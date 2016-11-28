@@ -37,8 +37,7 @@ Web console的代码在msec\_console子目录，是一个典型的Java Web Appli
 * zookeeper-3.4.8.jar
 
 几乎所有上面的jar都能在http://mvnrepository.com/下载到。
-其中gv.jar比较特殊一点，是用来画日志用到的dot图的，详细的请见：
-http://www.graphviz.org/pdf/gv.3java.pdf
+
 #3、remote shell#
 ## 3.1 简介 ##
 子目录remote\_shell是console服务器用来对业务运营机进行文件传输、远程命令执行的系统的代码。典型的应用场景是：发布的时候利用remote\_shell系统传输发布文件、执行发布命令。
@@ -205,6 +204,7 @@ Logsys是msec中日志系统。子目录spp\_rpc是srpc的源码，使用C++作�
 * flume-ng-mysql-sink    apache flume的插件，使日志数据写入mysql, 通过maven命令行构建
 * flume-protobuf-source   apache flume的插件，读取protobuf协议格式的日志数据, 通过maven命令行构建
 * proxy  日志系统的查询接口, 通过maven命令行构建
+
 ## 9.2 用到的外部库 ##
 * protobuf-2.5.0
 * commons-beanutils-1.7.0.jar
