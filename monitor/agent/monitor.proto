@@ -1,0 +1,233 @@
+package msec.monitor;
+
+//set function
+message Attr {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	repeated uint32 values = 3;
+	optional uint32 begin_time = 4;	//上报开始时间
+	optional uint32 end_time = 5;	//上报结束时间
+}
+
+//上报协议
+message ReqReport {
+	repeated Attr attrs = 1;
+}
+
+message RespReport {
+	optional uint32 result = 1;	//0，正常；其余，失败返回码。
+}
+
+//get function
+//读取监控数据协议
+message ReqMonitor {
+	//上报数据读取接口
+	optional ReqService service = 1;			//获取单个Service的属性和IP，可指定特定时间过滤无上报的属性
+	optional ReqServiceAttr serviceattr = 2;		//批量获取单个Service的多天多属性数据
+	optional ReqAttrIP attrip = 3;			//批量获取单个属性的多天多IP数据
+	optional ReqIP ip = 4;				//获取单个IP的Service和属性，可指定特定时间过滤无上报的属性
+	optional ReqIPAttr ipattr = 5;			//批量获取单个属性的多天多IP数据
+	
+	//目录树接口
+	optional ReqTreeList treelist = 10;
+	
+	//告警接口
+	optional ReqSetAlarmAttr setalarmattr = 20;	//新增或更新单个告警监控项
+	optional ReqDelAlarmAttr delalarmattr = 21;	//删除单个告警项
+	optional ReqNewestAlarm newalarm = 22;	//获取最新产生的告警，可指定获取特定服务的告警
+	optional ReqDelAlarm delalarm = 23;	//删除单日某类收敛告警
+}
+
+message RespMonitor {
+	//上报数据读取接口
+	optional uint32 result = 1;	//0，正常；其余，失败返回码。
+	optional RespService service = 2;
+	optional RespServiceAttr serviceattr = 3;
+	optional RespAttrIP attrip = 4;
+	optional RespIP ip = 5;
+	optional RespIPAttr ipattr = 6;
+	
+	//目录树接口
+	optional RespTreeList treelist = 10;
+
+	//告警接口
+	optional RespSetAlarmAttr setalarmattr = 20;
+	optional RespDelAlarmAttr delalarmattr = 21;
+	optional RespNewestAlarm newalarm = 22;
+	optional RespDelAlarm delalarm = 23;
+}
+
+
+//获取目录树
+message ReqTreeList {
+}
+
+message TreeListInfo {
+	optional string servicename = 1;
+}
+
+message RespTreeList {
+	repeated TreeListInfo infos = 1;
+}
+
+//获取单个Service的属性和IP
+message ReqService {
+	optional string servicename = 1;
+	repeated uint32 days = 2;	//如2016年2月24日对应的值为20160224；如指定日期则只返回在指定日期内有数据的属性
+}
+
+message AlarmAttr {
+	optional string attrname = 1;
+	optional uint32 max = 2;	//最大值
+	optional uint32 min = 3;	//最小值
+	optional uint32 diff = 4;		//波动值
+	optional uint32 diff_percent = 5;	//波动比率
+}
+
+message RespService {
+	repeated string attrnames = 1;
+	repeated string ips = 2;
+	repeated AlarmAttr alarmattrs = 3;
+}
+
+//批量获取单个Service的多天多属性数据
+message ReqServiceAttr {
+	optional string servicename = 1;
+	repeated string attrnames = 2;
+	repeated uint32 days = 3;	//如2016年2月24日对应的值为20160224
+}
+
+message AttrData {
+	optional string attrname = 1;
+	optional uint32 day = 2;
+	repeated uint32 values = 3;
+}
+
+message RespServiceAttr {
+	repeated AttrData data = 1;
+}
+
+//批量获取单个属性的多天多IP数据
+message ReqAttrIP {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	repeated string ips = 3;
+	repeated uint32 days = 4;
+}
+
+message AttrIPData {
+	optional string ip = 1;
+	optional uint32 day = 2;
+	repeated uint32 values = 3;
+}
+
+message RespAttrIP {
+	repeated AttrIPData data = 1;
+}
+
+//获取单个IP的Service和属性
+message ReqIP {
+	optional string ip = 1;
+	repeated uint32 days = 2;	//如2016年2月24日对应的值为20160224；如指定日期则只返回在指定日期内有数据的属性
+}
+
+message IPData {
+	optional string servicename = 1;
+	repeated string attrnames = 2;	//如果指定了日期，有可能返回有servicename但无attrname的IPData，说明该servicename下在指定日期没有属性上报
+}
+
+message RespIP {
+	repeated IPData data = 1;
+}
+
+//批量获取单个IP的多天多属性数据
+message ReqIPAttr {
+	optional string ip = 1;
+	repeated IPData attrs = 2;
+	repeated uint32 days = 3;
+}
+
+message IPAttrData {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	optional uint32 day = 3;
+	repeated uint32 values = 4;
+}
+
+message RespIPAttr {
+	repeated IPAttrData data = 1;
+}
+
+//新增或更新单个告警监控项
+message ReqSetAlarmAttr {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	optional uint32 max = 3;	//最大值
+	optional uint32 min = 4;	//最小值
+	optional uint32 diff = 5;		//波动值
+	optional uint32 diff_percent = 6;	//波动比率
+}
+
+//通过包头result确认是否成功
+//特殊返回码：
+//	1: 该服务的监控项已经到达上限
+message RespSetAlarmAttr {
+}
+
+//删除单个告警项
+message ReqDelAlarmAttr {
+	optional string servicename = 1;
+	optional string attrname = 2;
+}
+
+//通过包头result确认是否成功
+message RespDelAlarmAttr {
+	optional uint32  deleted_rows = 1;	//实际删除的告警行数
+}
+
+//获取某一天产生的告警，可指定获取特定服务的告警
+message ReqNewestAlarm {
+	optional string servicename = 1;	//不指定的话获取所有最新产生的告警
+	optional uint32 day = 2;			//指定日期
+}
+
+enum AlarmType
+{
+	ALARM_MAX = 1;
+	ALARM_MIN = 2;
+	ALARM_DIFF = 3;
+	ALARM_DIFF_PERCENT = 4;
+}
+
+//告警依据属性名、类型在一天内收敛
+message Alarm
+{
+	optional string servicename = 1;
+	optional string attrname= 2;	
+	optional AlarmType type  = 3;
+	optional uint32 first_alarm_time = 4;	//第一次告警时间
+	optional uint32 last_alarm_time = 5;	//最近一次告警时间
+	optional uint32 alarm_times = 6;		//告警次数，用于收敛逻辑
+	optional uint32 last_value = 7;		//最近一次告警的上报值
+	optional uint32 last_attr_value = 8;	//最近一次告警设置的阈值
+	optional uint32 last_diff_value = 9;	//如果是波动告警，计算实际波动量
+	
+}
+
+message RespNewestAlarm {
+	repeated Alarm alarms = 1;
+}
+
+//删除单日某类收敛告警
+message ReqDelAlarm {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	optional AlarmType type = 3;	//待删除的告警类型
+	optional uint32 day = 4;		//待删除告警的日期
+	optional uint32 time = 5;	//待删除告警的最后发生时间
+}
+
+//通过包头result确认是否成功
+message RespDelAlarm {
+	optional uint32  deleted_rows = 1;	//实际删除的告警行数
+}

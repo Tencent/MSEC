@@ -1,0 +1,20 @@
+package msec.monitor.data;
+
+message Attr {
+	optional string name = 1;
+}
+
+message IP {
+	optional uint32 ip = 1;
+	repeated uint32 ports = 2;
+}
+
+message ServiceData {
+	optional string servicename = 1;
+	repeated Attr attrs = 2;
+	repeated IP ips = 3;
+}
+
+message IPData {
+	repeated ServiceData services = 1; 
+}

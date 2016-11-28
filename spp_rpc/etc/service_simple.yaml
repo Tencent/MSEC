@@ -1,0 +1,14 @@
+global:
+  service: test
+  listen:
+    - address: eth1:5574/udp
+    - address: eth1:5575/tcp-oob
+
+proxy:
+  module: spp_module_test.so
+
+worker:
+  - id: 1
+    module: ./spp_module_test.so
+    procnum: 4
+

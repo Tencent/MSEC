@@ -1,0 +1,729 @@
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc"}}
+handleClass:[SendFileToAgent]
+fileBaseName:d.doc
+send error message:can NOT find fileLength element in json string
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc"fileLength":10240}}
+invalid json string
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc,"fileLength":10240}}
+invalid json string
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc","fileLength":10240}}
+handleClass:[SendFileToAgent]
+fileBaseName:d.doc
+open file success:/root/remote_shell/agent/src/../files/d.doc
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc","fileLength":10240}}
+handleClass:[SendFileToAgent]
+fileBaseName:d.doc
+open file success:/root/remote_shell/agent/src/../files/d.doc
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"d.doc","fileLength":10240}}
+handleClass:[SendFileToAgent]
+fileBaseName:d.doc
+open file success:/root/remote_shell/agent/src/../files/d.doc
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileBaseName":"d.doc"}}
+handleClass:[GetFileFromAgent]
+fileBaseName:d.doc
+write resultJsonStr:63,53        {"status":0, "message":"success", "fileLength":10240}
+open file success:/root/remote_shell/agent/src/../files/d.doc
+read file success:10240
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1925310359.txt"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1925310359.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileBaseName":"output_1925310359.txt"}}
+handleClass:[GetFileFromAgent]
+fileBaseName:output_1925310359.txt
+write resultJsonStr:60,50        {"status":0, "message":"success", "fileLength":58}
+open file success:/root/remote_shell/agent/src/../files/output_1925310359.txt
+read file success:58
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1375455199.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1375455199.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1489239658.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1489239658.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1599399253.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1599399253.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1985722546.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1985722546.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1037208486.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1037208486.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_781598147.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_781598147.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1063913040.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1063913040.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1645936420.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1645936420.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1477019610.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1477019610.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+returnErrMsg write 10 bytes to socket!
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1496170554.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1496170554.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+json msg len:0
+returnErrMsg write 10 bytes to socket!
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1709730004.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1709730004.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+json msg len:45
+returnErrMsg write 55 bytes to socket!
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_440898124.txt", "signature":"729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_440898124.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:729428279f974c4add5e4275b8f161d13b0bebfec677f8634d25e5d2f72458b446d7458770b42854653c2e9f65920ec9b9c17fdf1ccd2f4e03c99fde28d3bbb607fad53bd2f6b25fd049e5e88e17dbd35f5b3210c51420f87d605fea64d346a0e0ed96275d2a5213eff8cbf05b0c6343ddac7de6722c2cb6f87777ee2b0b51e6
+signature byte number:128
+hash bytes number:64
+hash hex string:34346631343366386134343033643765313564663730323166346565636539663739613734363464323037643832383165313333643435326237343063383666
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+send error message:signature invalid
+json msg len:45
+returnErrMsg write 55 bytes to socket!
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_2001220351.txt", "signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_2001220351.txt
+cmd fileLength:open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileBaseName":"a.sh","fileLength":8,"signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendFileToAgent]
+fileBaseName:a.sh
+open file success:/root/remote_shell/agent/src/../files/a.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_2076211333.txt", "signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_2076211333.txt
+cmd fileLength:8
+open file success:/root/remote_shell/agent/src/../files/cmd_0.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileBaseName":"output_2076211333.txt"}}
+handleClass:[GetFileFromAgent]
+fileBaseName:output_2076211333.txt
+write resultJsonStr:60,50        {"status":0, "message":"success", "fileLength":86}
+open file success:/root/remote_shell/agent/src/../files/output_2076211333.txt
+read file success, size=86
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1227908232.txt", "signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1227908232.txt
+cmd fileLength:8
+open file success:/root/remote_shell/agent/src/../files/cmd_2128769398.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_1861990445.txt", "signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_1861990445.txt
+cmd fileLength:8
+open file success:/root/remote_shell/agent/src/../files/cmd_2137426248.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"output_297185792.txt", "signature":"b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:output_297185792.txt
+cmd fileLength:8
+open file success:/root/remote_shell/agent/src/../files/cmd_2141273737.sh
+sigature:b005594f5bada84eead9ca85d97aaac2a9805b02771ae12e39bddc3a01e7f1aa893a3acc5860a41fc1cb329b7eccab846ea9ad146ee766ccc0be7d5f37c9848d5a26e047d8ce6f620f62c525aea2c2954a98fdb0b37b2f79fc0e6e3ab4580e47d45f9e6f28808f82a8ce261452dc4c722615a7e35f5cb3084b2e70411e0880e5
+signature byte number:128
+hash bytes number:32
+hash hex string:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+cmd file hash:44f143f8a4403d7e15df7021f4eece9f79a7464d207d8281e133d452b740c86f
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/rsa.c","fileLength":3243,"signature":"8f8b58cb304800edd3b1f158b153120ead4b1174cbefaaf0dbfc540dcfc0a26ef3ed492d09e5a01131b138ec267f41610753ad2992f298cac6e2ff2a0351c5dedb19a9b92af77c461e083745f187a2cbe036eadbc0a84347f70bf9dc959abad5d066e9bca3b817d8c42150a10a2952a4b663480cbc268b3a8096c1237cbac7b7"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/rsa.c
+open file success:/tmp/rsa.c
+sigature:8f8b58cb304800edd3b1f158b153120ead4b1174cbefaaf0dbfc540dcfc0a26ef3ed492d09e5a01131b138ec267f41610753ad2992f298cac6e2ff2a0351c5dedb19a9b92af77c461e083745f187a2cbe036eadbc0a84347f70bf9dc959abad5d066e9bca3b817d8c42150a10a2952a4b663480cbc268b3a8096c1237cbac7b7
+signature byte number:128
+hash bytes number:32
+hash hex string:759a942ce87532d0a1e51dab87cc7278623bd9b6ed65314b951aff9a30134010
+file hash:759a942ce87532d0a1e51dab87cc7278623bd9b6ed65314b951aff9a30134010
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/rsa.c"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/rsa.c
+write resultJsonStr:62,52        {"status":0, "message":"success", "fileLength":3243}
+open file success:/tmp/rsa.c
+read file success, size=3243
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/root/a.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/root/a.txt
+write resultJsonStr:59,49        {"status":0, "message":"success", "fileLength":6}
+open file success:/root/a.txt
+read file success, size=6
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":11, "outputFileName":"/tmp/output_806130442.txt", "signature":"6b9cf4b0c8d5b9b1cc7db4d11988b0bdcee748ed9606829cf50199f295f02e219d61cc36b1bc68ad5684ceee2eb2f125a33eb6bf0f6b4abacf50239839d14d8c5b4f6c109c5c2f5f00bcf546eeb3a3f9eaa04f200d055c77a153a1cacc0586f9b0623bd8979321a38b786f038128febec4359e949f3bc4a5592001bc3b96057f"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_806130442.txt
+cmd fileLength:11
+open file success:/tmp/cmd_6324864.sh
+sigature:6b9cf4b0c8d5b9b1cc7db4d11988b0bdcee748ed9606829cf50199f295f02e219d61cc36b1bc68ad5684ceee2eb2f125a33eb6bf0f6b4abacf50239839d14d8c5b4f6c109c5c2f5f00bcf546eeb3a3f9eaa04f200d055c77a153a1cacc0586f9b0623bd8979321a38b786f038128febec4359e949f3bc4a5592001bc3b96057f
+signature byte number:128
+hash bytes number:32
+hash hex string:2b5c5e2713765c7c8624b308fdfbef1b436a71038a9b20633a99bcfbd94bbf83
+cmd file hash:2b5c5e2713765c7c8624b308fdfbef1b436a71038a9b20633a99bcfbd94bbf83
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_806130442.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_806130442.txt
+write resultJsonStr:60,50        {"status":0, "message":"success", "fileLength":67}
+open file success:/tmp/output_806130442.txt
+read file success, size=67
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":8, "outputFileName":"/tmp/output_820564364.txt", "signature":"b75f947c5fb3dcd16ef9cc87fa8e613900a475565d5574dcef30d58f800a5d3ea65b5206ad61d63374abc73a19febbcd970c1e99ad508ddb48c936bee87953e0f708cb1976af3d2f194f01d696f4ecff16c37465baa0499730cccfa6a63f7934de253b620ac98260d6efeb43b23c34533c0d24549f7e96b55357e1ecea6af7c7"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_820564364.txt
+cmd fileLength:8
+open file success:/tmp/cmd_6324864.sh
+sigature:b75f947c5fb3dcd16ef9cc87fa8e613900a475565d5574dcef30d58f800a5d3ea65b5206ad61d63374abc73a19febbcd970c1e99ad508ddb48c936bee87953e0f708cb1976af3d2f194f01d696f4ecff16c37465baa0499730cccfa6a63f7934de253b620ac98260d6efeb43b23c34533c0d24549f7e96b55357e1ecea6af7c7
+signature byte number:128
+hash bytes number:32
+hash hex string:0df42d0fcd0ea42667cc1a3d0277804791360fca6f9adc5fbba7d997ab585686
+cmd file hash:0df42d0fcd0ea42667cc1a3d0277804791360fca6f9adc5fbba7d997ab585686
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_820564364.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_820564364.txt
+write resultJsonStr:62,52        {"status":0, "message":"success", "fileLength":1030}
+open file success:/tmp/output_820564364.txt
+read file success, size=1030
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":470, "outputFileName":"/tmp/output_1307767017.txt", "signature":"3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1307767017.txt
+cmd fileLength:470
+open file success:/tmp/cmd_6324864.sh
+sigature:3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68
+signature byte number:128
+hash bytes number:32
+hash hex string:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+cmd file hash:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1307767017.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1307767017.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":449}
+open file success:/tmp/output_1307767017.txt
+read file success, size=449
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":470, "outputFileName":"/tmp/output_329424017.txt", "signature":"3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_329424017.txt
+cmd fileLength:470
+open file success:/tmp/cmd_6324864.sh
+sigature:3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68
+signature byte number:128
+hash bytes number:32
+hash hex string:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+cmd file hash:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_329424017.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_329424017.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":551}
+open file success:/tmp/output_329424017.txt
+read file success, size=551
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":470, "outputFileName":"/tmp/output_1802790199.txt", "signature":"3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1802790199.txt
+cmd fileLength:470
+open file success:/tmp/cmd_6324864.sh
+sigature:3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68
+signature byte number:128
+hash bytes number:32
+hash hex string:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+cmd file hash:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1802790199.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1802790199.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":551}
+open file success:/tmp/output_1802790199.txt
+read file success, size=551
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":470, "outputFileName":"/tmp/output_1804613056.txt", "signature":"3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1804613056.txt
+cmd fileLength:470
+open file success:/tmp/cmd_6324864.sh
+sigature:3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68
+signature byte number:128
+hash bytes number:32
+hash hex string:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+cmd file hash:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1804613056.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1804613056.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":698}
+open file success:/tmp/output_1804613056.txt
+read file success, size=698
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160310092053_1703278055.tar","fileLength":1556480,"signature":"c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160310092053_1703278055.tar
+open file success:/tmp/20160310092053_1703278055.tar
+sigature:c2fc39f0ed39a96d81fbff095892fa50034c39f97f3d47b5b5a0fd679f7115ee7c0ff5ab31a32dd7e1bda639b6809b50e7a6b4fe975151aca80ced0c25741cd94edd8e498e83702b905013b2d48cef39ad627dd14c79d2368de7c7178b36f39ab3267e4b66cc76be0d7fe5c9df0d97dc95530e4dcb453f44ceb988048b700cb0
+signature byte number:128
+hash bytes number:32
+hash hex string:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+file hash:2ecc9cc4f911667a6eabab6bfcd9aa38784b00ae987978a17700cef4d15568f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":470, "outputFileName":"/tmp/output_143753969.txt", "signature":"3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_143753969.txt
+cmd fileLength:470
+open file success:/tmp/cmd_6324864.sh
+sigature:3cb917732781bf54bc56aea10f142009d8a90d1ae1862faa76425ca1eb23e0a156a69c398c6e2b833d2326c2f666dc89188c77752a3b09b30d3d505da194b19894d7a2353b8112df0126d2d2aab01f1bbf848b829e969a8873110fdddfeee66069905a38c65982470ef6acba3bd86964459e716ac895610675486e04796d0d68
+signature byte number:128
+hash bytes number:32
+hash hex string:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+cmd file hash:15bcde4fb5b2860a4383159991b5ad0ff4ced5ca15524d9d523cd6fb5d5fbdb2
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_143753969.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_143753969.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":699}
+open file success:/tmp/output_143753969.txt
+read file success, size=699
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":467, "outputFileName":"/tmp/output_386962357.txt", "signature":"189d406fef9c68f9dd43578e9830404e0f1e25060b01c71757359021e58477e94b346c19b436002c453c4b4dd151481ca7370c54c31818fd774177dcef9f1e5ddd0f5a64b2346ca7cdddfb0972b79ab90a3baa955a4474166b93946a474edbbc6ae55abf293626cd2ff7a72e2fb37140afedc820e7077a17beb734d63dcb3a7b"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_386962357.txt
+cmd fileLength:467
+open file success:/tmp/cmd_6324864.sh
+sigature:189d406fef9c68f9dd43578e9830404e0f1e25060b01c71757359021e58477e94b346c19b436002c453c4b4dd151481ca7370c54c31818fd774177dcef9f1e5ddd0f5a64b2346ca7cdddfb0972b79ab90a3baa955a4474166b93946a474edbbc6ae55abf293626cd2ff7a72e2fb37140afedc820e7077a17beb734d63dcb3a7b
+signature byte number:128
+hash bytes number:32
+hash hex string:b4a8c20d8da2faee69e7b9ad3c36cae1789dfb073991f14d447cbd0ba5c171a9
+cmd file hash:b4a8c20d8da2faee69e7b9ad3c36cae1789dfb073991f14d447cbd0ba5c171a9
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_386962357.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_386962357.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":548}
+open file success:/tmp/output_386962357.txt
+read file success, size=548
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":394, "outputFileName":"/tmp/output_1575854549.txt", "signature":"ac0b33ea79ff4856a51e3ae71803cf00702fe3301105b458764a37ed4becffbe150fd09d999c2c54458c6b80fdbe47ce54747711223a164e688dad4a7b973c55d25ca63b7a7575f1e118c2179fb68c8dd128929a3f626024f25676036c2d926fbf36a20dfb16729a555697135163a42bb88207f2c3659c801230bd798971c98b"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1575854549.txt
+cmd fileLength:394
+open file success:/tmp/cmd_6324864.sh
+sigature:ac0b33ea79ff4856a51e3ae71803cf00702fe3301105b458764a37ed4becffbe150fd09d999c2c54458c6b80fdbe47ce54747711223a164e688dad4a7b973c55d25ca63b7a7575f1e118c2179fb68c8dd128929a3f626024f25676036c2d926fbf36a20dfb16729a555697135163a42bb88207f2c3659c801230bd798971c98b
+signature byte number:128
+hash bytes number:32
+hash hex string:e027f1fda0320177fd3843f5a5d40e385259be3c922d01deaa8a09b9a8b43a54
+cmd file hash:e027f1fda0320177fd3843f5a5d40e385259be3c922d01deaa8a09b9a8b43a54
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1575854549.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1575854549.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":435}
+open file success:/tmp/output_1575854549.txt
+read file success, size=435
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":390, "outputFileName":"/tmp/output_1923339498.txt", "signature":"353120cb3b6a529dff937ce7b4b441ff2379c4f3f104935bc025a93dd8e43a01aa509911c84432758da135f1e4c19f45df9d21089781b7ff8f95dee089fb2db69f092a19ab51037118707ef8f0cca377af6f1feafa0e2d30fdfb398a197d34285d3afd6ea4248565a6ab4544b9aa2bf6999569b1b6c1211f1d38e0ce7db4ae1c"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1923339498.txt
+cmd fileLength:390
+open file success:/tmp/cmd_6324864.sh
+sigature:353120cb3b6a529dff937ce7b4b441ff2379c4f3f104935bc025a93dd8e43a01aa509911c84432758da135f1e4c19f45df9d21089781b7ff8f95dee089fb2db69f092a19ab51037118707ef8f0cca377af6f1feafa0e2d30fdfb398a197d34285d3afd6ea4248565a6ab4544b9aa2bf6999569b1b6c1211f1d38e0ce7db4ae1c
+signature byte number:128
+hash bytes number:32
+hash hex string:b8b6663e98507bfc2426b8379e496e1f61cfeb82dd77eae1e1a7a51914a9df70
+cmd file hash:b8b6663e98507bfc2426b8379e496e1f61cfeb82dd77eae1e1a7a51914a9df70
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1923339498.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1923339498.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":624}
+open file success:/tmp/output_1923339498.txt
+read file success, size=624
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":436, "outputFileName":"/tmp/output_421696599.txt", "signature":"a42c03e981cf16ccab1f0b3c6b63a88f4ab24a75613075685c2c0fb54ea5955710fef95f39f86c531aa3e4876fe7fdc1fa82f4c3d89e283ab5df0f218fc2d747a1f88fff6eb0d5cc2e0f66c1804bcfef1a2fca2b79424784eed62129283ee5a0864cacbb3778ee9b062318e7e319c677a2f33f1ab6cf04723b0cfbc0bd1cb273"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_421696599.txt
+cmd fileLength:436
+open file success:/tmp/cmd_6324864.sh
+sigature:a42c03e981cf16ccab1f0b3c6b63a88f4ab24a75613075685c2c0fb54ea5955710fef95f39f86c531aa3e4876fe7fdc1fa82f4c3d89e283ab5df0f218fc2d747a1f88fff6eb0d5cc2e0f66c1804bcfef1a2fca2b79424784eed62129283ee5a0864cacbb3778ee9b062318e7e319c677a2f33f1ab6cf04723b0cfbc0bd1cb273
+signature byte number:128
+hash bytes number:32
+hash hex string:fcb68651776a610e0041117ab5510f5d17005915151c86bbc0f2104944b70131
+cmd file hash:fcb68651776a610e0041117ab5510f5d17005915151c86bbc0f2104944b70131
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_421696599.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_421696599.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":205}
+open file success:/tmp/output_421696599.txt
+read file success, size=205
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":491, "outputFileName":"/tmp/output_1205661300.txt", "signature":"01ef65483672e461a5a2ae0154302658c6fd819e48d01aef8a1600d968ae649fe752286c4cb2cc4b46ef727038bcdd4d7b2943eea351330247ec04d0522cefd890e3a8cf36a1237c9f45c657bee89dce3f29063b5ec70f948a12cfc26ca97e30890e5b96ce09a52b15676805a81083d3fb48b5a7f248b30114cb312c5763e024"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1205661300.txt
+cmd fileLength:491
+open file success:/tmp/cmd_6324864.sh
+sigature:01ef65483672e461a5a2ae0154302658c6fd819e48d01aef8a1600d968ae649fe752286c4cb2cc4b46ef727038bcdd4d7b2943eea351330247ec04d0522cefd890e3a8cf36a1237c9f45c657bee89dce3f29063b5ec70f948a12cfc26ca97e30890e5b96ce09a52b15676805a81083d3fb48b5a7f248b30114cb312c5763e024
+signature byte number:128
+hash bytes number:32
+hash hex string:1b3edccd9f420a5972007787bf42f8cde5f05a3f3202f399f30d1a5de9a1c9f3
+cmd file hash:1b3edccd9f420a5972007787bf42f8cde5f05a3f3202f399f30d1a5de9a1c9f3
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1205661300.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1205661300.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":207}
+open file success:/tmp/output_1205661300.txt
+read file success, size=207
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324143359_794929371.tar","fileLength":1556480,"signature":"a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324143359_794929371.tar
+open file success:/tmp/20160324143359_794929371.tar
+sigature:a65701a30540f753035d9130a9c50e8b420bb54518dbc04410bbecd55ed7cb0bec18a44bdf9ecf1d75be7262528a6368996a7e43f4c8629dc131433fb5ef63bf7771044e4adfa63b1a178afe4eb2323ddb3eb582a13984752d4dd5b22d5cd0d4e2c6cedd7d819cf0dec607bba5a9a8c9637c55ce51776cea904089fa17ff87de
+signature byte number:128
+hash bytes number:32
+hash hex string:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+file hash:6d9a9dd55ddfd4fbafb7d75bbe222feb3622ce5d579b6cb5f9515c69217b4779
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":492, "outputFileName":"/tmp/output_1136678161.txt", "signature":"d925b705ea2d77b96675247de4ec91e530b46ca44dcc7ab35025c520678f3e373a97376a64aad44319aecb72812c4d7b37a3121f7f9079fd0ffb8e2a622b68d017d042d89f722acfc97a48ac721ba46b7fa5a6d15ba3d1321840fef02b944ed44db91ba4127658f4d999e64aa38f747532ab6094f3418b7ce8bc9a16e41cfb2b"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1136678161.txt
+cmd fileLength:492
+open file success:/tmp/cmd_6324864.sh
+sigature:d925b705ea2d77b96675247de4ec91e530b46ca44dcc7ab35025c520678f3e373a97376a64aad44319aecb72812c4d7b37a3121f7f9079fd0ffb8e2a622b68d017d042d89f722acfc97a48ac721ba46b7fa5a6d15ba3d1321840fef02b944ed44db91ba4127658f4d999e64aa38f747532ab6094f3418b7ce8bc9a16e41cfb2b
+signature byte number:128
+hash bytes number:32
+hash hex string:a41da25a35a2543660bc8deb92d739ea70e688830f8a2752d5bc9313815cb759
+cmd file hash:a41da25a35a2543660bc8deb92d739ea70e688830f8a2752d5bc9313815cb759
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1136678161.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1136678161.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":205}
+open file success:/tmp/output_1136678161.txt
+read file success, size=205
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324151657_1265612252.tar","fileLength":10240,"signature":"d7abb43768953f7afbec043b91c77361eb78aa6c4aa76a201460549bacfcc10a842b568bb23239cf7f7d9ddbdd051f0a750aec1de98ac8ad5dd020e7599c1e6572de5b1e7835291e1f3bee828b1ad105d32940a100aced15427605be861ac1d85e0976d404fef9fabcc80e96d6ea9794360ee65860ce57a2d050b6814be99d2f"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324151657_1265612252.tar
+open file success:/tmp/20160324151657_1265612252.tar
+sigature:d7abb43768953f7afbec043b91c77361eb78aa6c4aa76a201460549bacfcc10a842b568bb23239cf7f7d9ddbdd051f0a750aec1de98ac8ad5dd020e7599c1e6572de5b1e7835291e1f3bee828b1ad105d32940a100aced15427605be861ac1d85e0976d404fef9fabcc80e96d6ea9794360ee65860ce57a2d050b6814be99d2f
+signature byte number:128
+hash bytes number:32
+hash hex string:3c464179fe2276bd7abc188a443530efdbd320ae6d7ac6cdbeaf5eb916ebcf47
+file hash:3c464179fe2276bd7abc188a443530efdbd320ae6d7ac6cdbeaf5eb916ebcf47
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":298, "outputFileName":"/tmp/output_1654684326.txt", "signature":"bb3e8762ba836f0ef2a750709dd565d8ec8467f72f639f2cb708295c924f2dea45be9a966c24a9c532c0f6ed9de12ad363efeda800a5717ce00910e8dd881ffde909e43d6a727d7575b1de46fd98e72395cf15666167886deb8a49c48df8fe566b4911282f35f0d7f54fc960a571e9f8637683c804ebc57431bde78bd7420e75"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1654684326.txt
+cmd fileLength:298
+open file success:/tmp/cmd_6324864.sh
+sigature:bb3e8762ba836f0ef2a750709dd565d8ec8467f72f639f2cb708295c924f2dea45be9a966c24a9c532c0f6ed9de12ad363efeda800a5717ce00910e8dd881ffde909e43d6a727d7575b1de46fd98e72395cf15666167886deb8a49c48df8fe566b4911282f35f0d7f54fc960a571e9f8637683c804ebc57431bde78bd7420e75
+signature byte number:128
+hash bytes number:32
+hash hex string:c1400193cff018c77f05365b1ef4cb54014ec0fb4ffb3626d62bd0e3a30b3c36
+cmd file hash:c1400193cff018c77f05365b1ef4cb54014ec0fb4ffb3626d62bd0e3a30b3c36
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1654684326.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1654684326.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":176}
+open file success:/tmp/output_1654684326.txt
+read file success, size=176
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324151657_1265612252.tar","fileLength":10240,"signature":"d7abb43768953f7afbec043b91c77361eb78aa6c4aa76a201460549bacfcc10a842b568bb23239cf7f7d9ddbdd051f0a750aec1de98ac8ad5dd020e7599c1e6572de5b1e7835291e1f3bee828b1ad105d32940a100aced15427605be861ac1d85e0976d404fef9fabcc80e96d6ea9794360ee65860ce57a2d050b6814be99d2f"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324151657_1265612252.tar
+open file success:/tmp/20160324151657_1265612252.tar
+sigature:d7abb43768953f7afbec043b91c77361eb78aa6c4aa76a201460549bacfcc10a842b568bb23239cf7f7d9ddbdd051f0a750aec1de98ac8ad5dd020e7599c1e6572de5b1e7835291e1f3bee828b1ad105d32940a100aced15427605be861ac1d85e0976d404fef9fabcc80e96d6ea9794360ee65860ce57a2d050b6814be99d2f
+signature byte number:128
+hash bytes number:32
+hash hex string:3c464179fe2276bd7abc188a443530efdbd320ae6d7ac6cdbeaf5eb916ebcf47
+file hash:3c464179fe2276bd7abc188a443530efdbd320ae6d7ac6cdbeaf5eb916ebcf47
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":294, "outputFileName":"/tmp/output_1886694588.txt", "signature":"56c19cd6f46f1f5ec60af4d4c6cf9cb74f337bbb90702c8ef63922d03c014ef7445fa40c9aab5bf2561172751c20caf009935802e556f3de0d4af2a1b71ccf9b537ced89ffb8fb5327b705d42c855d5920361212d11aecb90047b10782587a6e9e4e68a5f57ede7d886d60611c1b93df38b8138db9bd489c20927917e5cea244"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_1886694588.txt
+cmd fileLength:294
+open file success:/tmp/cmd_6324864.sh
+sigature:56c19cd6f46f1f5ec60af4d4c6cf9cb74f337bbb90702c8ef63922d03c014ef7445fa40c9aab5bf2561172751c20caf009935802e556f3de0d4af2a1b71ccf9b537ced89ffb8fb5327b705d42c855d5920361212d11aecb90047b10782587a6e9e4e68a5f57ede7d886d60611c1b93df38b8138db9bd489c20927917e5cea244
+signature byte number:128
+hash bytes number:32
+hash hex string:9eea587ad233dee984165241c97314d2d9adbade73e86389c867b7bc0cfc3c2c
+cmd file hash:9eea587ad233dee984165241c97314d2d9adbade73e86389c867b7bc0cfc3c2c
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_1886694588.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_1886694588.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":207}
+open file success:/tmp/output_1886694588.txt
+read file success, size=207
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324152448_455443807.tar","fileLength":1177600,"signature":"c0165f2932aa8ae0635e4a97a6de3d362d0f95b8585dde3e4c03715eaa8fd065875b8f66c43dd699134b3dee1e284d9fed8ca43e857959b8b6df894448273ed7d01274484c930d808efae517bf8283e2da6d838c60327c1d9099cdd727c80b9b52ee029760131267f2d3af93f97841be8399f17b5296e0df72b3ac32c4f26f38"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324152448_455443807.tar
+open file success:/tmp/20160324152448_455443807.tar
+sigature:c0165f2932aa8ae0635e4a97a6de3d362d0f95b8585dde3e4c03715eaa8fd065875b8f66c43dd699134b3dee1e284d9fed8ca43e857959b8b6df894448273ed7d01274484c930d808efae517bf8283e2da6d838c60327c1d9099cdd727c80b9b52ee029760131267f2d3af93f97841be8399f17b5296e0df72b3ac32c4f26f38
+signature byte number:128
+hash bytes number:32
+hash hex string:5fb229e0d54820c6685c2fc735ac96446f596c9ee23ea94a5ecbdd2535307870
+file hash:5fb229e0d54820c6685c2fc735ac96446f596c9ee23ea94a5ecbdd2535307870
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":314, "outputFileName":"/tmp/output_172991952.txt", "signature":"1da4a2d420a9ff14e718a7639ef7e1cdb256a2e2a15adffa4e411fbff775df39bb03e67fc90f55b48ed9dacdc59364e0d225a683121a6357fe688e85fdec6432f55202808960fa17a7efacd207c7a4617127ed3f1b50b965e4a2633b5272ef8b968eccf73546fa14e64c378e46d98ee591d4fcb3a05ac5a3b6b5b025cfa9d089"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_172991952.txt
+cmd fileLength:314
+open file success:/tmp/cmd_6324864.sh
+sigature:1da4a2d420a9ff14e718a7639ef7e1cdb256a2e2a15adffa4e411fbff775df39bb03e67fc90f55b48ed9dacdc59364e0d225a683121a6357fe688e85fdec6432f55202808960fa17a7efacd207c7a4617127ed3f1b50b965e4a2633b5272ef8b968eccf73546fa14e64c378e46d98ee591d4fcb3a05ac5a3b6b5b025cfa9d089
+signature byte number:128
+hash bytes number:32
+hash hex string:68dcff9b2c54e1743a8f2778f8077afdecd2b0917ad62f65808fb714adf0f02a
+cmd file hash:68dcff9b2c54e1743a8f2778f8077afdecd2b0917ad62f65808fb714adf0f02a
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_172991952.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_172991952.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":259}
+open file success:/tmp/output_172991952.txt
+read file success, size=259
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324152448_455443807.tar","fileLength":1177600,"signature":"c0165f2932aa8ae0635e4a97a6de3d362d0f95b8585dde3e4c03715eaa8fd065875b8f66c43dd699134b3dee1e284d9fed8ca43e857959b8b6df894448273ed7d01274484c930d808efae517bf8283e2da6d838c60327c1d9099cdd727c80b9b52ee029760131267f2d3af93f97841be8399f17b5296e0df72b3ac32c4f26f38"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324152448_455443807.tar
+open file success:/tmp/20160324152448_455443807.tar
+sigature:c0165f2932aa8ae0635e4a97a6de3d362d0f95b8585dde3e4c03715eaa8fd065875b8f66c43dd699134b3dee1e284d9fed8ca43e857959b8b6df894448273ed7d01274484c930d808efae517bf8283e2da6d838c60327c1d9099cdd727c80b9b52ee029760131267f2d3af93f97841be8399f17b5296e0df72b3ac32c4f26f38
+signature byte number:128
+hash bytes number:32
+hash hex string:5fb229e0d54820c6685c2fc735ac96446f596c9ee23ea94a5ecbdd2535307870
+file hash:5fb229e0d54820c6685c2fc735ac96446f596c9ee23ea94a5ecbdd2535307870
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":281, "outputFileName":"/tmp/output_2079257623.txt", "signature":"4d109f211362f84779826c9a5376534f4f2077936fc2f537619b65a6ed392c0c39af0f604b721739bde1ff471f4575d06dadf2da0e661927140ec29e9b5c583ce3e3015f2ab385b48ebbeaed001ad7dcba835fd309fb02bdb0c156ec381ea50eb4087c13d569039d14d343a86cb4ade7324bd63bda845658a46486fb194eeba0"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_2079257623.txt
+cmd fileLength:281
+open file success:/tmp/cmd_6324864.sh
+sigature:4d109f211362f84779826c9a5376534f4f2077936fc2f537619b65a6ed392c0c39af0f604b721739bde1ff471f4575d06dadf2da0e661927140ec29e9b5c583ce3e3015f2ab385b48ebbeaed001ad7dcba835fd309fb02bdb0c156ec381ea50eb4087c13d569039d14d343a86cb4ade7324bd63bda845658a46486fb194eeba0
+signature byte number:128
+hash bytes number:32
+hash hex string:0852887103ca0c4cdcdccb0a9f7ea04c975083044e9ab6eb4bdb7f30196594b1
+cmd file hash:0852887103ca0c4cdcdccb0a9f7ea04c975083044e9ab6eb4bdb7f30196594b1
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_2079257623.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_2079257623.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":105}
+open file success:/tmp/output_2079257623.txt
+read file success, size=105
+received json string:{"handleClass":"SendFileToAgent", "requestBody":{"fileFullName":"/tmp/20160324154755_934292703.tar","fileLength":378880,"signature":"d645a9175d98019b4e32909e86df1511b8931688da55c3a737c0258149b4fee91746a897e64d8288be71dd2268fe1da442a75f1d20841a07fa610e31b8ee58f9e21d382a074e5b376935aae56bc50dd956bdba626fc56ebbb46651d1f6db9dce951a5cf3c661f7aa066da65512f65997f2d29aff4ff3eabd2647752ccc851cc4"}}
+handleClass:[SendFileToAgent]
+fileFullName:/tmp/20160324154755_934292703.tar
+open file success:/tmp/20160324154755_934292703.tar
+sigature:d645a9175d98019b4e32909e86df1511b8931688da55c3a737c0258149b4fee91746a897e64d8288be71dd2268fe1da442a75f1d20841a07fa610e31b8ee58f9e21d382a074e5b376935aae56bc50dd956bdba626fc56ebbb46651d1f6db9dce951a5cf3c661f7aa066da65512f65997f2d29aff4ff3eabd2647752ccc851cc4
+signature byte number:128
+hash bytes number:32
+hash hex string:7add51550c7fcc6acc15162f39384d10a6a02288829c9dc666c1ef2178ba0e6e
+file hash:7add51550c7fcc6acc15162f39384d10a6a02288829c9dc666c1ef2178ba0e6e
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"SendCmdsToAgentAndRun", "requestBody":{"cmdFileLength":281, "outputFileName":"/tmp/output_389094102.txt", "signature":"4b5cf8b95662630d20718a7cbbe61bb72d60409535393b5c3c87998670c8b4af34d3d1c58585b797f30f8f363bd106ee3e21787c390d6845b662b6e18d2274f417c0c7b678849b083619a638c2c4117f08f89706049c69749966ca2d3145e525edb6620422d0323c47adfb43277845691414636cbeaa9f3cc4ab8d2504b8dc0e"}}
+handleClass:[SendCmdsToAgentAndRun]
+outputFileName:/tmp/output_389094102.txt
+cmd fileLength:281
+open file success:/tmp/cmd_6324864.sh
+sigature:4b5cf8b95662630d20718a7cbbe61bb72d60409535393b5c3c87998670c8b4af34d3d1c58585b797f30f8f363bd106ee3e21787c390d6845b662b6e18d2274f417c0c7b678849b083619a638c2c4117f08f89706049c69749966ca2d3145e525edb6620422d0323c47adfb43277845691414636cbeaa9f3cc4ab8d2504b8dc0e
+signature byte number:128
+hash bytes number:32
+hash hex string:11d47623c4380d51b18536d22da1bf64e195fd58e71ba77917573d6bada33b6d
+cmd file hash:11d47623c4380d51b18536d22da1bf64e195fd58e71ba77917573d6bada33b6d
+write resultJsonStr:43,33        {"status":0, "message":"success"}
+received json string:{"handleClass":"GetFileFromAgent", "requestBody":{"fileFullName":"/tmp/output_389094102.txt"}}
+handleClass:[GetFileFromAgent]
+fileFullName:/tmp/output_389094102.txt
+write resultJsonStr:61,51        {"status":0, "message":"success", "fileLength":105}
+open file success:/tmp/output_389094102.txt
+read file success, size=105

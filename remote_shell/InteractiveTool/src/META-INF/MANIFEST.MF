@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: ngse.remote_shell.interactive_tool.Main
+

@@ -1,0 +1,17 @@
+INCLUDE += 
+CFLAGS = $(INCLUDE) -Wall -g -Werror
+
+lib_monitor_obj := mmap_queue.o  monitor_client.o
+
+all: libmonitor.a
+
+clean:
+	rm -f $(lib_monitor_obj) libmonitor.a
+
+libmonitor.a: $(lib_monitor_obj)
+	ar rcs libmonitor.a $(lib_monitor_obj)
+
+
+test: mmap_queue.h mmap_queue.c opt_time.h
+	gcc -o mqtest mmap_queue.c -DSQ_FOR_TEST -g -Wall
+

@@ -1,0 +1,118 @@
+package ngse.monitor;
+
+//set function
+message Attr {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	repeated uint32 values = 3;
+	optional uint32 begin_time = 4;	//上报开始时间
+	optional uint32 end_time = 5;	//上报结束时间
+}
+
+//上报协议
+message ReqReport {
+	repeated Attr attrs = 1;
+}
+
+message RespReport {
+	optional uint32 result = 1;	//0，正常；其余，失败返回码。
+}
+
+//get function
+//读取监控数据协议
+message ReqMonitor {
+	optional ReqService service = 1;
+	optional ReqServiceAttr serviceattr = 2;
+	optional ReqAttrIP attrip = 3;
+	optional ReqIP ip = 4;
+	optional ReqIPAttr ipattr = 5;
+}
+
+message RespMonitor {
+	optional uint32 result = 1;	//0，正常；其余，失败返回码。
+	optional RespService service = 2;
+	optional RespServiceAttr serviceattr = 3;
+	optional RespAttrIP attrip = 4;
+	optional RespIP ip = 5;
+	optional RespIPAttr ipattr = 6;
+}
+
+//获取单个Service的属性和IP
+message ReqService {
+	optional string servicename = 1;
+	repeated uint32 days = 2;	//如2016年2月24日对应的值为20160224；如指定日期则只返回在指定日期内有数据的属性
+}
+
+message RespService {
+	repeated string attrnames = 1;
+	repeated string ips = 2;
+}
+
+//批量获取单个Service的多天多属性数据
+message ReqServiceAttr {
+	optional string servicename = 1;
+	repeated string attrnames = 2;
+	repeated uint32 days = 3;	//如2016年2月24日对应的值为20160224
+}
+
+message AttrData {
+	optional string attrname = 1;
+	optional uint32 day = 2;
+	repeated uint32 values = 3;
+}
+
+message RespServiceAttr {
+	repeated AttrData data = 1;
+}
+
+//批量获取单个属性的多天多IP数据
+message ReqAttrIP {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	repeated string ips = 3;
+	repeated uint32 days = 4;
+}
+
+message AttrIPData {
+	optional string ip = 1;
+	optional uint32 day = 2;
+	repeated uint32 values = 3;
+}
+
+message RespAttrIP {
+	repeated AttrIPData data = 1;
+}
+
+//获取单个IP的Service和属性
+message ReqIP {
+	optional string ip = 1;
+	repeated uint32 days = 2;	//如2016年2月24日对应的值为20160224；如指定日期则只返回在指定日期内有数据的属性
+}
+
+message IPData {
+	optional string servicename = 1;
+	repeated string attrnames = 2;	//如果指定了日期，有可能返回有servicename但无attrname的IPData，说明该servicename下在指定日期没有属性上报
+}
+
+message RespIP {
+	repeated IPData data = 1;
+}
+
+//批量获取单个IP的多天多属性数据
+message ReqIPAttr {
+	optional string ip = 1;
+	repeated IPData attrs = 2;
+	repeated uint32 days = 3;
+}
+
+message IPAttrData {
+	optional string servicename = 1;
+	optional string attrname = 2;
+	optional uint32 day = 3;
+	repeated uint32 values = 4;
+}
+
+message RespIPAttr {
+	repeated IPAttrData data = 1;
+}
+

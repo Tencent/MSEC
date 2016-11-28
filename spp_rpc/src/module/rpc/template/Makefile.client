@@ -1,0 +1,92 @@
+########MAKEFILE##########
+PB_INC=../include/pb
+PROTOC=../lib/protoc
+FRAME_INC_PATH=../include
+FRAME_LIB=../lib
+DEBUG= -g
+
+INCCOMM=-I$(FRAME_INC_PATH) -I$(PB_INC)  -I$(FRAME_INC_PATH)/internal -I$(FRAME_INC_PATH)/spp_incl/ -I$(FRAME_INC_PATH)/sync_incl
+LIBCOMM=-L$(FRAME_LIB) -lrpc_clt_comm -lnlbapi -lprotobuf -lmt -ldl
+BINARY = client_$(MODULE_REPLACE)_sync
+
+### rules
+ALLPROTOBUF=$(wildcard ./*.proto)
+ALLPROTOBUF_H=$(patsubst %.proto,%.pb.h,$(ALLPROTOBUF))
+ALLPROTOBUF_OBJ=$(patsubst %.proto,%.pb.o,$(ALLPROTOBUF))
+
+# Comment the following line if you are not using the gnu c compiler
+#C_ARGS = -Wall -g -fPIC -D_DEBUG
+C_ARGS = -Wall -g -fPIC
+#.SUFFIXES: .o .cpp
+
+ifeq ($(ARCH),32)
+	C_ARGS +=  -march=pentium4 -m32 -DSUS_LINUX -pthread
+else
+	C_ARGS +=  -m64 -DSUS_LINUX -pthread
+endif
+# You might have to change this if your c compiler is not cc
+CC = g++
+
+# You shouldn't need to make any more changes below this line.
+
+#.c.o:
+#	$(CC) -c $*.c
+
+all: proto $(BINARY) 
+
+### shell color config
+RED = \\e[1m\\e[31m
+DARKRED = \\e[31m
+GREEN = \\e[1m\\e[32m
+DARKGREEN = \\e[32m
+BLUE = \\e[1m\\e[34m
+DARKBLUE = \\e[34m
+YELLOW = \\e[1m\\e[33m
+DARKYELLOW = \\e[33m
+MAGENTA = \\e[1m\\e[35m
+DARKMAGENTA = \\e[35m
+CYAN = \\e[1m\\e[36m
+DARKCYAN = \\e[36m
+RESET = \\e[m
+CRESET =  ;echo -ne \\e[m; test -s $@
+
+%.o: %.cpp
+	@echo -e Compiling $(GREEN)$<$(RESET) ...$(RED)
+	@$(CC) $(C_ARGS) -c -o $@ $< $(INCCOMM) $(CRESET)
+
+%.o: %.cc
+	@echo -e Compiling $(GREEN)$<$(RESET) ...$(RED)
+	@$(CC) $(C_ARGS) -c -o $@ $< $(INCCOMM) $(CRESET)
+
+%.o: %.c
+	@echo -e Compiling $(GREEN)$<$(RESET) ...$(RED)
+	@$(CC) $(C_ARGS) -c -o $@ $< $(INCCOMM) $(CRESET)  
+
+%.o:%.S
+	@echo -e Compiling $(GREEN)$<$(RESET) ...$(RED)
+	@$(CC) $(C_ARGS) -c -o $@ $< $(INCCOMM) $(CRESET) 
+
+%.pb.h:%.proto
+	@echo -e Generating $(BLUE)$@$(RESET)...
+	@chmod a+x $(PROTOC)
+	@$(PROTOC)  $<  --cpp_out=$(shell dirname $<)  --proto_path=$(shell dirname $<) \
+	--proto_path=$(PB_INC) --proto_path=$(FRAME_INC_PATH)
+
+%.pb.o:%.proto
+	@echo -e Compiling $(GREEN)$<$(RESET) ...$(RED)
+	@$(CC) $(C_ARGS) -c -o $@ ` echo $< | sed 's/.proto$$/.pb.cc/g' ` $(INCCOMM) $(CRESET)
+
+clean:
+	@rm -f $(BINARY)  *.o 
+
+proto: $(ALLPROTOBUF_H) 
+
+
+LIB_OBJ = $(patsubst %.cpp,%.o,$(wildcard *.cpp)) $(patsubst %.c,%.o,$(wildcard *.c)) \
+          $(patsubst %.cc,%.o,$(wildcard *.cc)) $(patsubst %.cxx,%.o,$(wildcard *.cxx)) $(ALLPROTOBUF_OBJ)
+
+client_$(MODULE_REPLACE)_sync: $(LIB_OBJ)
+	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED)
+	@-rm -f $@ 
+	@$(CC) -o $@ $^  $(C_ARGS) $(LIBCOMM) $(CRESET)
+	@chmod +x $@ 

@@ -1,0 +1,61 @@
+global:
+  service: echo_test
+  listen:
+    - address: eth1:5574/udp
+    - address: eth1:5575/tcp-oob
+  timeout: 60
+  udpclose: on
+  TOS: 0
+
+controller:
+  flog:
+    type: 0
+    level: 1
+    maxfilesize: 10240000
+    maxfilenum: 10
+  log:
+    type: 0
+    level: 1
+    maxfilesize: 10240000
+    maxfilenum: 10
+
+proxy:
+  module: spp_module_test.so
+  conf: ../conf/service.xml
+  global: 1
+  interval: 20
+  sendcache_limit: 2048000
+  maxconn: 100000
+  maxpkg: 100000
+  flog:
+    type: 0
+    level: 1
+    maxfilesize: 10240000
+    maxfilenum: 10
+  log:
+    type: 0
+    level: 1
+    maxfilesize: 10240000
+    maxfilenum: 10
+
+worker:
+  - id: 1
+    module: ./spp_module_test.so
+    conf: ../conf/service.xml
+    global: 1
+    reload: 1
+    procnum: 4
+    interval: 20    
+    shmsize: 16
+    timeout: 800
+    flog:
+      type: 0
+      level: 1
+      maxfilesize: 10240000
+      maxfilenum: 10
+    log:
+      type: 0
+      level: 1
+      maxfilesize: 10240000
+      maxfilenum: 10
+

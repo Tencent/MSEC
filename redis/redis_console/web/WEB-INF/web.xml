@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <!-- json rpc ，几乎所有ajax请求都是由该servlet处理并分配到实际的java bean-->
+    <servlet>
+        <servlet-name>JsonRPCServlet</servlet-name>
+        <servlet-class>msec.org.JsonRPCServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JsonRPCServlet</servlet-name>
+        <url-pattern>/JsonRPCServlet</url-pattern>
+    </servlet-mapping>
+    <!-- 统一的文件上传处理，例如openssl动态库-->
+    <servlet>
+        <servlet-name>FileUpload</servlet-name>
+        <servlet-class>msec.org.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUpload</servlet-name>
+        <url-pattern>/FileUpload</url-pattern>
+    </servlet-mapping>
+
+
+
+    <!--用来做初始化和读取配置（例如配置log4j）的servlet -->
+    <servlet>
+        <servlet-name>ServletConfig</servlet-name>
+        <servlet-class>msec.org.ServletConfig</servlet-class>
+        <init-param>
+            <param-name>log4j-properties-location</param-name>
+            <param-value>/WEB-INF/lib/log4j.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>FileServerRootDir</param-name>
+            <param-value>/msec/files</param-value>
+        </init-param>
+        <init-param>
+            <param-name>UserTicketKey</param-name>
+            <param-value>1f1735424446fd5ebf34642c0644fba7</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+</web-app>

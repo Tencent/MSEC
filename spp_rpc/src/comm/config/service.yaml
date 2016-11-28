@@ -1,0 +1,35 @@
+global:
+  listen:
+    - address: eth1:5574/udp
+    - address: eth1:5575/tcp-oob
+
+controller:
+  flog:
+    level: 1
+  log:
+    level: 1
+
+proxy:
+  timeout: 60
+  flog:
+    level: 1
+  log:
+    level: 1
+
+worker:
+  - id: 1
+    module: ./spp_module_test.so
+    procnum: 4
+    interval: 20        
+    flog:
+      level: 1
+    log:
+      level: 1
+
+  - id: 2             
+    module: ./spp_module_test.so
+    procnum: 4
+    flog:
+      level: 1
+    log:
+      level: 1
