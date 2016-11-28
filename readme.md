@@ -48,6 +48,7 @@ http://www.graphviz.org/pdf/gv.3java.pdf
 * server是部署在console服务器上发出命令的程序，用c语言开发；
 * agent是部署在业务运营机上的程序，它接收server的命令，用java开发的；
 * InteractiveTool是和server部署在一起的一个命令行工具，通过它可以手工发起命令，用java开发的。
+
 ## 3.2 用到的外部库 ##
 server用到：
 
@@ -180,6 +181,7 @@ srpc\_java是一个逻辑层的java框架, 对应的子目录是msec\_srpc\_java
 * bin          框架执行脚本
 * lib          构建之后，框架依赖的库
 * pom.xml     框架通过maven构建
+
 ## 8.2 用到的外部库 ##
 * commons-beanutils-1.7.0.jar
 * commons-cli-1.2.jar
