@@ -71,8 +71,9 @@ standalone\_console是一个典型的Java Web Application。子目录standalone\
 ## 4.2 用到的外部库 ##
 server用到：
 
-* mysqlclient库（对应yum中的mariadb-devel）
-* zlib库（对应yum中的zlib-devel）
+* protobuf库（版本2.5.0）
+* mysqlclient库（版本>=5.5.0）
+* zlib库（版本>=1.2.0）
 
 standalone\_console用到：
 
@@ -99,8 +100,9 @@ standalone\_console用到：
 ## 5.2 用到的外部库 ##
 monitor\_server/server用到：
 
-* mysqlclient库（对应yum中的mariadb-devel）
-* zlib库（对应yum中的zlib-devel）
+* protobuf库（版本2.5.0）
+* mysqlclient库（版本>=5.5.0）
+* zlib库（版本>=1.2.0）
 
 redis\_console用到：
 

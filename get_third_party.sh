@@ -16,6 +16,7 @@ wget http://central.maven.org/maven2/com/google/protobuf/protobuf-java/2.6.0/pro
 wget http://central.maven.org/maven2/org/scf4j/scf4j-props/1.0.1/scf4j-props-1.0.1.jar
 wget http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.18/slf4j-api-1.7.18.jar
 wget http://www.java2s.com/Code/JarDownload/zookeeper/zookeeper-3.4.3.jar.zip
+wget http://nchc.dl.sourceforge.net/project/jgraphviz/jgraphviz/0.1/com.rapitasystems.jgraphviz_2.20.3_linux_x86.zip
 cd -
 
 echo ' download jar files used by monitor console:'
@@ -28,6 +29,7 @@ echo ' download jar files used by redis console:'
 echo '======================================================='
 mkdir -p third_party/redis/redis_console; cd   third_party/redis/redis_console
 cp ../../msec_console/*  ./
+wget http://search.maven.org/remotecontent?filepath=redis/clients/jedis/2.8.1/jedis-2.8.1.jar
 cd -
 
 echo 'download jar files used by remote shell server:'
@@ -40,6 +42,9 @@ wget http://maven.restlet.org/org/json/org.json/2.0/org.json-2.0.jar
 cd -
 
 mkdir -p third_party/monitor/monitor_server; cd  third_party/monitor/monitor_server
+echo 'download protobuf for monitor_server'
+echo '======================================================='
+wget https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz
 echo 'download zlib for monitor_server:'
 echo '======================================================='
 wget http://zlib.net/zlib-1.2.8.tar.gz
@@ -49,9 +54,10 @@ wget http://cdn.mysql.com/archives/mysql-5.5/MySQL-devel-5.5.8-1.linux2.6.x86_64
 cd -
 
 
-echo 'download zlib and mysql client library for redis'
+echo 'download protobuf, zlib and mysql client library for redis'
 echo '======================================================='
 mkdir -p third_party/redis/monitor_server; cd  third_party/redis/monitor_server
+cp  ../../monitor/monitor_server/protobuf* .
 cp  ../../monitor/monitor_server/zlib* .
 cp  ../../monitor/monitor_server/MySQL* .
 cd -
