@@ -1,7 +1,13 @@
 Tencent is pleased to support the open source community by making MSEC available.  
 Copyright (C) 2016 THL A29 Limited, a Tencent company.  All rights reserved.
-If you have downloaded a copy of the MSEC binary from Tencent, please note that the MSEC binary is licensed under the GNU General Public License, Version 2.0.
-If you have downloaded a copy of the MSEC source code from Tencent, please note that MSEC source code is licensed under the GNU General Public License, Version 2.0, except for the third-party components listed below which are subject to different license terms.  Your integration of MSEC into your own projects may require compliance with the GNU General Public License, Version 2.0, as well as the other licenses applicable to the third-party components included within MSEC.
+If you have downloaded a copy of the MSEC binary from Tencent, please note that 
+the MSEC binary is licensed under the GNU General Public License, Version 2.0.
+If you have downloaded a copy of the MSEC source code from Tencent, please note 
+that MSEC source code is licensed under the GNU General Public License, Version 
+2.0, except for the third-party components listed below which are subject to 
+different license terms.  Your integration of MSEC into your own projects may require 
+compliance with the GNU General Public License, Version 2.0, as well as the other 
+licenses applicable to the third-party components included within MSEC.
 A copy of the GNU General Public License, Version 2.0 is included in this file.
 
 Other dependencies and licenses:
