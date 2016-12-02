@@ -1,23 +1,31 @@
-# 1、概述 #
+# 1、概述 Overview #
 这里是毫秒服务引擎的代码，分好几个模块，开发语言主要是java和c/c++。每个模块需要单独编译。
 
-## 编译环境要求 ##
+This repository contains the source code for MSEC (Mass Service Engine in Cluster). The source code consists of several modules.
+The main programming language used are java and c/c++. Every module needs to compile separately.
+
+## 编译环境要求 Compiling Environment ##
 * gcc version >= 4.1.2
 * autoconf  version >= 2.59
-* JDK  version > = 1.6
-* Maven version > = 3.2.5
-* Linux内核版本>=2.6.18
-* CPU架构：x86\_64
+* JDK  version >= 1.6
+* Maven version >= 3.2.5
+* Linux kernel >= 2.6.18
+* CPU architecture：x86\_64
 
-## 关于用到的外部库 ##
+## 关于用到的外部库 External libraries ##
 下载到源代码后，在能够连接外网的linux服务器上手工执行get\_third\_party.sh脚本，会下载各模块用到的外部库，保存在third\_party目录下； srpc\_java和logsys是maven组织的java项目，mvn通过pom.xml配置自动下载用到的外部库。
 
-# 2、web console #
-## 2.1 简介 ##
+You may manually execute get\_third\_party.sh, which will download external libraries used by different modules to third\_party folder.
+srpc\_java and logsys are projects by Apache Maven. mvn will configure external libraries according to pom.xml.
+
+# 2、Web console #
+## 2.1 简介 Intro ##
 
 Web console的代码在msec\_console子目录，是一个典型的Java Web Application。目录msec\_console下的src子目录是java代码，web子目录是静态页面、css、图片等web资源文件。
 
-## 2.2 用到的外部库 ##
+Source code of Web console is located under msec\_console. Web console is a typical Java Web Application. Java code is located under msec\_console folder, static resources are located under web folder.
+
+## 2.2 用到的外部库 External libraries ##
 * commons-compress-1.8.jar
 * commons-fileupload-1.2.2.jar
 * commons-io-2.4.jar
@@ -38,8 +46,10 @@ Web console的代码在msec\_console子目录，是一个典型的Java Web Appli
 
 几乎所有上面的jar都能在http://mvnrepository.com/下载到。
 
-#3、remote shell#
-## 3.1 简介 ##
+Almost all jars mentioned can be downloaded from http://mvnrepository.com/ .
+
+#3、Remote shell#
+## 3.1 简介 Intro ##
 子目录remote\_shell是console服务器用来对业务运营机进行文件传输、远程命令执行的系统的代码。典型的应用场景是：发布的时候利用remote\_shell系统传输发布文件、执行发布命令。
 
 子目录remote\_shell下又有三个子目录：
@@ -48,15 +58,25 @@ Web console的代码在msec\_console子目录，是一个典型的Java Web Appli
 * agent是部署在业务运营机上的程序，它接收server的命令，用java开发的；
 * InteractiveTool是和server部署在一起的一个命令行工具，通过它可以手工发起命令，用java开发的。
 
-## 3.2 用到的外部库 ##
+Subdirectory remote\_shell contains code for console server's file transmission and remote execution. Typical scenario is: using remote\_shell system to transmit files and issue deployment commands.
+
+Three folders are in remote\_shell:
+
+* `server` is a program deployed on console server, developed in C;
+* `agent` is a program deployed on business logic servers, receiving commands from server, developed in Java;
+* `InteractiveTool` is a command line tool developed in Java bundled with server, which can be used to issue command manually.
+
+## 3.2 用到的外部库 External libraries ##
 server用到：
+
+Used by server:
 
 * bcprov-jdk16-1.46.jar
 * jackson-all-1.6.0.jar
 * junit-4.12.jar
 * org.json.jar
 
-# 4、monitor #
+# 4、Monitor #
 ## 4.1 简介 ##
 子目录monitor是一套集中式的监控服务，该监控服务既可作为msec的集中式监控服务供msec业务上报，也可单独部署并使用独立的standalone\_console进行管理。典型的应用场景是：业务上报监控到监控agent，监控agent汇总定时上报给监控服务，开发运营人员通过msec的web_console页面或独立部署的standalone\_console页面查看业务监控汇总视图。
 
@@ -68,14 +88,28 @@ server用到：
 
 standalone\_console是一个典型的Java Web Application。子目录standalone\_console下的src子目录是java代码，web子目录是静态页面、css、图片等web资源文件。
 
-## 4.2 用到的外部库 ##
+Monitor is a centralized monitor server. This server can be used as a central server, as well as a separate one managed by standalone standalone\_console. Typical scenario is: report beind submitted to monitor agent, the agent submit reports to server periodically. DevOps staff check collective view from web_console page or standalone\_console page in MSEC.
+
+Three folders are under monitor directory:
+
+* `lib` contains common library for agent/server, developed in C++
+* `server` is the monitoring server, developed in C++
+* `agent` is a program deployed on business logic servers, responsible for collecting monitoring data from business modules and reporting to monitoring server periodically. (developed in C++)
+
+standalone\_console is a typical Java Web Application: java code under src folder, static resources under web folder.
+
+## 4.2 用到的外部库 External libraries ##
 server用到：
+
+Used by server:
 
 * protobuf库（版本2.5.0）
 * mysqlclient库（版本>=5.5.0）
 * zlib库（版本>=1.2.0）
 
 standalone\_console用到：
+
+Used by standalone\_console:
 
 * commons-compress-1.8.jar
 * commons-fileupload-1.2.2.jar
@@ -94,17 +128,23 @@ standalone\_console用到：
 * zookeeper-3.4.8.jar
 
 # 5、redis #
-## 5.1 简介 ##
+## 5.1 简介 Intro ##
 子目录redis\_console是一套基于redis cluster的KV运维管理平台。Web侧的代码在redis\_console子目录，是一个典型的Java Web Application。子目录redis\_console下的src子目录是java代码，web子目录是静态页面、css、图片等web资源文件。子目录monitor\_server提供了一套专用于redis服务的监控系统，和msec的monitor服务的代码实现有些微的差别，但代码路径格式是一致的。
 
-## 5.2 用到的外部库 ##
+Subdirectory redis\_console contains a key-value DevOps platform based on redis cluster. redis\_console is a typical Java Web Application. Subdirectory monitor\_server contains a monitoring system for redis services, which has with differences from msec's, but the file organzation structure of the folder is the same.
+
+## 5.2 用到的外部库 External libraries ##
 monitor\_server/server用到：
+
+Used by monitor\_server/server
 
 * protobuf库（版本2.5.0）
 * mysqlclient库（版本>=5.5.0）
 * zlib库（版本>=1.2.0）
 
 redis\_console用到：
+
+Used by redis\_console:
 
 * commons-compress-1.8.jar
 * commons-fileupload-1.2.2.jar
@@ -126,8 +166,11 @@ redis\_console用到：
 特别注明：
 **如果用于部署，redis\_console子目录中的web\resources\redis.tgz里需要加上redis的二进制服务，包含redis-server和redis-cli。**
 
+Note:
+**If it is used in deployment, services of redis binaries, including redis-server and redis-cli, should be added to web\resources\redis.tgz under redis\_console.**
+
 # 6、nlb #
-## 6.1 简介 ##
+## 6.1 简介 Intro ##
 nlb是一套网络负载均衡寻址系统。源码在子目录nlb下，使用纯C语言开发。src目录为所有代码，代码主要包含agent和api两部分，配置通过zookeeper集群下发，由web console导入配置到zookeeper集群。
 
 源码目录介绍：
@@ -137,12 +180,21 @@ nlb是一套网络负载均衡寻址系统。源码在子目录nlb下，使用�
 * comm	通用代码
 * tools		工具源码：包含get\_route和show\_servers工具
 
-## 6.2 用到的外部库 ##
+nlb is a load balancer and routing system. Source code is under folder nlb. Developed purely in C. All codes are located in src folder. The code consists of two parts, agent and api. Configuration is sent through zookeeper cluster, and is imported to zookeeper cluster by web console.
+
+Directory structure:
+
+* `agent`: source code of agent
+* `api`: source code of api
+* `comm`: commons
+* `tools`: source code of tools including get\_route and show\_server
+
+## 6.2 用到的外部库 External libraries ##
 * zookeeper-3.4.8
 * jansson-2.9
 
 # 7、srpc #
-## 7.1 简介 ##
+## 7.1 简介 Intro ##
 srpc是一个逻辑层rpc框架。子目录spp\_rpc是srpc的源码，使用C++作为主开发语言，支持C++/Python/PHP语言，C++支持微线程。
 
 源码主要目录介绍：
@@ -156,7 +208,20 @@ srpc是一个逻辑层rpc框架。子目录spp\_rpc是srpc的源码，使用C++�
 * module/rpc/php\_template	PHP自动生成代码源码
 * module/rpc/py\_template		Python自动生成代码源码
 
-## 7.2 用到的外部库 ##
+srpc is a rpc framework in logic layer. Main language is C++. C++/Python/PHP is supported. C++ interface supports microthread.
+
+Directory structure (major folders introduced):
+
+* `sync\_frame`: code for microthread
+* `controller`: code of controller process
+* `proxy`: code of proxy process
+* `worker`: code of worker process
+* `rpc`: rpc code
+* `module/rpc/template`: autogenerated c++ code
+* `module/rpc/php\_template`: autogenerated php code
+* `module/rpc/py\_template`: autogenerated python code
+
+## 7.2 用到的外部库 External libraries ##
 * protobuf-2.5.0
 * http-parser
 * jansson
@@ -168,18 +233,28 @@ srpc是一个逻辑层rpc框架。子目录spp\_rpc是srpc的源码，使用C++�
 
 
 # 8、srpc\_java #
-## 8.1 简介 ##
+## 8.1 简介 Intro ##
 srpc\_java是一个逻辑层的java框架, 对应的子目录是msec\_srpc\_java。
 
 源码主要目录介绍：
 
-* srpc     	框架代码
-* src          业务示例代码
-* bin          框架执行脚本
-* lib          构建之后，框架依赖的库
-* pom.xml     框架通过maven构建
+* srpc     	框架代码 code of framework
+* src          业务示例代码 examples
+* bin          框架执行脚本 scripts
+* lib          构建之后，框架依赖的库 dependencies after build
+* pom.xml     框架通过maven构建 build framework with maven
 
-## 8.2 用到的外部库 ##
+A java framework in logic layer. The corresponding directory is msec\_srpc\_java.
+
+Directory structure:
+
+* `srpc`: code of framework
+* `src`: business code examples
+* `bin`: scripts
+* `lib`: dependencies after build
+* `pom.xml`: build framework with maven
+
+## 8.2 用到的外部库 External libraries ##
 * commons-beanutils-1.7.0.jar
 * commons-cli-1.2.jar
 * commons-collections-3.1.jar
@@ -195,7 +270,7 @@ srpc\_java是一个逻辑层的java框架, 对应的子目录是msec\_srpc\_java
 
 # 9、logsys #
 
-## 9.1 简介 ##
+## 9.1 简介 Intro ##
 
 Logsys是msec中日志系统。子目录spp\_rpc是srpc的源码，使用C++作为主开发语言，支持C++/Python/PHP语言，C++支持微线程。
 
@@ -206,7 +281,14 @@ Logsys是msec中日志系统。子目录spp\_rpc是srpc的源码，使用C++作�
 * flume-protobuf-source   apache flume的插件，读取protobuf协议格式的日志数据, 通过maven命令行构建
 * proxy  日志系统的查询接口, 通过maven命令行构建
 
-## 9.2 用到的外部库 ##
+Logsys is the journal system in MSEC. Directory spp\_rpc contains source code of srpc, mainly developed in C++. C++/Python/PHP is supported. C++ supports microthreads.
+
+* `api`: api provided by journal system, for use in srpc
+* `flume-ng-mysql-sink`: plugin of apache flume, write journal data into mysql, build it with maven commandlines
+* `flume-protobuf-source`: plugin of apache flume, read journal data in protobuf protocol, build it with maven
+* `proxy`: interface to query journal sytem, build it with maven
+
+## 9.2 用到的外部库 External libraries ##
 * protobuf-2.5.0
 * commons-beanutils-1.7.0.jar
 * commons-cli-1.2.jar
