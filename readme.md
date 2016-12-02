@@ -166,10 +166,6 @@ srpc是一个逻辑层rpc框架。子目录spp\_rpc是srpc的源码，使用C++�
 * php
 * r3c
 
-为了适配微线程，修改了以下库
-
-* mysql-connector-c-6.1.6
-* hiredis-0.13.3
 
 # 8、srpc\_java #
 ## 8.1 简介 ##
