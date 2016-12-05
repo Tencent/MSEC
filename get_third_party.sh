@@ -1,3 +1,6 @@
+#!/bin/sh
+set -e
+
 echo ' download jar files used by msec_console:'
 echo '=========================================='
 mkdir -p third_party/msec_console;cd third_party/msec_console
