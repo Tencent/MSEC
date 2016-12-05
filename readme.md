@@ -36,7 +36,7 @@ Web console的代码在msec\_console子目录，是一个典型的Java Web Appli
 * slf4j-api-1.7.18.jar
 * zookeeper-3.4.8.jar
 
-几乎所有上面的jar都能在http://mvnrepository.com/下载到。
+几乎所有上面的jar都能在<http://mvnrepository.com/>下载到。
 
 #3、remote shell#
 ## 3.1 简介 ##
