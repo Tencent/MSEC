@@ -22,8 +22,7 @@
 
 #BUILD = BUILD_DEBUG
 BUILD =BUILD_RELEASE
-EXES = test_timer  test_bitmap test_shm_array test_any_value test_svr test_client test_config #test_http_svr 
-#test_hash_map
+EXES = test_timer  test_bitmap test_shm_array test_any_value test_svr test_client test_config 
 MY_LIB = -L../lib/ -ltce -L/usr/local/mysql/lib/ -lmysqlclient -L/lib/ -lz -lpthread
 
 MY_INC= -I../include/ -I/usr/local/mysql/include/
