@@ -179,7 +179,7 @@ rpc GetMP3List(GetMP3ListRequest) returns (GetMP3ListResponse);
 }
 ```
 
-### Step3：开发标准服务MainLogic {#step3开发标准服务mainlogic .ListParagraph}
+### Step3：开发标准服务MainLogic
 
 点击MainLogic 服务的“获取开发环境”的按钮，下载开发包，在开发机上展开
 
@@ -393,7 +393,7 @@ UnpackResponse(recv_buf, recv_len, response)
 [frozen.h](https://github.com/cesanta/frozen/blob/master/frozen.h)
 [frozen.c](https://github.com/cesanta/frozen/blob/master/frozen.c)
 
-### Step6：cgi访问MainLogic标准服务 {#step6cgi访问mainlogic标准服务 .ListParagraph}
+### Step6：cgi访问MainLogic标准服务
 
 首先从MainLogic的配置页面下载调用方用的库：
 
@@ -446,7 +446,7 @@ CheckPkgLen()三个函数。
 
 3.  就像场景二一样的编码，用CallMethod发起对msec_B.b 这个服务的访问即可
 
-### Step7：发布标准服务 {#step7发布标准服务 .ListParagraph}
+### Step7：发布标准服务
 
 首先，确保要发布的业务运营机环境已经安装了毫秒的agent并启动ok，详细见《msec是什么.docx》里的第一步：机器准备环节
 
