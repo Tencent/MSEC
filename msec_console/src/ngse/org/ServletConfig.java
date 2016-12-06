@@ -81,8 +81,8 @@ public class ServletConfig extends HttpServlet {
         } else {
             String webAppPath = sc.getRealPath("/");
             String log4jProp = webAppPath + log4jLocation;
-            File yoMamaYesThisSaysYoMama = new File(log4jProp);
-            if (yoMamaYesThisSaysYoMama.exists()) {
+            File propFile = new File(log4jProp);
+            if (propFile.exists()) {
                 //System.out.println("使用: " + log4jProp+"初始化日志设置信息");
                 PropertyConfigurator.configure(log4jProp);
             } else {
