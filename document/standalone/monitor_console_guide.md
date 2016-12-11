@@ -69,36 +69,36 @@ docker ps -a
 
 1.  加载docker镜像
 
-```bash
-docker import monitor_standalone.tar.gz centos:monitor_standalone
-docker images
-#result looks like:
-#REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
-#centos monitor_standalone 3a9c6f7a9709 59 seconds ago 1.019 GB
-```
+	```bash
+	docker import monitor_standalone.tar.gz centos:monitor_standalone
+	docker images
+	#result looks like:
+	#REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
+	#centos monitor_standalone 3a9c6f7a9709 59 seconds ago 1.019 GB
+	```
 
 2.  解压数据卷, 并移至目录： /monitor_data
 
-```bash
-tar xvf monitor_standalone_data.tar.gz; mv monitor_data /monitor_data
-```
+	```bash
+	tar xvf monitor_standalone_data.tar.gz; mv monitor_data /monitor_data
+	```
 
 3.  运行docker镜像
 
-```bash
-docker run --net=host --ipc=host -d -it -v /monitor_data/:/monitor_standalone --privileged=true -v /etc/localtime:/etc/localtime:ro centos:monitor_standalone '/etc/rc.d/rc.local'
-```
+	```bash
+	docker run --net=host --ipc=host -d -it -v /monitor_data/:/monitor_standalone --privileged=true -v /etc/localtime:/etc/localtime:ro centos:monitor_standalone '/etc/rc.d/rc.local'
+	```
 
-1.  查看服务正常
+4.  查看服务正常
 
-```bash
-netstat -anop |grep '8080\|38002' |grep LISTEN
-#result looks like
-#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 70/java off (0.00/0/0)
-#tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 260/./monitor_server off (0.00/0/0)
-```
+	```bash
+	netstat -anop |grep '8080\|38002' |grep LISTEN
+	#result looks like:
+	#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 70/java off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 260/./monitor_server off (0.00/0/0)
+	```
 
-1.  进入监控系统管理页面查看是否正常, URL为http://Console_IP:8080
+5.  进入监控系统管理页面查看是否正常, URL为http://Console_IP:8080
 
 ## 3.3 业务机器Agent安装
 
@@ -106,28 +106,28 @@ netstat -anop |grep '8080\|38002' |grep LISTEN
 
 1.  解压Agent包并放置于/msec/agent/目录，注意：agent目录必须为/msec/agent/monitor目录
 
-```bash
-tar xvf monitor_standalone_agent.tar.gz -C /msec/agent/monitor
-```
+	```bash
+	tar xvf monitor_standalone_agent.tar.gz -C /msec/agent/monitor
+	```
 
 2.  启动agent, 请修改monitor.conf配置，将<server>ip/port参数为监控系统部署ip/port，使用`./start.sh`启动即可，agent成功启动会显示如下信息。
-
-```bash
-./start.sh
-#result looks like:
-#Monitor agent started
-```
+	
+	```bash
+	./start.sh
+	#result looks like:
+	#Monitor agent started
+	```
 
 3.  agent同时提供test_set和test_get命令行用于测试设置/获取monitor数据，请修改ip.conf配置为监控系统的ip/port：
 
-```bash
-#设置业务TestSvc.TestSvc，属性名rpc.update的监控项
-./test_set TestSvc.TestSvc rpc.update
-#获取该业务下的属性和IP详情
-./test_get 1 TestSvc.TestSvc 
-#获取监控业务目录树
-./test_get 10
-```
+	```bash
+	#设置业务TestSvc.TestSvc，属性名rpc.update的监控项
+	./test_set TestSvc.TestSvc rpc.update
+	#获取该业务下的属性和IP详情
+	./test_get 1 TestSvc.TestSvc 
+	#获取监控业务目录树
+	./test_get 10
+	```
 
 > 用户可参考命令行帮助获取更多输入参数信息，同时也可实时在监控系统管理页面中查看具体业务的监控视图。
 
