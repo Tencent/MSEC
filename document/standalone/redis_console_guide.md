@@ -44,36 +44,35 @@ docker ps -a
 
 1. 加载docker镜像
 
-```bash
-docker import redis_console.tar.gz centos:redis_console
-docker images
-#result looks like:
-#REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
-#centos redis_console 3a9c6f7a9709 59 seconds ago 957.2 MB
-```
-
+	```bash
+	docker import redis_console.tar.gz centos:redis_console
+	docker images
+	#result looks like:
+	#REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
+	#centos redis_console 3a9c6f7a9709 59 seconds ago 957.2 MB
+	```
 
 2. 解压数据卷, 并移至目录： /redis_console_data
 
-```bash
-tar xvf redis_console_data.tar.gz; mv redis_console_data redis_console_data
-```
+	```bash
+	tar xvf redis_console_data.tar.gz; mv redis_console_data redis_console_data
+	```
 
 3.  运行docker镜像
 
-```bash
-docker run --net=host --ipc=host -d -it -v /redis_console_data/:/msec --privileged=true -v /etc/localtime:/etc/localtime:ro centos:redis_console '/etc/rc.d/rc.local'
-```
+	```bash
+	docker run --net=host --ipc=host -d -it -v /redis_console_data/:/msec --privileged=true -v /etc/localtime:/etc/localtime:ro centos:redis_console '/etc/rc.d/rc.local'
+	```
 
 4.  查看服务正常
 
-```bash
-netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
-#result looks like:
-#tcp 0 0 0.0.0.0:9982 0.0.0.0:* LISTEN 2326/java off (0.00/0/0)
-#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 2359/java off (0.00/0/0)
-#tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 2815/./monitor_serv off (0.00/0/0)
-```
+	```bash
+	netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
+	#result looks like:
+	#tcp 0 0 0.0.0.0:9982 0.0.0.0:* LISTEN 2326/java off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 2359/java off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 2815/./monitor_serv off (0.00/0/0)
+	```
 
 5.  进入监控系统管理页面查看是否正常, URL为 http://Console_IP:8080
 
@@ -97,7 +96,7 @@ netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
 
 1.  IP/Port列表：配置该服务部署到哪些机器上面，通过扩容、缩容流程进行cluster的容量管理；同时可以实时展现当前服务状态；
 
-> *服务是以Set形式进行容量管理，一个Set的机器数为初始化时设置的拷贝数，扩容和缩容都需要一次性增加、去除一个或多个Set。*
+	> *服务是以Set形式进行容量管理，一个Set的机器数为初始化时设置的拷贝数，扩容和缩容都需要一次性增加、去除一个或多个Set。*
 
 2.  扩容管理：增加一个/多个Set。
 
@@ -105,7 +104,7 @@ netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
 
 4.  死机恢复/机器替换管理：可以对死机机器进行恢复或使用新机器替换。
 
-> *注意：如果使用新机器替换死机机器，新机器只能服务一个Set。*
+	> *注意：如果使用新机器替换死机机器，新机器只能服务一个Set。*
 
 ![](images/redis_console_guide/image2.png)
 实例列表按钮旁的三角形图标出现说明当前服务有一定风险，点击会提示用户当前服务的可能的问题（如部分hash slot拷贝数不足等问题）。
