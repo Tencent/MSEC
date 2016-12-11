@@ -69,7 +69,7 @@ docker run --net=host --ipc=host -d -it -v /redis_console_data/:/msec --privileg
 
 ```bash
 netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
-#results looks like:
+#result looks like:
 #tcp 0 0 0.0.0.0:9982 0.0.0.0:* LISTEN 2326/java off (0.00/0/0)
 #tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 2359/java off (0.00/0/0)
 #tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 2815/./monitor_serv off (0.00/0/0)
