@@ -34,7 +34,7 @@ Docker初始化会需要一段时间（10min？），并且机器响应会很慢
 docker ps
 ```
 
-![](images/media/image1.png)
+![](images/docker_guide/image1.png)
 
 # 以centos为例来使用docker
 
@@ -54,7 +54,7 @@ docker pull daocloud.io/centos
 
 成功拉下来后，用images命令可以查看到：
 
-![](images/media/image2.png)
+![](images/docker_guide/image2.png)
 
 用run命令执行它：
 
@@ -67,39 +67,39 @@ docker run –it centos:latest /bin/bash
 
 另外起一个securecrt连接到母机，可以用ps命令查看docker容器（容器是很重要的概念，可以认为是一个执行中的虚拟机实例，类似进程，另一个概念是镜像，类似可执行文件）
 
-![](images/media/image3.png)
+![](images/docker_guide/image3.png)
 
 如果在刚才启动的centos虚拟机里执行exit命令，那么docker ps命令就看不到这个容器了，因为它停止执行了，用`docker ps -a`才能看到：
 
-![](images/media/image4.png)
+![](images/docker_guide/image4.png)
 
 用**docker rm**可以删除这些已经停止了的容器，可以类比为僵尸进程吧
 
-![](images/media/image5.png)
+![](images/docker_guide/image5.png)
 
 如果不希望exit退出但是又想解脱那个终端怎么办呢？在终端里按`CTRL-p CTRL-q`
 
 如果我又想让当前终端“连接”到这个容器怎么办呢，用`docker attach`命令
 
-![](images/media/image6.png)
+![](images/docker_guide/image6.png)
 
 如果我想在虚拟机里面装个自己的应用程序或者装个mysql，并且希望下次启动虚拟机这些程序还在，怎么弄呢，那就装好这些程序后，用`docker commit`命令提交为一个新的镜像
 
-![](images/media/image7.png)
+![](images/docker_guide/image7.png)
 
 例如
 
-![](images/media/image8.png)
+![](images/docker_guide/image8.png)
 
 你看，多了一个我自己的镜像，用run命令启动它，里面会有mysql
 
-![](images/media/image9.png)
+![](images/docker_guide/image9.png)
 
 如果希望这个镜像在其他母机上执行起来，可以使用export命令导出为.tar文件，在其他机器上用import命令导入镜像，然后执行。Docker的思想本来就是制作-移动-运行
 
-![](images/media/image10.png)
+![](images/docker_guide/image10.png)
 
-![](images/media/image11.png)
+![](images/docker_guide/image11.png)
 
 ## 授之以渔
 
@@ -118,5 +118,5 @@ docker run –it centos:latest /bin/bash
 
 例如：
 
-![](images/media/image12.png)
+![](images/docker_guide/image12.png)
 

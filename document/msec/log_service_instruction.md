@@ -99,7 +99,9 @@ Agent会根据NLB模块获取日志Server的日志，并将业务日志转发。
 
 可以进入到docker container中查看：
 
+```bash
 docker exec --it <container id> /bin/bash
+```
 
 进入后可以看到以下几个进程，分别对应logsys_svr, logsys_proxy, mysql
 

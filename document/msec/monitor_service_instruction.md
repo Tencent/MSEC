@@ -6,11 +6,11 @@
 
 监控服务分为mysql服务（用于存储告警相关信息）和监控服务。
 
-### 1.1.1 mysql服务
+### mysql服务
 
 mysql服务位于/usr/local/mysql目录下。
 
-### 1.1.2 监控服务
+### 监控服务
 
 监控服务位于/usr/local/monitor目录下：
 

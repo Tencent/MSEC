@@ -39,7 +39,7 @@ MSEC以docker的方式安装整体环境，分为以下几个docker镜像:
 yum install docker
 ```
 
-一般情况会直接成功，显示Complete\!
+一般情况会直接成功，显示Complete!
 
 但是腾讯云的centos7版本下会报错，需要更新一下lvm2，所以先执行：
 
@@ -99,8 +99,8 @@ docker ps -a
 	```bash
 	netstat -anop |grep '8080\|8972' |grep LISTEN
 	#result looks like:
-	#tcp 0 0 0.0.0.0:8972 0.0.0.0:\* LISTEN 7973/java off (0.00/0/0)
-	#tcp 0 0 0.0.0.0:8080 0.0.0.0:\* LISTEN 20607/java off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:8972 0.0.0.0:* LISTEN 7973/java off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 20607/java off (0.00/0/0)
 	```
 
 5.  进入管理系统页面查看是否正常, URL为 *http://Console_IP:8080*
@@ -112,17 +112,17 @@ docker ps -a
 6.  查看监控系统服务正常
 
 	```bash
-	netstat -anop |grep '48002\\|48003' |grep LISTEN
+	netstat -anop |grep '48002\|48003' |grep LISTEN
 	#result looks like:
-	#tcp 0 0 0.0.0.0:48002 0.0.0.0:\* LISTEN 17366/./monitor_ser off (0.00/0/0)
-	#tcp 0 0 0.0.0.0:48003 0.0.0.0:\* LISTEN 17366/./monitor_ser off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:48002 0.0.0.0:* LISTEN 17366/./monitor_ser off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:48003 0.0.0.0:* LISTEN 17366/./monitor_ser off (0.00/0/0)
 	```
 
 7.  将监控服务的IP设置到msec console页面中, 并启用服务
 
 	1. 进入msec console主页，选择：异构的外部服务–>RESERVED->monitor(如果没有这个服务，你就在异构服务里创建一级服务叫RESERVED，RESERVED下面创建monitor二级服务)
 
-	2. 在新增IP: port后填入 “安装IP:48002”, 加入IP端口，协议类型选择tcp
+	2. 在新增IP: port后填入 “监控服务IP:48002”, 加入IP端口，协议类型选择tcp
 
 		加入成功后：会显示服务为disabled状态, 即还没有上线服务。如下图
 
@@ -141,18 +141,18 @@ docker ps -a
 8.  查看服务正常
 
 	```bash
-	netstat -anop |grep '5029\\|30150\\|44445' |grep LISTEN
+	netstat -anop |grep '5029\|30150\|44445' |grep LISTEN
 	#result looks like:
-	#tcp6 0 0 :::44445 :::\* LISTEN 27533/docker-proxy off (0.00/0/0)
-	#tcp6 0 0 :::5029 :::\* LISTEN 27548/docker-proxy off (0.00/0/0)
-	#tcp6 0 0 :::30150 :::\* LISTEN 27540/docker-proxy off (0.00/0/0)
+	#tcp6 0 0 :::44445 :::* LISTEN 27533/docker-proxy off (0.00/0/0)
+	#tcp6 0 0 :::5029 :::* LISTEN 27548/docker-proxy off (0.00/0/0)
+	#tcp6 0 0 :::30150 :::* LISTEN 27540/docker-proxy off (0.00/0/0)
 	```
 
 9.  将日志服务的IP设置到msec console页面中, 并启用服务
 
 	1. 进入msec console主页，选择：异构的外部服务 >> RESERVED >> log
 
-	2. 在新增IP: port后填入 “\<安装IP>:30150”, 加入IP端口,协议类型选择tcp
+	2. 在新增IP: port后填入 “日志服务IP:30150”, 加入IP端口,协议类型选择tcp
 
 		加入成功后：会显示服务为disabled状态, 即还没有上线服务。如下图
 
