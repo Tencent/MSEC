@@ -1,12 +1,12 @@
 # msec服务开发详解（php）
 
-## 1、示例的场景描述
+## 示例的场景描述
 
 这里我们会以一个实际的例子来说明如何基于msec开发一个服务。
 
 ![](images/dev_php/architecture.png)
 
-如上图所示，
+如上图所示，业务流程如下：
 
 1.  android客户端访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考msec服务开发详解(cpp)文档相关章节。
 
@@ -236,7 +236,7 @@ service CrawlService {
 	}
 	```
 
-	为了方便直接拷贝试用，这里给出了MainLogicService.php文件：
+	为了方便直接拷贝试用，这里给出了完整文件：[MainLogicService.php](examples/dev_php/MainLogicService.php)
 
 ### Step4：编译MainLogic服务
 
@@ -317,7 +317,7 @@ $dbconn->close();
 
 getroutebyname通过业务名获取路由信息；updateroute更新路由统计信息，用于lb做回包统计。如果不需要回包统计做动态路由，可以不用调用updateroute。
 
-为了方便拷贝试做，这里给出CrawlService.php文件的完整版本：
+为了方便拷贝试做，这里给出完整文件：[CrawlService.php](examples/dev_php/CrawlService.php)
 
 ### Step6：PHP客户端访问MainLogic标准服务
 
@@ -334,83 +334,84 @@ getroutebyname通过业务名获取路由信息；updateroute更新路由统计�
 3.  如果没有，请安装php解释器，版本要求5.6.x
 
 4.  编辑/etc/php.ini，加入扩展
-    （1.0版本因为疏忽，漏了一个文件，请从MainLogic业务运营机的/msec/VOA_php/MainLogic/bin/lib目录下拷贝nlb_php.so到当前目录下）
 
-> extension=nlb_php.so的绝对路径
-> 
-> extension=srpc_comm_php.so的绝对路径
+	（1.0版本因为疏忽，漏了一个文件，请从MainLogic业务运营机的/msec/VOA_php/MainLogic/bin/lib目录下拷贝nlb_php.so到当前目录下）
+
+	> extension=nlb_php.so的绝对路径
+	> 
+	> extension=srpc_comm_php.so的绝对路径
 
 5.  调用php -m, 看扩展是否加载成功
 
-![](images/dev_php/image15.png)
+	![](images/dev_php/image15.png)
 
 6.  需要设置环境变量LD_LIBRARY_PATH
 
-```bash
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:."
-```
+	```bash
+	export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:."
+	```
 
-7、执行`php test.php`，可以成功调用 MainLogic服务
+7. 执行`php test.php`，可以成功调用 MainLogic服务
 
-test.php的主要逻辑是调用MainLogic模块：
+	test.php的主要逻辑是调用MainLogic模块：
 
-```php
-require_once 'pb4php/message/pb_message.php'; // pb4php文件
-require_once 'pb_proto_msec.php'; // 自动生成的pb文件
+	```php
+	require_once 'pb4php/message/pb_message.php'; // pb4php文件
+	require_once 'pb_proto_msec.php'; // 自动生成的pb文件
 
-$request = new GetTitlesRequest();
-$request->set_type("standard");
-$body_str = $request->serializeToString();
-$seq = rand();
+	$request = new GetTitlesRequest();
+	$request->set_type("standard");
+	$body_str = $request->serializeToString();
+	$seq = rand();
 
-// 打包示例
-$req_pkg = srpc_serialize("MainLogic.MainLogicService.GetTitles", $body_str, $seq);
-if ($req_pkg === null)
-{
-	echo "srpc_pack failed";
-	return -1;
-}
-```
+	// 打包示例
+	$req_pkg = srpc_serialize("MainLogic.MainLogicService.GetTitles", $body_str, $seq);
+	if ($req_pkg === null)
+	{
+		echo "srpc_pack failed";
+		return -1;
+	}
+	```
 
-发出请求后，流式传输层接收应答的处理：
+	发出请求后，流式传输层接收应答的处理：
 
-```php
-//业务收发包: 伪代码
-$rsp_pkg = send_rcv($addr, $req_pkg);
-```
+	```php
+	//业务收发包: 伪代码
+	$rsp_pkg = send_rcv($addr, $req_pkg);
+	```
 
-收到应答后，拆解出rpc隐含的头部、包体，进行解析
+	收到应答后，拆解出rpc隐含的头部、包体，进行解析
 
-```php
-$ret = srpc_deserialize($rsp_pkg);
+	```php
+	$ret = srpc_deserialize($rsp_pkg);
 
-if (($ret['errmsg'] !== 'success') && ($ret['errmsg'] !=='Success'))
-{
-	echo "srpc_unpack failed ", $ret['errmsg'];
-	return -2;
-}
+	if (($ret['errmsg'] !== 'success') && ($ret['errmsg'] !=='Success'))
+	{
+		echo "srpc_unpack failed ", $ret['errmsg'];
+		return -2;
+	}
 
-if ($ret['seq'] != $seq)
-{
-	echo "the sequence is inconsistent";
-	return -3;
-}
+	if ($ret['seq'] != $seq)
+	{
+		echo "the sequence is inconsistent";
+		return -3;
+	}
 
-$body_str = $ret['body'];
-$response = new GetTitlesResponse();
-$response->ParseFromString($body_str);
-var_dump($response);
-```
+	$body_str = $ret['body'];
+	$response = new GetTitlesResponse();
+	$response->ParseFromString($body_str);
+	var_dump($response);
+	```
 
-这里主要关注SRpcPrxy类下的三个接口：
+	这里主要关注SRpcPrxy类下的三个接口：
 
-`string srpc_serialize(string service_name, string request, int seq)`用于组包
+	`string srpc_serialize(string service_name, string request, int seq)`用于组包
 
-`int srpc_check_pkg(string response)` 用于判断包的完整性
+	`int srpc_check_pkg(string response)` 用于判断包的完整性
 
-`array srpc_deserialize(string response)` 用于解包
+	`array srpc_deserialize(string response)` 用于解包
 
-为了方便拷贝试做，这里给出客户端test.php文件的完整版本：
+	为了方便拷贝试做，这里给出客户端文件：[test.php](examples/dev_php/test.php)
 
 注意：这就是场景一：外部模块调用标准服务。
 
