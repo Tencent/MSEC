@@ -8,7 +8,7 @@
 
 如上图所示，业务流程如下：
 
-1.  android客户端访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考msec服务开发详解(cpp)文档相关章节。
+1.  android客户端访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考[msec服务开发详解(cpp)](cpp_dev_guide.md)文档相关章节。
 
 2.  MainLogic收到请求后，转而请求Crawl
 
@@ -155,7 +155,7 @@ service CrawlService {
 
 	下载后可以看到里面的crawl_php文件夹下有pb_proto_VOA_php_Crawl.php文件，将这个文件放到MainLogic服务开发机的的目录MainLogic_server下，我们就可以调用Crawl服务提供的接口。
 
-	修改MainLogicService.php，增加业务代码，并require_once MainLogicService.php文件。
+	修改MainLogicService.php，增加业务代码，并`require_once MainLogicService.php`文件。
 
 	其中值得关注的是如何访问Crawl服务，也就是场景二：标准服务调用标准服务：
 
@@ -427,7 +427,7 @@ getroutebyname通过业务名获取路由信息；updateroute更新路由统计�
 
 ### Step7：发布标准服务
 
-首先，确保要发布的业务运营机环境已经安装了毫秒的agent并启动ok，详细见《msec是什么.docx》里的第一步：机器准备环节
+首先，确保要发布的业务运营机环境已经安装了毫秒的agent并启动ok，详细见[msec是什么](msec_in_a_nutshell.md)文档里的第一步：机器准备环节
 
 然后点击“制定发布计划”按钮，一步一步选择要发布的目标IP、业务插件等等
 
