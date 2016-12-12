@@ -129,7 +129,7 @@ static void AccessMysql(::crawl::GetMP3ListResponse  & resp)
 
 
 /**
- * @brief  自动生成的业务方法实现接�?
+ * @brief  自动生成的业务方法实现接口
  * @param  request  [入参]业务请求报文
  *         response [出参]业务回复报文
  * @return 框架会将返回值作为执行结果传给客户端
@@ -183,7 +183,7 @@ int CMainLogicServiceMsg::GetTitles(const GetTitlesRequest* request, GetTitlesRe
 }
 
 /**
- * @brief  自动生成的业务方法实现接�?
+ * @brief  自动生成的业务方法实现接口
  * @param  request  [入参]业务请求报文
  *         response [出参]业务回复报文
  * @return 框架会将返回值作为执行结果传给客户端
@@ -259,4 +259,17 @@ int CMainLogicServiceMsg::DownloadMP3(const DownloadMP3Request* request, Downloa
 {
 	
 	
-	ATTR
+	ATTR_REPORT("DownloadMP3_ENTRY");
+
+	
+	ATTR_REPORT("DownloadMP3_EXIT_SUC");
+	response->set_status(0);
+	response->set_msg("success");
+	
+    
+
+    return 0;
+}
+
+
+

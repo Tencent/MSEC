@@ -114,4 +114,13 @@ int main() {
     printf("server response:%d %s\n", resp.status(), resp.msg().c_str());
     printf("titles number:%d\n", resp.titles_size());
     int i;
-    for (i = 0; i < re
+    for (i = 0; i < resp.titles_size(); ++i)
+    {
+        printf("title#%d:%s\n", i,
+            resp.titles(i).c_str());
+    }
+
+
+
+    return 0;
+}

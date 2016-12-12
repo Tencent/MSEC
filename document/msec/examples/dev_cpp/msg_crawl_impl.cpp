@@ -176,4 +176,14 @@ int CCrawlServiceMsg::GetMP3List(const GetMP3ListRequest* request, GetMP3ListRes
 	
 	response->set_status(0);
 	response->set_msg("success");
-	NGLOG_IN
+	NGLOG_INFO("success");
+	ATTR_REPORT("GetMP3List_EXIT_SUC");
+l_end:	
+	if (obj != NULL) { free(obj);}		
+
+	
+        return 0;
+}
+
+
+
