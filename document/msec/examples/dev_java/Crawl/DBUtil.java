@@ -194,4 +194,9 @@ public class DBUtil {
                 resultSet.close();
             }
             if (connection != null) {
-                
+                connection.close(); 
+            }
+        }
+        catch (Exception e) {}
+    }
+}

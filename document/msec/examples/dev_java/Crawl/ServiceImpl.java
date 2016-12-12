@@ -163,5 +163,9 @@ public class ServiceImpl implements Msec.CrawlService.BlockingInterface {
                 util.releaseConn();
             }
         }
+
         builder.setStatus(0);
-        builder.setMsg("
+        builder.setMsg("success");
+        return builder.build();
+    }
+}

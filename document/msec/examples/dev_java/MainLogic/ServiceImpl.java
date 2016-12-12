@@ -113,5 +113,8 @@ public class ServiceImpl implements Msec.MainLogicService.BlockingInterface {
         responseBuilder.setStatus(0);
         return responseBuilder.build();
     }
-    
-    public Msec.DownloadMP3Response downloadMP3(RpcController controller, Msec.Download
+    public Msec.DownloadMP3Response downloadMP3(RpcController controller, Msec.DownloadMP3Request request) throws ServiceException {
+    //Add your code here
+        return null;
+    }
+}
