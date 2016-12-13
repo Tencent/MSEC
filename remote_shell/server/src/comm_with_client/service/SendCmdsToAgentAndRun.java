@@ -1,22 +1,3 @@
-
-/**
- * Tencent is pleased to support the open source community by making MSEC available.
- *
- * Copyright (C) 2016 THL A29 Limited, a Tencent company. All rights reserved.
- *
- * Licensed under the GNU General Public License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. You may 
- * obtain a copy of the License at
- *
- *     https://opensource.org/licenses/GPL-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the 
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions
- * and limitations under the License.
- */
-
-
 package comm_with_client.service;
 
 import comm_with_client.request.SendCmdsToAgentAndRunRequest;
@@ -33,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,8 +25,7 @@ import java.util.logging.Logger;
 public class SendCmdsToAgentAndRun extends JsonRPCHandler {
 
 
-    //¼òµ¥Ç©ÃûÒ»ÏÂ£¬ÓÃË½Ô¿¶ÔÎÄ¼şÄÚÈİµÄÕªÒª¼ÓÃÜ£¬Ã»ÓĞÊ±¼ä¡¢Ëæ»úÊıµÈÒò×Ó£¬¿ÉÄÜ»á±»¶ñÒâÕß
-    //ÖØ·ÅÕâ¸öÇëÇó£¬²»¹ÜÁË£¬ÒòÎª¼ÓÉÏÇ©ÃûÊ±¼ä¶Ô·şÎñÆ÷µÄÊ±¼äÍ¬²½ÓĞÒªÇó
+
     private String geneSignature(String filename)
     {
 
@@ -67,12 +48,19 @@ public class SendCmdsToAgentAndRun extends JsonRPCHandler {
             if (result.length != 32) {
                 return "";
             }
-
-
-
             System.out.println("cmd file sha256:"+Tools.toHexString(result));
 
-            result = Tools.encryptWithPriKey(result, Main.privateKey);
+            //combine file digest and current time together
+            byte[] digestAndTimestamp = new byte[64];
+            for (int i = 0; i < 32; i++) {
+                digestAndTimestamp[i] = result[i];
+            }
+            byte[] currentSec = Tools.currentSeconds().getBytes(Charset.forName("UTF-8"));
+            for (int i = 0; i < 32; i++) {
+                digestAndTimestamp[i+32] = currentSec[i];
+            }
+            //encrypt
+            result = Tools.encryptWithPriKey(digestAndTimestamp, Main.privateKey);
             if (result == null || result.length < 64)
             {
                 return "";
@@ -94,12 +82,12 @@ public class SendCmdsToAgentAndRun extends JsonRPCHandler {
         try {
             File file = new File(request.getLocalFileFullName());
 
-            //ÃüÁîÖ´ĞĞºó½á¹û±£´æµÄÎÄ¼şµÄÃû×Ö
+            //ï¿½ï¿½ï¿½ï¿½Ö´ï¿½Ğºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             String outFileName = String.format("/tmp/output_%d.txt", (int)(Math.random()*Integer.MAX_VALUE));
             outputFileName.delete(0, outputFileName.length());
             outputFileName.append(outFileName);
 
-            //¶ÔÃüÁîÎÄ¼ş½øĞĞÇ©Ãû
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½
             String signature = "";
             if (Main.privateKey != null)
             {
@@ -180,6 +168,7 @@ public class SendCmdsToAgentAndRun extends JsonRPCHandler {
         }
         catch (IOException e)
         {
+            e.printStackTrace();
             return e.toString();
         }
 
