@@ -26,12 +26,14 @@ function callback($response)
     return 0;
 }
 
+
 class CrawlService{
 
     
     /**
      * @brief  自动生成的业务方法实现接口
-     * @param  request  [入参]业务请求报文，非pb格式，需要转换成pb
+     * @param  request  [入参]业务请求报文，可能是序列化后的protobuf或者json报文
+     *         is_json  [入参]是否json报文
      * @return 业务回复报文，pb序列化后的报体
      */
     public function GetMP3List($request, $isJson)
@@ -41,20 +43,13 @@ class CrawlService{
         $response = "{\"status\":-1000, \"msg\":\"Json not supported\"}";
         return $response;
         }
-/* //test phar
-        require_once "phar://".__DIR__."/../lib/user.phar/user.func.php";
-        $u=make_user("test","test@qq.com");
-        dump_user($u);
-*/
         /* pb部分，反序列化请求包体 */
         $req = new GetMP3ListRequest();
         $req->ParseFromString($request);
         $rsp = new GetMP3ListResponse();
-
         // TODO: 业务逻辑实现
         nglog_info("GetMP3List start...\n");
         attr_report('GetMP3List entry');
-
         if ( strlen($req->type()) < 1 ||
            strcmp($req->type(), "standard") != 0 && strcmp($req->type(), "special") != 0)
         {
@@ -66,9 +61,7 @@ class CrawlService{
             $req->type());
         $lenStr = sprintf("%-10d", strlen($jsonReq));
         $jsonReq = $lenStr.$jsonReq;
-
         nglog_info("begin to call jsoup:".$jsonReq."\n");
-
         $jsonResp = "";
         $errmsg = "";
         $ret = callmethod_odd("Jsoup.jsoup", $jsonReq, $jsonResp, $errmsg, "callback", 10000000);
@@ -80,7 +73,6 @@ class CrawlService{
             goto label_end;
         }
         nglog_info("call jsoup success\n");
-
         $jsonObj = json_decode(substr($jsonResp, 10));
         $status = $jsonObj->{'status'};
         if ($status != 0)
@@ -91,7 +83,6 @@ class CrawlService{
             goto label_end;
         }
         nglog_info("jsoup returns ok\n");
-
         $mp3s = $jsonObj->{'mp3s'};
         $index = 0;
         nglog_info("begin to scan mp3 list...\n");
@@ -104,9 +95,7 @@ class CrawlService{
             $oneMP3 = new OneMP3();
             $oneMP3->set_url($mp3->{'url'});
             $oneMP3->set_title($mp3->{'title'});
-
             nglog_info(sprintf("get one mp3:%s,%s\n",$mp3->{'url'}, $mp3->{'title'} ));
-
             $rsp->set_mp3s($index, $oneMP3);
             $index++;
         }
@@ -114,7 +103,6 @@ class CrawlService{
         $rsp->set_msg("success");
         nglog_info("GetMP3List successfully\n");
         attr_report("GetMP3List successfully");
-
         $dbinfo =  getroutebyname("Database.mysql");
         $dbuser = "msec";
         $dbpass = "msec@anyhost";
@@ -125,9 +113,7 @@ class CrawlService{
             nglog_error("db connect fails.\n");
             goto label_end;
         }
-
         $query = "INSERT INTO mp3_list(title, url) VALUES (?,?)";
-
         foreach ($mp3s as $mp3) {
             $stmt = $dbconn->prepare($query);
             $stmt ->bind_param("ss", $mp3->{'title'}, $mp3->{'url'});
@@ -142,6 +128,8 @@ label_end:
         $response = $rsp->serializeToString();
         return $response; 
     }
+	
+    
 }
 
 function callmethod_odd($servicename,
@@ -157,14 +145,11 @@ function callmethod_odd($servicename,
         $errmsg = ("getroutebyname failed");
         return -1;
     }
-
     $comm_type = $route["type"];
-
     if ($comm_type == "tcp") {
         return callmethod_odd_tcp($route,
             $request ,$response, $errmsg, $callback_func, $timeout_usec);
     } else if ($comm_type == "udp") {
-
         return callmethod_odd_udp($route,
             $request ,$response, $errmsg, $timeout_usec);
     } else {
@@ -172,7 +157,6 @@ function callmethod_odd($servicename,
         return -1;
     }
 }
-
 function callmethod_odd_tcp(array  $route,
                         $request,
                         &$response,
@@ -180,14 +164,11 @@ function callmethod_odd_tcp(array  $route,
                         $callback_func,
                         $to_usec)
 {
-
     $ip = $route["ip"];
     $port = $route["port"];
-
     $fd = 0;
     $lefttime = $to_usec;
     $starttime = gettimeofday();
-
     $fd = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
     socket_set_nonblock($fd);
     // connect to server
@@ -220,7 +201,6 @@ function callmethod_odd_tcp(array  $route,
             socket_close($fd);
             return -1;
         }
-
         // modify left time
         $now = gettimeofday();
         $lefttime = $to_usec;
@@ -230,10 +210,8 @@ function callmethod_odd_tcp(array  $route,
             socket_close($fd);
             return -1;
         }
-
     }
     // connection is estabelished
-
     // write to server
     $ret = socket_write($fd, $request);
     if ($ret == NULL || $ret < strlen($request)) //strlen不会因为遇到字节0就停下来
@@ -242,7 +220,6 @@ function callmethod_odd_tcp(array  $route,
         socket_close($fd);
         return -1;
     }
-
     // modify left time
     $now = gettimeofday();
     $lefttime = $to_usec;
@@ -252,7 +229,6 @@ function callmethod_odd_tcp(array  $route,
         socket_close($fd);
         return -1;
     }
-
     $response = "";
     $resplen = 0;
     // recv with timeout
@@ -271,7 +247,6 @@ function callmethod_odd_tcp(array  $route,
             socket_close($fd);
             return -1;
         }
-
         $data = socket_read($fd, 65535);
         if ($data === FALSE) {
             $errmsg = "receive failed:" . socket_strerror(socket_last_error());
@@ -284,13 +259,10 @@ function callmethod_odd_tcp(array  $route,
             socket_close($fd);
             return -1;
         }
-
         $response = $response . $data;
-
         $ret = $callback_func($response);
         if ($ret == 0) // have NOT get a  complete package, continue
         {
-
         } else if ($ret > 0) //get a complete package, length is $ret
         {
             $resplen = $ret;
@@ -306,8 +278,6 @@ function callmethod_odd_tcp(array  $route,
             socket_close($fd);
             return -1;
         }
-
-
         // modify left time
         $now = gettimeofday();
         $lefttime = $to_usec;
@@ -322,27 +292,20 @@ function callmethod_odd_tcp(array  $route,
     $response = substr($response, 0, $resplen);
     socket_close($fd);
     return 0;
-
-
 }
-
 function callmethod_odd_udp(array  $route,
                             $request,
                             &$response,
                             &$errmsg,
                             $to_usec)
 {
-
     $ip = $route["ip"];
     $port = $route["port"];
-
     $fd = 0;
     $lefttime = $to_usec;
     $starttime = gettimeofday();
-
     $fd = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     socket_set_nonblock($fd);
-
     // write to server
     $ret = socket_write($fd, $request);
     if ($ret == NULL || $ret < strlen($request)) //strlen不会因为遇到字节0就停下来
@@ -351,11 +314,9 @@ function callmethod_odd_udp(array  $route,
         socket_close($fd);
         return -1;
     }
-
     $response = "";
     $resplen = 0;
     // recv with timeout
-
     $r = array($fd);
     $w = NULL;
     $e = NULL;
@@ -370,7 +331,6 @@ function callmethod_odd_udp(array  $route,
         socket_close($fd);
         return -1;
     }
-
     $response = socket_read($fd, 65535);
     if ($response === FALSE) {
         $errmsg = "receiv failed:" . socket_strerror(socket_last_error());
@@ -379,7 +339,6 @@ function callmethod_odd_udp(array  $route,
     }
     socket_close($fd);
     return 0;
-
 }
 
 

@@ -1,3 +1,5 @@
+
+
 <?php
 
 /**
@@ -8,53 +10,40 @@
 require_once 'pb4php/message/pb_message.php';   // pb4php文件
 require_once 'pb_proto_msec.php';   // 自动生成的pb文件
 require_once 'call_service.php';                // callmethod文件
-require_once 'crawl_client.php';
+require_once 'pb_proto_VOA_php_Crawl.php';
 
 class MainLogicService{
-    public static $use_php = true;
+
     
-    /**
-     * @brief  自动生成的业务方法实现接口
-     * @param  request  [入参]业务请求报文，非pb格式，需要转换成pb
-     * @return 业务回复报文，pb序列化后的报体
-     */
-    public function GetTitles($request, $isJson)
+
+    public function GetTitles($request, $is_json)
     {
-        // TODO: 业务逻辑实现
         nglog_info("GetTitles start....\n");
         attr_report("GetTitles Entry");
 
-        if($isJson)
+        $req = new GetTitlesRequest();
+        if($is_json)
         {
-            $req=json_decode($request);
+            $req_array =json_decode($request);
+            $req->set_type( $req_array->{"type"});
         }
         else {
             /* 反序列化请求包体 */
-            $req = new GetTitlesRequest();
             $req->ParseFromString($request);
         }
         $rsp = new GetTitlesResponse();
         $rsp_array = array();
-
         $getMP3ListRequest = new GetMP3ListRequest();
         $getMP3ListRequest->set_type("special");
         $getMP3ListResp = new GetMP3ListResponse();
-        $ret = 0;
-        if(self::$use_php) {
-            $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
+        $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
                 $getMP3ListRequest->serializeToString(), 15000);
-        }
-        else {
-            $ret = callmethod("VOA_java.Crawl", "crawl.CrawlService.getMP3List",
-                $getMP3ListRequest->serializeToString(), 15000);
-        }
         if ($ret['errmsg'] != 'Success')
         {
             $rsp->set_msg('callmethod failed:'.$ret['errmsg']);
             $rsp->set_status(100);
             $rsp_array["msg"]='callmethod failed:'.$ret['errmsg'];
             $rsp_array["status"]=100;
-
             nglog_error('callmethod failed:'.$ret['errmsg']."\n");
             goto  label_end;
         }
@@ -73,23 +62,21 @@ class MainLogicService{
         $rsp_array["title"]=array();
         for ($i = 0; $i < $getMP3ListResp->mp3s_size(); $i++)
         {
-
             $oneMP3 =  $getMP3ListResp->mp3s($i);
             $title = $oneMP3->title();
             $rsp->append_titles($title);
-            $rsp_array["title"][]=$title;
+            $rsp_array["title"][$i]=$title;
             nglog_info("append title:".$title."\n");
         }
         nglog_info("GetTitles end successfully.\n");
         attr_report("GetTitles Success");
-
         $rsp->set_msg("success");
         $rsp->set_status(0);
         $rsp_array["msg"]='success';
         $rsp_array["status"]=0;
 label_end:
         /* 序列化回复包体 */
-        if($isJson) {
+        if($is_json) {
             $response = json_encode($rsp_array);
             return $response;
         }
@@ -98,61 +85,60 @@ label_end:
             return $response;
         }
     }
+
+
 	
     
-    /**
-     * @brief  自动生成的业务方法实现接口
-     * @param  request  [入参]业务请求报文，非pb格式，需要转换成pb
-     * @return 业务回复报文，pb序列化后的报体
-     */
-    public function GetUrlByTitle($request, $isJson)
-    {
-        if($isJson) {
-            //not supported...
-            $response = "{\"status\":-1000, \"msg\":\"Json not supported\"}";
-            return $response;
-        }
-        /* 自动生成部分，反序列化请求包体 */
-        $req = new GetUrlByTitleRequest();
-        $req->ParseFromString($request);
-        $rsp = new GetUrlByTitleResponse(); 
 
+    public function GetUrlByTitle($request, $is_json)
+    {
+        $req = new GetUrlByTitleRequest();
+        if($is_json)
+        {
+            $req_array=json_decode($request);
+
+            $req->set_type($req_array->{"type"});
+            $req->set_title($req_array->{"title"});
+        }
+        else {
+            /* 反序列化请求包体 */
+            $req->ParseFromString($request);
+        }
+        $rsp = new GetUrlByTitleResponse(); 
+        $rsp_array = array();
         // TODO: 业务逻辑实现
         nglog_info("GetUrlByTitle start....\n");
         attr_report("GetUrlByTitle Entry");
-
         $getMP3ListRequest = new GetMP3ListRequest();
         $getMP3ListRequest->set_type("special");
         $getMP3ListResp = new GetMP3ListResponse();
-        $ret = 0;
-        if(self::$use_php) {
-            $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
+        $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
                 $getMP3ListRequest->serializeToString(), 15000);
-        }
-        else {
-            $ret = callmethod("VOA_java.Crawl", "crawl.CrawlService.getMP3List",
-                $getMP3ListRequest->serializeToString(), 15000);
-        }
         if ($ret['errmsg'] != 'Success')
         {
             $rsp->set_msg('callmethod failed:'.$ret['errmsg']);
             $rsp->set_status(100);
+            $rsp_array["msg"] = 'callmethod failed:'.$ret['errmsg'];
+            $rsp_array["status"] = 100;
             nglog_error('callmethod failed:'.$ret['errmsg']."\n");
             goto  label_end;
         }
         nglog_info("callmethod successfully\n");
-
         $getMP3ListResp->ParseFromString($ret['rsp']);
         if ($getMP3ListResp->status() != 0)
         {
             $rsp->set_msg('rpc failed:'.$getMP3ListResp->msg());
             $rsp->set_status(100);
+            $rsp_array["msg"] = 'rpc failed:'.$getMP3ListResp->msg();
+            $rsp_array["status"] = 100;
             nglog_error('rpc failed:'.$getMP3ListResp->msg()."\n");
             goto  label_end;
         }
         nglog_info("rpc return status=0\n");
         $rsp->set_msg("failed to find the url");
         $rsp->set_status(100);
+        $rsp_array["msg"] = "failed to find the url";
+        $rsp_array["status"] = 100;
         nglog_info("begin scan mp3 list...");
         for ($i = 0; $i < $getMP3ListResp->mp3s_size(); $i++)
         {
@@ -166,43 +152,29 @@ label_end:
                 $rsp->set_msg("success");
                 $rsp->set_status(0);
 
+                $rsp_array["msg"] = 'success';
+                $rsp_array["status"] = 0;
+                $rsp_array["url"] = $url;
+
                 nglog_info("GetUrlByTitle end successfully.\n");
                 attr_report("GetUrlByTitle Success");
-
                 break;
             }
         }
  label_end:
         /* 序列化回复包体 */
-        $response = $rsp->serializeToString();
-        return $response; 
+        if($is_json) {
+            $response = json_encode($rsp_array);
+            return $response;
+        }
+        else {
+            $response = $rsp->serializeToString();
+            return $response;
+        }
     }
 	
     
-    /**
-     * @brief  自动生成的业务方法实现接口
-     * @param  request  [入参]业务请求报文，非pb格式，需要转换成pb
-     * @return 业务回复报文，pb序列化后的报体
-     */
-    public function DownloadMP3($request, $isJson)
-    {
-        if($isJson) {
-            //not supported...
-            $response = "{\"status\":-1000, \"msg\":\"Json not supported\"}";
-            return $response;
-        }
-
-        /* 自动生成部分，反序列化请求包体 */
-        $req = new DownloadMP3Request();
-        $req->ParseFromString($request);
-        $rsp = new DownloadMP3Response();
-
-        // TODO: 业务逻辑实现
-
-        /* 序列化回复包体 */
-        $response = $rsp->serializeToString();
-        return $response; 
-    }
 }
+
 ?>
 
