@@ -41,34 +41,7 @@ static void returnResultJsonString(int sock, off_t sz)
 
 extern RSA * rsa_key;
 
-static int checkTimestamp(const unsigned char * hashBytes)
-{
-	char timestamp[33];
-	int i;
-	for (i = 0; i < 32; ++i)
-	{
-		timestamp[i] = hashBytes[32+i];
-	}
-	timestamp[32] = 0;
-	//trim
-	for (i = 31; i >=0 ; i--)
-	{
-		if (timestamp[i] == ' ') {timestamp[i] = 0;}
-	}
-	int serverTime = atoi(timestamp);
-
-	//check if timestamp is fresh
-	int currentTime = time(NULL);
-	logger("check time:%d vs %d\n", serverTime, currentTime);
-	if (abs(serverTime-currentTime) < (1*3600))
-	{
-		return 0;
-	}
-	else
-	{
-		return -1;
-	}
-}
+int checkTimestamp(const unsigned char * hashBytes);
 
 // decrypt the signature field with public key,
 // the plain text is digest of command file(32B) and timestamp(32B)

@@ -45,7 +45,7 @@ static void returnResultJsonString(int sock)
 
 extern RSA * rsa_key;
 
-static int checkTimestamp(const unsigned char * hashBytes)
+int checkTimestamp(const unsigned char * hashBytes)
 {
     char timestamp[33];
     int i;
