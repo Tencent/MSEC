@@ -24,8 +24,6 @@ import java.util.logging.Logger;
 public class SendFileToAgent extends JsonRPCHandler {
 
 
-    //简单签名一下，用私钥对文件内容的摘要加密，没有时间、随机数等因子，可能会被恶意者
-    //重放这个请求，不管了，因为加上签名时间对服务器的时间同步有要求
     private String geneSignature(String filename)
     {
 
