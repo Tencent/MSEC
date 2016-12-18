@@ -10,7 +10,7 @@ public class VOAClient {
     public static void main(String[] args) {
         SrpcProxy proxy = new SrpcProxy();
         proxy.setCaller("android_1.0");//调用者身份，用于日志展现
-        proxy.setMethod("MainLogic.MainLogicService.getTitles1");//调用的RPC方法，基于协议里的package_name.service_name.rpc_name
+        proxy.setMethod("MainLogic.MainLogicService.getTitles");//调用的RPC方法，基于协议里的package_name.service_name.rpc_name
         long seq = (long)(1000000 * Math.random());  //服务可自行替换Seq生成方法
         proxy.setSequence(seq);//请求的唯一标识，用于校验应答包，防止串包
 
