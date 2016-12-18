@@ -36,7 +36,7 @@ public class Main {
              * MSEC v2.0 released some api to access LB
              *
              * client such as servlet or cgi can call these api to get IP and port of destination service, and
-             * if you do so, you must install LB agent on client server, and start it in 'client' mode. for example:
+             * if you do so, you must install LB agent on client machines, and start it in 'client' mode. for example:
              *                        ./nlbagent 10.104.95.110:8972 -m client -i eth0
              * You can get detail information from nlbagent program
              *
