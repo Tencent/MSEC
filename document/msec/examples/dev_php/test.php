@@ -61,7 +61,14 @@ $body_str = $ret['body'];
 $response = new GetTitlesResponse();
 $response->ParseFromString($body_str);
 
-var_dump($response);
+echo "status:".$response->status()."\n";
+echo "title number:".$response->titles_size()."\n";
+for ($i = 0; $i < $response->titles_size(); ++$i)
+{
+        echo "title#".$i.":".$response->titles($i)."\n";
+}
+
+//var_dump($response);
 
 
 function send_rcv($servicename,
