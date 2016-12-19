@@ -38,7 +38,7 @@ class MainLogicService{
         $getMP3ListResp = new GetMP3ListResponse();
         $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
                 $getMP3ListRequest->serializeToString(), 15000);
-        if ($ret['errmsg'] != 'Success')
+        if ($ret['ret'] != 0 )
         {
             $rsp->set_msg('callmethod failed:'.$ret['errmsg']);
             $rsp->set_status(100);
@@ -114,7 +114,7 @@ label_end:
         $getMP3ListResp = new GetMP3ListResponse();
         $ret = callmethod("VOA_php.Crawl", "crawl.CrawlService.GetMP3List",
                 $getMP3ListRequest->serializeToString(), 15000);
-        if ($ret['errmsg'] != 'Success')
+        if ($ret['ret'] != 0)
         {
             $rsp->set_msg('callmethod failed:'.$ret['errmsg']);
             $rsp->set_status(100);
