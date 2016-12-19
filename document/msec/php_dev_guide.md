@@ -8,7 +8,7 @@
 
 如上图所示，业务流程如下：
 
-1.  android客户端访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考[msec服务开发详解(cpp)](cpp_dev_guide.md)文档相关章节。
+1.  php client访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考[msec服务开发详解(cpp)](cpp_dev_guide.md)文档相关章节。
 
 2.  MainLogic收到请求后，转而请求Crawl
 
@@ -22,7 +22,7 @@
 
 **这个例子比较典型，包括好几种远程调用场景：**
 
-1.  场景一：其他模块调用标准服务（android客户端调用MainLogic的GetTitles接口和GetUrlByTitle接口）
+1.  场景一：其他模块调用标准服务（php client用MainLogic的GetTitles接口和GetUrlByTitle接口）
 
 2.  场景二：标准服务A调用标准服务B（MainLogic调用Crawl的GetMP3List接口）
 
