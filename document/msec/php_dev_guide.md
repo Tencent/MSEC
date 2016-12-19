@@ -155,7 +155,7 @@ service CrawlService {
 
 	下载后可以看到里面的crawl_php文件夹下有pb_proto_VOA_php_Crawl.php文件，将这个文件放到MainLogic服务开发机的的目录MainLogic_server下，我们就可以调用Crawl服务提供的接口。
 
-	修改MainLogicService.php，增加业务代码，并`require_once MainLogicService.php`文件。
+	修改MainLogicService.php，增加业务代码，并`require_once pb_proto_VOA_php_Crawl.php`文件。
 
 	其中值得关注的是如何访问Crawl服务，也就是场景二：标准服务调用标准服务：
 
