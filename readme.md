@@ -22,7 +22,6 @@ Web console的代码在msec\_console子目录，是一个典型的Java Web Appli
 * commons-compress-1.8.jar
 * commons-fileupload-1.2.2.jar
 * commons-io-2.4.jar
-* gv.jar
 * ini4j-0.5.4.jar
 * jackson-all-1.6.0.jar
 * javax.servlet-api-3.1.0.jar
