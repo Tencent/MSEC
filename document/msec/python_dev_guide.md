@@ -10,15 +10,13 @@
 
 1.  python client访问MainLogic，请求拉取英语听力mp3列表。如果希望通过C/C++（如cgi）访问MainLogic，请参考[msec服务开发详解(cpp)](cpp_dev_guide.md)文档相关章节。
 
-2.  MainLogic收到请求后，转而请求Crawl
+2.  MainLogic收到请求后，先请求一下异构服务mysql，再请求Crawl
 
 3.  Crawl也没有mp3列表，转而请求异构服务Jsoup
 
 4.  Jsoup是一个抓去网上MP3英语听力文件的服务，逐级把mp3列表返回给Crawl和MainLogic
 
-5.  Crawl收到列表后将列表写入mysql，并返回给MainLogic
-
-6.  MainLogic收到mp3列表后，并返回给客户端
+5.  MainLogic收到mp3列表后，并返回给客户端
 
 **这个例子比较典型，包括好几种远程调用场景：**
 
@@ -26,9 +24,9 @@
 
 2.  场景二：标准服务A调用标准服务B（MainLogic调用Crawl的GetMP3List接口）
 
-3.  场景三：标准服务A调用异构服务B，异构服务B提供接口协议文档的形式（Crawl调用Jsoup）
-
-4.  场景四：标准服务A调用异构服务B，异构服务B提供接口API的形式（Crawl调用mysqld）
+3.  场景三：标准服务A调用异构服务B，异构服务B提供接口API的形式（MainLogic调用mysql）
+  
+4.  场景四：标准服务A调用异构服务B，异构服务B提供接口协议文档的形式（Crawl调用Jsoup）
 
 5.  场景五：其实还有一种情况，A部门部署了一个msec，B部门也部署了一个msec，A部门的标准服务a调用B部门的标准服务b
 
@@ -212,7 +210,7 @@ service CrawlService {
 
 	这里为了支持json，我们使用了一个三方的protobuf和json互换的库：[protobuf_json](https://github.com/dpp-name/protobuf-json/blob/master/protobuf_json.py)
 
-	另一个值得关注的是如何访问mysql服务，也就是场景四：标准服务调用异构服务
+	另一个值得关注的是如何访问mysql服务，也就是场景三：标准服务调用异构服务
 	
 	首先配置异构服务mysql的IP列表，并通过扩缩容操作，将新加入的IP扩容到负载均衡系统里，这样就能被其他服务访问到。点击右上角的扩缩容按钮。该IP的状态由disabled变成enabled
 	
@@ -255,7 +253,7 @@ service CrawlService {
 
 Crawl服务的业务逻辑比较简单，访问Jsoup这个异构服务，拉取一个英语mp3文件的(文件标题， 文件url)的列表。
 
-这里值得特别注意的是：这是场景三：标准服务访问一个异构服务，该异构服务提供了接口协议文档。
+这里值得特别注意的是：这是场景四：标准服务访问一个异构服务，该异构服务提供了接口协议文档。
 
 首先，配置Jsoup的IP并扩容到负载均衡管理系统里：
 
