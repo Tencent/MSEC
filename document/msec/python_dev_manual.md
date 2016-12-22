@@ -2,7 +2,8 @@
 
 **MSEC** 是一个开发+运营解决方案，不只是一个开发框架。支持Java、C/C++、PHP和Python开发语言，其中后三种语言底层框架都是基于C++开发的逻辑层框架。本文主要介绍框架提供给Python开发者使用的接口介绍。
 
-C++底层框架的实现请参见cpp_dev_manual.md的SRPC介绍一节。
+## 框架简介 ##
+C++底层框架的实现请参见[cpp_dev_manual.md](https://github.com/Tencent/MSEC/blob/master/document/msec/cpp_dev_manual.md)的[SRPC介绍](https://github.com/Tencent/MSEC/blob/master/document/msec/cpp_dev_manual.md#srpc简介)一节。
 
 ## 支持Python原理 ##
 SRPC对Python的支持比较简单，使用底层Python API对Python环境做初始化，然后调用Python用户态函数。大致伪码如下：
@@ -64,7 +65,7 @@ service EchoService
 ```
 
 ### 生成代码 ###
-开发包的rpc/py_template/目录下包含自动生成代码的Python脚本，脚本使用如下：
+开发包的rpc/py_template/目录下包含自动生成代码的Python脚本，在MSEC中，可以直接在页面操作自动生成代码包，脚本使用如下：
 
 ```
 // 用法介绍
@@ -105,8 +106,7 @@ echo_server
 ### 服务器端编码 ###
 
 #### 业务主逻辑实现 ####
-在$(package)\_server/$(package).py文件下（即echo\_server/echo.py），业务可以修改业务代码实现。关注TODO部分:
-
+在$(package)_server/$(package).py文件下（即echo_server/echo.py），业务可以修改业务代码实现。关注TODO部分:
 
 ```python
 
@@ -133,12 +133,14 @@ class EchoService:
         return response.SerializeToString()
 ```
 
-上述代码第一个TODO，如果业务请求为http+json格式，需要在这里处理json格式的请求。后续版本会做到json和protobuf处理不做区分，请期待。
-http+json的请求报文格式和回复报文格式，参见cpp\_dev\_manual.md的“http+json支持”一节。
+#### http+json支持 ####
+
+上一节的第一个TODO，如果业务请求为http+json格式，需要在这里处理json格式的请求。后续版本会做到json和protobuf处理不做区分，请期待。
+http+json的请求报文格式和回复报文格式，参见[cpp_dev_manual.md](cpp_dev_manual.md)的[http+json支持](cpp_dev_manual.md#httpjson支持)一节。
 
 #### 初始化逻辑实现 ####
 
-如果业务需要在进程启动的时候做一些初始化，在进程退出的时候做一些反初始化的逻辑，SRPC提供了如下接口让业务可以实现相关逻辑。相关文件在服务器目录下的entry.py。
+如果业务需要在进程启动的时候做一些初始化，在进程退出的时候做一些反初始化的逻辑，SRPC提供了如下接口让业务可以实现相关逻辑。相关文件在服务器目录下的[entry.py](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/rpc/py_template/entry.py)。
 
 ```python
 #
@@ -157,7 +159,7 @@ def fini():
 ```
 
 #### 定时任务实现 ####
-如果业务需要定时做一些业务逻辑，可以在loop里面实现自己的定时逻辑，自己判断超时。相关文件在服务器目录下的entry.py。
+如果业务需要定时做一些业务逻辑，可以在loop里面实现自己的定时逻辑，自己判断超时。相关文件在服务器目录下的[entry.py](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/rpc/py_template/entry.py)。
 
 ```python
 def loop():
@@ -165,10 +167,10 @@ def loop():
 ```
 
 #### 扩展引入 ####
-SRPC支持Python的egg格式扩展，直接将egg文件放入bin/lib目录即可。在msec中，可以通过页面上传的第三方库的方式引入扩展，操作简单。
+SRPC支持Python的egg格式扩展，直接将egg文件放入bin/lib目录即可。在MSEC中，可以通过页面上传的第三方库的方式引入扩展，操作简单。
 
 ## Python插件介绍 ##
-SRPC提供了四个插件srpc\_comm\_py,nlb\_py,log\_py,monitor\_py。可以统一调用msec\_impl.py中的接口实现插件的调用，首先需要import msec_impl,然后才能调用下面的各个接口
+SRPC提供了四个插件srpc_comm_py,nlb_py,log_py,monitor_py。可以统一调用[msec_impl.py](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/rpc/py_template/msec_impl.py)中的接口实现插件的调用，首先需要import msec_impl,然后才能调用下面的各个接口
 
 ### 调用SRPC服务接口 ###
 
@@ -273,7 +275,7 @@ def updateroute(service_name, ip, failed, cost):
 
 ### cgi调用接口 ###
 
-如果一个非MSEC的业务需要调用MSEC业务，可以使用下面的打解包接口。对于机器上有安装的nlbagent的机器，可以通过“路由接口”一节提到的接口获取后端服务器IP、Port。
+如果一个非MSEC的业务需要调用MSEC业务，可以使用下面的打解包接口。对于机器上有安装的nlbagent的机器，可以通过[路由接口](#路由接口)一节提到的接口获取后端服务器IP、Port。
 
 ```python
 #
@@ -304,6 +306,10 @@ def srpc_deserialize(pkg):
 def srpc_check_pkg(pkg):
 
 ```
+
+## 框架配置 ##
+
+配置同c++，详见cpp_dev_manual.md中的[SRPC配置说明](cpp_dev_manual.md#srpc配置说明)一节。
 
 
 
