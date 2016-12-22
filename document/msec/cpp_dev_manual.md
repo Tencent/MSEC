@@ -405,7 +405,7 @@ if (seq != rsp_seq)
 }
 ```
 
-**注意**：上面没有说到如何获取服务器端的地址。需要开发者自己安装nlbagent，然后就可以直接调用nlb的getroutebyname接口获取到对应的IP，详细使用方法请看[NLB使用](cpp_dev_manual.md#c++开发者手册##SRPC简介###NLB使用")一节。
+**注意**：上面没有说到如何获取服务器端的地址。需要开发者自己安装nlbagent，然后就可以直接调用nlb的getroutebyname接口获取到对应的IP，详细使用方法请看[NLB使用](cpp_dev_manual.md#nlb使用")一节。
 
 
 ### http+json支持 ###
