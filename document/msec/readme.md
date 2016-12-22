@@ -9,7 +9,7 @@
 * [monitor_service_instruction.md](monitor_service_instruction.md) 介绍了集中化监控服务的使用说明
 
 ###开发者手册
-开发者手册介绍了开发框架的整体架构，以及开发者在开发服务框架时所需要关注的关键开发细节，包括如何进行RPC调用的API、和MSEC集中化服务交互的API、如何使用三方扩展等。
+开发者手册介绍了开发框架的整体架构，以及开发者在开发服务框架时所需要关注的关键开发细节，包括如何进行业务初始化、远程调用API、MSEC集中化服务API、如何使用三方扩展等。
 
 * [C++开发者手册](cpp_dev_manual.md)
 * [Java开发者手册](java_dev_manual.md)
