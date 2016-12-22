@@ -10,7 +10,7 @@
 - **插件化**<br/>开发简单，开发者只需要实现几个接口，并提供业务插件(动态库)给框架加载，即可实现业务调用
 - **协议**<br/>采用google的protobuf协议做为标准协议，自动生成代码，使用简单
 - **名字服务**<br/>采用MSEC内部使用的自适应网络负载均衡*NLB*做名字服务
-- **负载均衡**<br/>采用MSEC内部使用的自适应网络负载均衡*NLB*做名字服务
+- **负载均衡**<br/>采用MSEC内部使用的自适应网络负载均衡*NLB*做负载均衡
 - **服务监控**<br/>采用MSEC内部使用的打点监控系统*Monitor*
 - **日志**<br/>支持本地日志和远程日志，远程日志采用MSEC内部使用的日志系统，支持染色
 
@@ -125,14 +125,14 @@ int CEchoServiceMsg::Echo(const EchoRequest* request, EchoResponse* response)
      *      业务可使用框架自带的监控系统 ATTR_REPORT("test"), 详见monitor.h
      *      业务可使用框架自带的日志系统 NGLOG_DEBUG("test")，详见srpc_log.h
      */
-    **if (request->message() == "hello world")
+    if (request->message() == "hello world")
     {
         response->set_message("hello world");
     }
     else
     {
         response->set_message("invalid message");
-    }**
+    }
 
     return 0;
 }
@@ -167,7 +167,7 @@ extern "C" int spp_handle_init(void* arg1, void* arg2)
         }
     }
 
-    **// TODO: 业务初始化**
+    // TODO: 业务初始化
 
     return 0;
 }
@@ -176,28 +176,19 @@ extern "C" int spp_handle_init(void* arg1, void* arg2)
  * @brief 业务服务终止接口函数(proxy/worker)
  * @param server -业务进程信息
  */
-extern "C" int spp_handle_init(void* arg1, void* arg2)
+extern "C" void spp_handle_fini(void* arg1, void* arg2)
 {
-    int32_t ret = 0;
-    const char* etc = (const char*)arg1;
     CServerBase* base = (CServerBase*)arg2;
-    NGLOG_DEBUG("spp_handle_init, config:%s, servertype:%d", etc, base->servertype());
+    NGLOG_DEBUG("spp_handle_fini");
 
-    if (base->servertype() == SERVER_TYPE_WORKER) // WORKER进程初始化
+    if (base->servertype() == SERVER_TYPE_WORKER )
     {
-        // 注册RPC服务与消息信息
-        ret += CMethodManager::Instance()->RegisterService(new CRpcEchoServiceImpl, new CEchoServiceMsg);
-        if (ret != 0)
-        {
-            NGLOG_ERROR("service regist failed, ret %d", ret);
-            return -1;
-        }
+        CSyncFrame::Instance()->Destroy();
     }
 
-    **// TODO: 业务初始化**
-
-    return 0;
+    // TODO: 业务去初始化
 }
+
 ```
 
 
@@ -414,7 +405,7 @@ if (seq != rsp_seq)
 }
 ```
 
-**注意**：上面没有说到如何获取服务器端的地址。需要开发者自己安装nlbagent，然后就可以直接调用nlb的getroutebyname接口获取到对应的IP，详细使用方法请看nlb使用一节。
+**注意**：上面没有说到如何获取服务器端的地址。需要开发者自己安装nlbagent，然后就可以直接调用nlb的getroutebyname接口获取到对应的IP，详细使用方法请看[NLB使用](cpp_dev_manual.md#SRPC简介##NLB使用)一节。
 
 
 ### http+json支持 ###
@@ -431,7 +422,7 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
 
 可以直接使用wget做测试：
 
-> wget --post-data="{\"message\": \"hello world\"}" /127.0.0.1:7963?methodName=echo.EchoService.Echo
+> wget --post-data="{\"message\": \"hello world\"}" /127.0.0.1:7963?methodName=echo.EchoService.Echo <br/>
 
 **注意**：请求参数中需要带RPC方法名
 
@@ -493,7 +484,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
 
 #### 批量收发接口 ####
 
-批量网络收发接口，IMtTask的定义请参见mt\_api.h，实际上只需要继承该类，并实现自己的Process函数即可完成一个Task的实现。Task内部的网络操作需要调用微线程的网络IO接口，比如上面的mt\_udpsendrcv和mt\_tcpsendrcv。详细示例可以参见spp\_dev.tar的Relay_task.cpp中的ExampleMsg::HandleProcess函数实现。
+批量网络收发接口，IMtTask的定义请参见[mt_api.h](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/sync_frame/micro_thread/mt_api.h)，实际上只需要继承该类，并实现自己的Process函数即可完成一个Task的实现。Task内部的网络操作需要调用微线程的网络IO接口，比如上面的mt_udpsendrcv和mt_tcpsendrcv。详细示例可以参见源码中的[Relay_task.cpp](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/example/sync/task/Relay_task.cpp)中的ExampleMsg::HandleProcess函数实现。
 
 ```c++
 typedef vector<IMtTask*>  IMtTaskList;
@@ -532,7 +523,7 @@ void mt_sleep(int ms);
 
 ### NLB使用 ###
 
-SRPC可以直接使用LB做寻址，业务需要通过web console注册到MSEC。
+SRPC可以直接使用NLB做寻址，业务需要通过web_console注册到MSEC。
 
 #### API说明 ####
 
@@ -570,7 +561,7 @@ int32_t getroutebyname(const char *name, struct routeid *route);
 int32_t updateroute(const char *name, uint32_t ip, int32_t failed, int32_t cost);
 ```
 
-getroutebyname通过业务名获取路由信息；updateroute更新路由统计信息，用于lb做回包统计。如果不需要回包统计做动态路由，可以不用调用updateroute。
+getroutebyname通过业务名获取路由信息；updateroute更新路由统计信息，用于NLB做回包统计。如果不需要回包统计做动态路由，可以不用调用updateroute。
 
 使用伪代码示例：
 
@@ -751,7 +742,7 @@ SRPC采用微线程框架，不允许进程内部有阻塞的逻辑（比如网�
 
 ## SRPC配置说明 ###
 
-```c++
+```ini
 [SRPC]
 listen=eth1:5000/udp eth1:5000/tcp  ; 不填写接口名，监听所有接口； 没有listen配置，默认监听7963端口
 shmsize=16							; proxy和worker通信队列大小，默认16M
