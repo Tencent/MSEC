@@ -154,6 +154,41 @@ echo
 	}
 ```
 
+### 2.3.1. 初始化实现
+
+如果业务在进程启动和停止的时候需要做一些初始化和反初始化的操作，SRPC提供了如下接口让业务可以实现相关逻辑。相关文件在服务器目录下的[entry.php](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/rpc/php_template/entry.php)。
+
+```php
+/* 初始化接口 */
+function init($config)
+{   
+	loadclass();
+	echo "service::init\n";
+	return 0;
+}
+
+/* 反初始化接口 */
+function fini()
+{   
+	echo "service::fini\n";
+	return 0;
+}
+```
+
+### 2.3.2. 定时任务实现
+
+如果业务需要定时做一些业务逻辑，可以在loop里面实现自己的定时逻辑，自己判断超时。相关文件在服务器目录下的[entry.php](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/rpc/php_template/entry.php)。
+
+```php
+/**
+ * @brief 定时操作接口，使用者自己判断超时逻辑
+ */
+function loop()
+{
+    return 0;
+}
+```
+
 ## 2.4. 调用其它SRPC业务
 
 通过调用callmethod接口，可以完成其它SRPC业务的调用。
@@ -378,4 +413,8 @@ Content-Length: 63
 {"ret":0, "errmsg":"", "resultObj": {"message": "hello world"}}
 ```
 **注意**：回复报文的http消息体带框架返回的错误信息，resultObj才是业务返回的json字符串。业务需要先判断ret是否为0，不为0就表示错误，这时不会有resultObj。
+
+## 2.7. 框架配置
+
+配置同c++，详见cpp_dev_manual.md中的[SRPC配置说明](cpp_dev_manual.md#srpc配置说明)一节。
 
