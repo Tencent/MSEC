@@ -359,22 +359,23 @@ phar包及需要包含的PHP源码，可以放到自动生成代码的目录下�
 
 - **请求报文格式**
 
+```
 POST /127.0.0.1:7963?methodName=echo.EchoService.Echo
 Content-Type: aplication/json; charset=UTF-8
 Content-Length: 26
 
 {"message": "hello world"}
-
+```
 **注意**:请求参数中需要带RPC方法名
 
 - **回复报文格式**
-
+```
 HTTP/1.1 200 OK
 Content-Type: aplication/json; charset=UTF-8
 Content-Encoding: UTF-8
 Content-Length: 63
 
 {"ret":0, "errmsg":"", "resultObj": {"message": "hello world"}}
-
+```
 **注意**：回复报文的http消息体带框架返回的错误信息，resultObj才是业务返回的json字符串。业务需要先判断ret是否为0，不为0就表示错误，这时不会有resultObj。
 
