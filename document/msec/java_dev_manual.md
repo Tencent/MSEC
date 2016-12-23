@@ -171,9 +171,9 @@ libjni\_monitor.so
  
  \* @brief 自动生成的业务方法实现接口
  
- \* @param request \[入参\]业务请求报文
+ \* @param request [入参]业务请求报文
  
- \* response \[出参\]业务回复报文
+ \* response [出参]业务回复报文
  
  \* @return 框架会将返回值作为执行结果传给客户端
  
@@ -342,13 +342,13 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  //ret \< 0: wrong package format
  
- int checkPackageLength(byte\[\] data);
+ int checkPackageLength(byte[] data);
  
  //获取响应包中的Sequence
  
  //Return value: sequence in response
  
- long decodeSequence(byte\[\] data);
+ long decodeSequence(byte[] data);
  
  }
 ```
@@ -367,13 +367,13 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  \* timeoutMillis 超时时间
  
- \* @return byte\[\] 响应包的数据
+ \* @return byte[] 响应包的数据
  
  \* 其它 失败
  
  \*/
  
- byte\[\] callMethod(String moduleName, String serviceMethodName,
+ byte[] callMethod(String moduleName, String serviceMethodName,
  CustomPackageHelper packageHelper, int timeoutMillis) throws
  Exception;
 ```
@@ -393,13 +393,13 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  \* @param request 业务请求包体, protobuf对象
  
- \* @return byte\[\] 响应包的数据
+ \* @return byte[] 响应包的数据
  
  \* 其它 失败
  
  \*/
  
- byte\[\] serialize(MessageLite request);
+ byte[] serialize(MessageLite request);
  
  /\*\*
  
@@ -417,7 +417,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  \*/
  
- MessageLite deserialize(byte\[\] data, int length, MessageLite
+ MessageLite deserialize(byte[] data, int length, MessageLite
  responseInstance) throws Exception;
  
  /\*\*
@@ -436,7 +436,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  \*/
  
- int checkPackage(byte\[\] data, int length);
+ int checkPackage(byte[] data, int length);
 ```
 
 示例代码如下：
@@ -455,7 +455,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  echoRequestBuilder.setMessage("hello");
  
  Echo.EchoRequest echoRequest = echoRequestBuilder.build();  
- byte\[\] sendBytes = proxy.serialize(echoRequest);
+ byte[] sendBytes = proxy.serialize(echoRequest);
  
  //3. 自行实现网络收发
  
@@ -470,7 +470,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  (Echo.EchoResponse)proxy.deserialize(recvBytes, recvBytesLength,
  echoResponseInstance);  
  if(response == null) {  
- throw new Exception(String.format("Deserialize error: \[%d\]%s",
+ throw new Exception(String.format("Deserialize error: [%d]%s",
  proxy.getErrno(),
 proxy.getErrmsg()));  
  }
