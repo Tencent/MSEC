@@ -167,26 +167,26 @@ libjni\_monitor.so
 业务实现逻辑都在src/main/java/$(packagename)/ServiceImpl.java里面实现，上例中的RPC方法名是Echo，包名是echo，可以在msg\_echo\_impl.cpp里面找到Echo方法的实现接口（蓝色为逻辑实现示例代码）：
 
 ```java
- /\*\*
+ /**
  
- \* @brief 自动生成的业务方法实现接口
+ * @brief 自动生成的业务方法实现接口
  
- \* @param request [入参]业务请求报文
+ * @param request [入参]业务请求报文
  
- \* response [出参]业务回复报文
+ * response [出参]业务回复报文
  
- \* @return 框架会将返回值作为执行结果传给客户端
+ * @return 框架会将返回值作为执行结果传给客户端
  
- \*/
+ */
  
  public Echo.EchoResponse echo(RpcController controller,
  Echo.EchoRequest request) throws ServiceException {
  
- /\*\*
+ /**
  
- \* TODO 业务逻辑实现，request/response为业务定义的protobuf协议格式
+ * TODO 业务逻辑实现，request/response为业务定义的protobuf协议格式
  
- \*/
+ */
  
  Echo.EchoResponse.Builder builder = Echo.EchoResponse.newBuilder();
  
@@ -235,25 +235,25 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
 对于msec内部的业务，可以直接调用ServiceFactory.callMethod完成RPC调用：
 
 ```java
- /\*\*
+ /**
  
- \* @brief 框架内部调用方法接口
+ * @brief 框架内部调用方法接口
  
- \* @param moduleName 业务名 一级业务名.二级业务名 "JavaSample.Jecho"
+ * @param moduleName 业务名 一级业务名.二级业务名 "JavaSample.Jecho"
  
- \* serviceMethodName 方法名 方法名的pb全称"Echo.EchoService.echo"
+ * serviceMethodName 方法名 方法名的pb全称"Echo.EchoService.echo"
  
- \* request 请求报文
+ * request 请求报文
  
- \* responseInstance 回复类型的DefaultInstance
+ * responseInstance 回复类型的DefaultInstance
  
- \* timeoutMillis 超时时间
+ * timeoutMillis 超时时间
  
- \* @return SRPC\_SUCCESS 成功
+ * @return SRPC\_SUCCESS 成功
  
- \* 其它 失败
+ * 其它 失败
  
- \*/
+ */
  
  MessageLite callMethod(String moduleName, String serviceMethodName,
  MessageLite request, MessageLite responseInstance, int timeoutMillis)
@@ -355,23 +355,23 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
 实现该接口后，再调用ServiceFactory.callMethod完成RPC调用：
 
 ```java
- /\*\*
+ /**
  
- \* @brief 框架调用外部服务的接口
+ * @brief 框架调用外部服务的接口
  
- \* @param moduleName 业务名 一级业务名.二级业务名 "JavaSample.Jecho"
+ * @param moduleName 业务名 一级业务名.二级业务名 "JavaSample.Jecho"
  
- \* serviceMethodName 方法名 这里仅仅是接口的一个标识，用于上报
+ * serviceMethodName 方法名 这里仅仅是接口的一个标识，用于上报
  
- \* packageHelper 打包接口的具体实现
+ * packageHelper 打包接口的具体实现
  
- \* timeoutMillis 超时时间
+ * timeoutMillis 超时时间
  
- \* @return byte[] 响应包的数据
+ * @return byte[] 响应包的数据
  
- \* 其它 失败
+ * 其它 失败
  
- \*/
+ */
  
  byte[] callMethod(String moduleName, String serviceMethodName,
  CustomPackageHelper packageHelper, int timeoutMillis) throws
@@ -387,54 +387,54 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
 接口方法：
 
 ```java
- /\*\*
+ /**
  
- \* @brief 序列化请求报文
+ * @brief 序列化请求报文
  
- \* @param request 业务请求包体, protobuf对象
+ * @param request 业务请求包体, protobuf对象
  
- \* @return byte[] 响应包的数据
+ * @return byte[] 响应包的数据
  
- \* 其它 失败
+ * 其它 失败
  
- \*/
+ */
  
  byte[] serialize(MessageLite request);
  
- /\*\*
+ /**
  
- \* @brief 反序列化回复报文
+ * @brief 反序列化回复报文
  
- \* @param data 回复报文
+ * @param data 回复报文
  
- \* @param length 回复报文长度
+ * @param length 回复报文长度
  
- \* @param responseInstance业务回复包体,protobuf对象的实例
+ * @param responseInstance业务回复包体,protobuf对象的实例
  
- \* @return \!=null 业务回复包体
+ * @return \!=null 业务回复包体
  
- \* 其它或异常 失败
+ * 其它或异常 失败
  
- \*/
+ */
  
  MessageLite deserialize(byte[] data, int length, MessageLite
  responseInstance) throws Exception;
  
- /\*\*
+ /**
  
- \* @brief tcp方式下检查是否收到了完整的应答包
+ * @brief tcp方式下检查是否收到了完整的应答包
  
- \* @param data 回复报文
+ * @param data 回复报文
  
- \* @param length 回复报文长度
+ * @param length 回复报文长度
  
- \* @return \< 0 报文格式错误
+ * @return \< 0 报文格式错误
  
- \* = 0 报文不完整
+ * = 0 报文不完整
  
- \* \ 0 报文有效长度
+ * \ 0 报文有效长度
  
- \*/
+ */
  
  int checkPackage(byte[] data, int length);
 ```
@@ -583,41 +583,41 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
 接口方法：getroutebyname
 
 ```java
- /\*\*
+ /**
  
- \* @brief 根据业务名获取路由信息
+ * @brief 根据业务名获取路由信息
  
- \* @param name 业务名，例如JavaSample.Jecho
+ * @param name 业务名，例如JavaSample.Jecho
  
- \* @param r 输出的服务端信息，含IP、端口、服务类型
+ * @param r 输出的服务端信息，含IP、端口、服务类型
  
- \* @return True 调用成功
+ * @return True 调用成功
  
- \* False 失败
+ * False 失败
  
- \*/
+ */
  
  boolean getroutebyname(String name,Route r ) throws Exception;
  
- /\*\*
+ /**
  
- \* @brief 更新路由统计数据
+ * @brief 更新路由统计数据
  
- \* @info 每次收发结束后，需要将成功与否、时延数据更新到统计数据
+ * @info 每次收发结束后，需要将成功与否、时延数据更新到统计数据
  
- \* @param name 业务名，例如JavaSample.Jecho
+ * @param name 业务名，例如JavaSample.Jecho
  
- \* @param ip 输入参数，IP地址
+ * @param ip 输入参数，IP地址
  
- \* @param failed 输入参数，\>1表示失败次数，0表示成功
+ * @param failed 输入参数，\>1表示失败次数，0表示成功
  
- \* @param cost 输入参数，调用时延
+ * @param cost 输入参数，调用时延
  
- \* @return True 调用成功
+ * @return True 调用成功
  
- \* False 失败
+ * False 失败
  
- \*/
+ */
  
  boolean updateroutebyname(String name, String ip, int failed, int
  cost);
@@ -706,19 +706,19 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
 用户也可修改etc/config.ini写入自定义的配置项。配置读取接口为ServiceFactory. getConfig, 如下：
 
 ```java
- /\*\*
+ /**
  
- \* @brief 读取etc/config.ini中的配置项
+ * @brief 读取etc/config.ini中的配置项
  
- \* @param section ini文件的节名
+ * @param section ini文件的节名
  
- \* key ini文件的键名
+ * key ini文件的键名
  
- \* @return String 配置内容
+ * @return String 配置内容
  
- \* null 失败
+ * null 失败
  
- \*/
+ */
  
  String getConfig(String section, String key);
 ```
