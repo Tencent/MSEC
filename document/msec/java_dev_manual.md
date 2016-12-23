@@ -102,13 +102,13 @@ SRPC通过开发者定义的协议格式，可以自动生成对应的代码，�
  
  | |-- srpc.sh //服务启动停止脚本
  
- | \`-- test\_client.sh
+ | `-- test_client.sh
  
  |-- etc //配置文件
  
  | |-- config.ini
  
- | \`-- log4j.properties
+ | `-- log4j.properties
  
  |-- lib //依赖的jar包
  
@@ -118,11 +118,11 @@ SRPC通过开发者定义的协议格式，可以自动生成对应的代码，�
  
  | |-- ...
  
- | \`-- protoc
+ | `-- protoc
  
  |-- pom.xml //Maven pom文件
  
- |-- pom\_offline.xml //无法访问网络时，用该POM文件进行项目构建
+ |-- pom_offline.xml //无法访问网络时，用该POM文件进行项目构建
  
  |-- src
  
@@ -134,37 +134,37 @@ SRPC通过开发者定义的协议格式，可以自动生成对应的代码，�
  
  | | | |-- org
  
- | | | | \`-- msec //框架的主体代码
+ | | | | `-- msec //框架的主体代码
  
  | | | |-- sample //服务端包名, 与proto文件的package名对应
  
  | | | | |-- Client.java //客户端代码
  
- | | | | \`-- ServiceImpl.java //服务端代码
+ | | | | `-- ServiceImpl.java //服务端代码
  
- | | | \`-- srpc
+ | | | `-- srpc
  
- | | | \`-- Head.java
+ | | | `-- Head.java
  
- | | \`-- resources
+ | | `-- resources
  
  | | |-- META-INF
  
- | | | \`-- log4j.properties
+ | | | `-- log4j.properties
  
- | | \`-- sofiles //JNI外部库：负载均衡、监控、日志
+ | | `-- sofiles //JNI外部库：负载均衡、监控、日志
  
- | | |-- libjni\_lb.so
+ | | |-- libjni_lb.so
  
- | | |-- libjni\_log.so
+ | | |-- libjni_log.so
  
- | | \`--
-libjni\_monitor.so
+ | | `--
+libjni_monitor.so
 ```
 
 ## 实现业务逻辑
 
-业务实现逻辑都在src/main/java/$(packagename)/ServiceImpl.java里面实现，上例中的RPC方法名是Echo，包名是echo，可以在msg\_echo\_impl.cpp里面找到Echo方法的实现接口（蓝色为逻辑实现示例代码）：
+业务实现逻辑都在src/main/java/$(packagename)/ServiceImpl.java里面实现，上例中的RPC方法名是Echo，包名是echo，可以在msg_echo_impl.cpp里面找到Echo方法的实现接口（蓝色为逻辑实现示例代码）：
 
 ```java
  /**
@@ -249,7 +249,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  * timeoutMillis 超时时间
  
- * @return SRPC\_SUCCESS 成功
+ * @return SRPC_SUCCESS 成功
  
  * 其它 失败
  
@@ -327,7 +327,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  //ret == 0: succ
  
- //ret \!= 0: failed
+ //ret != 0: failed
  
  int encode(long sequence, ChannelBufferOutputStream stream) throws
  IOException;
@@ -336,11 +336,11 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  //Return value:
  
- //ret \ 0: package length == ret
+ //ret > 0: package length == ret
  
  //ret == 0: package not complete
  
- //ret \< 0: wrong package format
+ //ret < 0: wrong package format
  
  int checkPackageLength(byte[] data);
  
@@ -411,7 +411,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  * @param responseInstance业务回复包体,protobuf对象的实例
  
- * @return \!=null 业务回复包体
+ * @return !=null 业务回复包体
  
  * 其它或异常 失败
  
@@ -428,11 +428,11 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  * @param length 回复报文长度
  
- * @return \< 0 报文格式错误
+ * @return < 0 报文格式错误
  
  * = 0 报文不完整
  
- * \ 0 报文有效长度
+ *  > 0 报文有效长度
  
  */
  
@@ -445,7 +445,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  //1. 初始化代理
  
  SrpcProxy proxy = new SrpcProxy();  
- proxy.setCaller("echo\_client");  
+ proxy.setCaller("echo_client");  
  proxy.setMethod("Echo.EchoService.echo");
  
  //2. 设置请求，并序列化  
@@ -609,7 +609,7 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
  
  * @param ip 输入参数，IP地址
  
- * @param failed 输入参数，\>1表示失败次数，0表示成功
+ * @param failed 输入参数，>1表示失败次数，0表示成功
  
  * @param cost 输入参数，调用时延
  
@@ -633,7 +633,7 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
  
  boolean ret = accessLB.getroutebyname("JavaSample.Jecho", route);
  
- if (\!ret) return;
+ if (!ret) return;
  
  System.out.println("Server addr: " + route.getIp() + ":" +
  route.getPort());
@@ -648,7 +648,7 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
  
  long begin = System.currentTimeMillis();
  
- if (route.getComm\_type() == Route.COMM\_TYPE.COMM\_TYPE\_UDP) {
+ if (route.getComm_type() == Route.COMM_TYPE.COMM_TYPE_UDP) {
  
  ret = UdpSendRecv(route.getIp(), route.getPort(), reqData); // UDP网络通信
  
@@ -658,7 +658,7 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
  
  }
  
- if (ret \< 0) // 表示失败： 服务端超时了
+ if (ret < 0) // 表示失败： 服务端超时了
  
  accessLB.updateroute("JavaSample.Jecho", route.getIp(), 1, 0); // 上报失败
  
