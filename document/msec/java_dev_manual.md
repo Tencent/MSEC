@@ -16,15 +16,10 @@ Netty是一个高性能、异步事件驱动的NIO框架，在此不再赘述，
 SRPC Java主要功能如下：
 
 - **RPC**<br/>远程RPC接口，简化模块间调用
-
 - **协议**<br/>采用google的protobuf协议做为标准协议，自动生成代码，使用简单
-
 - **名字服务**<br/>采用MSEC内部使用的NLB做名字服务，以JNI形式嵌入框架, 通过mmap与本机的NLB Agent通信
-
 - **负载均衡**<br/>采用MSEC内部使用的NLB做负载均衡, 以JNI形式嵌入框架, 通过mmap与本机的NLB Agent通信
-
 - **服务监控**<br/>采用MSEC内部使用的打点监控系统Monitor, 以JNI形式嵌入框架, 通过mmap与本机的Monitor Agent通信
-
 - **日志**<br/>支持本地日志和远程日志，远程日志采用MSEC内部使用的日志系统，支持染色, 以JNI形式嵌入框架, 通过socket与本机的Logsys Agent通信
 
 # SRPC编码
@@ -113,7 +108,6 @@ libjni_monitor.so
 *        response [出参]业务回复报文
 * @return 框架会将返回值作为执行结果传给客户端
 */
- 
 public Echo.EchoResponse echo(RpcController controller,
 	Echo.EchoRequest request) throws ServiceException {
 
@@ -171,7 +165,6 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
 * @return SRPC_SUCCESS 成功
 *         其它 失败
 */
-
 MessageLite callMethod(String moduleName, String serviceMethodName,
 	MessageLite request, MessageLite responseInstance, int timeoutMillis) throws Exception;
 ```
@@ -196,18 +189,15 @@ try {
 }
 ```
 参数说明：
-
 1.  JavaSample.Jecho 业务名，web console录入，两级业务名
 2.  Echo.EchoService.echo 方法名，pb自动生成的方法名全称
 3.  Request 请求包
 4.  Response 回复包
 
 #### 调用SRPC异构服务
-
 确保被调业务已经录入msec webconsole的异构服务中，调用方法同[*调用标准服务*](#调用标准服务)。
 
 #### 调用非SRPC异构服务
-
 可按照如下方式实现调用：
 
 1.  将外部服务的server地址配置在console页面，这样就可以利用msec系统提供的负载均衡能力
@@ -306,7 +296,6 @@ proxy.setMethod("Echo.EchoService.echo");
 //2. 设置请求，并序列化  
 Echo.EchoRequest.Builder echoRequestBuilder = Echo.EchoRequest.newBuilder();
 echoRequestBuilder.setMessage("hello");
-
 Echo.EchoRequest echoRequest = echoRequestBuilder.build();  
 byte[] sendBytes = proxy.serialize(echoRequest);
 
@@ -314,11 +303,9 @@ byte[] sendBytes = proxy.serialize(echoRequest);
 SendRecv(sendBytes, recvBytes, recvBytesLength);
 
 //4. 回复的反序列化
-Echo.EchoResponse echoResponseInstance =
-Echo.EchoResponse.getDefaultInstance();
-
-Echo.EchoResponse response =
-	(Echo.EchoResponse)proxy.deserialize(recvBytes, recvBytesLength, echoResponseInstance);  
+Echo.EchoResponse echoResponseInstance = Echo.EchoResponse.getDefaultInstance();
+Echo.EchoResponse response = (Echo.EchoResponse)proxy.deserialize(recvBytes, 
+                              recvBytesLength, echoResponseInstance);  
 if(response == null) {  
 	throw new Exception(String.format("Deserialize error: [%d]%s",
 		proxy.getErrno(), proxy.getErrmsg()));  
@@ -495,5 +482,7 @@ String getConfig(String section, String key);
 
 ## 其他
 
- 定时任务的支持：提供ServiceUtils.loop接口执行定时任务。
+定时任务的支持：提供ServiceUtils.loop接口执行定时任务。如业务开发有定时任务的需求，可调用该接口。
+
+初始化逻辑：Java入口Main函数在ServiceImpl.java中，如业务开发需要实现服务的初始化，请直接添加在Main函数中。
 
