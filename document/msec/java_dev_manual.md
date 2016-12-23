@@ -210,25 +210,23 @@ libjni\_monitor.so
 SRPC服务主要分为两类：标准服务和异构服务。异构服务又分为两类：SRPC和非SRPC。
 
 **标准服务**： 指采用MSEC SRPC框架开发的服务（C++/Java/PHP/Python都包含在内），
-且与调用方（或被调用方）在同一个MSEC
-Console中管理。（因不同的MSEC
-Console意味着服务的IP端口配置信息不在一个数据库中，互不可见，所以要区别对待。）
+且与调用方（或被调用方）在同一个MSEC Console中管理。（因不同的MSEC Console意味着服务的IP端口配置信息不在一个数据库中，互不可见，所以要区别对待。）
 
-**异构服务**：指不是采用MSEC SRPC框架开发的服务, 或者与调用方（或被调用方）不在同一个MSEC Console中管理。
+**异构服务**：指不是采用MSEC SRPC框架开发的服务, 或者与调用方（或被调用方）不在同一个MSEC Console部署实例中管理。
 
 这里按照3类解释说明：
 
   - **标准服务**
 
-SRPC服务，且和存在调用关系的业务在同一个实例。
+SRPC服务，且和存在调用关系的业务在同一个毫秒部署实例。
 
   - **SRPC异构服务**
 
-SRPC服务，且和存在调用关系的业务不在同一个实例。
+SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例。想象一下：部署了两个毫秒console管理服务器，其中一个毫秒console上的A服务调用另外一个毫秒console上的B服务
 
   - **非SRPC异构服务**
 
-非SRPC服务。
+非SRPC服务。例如mysql服务
 
 ### SRPC业务调用其它服务
 
@@ -304,7 +302,7 @@ SRPC服务，且和存在调用关系的业务不在同一个实例。
 
 #### 调用SRPC异构服务
 
-确保被调业务已经录入msec webconsole，调用方法同[*调用标准服务*](#调用标准服务)。
+确保被调业务已经录入msec webconsole的异构服务中，调用方法同[*调用标准服务*](#调用标准服务)。
 
 #### 调用非SRPC异构服务
 
@@ -424,7 +422,7 @@ SRPC服务，且和存在调用关系的业务不在同一个实例。
  
  /\*\*
  
- \* @brief 检查报文长度
+ \* @brief tcp方式下检查是否收到了完整的应答包
  
  \* @param data 回复报文
  
@@ -487,7 +485,7 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
   - **请求报文格式**
 
 ```
- POST /127.0.0.1:7963?**methodName=Echo.EchoService.echo**
+ POST /127.0.0.1:7963/invoke?methodName=Echo.EchoService.echo
  
  Content-Type: aplication/json; charset=UTF-8
  
@@ -500,7 +498,7 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
 
 ```
  wget --post-data="{\\"message\\":\\"hello world\\"}"
- /127.0.0.1:7963?methodName=Echo.EchoService.echo
+ /127.0.0.1:7963/invoke?methodName=Echo.EchoService.echo
 ```
 【注意】请求参数中需要带RPC方法名
 
@@ -552,11 +550,11 @@ SRPC提供远程日志功能，远程日志用户可自定义设置选项，并�
 日志配置示例：
 
 ```
- \[LOG\]
+ [LOG]
  
  Level=DEBUG
  
- \[COLOR\]
+ [COLOR]
  
  FieldName0=uin
  
@@ -682,15 +680,15 @@ Java已封装好NLB功能，在ServiceFactory.callMethod中会自动调用NLB获
 示例如下：
 
 ```
- \[SRPC\]
+ [SRPC]
  
  listen=eth0:7963/tcp
  
- \[LOG\]
+ [LOG]
  
  Level=DEBUG
  
- \[COLOR\]
+ [COLOR]
  
  FieldName0=uin
  
