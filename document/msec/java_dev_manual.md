@@ -279,7 +279,7 @@ SRPC服务，且和存在调用关系的业务不在同一个毫秒部署实例�
  
  echoRequest, echoResponseInstance, 3000);
  
- System.out.println("Request:\\n" + echoRequest + "Response:\\n" +
+ System.out.println("Request:\n" + echoRequest + "Response:\n" +
  echoResponse);
  
  } catch (Exception ex) {
@@ -497,7 +497,7 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
 可以直接使用wget做测试：
 
 ```
- wget --post-data="{\\"message\\":\\"hello world\\"}"
+ wget --post-data="{\"message\":\"hello world\"}"
  /127.0.0.1:7963/invoke?methodName=Echo.EchoService.echo
 ```
 【注意】请求参数中需要带RPC方法名
