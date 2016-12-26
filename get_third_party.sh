@@ -2,7 +2,7 @@
 set -e
 
 echo ' download jar files used by msec_console:'
-echo '=========================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/msec_console;cd third_party/msec_console
 wget http://central.maven.org/maven2/org/apache/commons/commons-compress/1.8/commons-compress-1.8.jar
 wget http://central.maven.org/maven2/commons-fileupload/commons-fileupload/1.2.2/commons-fileupload-1.2.2.jar
@@ -23,20 +23,20 @@ wget http://nchc.dl.sourceforge.net/project/jgraphviz/jgraphviz/0.1/com.rapitasy
 cd -
 
 echo ' download jar files used by monitor console:'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/monitor/monitor_console;cd third_party/monitor/monitor_console
 cp ../../msec_console/*  ./
 cd -
 
 echo ' download jar files used by redis console:'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/redis/redis_console; cd   third_party/redis/redis_console
 cp ../../msec_console/*  ./
 wget http://search.maven.org/remotecontent?filepath=redis/clients/jedis/2.8.1/jedis-2.8.1.jar
 cd -
 
 echo 'download jar files used by remote shell server:'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/remote_shell/server;cd third_party/remote_shell/server
 wget http://central.maven.org/maven2/org/bouncycastle/bcprov-jdk16/1.46/bcprov-jdk16-1.46.jar
 wget http://www.java2s.com/Code/JarDownload/jackson-all/jackson-all-1.7.4.jar.zip
@@ -44,21 +44,27 @@ wget http://central.maven.org/maven2/junit/junit/4.12/junit-4.12.jar
 wget http://maven.restlet.org/org/json/org.json/2.0/org.json-2.0.jar
 cd -
 
+echo 'download libs used by remote shell agent:'
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+mkdir -p third_party/remote_shell/agent;cd third_party/remote_shell/agent
+wget https://github.com/cesanta/frozen/archive/master.zip
+cd -
+
 mkdir -p third_party/monitor/monitor_server; cd  third_party/monitor/monitor_server
 echo 'download protobuf for monitor_server'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 wget https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz
 echo 'download zlib for monitor_server:'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 wget http://zlib.net/zlib-1.2.8.tar.gz
 echo 'download mysql client library for monitor_server:'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 wget http://cdn.mysql.com/archives/mysql-5.5/MySQL-devel-5.5.8-1.linux2.6.x86_64.rpm
 cd -
 
 
 echo 'download protobuf, zlib and mysql client library for redis'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/redis/monitor_server; cd  third_party/redis/monitor_server
 cp  ../../monitor/monitor_server/protobuf* .
 cp  ../../monitor/monitor_server/zlib* .
@@ -66,20 +72,20 @@ cp  ../../monitor/monitor_server/MySQL* .
 cd -
 
 echo 'download zookeeper for nlb'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/nlb/zookeeper; cd third_party/nlb/zookeeper;
 wget http://mirror.bit.edu.cn/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz
 cd -
 
 echo 'download protobuf....'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/protobuf; cd third_party/protobuf
 wget -c -O protobuf-2.5.0.tar.gz https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz
 cd - 
 
 mkdir -p third_party/srpc; cd  third_party/srpc
 echo 'download library for srpc....'
-echo '======================================================='
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 
 mkdir -p r3c; cd r3c
 wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/eyjian/r3c/zip/master'

@@ -56,6 +56,10 @@ server用到：
 * junit-4.12.jar
 * org.json.jar
 
+agent用到：
+
+* frozen, 轻量的json解析C语言库
+
 # 4、monitor #
 ## 4.1 简介 ##
 子目录monitor是一套集中式的监控服务，该监控服务既可作为msec的集中式监控服务供msec业务上报，也可单独部署并使用独立的standalone\_console进行管理。典型的应用场景是：业务上报监控到监控agent，监控agent汇总定时上报给监控服务，开发运营人员通过msec的web_console页面或独立部署的standalone\_console页面查看业务监控汇总视图。
