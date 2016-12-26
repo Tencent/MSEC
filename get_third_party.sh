@@ -47,7 +47,8 @@ cd -
 echo 'download libs used by remote shell agent:'
 echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/remote_shell/agent;cd third_party/remote_shell/agent
-wget https://github.com/cesanta/frozen/archive/master.zip
+wget https://github.com/cesanta/frozen/blob/master/frozen.c
+wget https://github.com/cesanta/frozen/blob/master/frozen.h
 cd -
 
 mkdir -p third_party/monitor/monitor_server; cd  third_party/monitor/monitor_server
