@@ -422,7 +422,7 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
 
 可以直接使用wget做测试：
 
-> wget --post-data="{\"message\": \"hello world\"}" /127.0.0.1:7963?methodName=echo.EchoService.Echo <br/>
+> wget --post-data="{\"message\": \"hello world\"}" http://127.0.0.1:7963?methodName=echo.EchoService.Echo <br/>
 
 **注意**：请求参数中需要带RPC方法名
 

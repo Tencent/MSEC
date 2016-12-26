@@ -330,7 +330,7 @@ Content-Length: 26
 可以直接使用wget做测试：
 
 ```
- wget --post-data="{\"message\":\"hello world\"}"  /127.0.0.1:7963/invoke?methodName=Echo.EchoService.echo
+ wget --post-data="{\"message\":\"hello world\"}"  http://127.0.0.1:7963/invoke?methodName=Echo.EchoService.echo
 ```
 【注意】请求参数中需要带RPC方法名
 
