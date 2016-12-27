@@ -1,8 +1,8 @@
-# c++开发者手册 #
+# c++开发者手册
 
 **MSEC** 是一个开发+运营解决方案，不只是一个开发框架。支持Java、C/C++、PHP和Python开发语言，其中后三种语言底层框架都是基于C++开发的逻辑层框架。本文主要介绍框架原理和C/C++接口使用。
 
-## SRPC简介 ##
+## SRPC简介
 
 **SRPC** 是一个典型的逻辑层框架融合RPC和MSEC外围系统的产物，主语言采用C++/C，并对PHP和Python提供了简单支持，有如下特点:
 
@@ -14,7 +14,7 @@
 - **服务监控**<br/>采用MSEC内部使用的打点监控系统*Monitor*
 - **日志**<br/>支持本地日志和远程日志，远程日志采用MSEC内部使用的日志系统，支持染色
 
-### 整体框架 ###
+### 整体框架
 
 ![](images/cpp_dev_manual/srpc_framework.png)
 
@@ -27,7 +27,7 @@
 
 *proxy*和*worker*进程通过两块共享内存+fifo通知机制完成交互。一块共享内存proxy负责发包，worker收包；另外一块worker发包，proxy收包。所有进程通过mmap和socket的方式，与三个agent进程交互，实现路由信息的获取、监控上报、日志上报。
 
-### 微线程简介 ###
+### 微线程简介
 **微线程**是一个*协程*库，一些语言(golang,erlang等)已经提供了语言级别的支持，但是C语言并没有提供支持，有一些开源的C语言库提供了类似的支持，比如：libco、libtask、coro、libpcl、State Threads等。<br/>
 
 类似于apache的fork模型，网络服务器，每次收到报文，都创建一个执行环境来单独处理，差异在于不是进程，而是微线程； 每个线程，有独立的栈空间，其执行过程与其它线程隔离。对比于posix的线程，“微线程”是用户态的调度，实质上，多个“微线程”是同一操作系统调度单元，而微线程间的调度，是用户态进程内部管理的，也就是说，每次微线程切换，不用进入系统态，开销会小很多。
@@ -38,10 +38,10 @@
 
 如上图所示，微线程的调度原理主要基于epoll、等待队列和可运行队列，是非抢占式的。微线程在空闲时（网络IO阻塞或其它事件等待时）加入等待队列，主动让出CPU；如果IO满足或者其它事件到达，加入可运行队列；守护微线程负责整体的IO和微线程调度。
 
-## SRPC编码 ##
+## SRPC编码
 本节主要采用一两个事例程序来完成编码的说明。
 
-### 协议定义 ###
+### 协议定义
 SRPC的协议使用*protobuf*，协议的定义实际上就是一个proto文件。在MSEC中，开发同学只需要在页面上定义好协议即可。后续章节描述如无特殊说明，都采用如下协议做示例。
 
 ```protobuf
@@ -71,7 +71,7 @@ option cc_generic_services = true; // 生成RPC，这行必须加上
 ```
 
 
-### 自动生成代码 ###
+### 自动生成代码
 
 SRPC通过开发者定义的协议格式，可以自动生成对应的代码，业务开发者只需要关注业务的逻辑即可。在MSEC中，自动生成的代码通过页面完成。以上文中的echo为例，生成后的代码下载下来的目录如下：
 
@@ -107,7 +107,7 @@ echo
     `-- protoc		// pb生成代码工具
 ```
 
-### 实现业务逻辑 ###
+### 实现业务逻辑
 
 业务实现逻辑都在msg_$(packagename)_impl.cpp里面实现，上例中的RPC方法名是Echo，包名是echo，可以在msg_echo_impl.cpp里面找到Echo方法的实现接口（TODO下面为简单代码实现）：
 
@@ -138,7 +138,7 @@ int CEchoServiceMsg::Echo(const EchoRequest* request, EchoResponse* response)
 }
 ```
 
-#### 业务初始化 ####
+#### 业务初始化
 
 如果业务需要在进程启动和停止的时候，需要做一些初始化和清理工作，可以修改service_$(package)_frm.cpp下面的代码实现。
 
@@ -193,7 +193,7 @@ extern "C" void spp_handle_fini(void* arg1, void* arg2)
 
 
 
-### 服务间调用 ###
+### 服务间调用
 
 SRPC服务主要分为两类：标准服务和异构服务。异构服务又分为两类：SRPC和非SRPC。这里按照3类解释说明：
 
@@ -201,9 +201,9 @@ SRPC服务主要分为两类：标准服务和异构服务。异构服务又分�
 - SRPC异构服务<br/>SRPC服务，且和存在调用关系的业务不在同一个实例。
 - 非SRPC异构服务<br/>	非SRPC服务。
 
-#### SRPC业务调用其它服务 ####
+#### SRPC业务调用其它服务
 
-##### 调用标准服务 #####
+##### 调用标准服务
 
 对于MSEC内部的业务，可以直接调用CallMethod完成RPC调用。
 
@@ -249,7 +249,7 @@ Request				    请求包
 Response				回复包
 ```
 
-##### 调用SRPC异构服务 #####
+##### 调用SRPC异构服务
 
 需要通过SRPC提供的代理调用，调用接口如下：
 
@@ -302,7 +302,7 @@ proxy.CallMethod(send_buf, send_len, recv_buf, recv_len, timeout)
 UnpackResponse(recv_buf, recv_len, response)
 ```
 
-#### 其它业务调用SRPC业务 ####
+#### 其它业务调用SRPC业务
 
 SRPC有自带的打解包方式用于异构业务调用RPC业务。
 
@@ -408,7 +408,7 @@ if (seq != rsp_seq)
 **注意**：上面没有说到如何获取服务器端的地址。需要开发者自己安装nlbagent，然后就可以直接调用nlb的getroutebyname接口获取到对应的IP，详细使用方法请看[NLB使用](cpp_dev_manual.md#nlb使用)一节。
 
 
-### http+json支持 ###
+### http+json支持
 
 SRPC支持通过http+json的方式访问服务，服务器端开发者并不需要关注该特性，因为框架已经将对应的json转换成protobuf格式，开发者毫无感知。
 
@@ -437,11 +437,11 @@ SRPC支持通过http+json的方式访问服务，服务器端开发者并不需�
 
 **注意**：回复报文的http消息体带框架返回的错误信息，resultObj才是业务返回的json字符串。业务需要先判断ret是否为0，不为0就表示错误，这时不会有resultObj。
 
-### 微线程使用 ###
+### 微线程使用
 
 在SRPC中可以直接调用微线程接口完成网络收发，这里列出常用的接口说明。
 
-#### TCP&UDP收发接口 ####
+#### TCP&UDP收发接口
 
 ```c++
 /**
@@ -482,7 +482,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
 	                  int timeout, MtFuncTcpMsgLen chek_func);
 ```
 
-#### 批量收发接口 ####
+#### 批量收发接口
 
 批量网络收发接口，IMtTask的定义请参见[mt_api.h](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/sync_frame/micro_thread/mt_api.h)，实际上只需要继承该类，并实现自己的Process函数即可完成一个Task的实现。Task内部的网络操作需要调用微线程的网络IO接口，比如上面的mt_udpsendrcv和mt_tcpsendrcv。详细示例可以参见源码中的[Relay_task.cpp](https://github.com/Tencent/MSEC/tree/master/spp_rpc/src/module/example/sync/task/Relay_task.cpp)中的ExampleMsg::HandleProcess函数实现。
 
@@ -497,7 +497,7 @@ typedef vector<IMtTask*>  IMtTaskList;
 int mt_exec_all_task(IMtTaskList& req_list);
 ```
 
-#### 创建微线程接口 ####
+#### 创建微线程接口
 
 ```c++
 typedef void (*ThreadStart)(void*);      ///< 微线程入口函数定义
@@ -511,7 +511,7 @@ typedef void (*ThreadStart)(void*);      ///< 微线程入口函数定义
 void* mt_start_thread(void* entry, void* args);
 ```
 
-#### 微线程sleep接口 ####
+#### 微线程sleep接口
 
 ```c++
 /**
@@ -521,11 +521,11 @@ void* mt_start_thread(void* entry, void* args);
 void mt_sleep(int ms);
 ```
 
-### NLB使用 ###
+### NLB使用
 
 SRPC可以直接使用NLB做寻址，业务需要通过web_console注册到MSEC。
 
-#### API说明 ####
+#### API说明
 
 ```c++
 typedef enum {
@@ -589,7 +589,7 @@ else
 }
 ```
 
-### Monitor ###
+### Monitor
 
 SRPC支持打点监控，使用简单，且几乎没有性能开销。暂时支持两种打点监控：
 
@@ -606,7 +606,7 @@ ATTR_REPORT_INC("test"，11);	       // test为上报属性名,11为累加值
 ATTR_REPORT_SET("test", 100);	    // test为上报属性名 100为上报值
 ```
 
-### Log ###
+### Log
 SRPC日志功能强大，支持远程日志和本地日志两种日志方式，远程日志用户可自定义设置选项，并通过选项染色。
 
 **注意**：远程日志的选项和每一个业务请求绑定，非全局。
@@ -665,7 +665,7 @@ NGLOG_FATAL(fmt, args...)
 NGLOG_SET_OPTION(k, v)	// 远程日志可设置选项，并通过日志选项染色
 ```
 
-### 读取配置接口 ###
+### 读取配置接口
 
 SRPC提供读取ini配置的接口，首先需要包含#include "configini.h"文件，然后调用对应的接口，接口如下：
 
@@ -692,12 +692,12 @@ int GetConfig(const string &config_path, const string &session, const string &ke
 int GetConfig(const string &session, const string &key, string &val);
 ```
 
-### 第三方库使用 ###
+### 第三方库使用
 SRPC采用微线程框架，不允许进程内部有阻塞的逻辑（比如网络操作）。SRPC目前对通用的mysql和redis客户端库提供了微线程支持，业务开发者可以很方便的使用。
 
 **注意**：在调用SRPC和微线程接口时，会有上下文切换，mysql句柄和redis客户端需要在每个执行流“创建+销毁”，形成闭环。
 
-#### mysql使用方法 ####
+#### mysql使用方法
 
 - 包含头文件
 
@@ -709,11 +709,11 @@ SRPC采用微线程框架，不允许进程内部有阻塞的逻辑（比如网�
 
 和原生mysql库调用方式相同，详细参见官方说明文档。
 
-#### redis ####
+#### redis
 
 框架提供hiredis和r3c对微线程的支持，hiredis不支持redis集群模式。
 
-##### hiredis使用方法 #####
+##### hiredis使用方法
 
 - 包含头文件
 
@@ -725,7 +725,7 @@ SRPC采用微线程框架，不允许进程内部有阻塞的逻辑（比如网�
 
 使用方法和原生hiredis库一样，参见框架源码third_party/hiredis/README.md或者官方文档。
 
-##### r3c使用方法 #####
+##### r3c使用方法
 
 **注意**：r3c依赖hiredis库，链接时，需要将hiredis库放到r3c库的后面
 
@@ -740,7 +740,7 @@ SRPC采用微线程框架，不允许进程内部有阻塞的逻辑（比如网�
 使用方法和原生r3c库一样，参见官方说明。
 
 
-## SRPC配置说明 ###
+## SRPC配置说明
 
 ```ini
 [SRPC]
