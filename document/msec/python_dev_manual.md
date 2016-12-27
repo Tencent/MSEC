@@ -111,14 +111,14 @@ echo_server
 ```python
 
 class EchoService:
-    @brief  自动生成的业务方法实现接口
-    @param  req_data  [入参]业务请求报文，非pb格式，需要转换成pb，也有可能是json字符串
-    @       is_json   [入参]是否为json
-    @return 业务回复报文，pb序列化后的包体或者json字符串
+    # @brief  自动生成的业务方法实现接口
+    # @param  req_data  [入参]业务请求报文，非pb格式，需要转换成pb，也有可能是json字符串
+    # @       is_json   [入参]是否为json
+    # @return 业务回复报文，pb序列化后的包体或者json字符串
     def EchoTest(self, req_data, is_json):
         json协议处理
         if is_json:
-            TODO: 业务逻辑实现
+            # TODO: 业务逻辑实现
             return req_data
 
         自动生成部分，反序列化请求包体
@@ -126,10 +126,10 @@ class EchoService:
         request.ParseFromString(req_data)
         response = service_pb2.EchoResponse()
 
-        TODO: 业务逻辑实现
-        **response.message = request.message**
+        # TODO: 业务逻辑实现
+        response.message = request.message
 
-        序列化回复包体
+        # 序列化回复包体
         return response.SerializeToString()
 ```
 
