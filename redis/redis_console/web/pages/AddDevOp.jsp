@@ -17,13 +17,6 @@
 --%>
 
 
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2016/1/25
-  Time: 14:07
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -75,7 +68,7 @@
                  if (status == "success") {//http通信返回200
                       if (data.status == 0) {//业务处理成功
 
-                       var str="<p>结果：添加成功。.</p>";
+                       var str="<p>结果：添加成功。</p>";
 
                         $("#result_message").empty();
                         $(str).appendTo("#result_message");

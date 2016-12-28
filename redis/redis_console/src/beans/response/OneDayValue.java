@@ -26,10 +26,12 @@ public class OneDayValue
 {
     String date;
     int[] values;
+    int max;
     public OneDayValue(String d, int[] v)
     {
         date = d;
         values = v;
+        max = 0;
     }
 
     public String getDate() {
@@ -47,4 +49,14 @@ public class OneDayValue
     public void setValues(int[] values) {
         this.values = values;
     }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+
 }

@@ -17,13 +17,6 @@
 --%>
 
 
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2016/1/25
-  Time: 14:07
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
@@ -613,9 +606,11 @@
 									  $.each(rec.servers, function(j,svr){
 										  str += "Set名："+svr.set_id+"，组"+svr.group_id+"，端口："+svr.port+"，内存容量:"+svr.memory+"MB，" + (svr.master == true ? "<strong>Master</strong>":"Slave") + "<br/>";
 									  })
-									  added_servers.push.apply(added_servers, rec.servers);
-									  if(rec.servers != null && rec.servers.length != rec.instance_num) {
-										  str += "<strong>注意：由于Set内机器性能不一致，当前机器容量未用完，机器可安装"+rec.instance_num+"个实例，实际安装了"+rec.servers.length+"个实例</strong>";
+									  if(rec.servers != null) {
+										  added_servers.push.apply(added_servers, rec.servers);
+										  if (rec.servers.length != rec.instance_num) {
+											  str += "<strong>注意：由于Set内机器性能不一致，当前机器容量未用完，机器可安装" + rec.instance_num + "个实例，实际安装了" + rec.servers.length + "个实例</strong>";
+										  }
 									  }
 									  str += "</td>";
 								  }
