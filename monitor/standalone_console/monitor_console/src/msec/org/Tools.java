@@ -22,14 +22,13 @@ package msec.org;
 import beans.response.OneAttrDaysChart;
 import org.jfree.chart.*;
 
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.DateTickUnit;
-import org.jfree.chart.axis.DateTickUnitType;
-import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.title.TextTitle;
 import org.jfree.data.time.*;
 import org.jfree.data.xy.XYDataset;
 import beans.response.OneDayValue;
+import org.jfree.ui.RectangleInsets;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -39,6 +38,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -57,20 +57,18 @@ public class Tools {
             Minute current = new Minute(gc.getTime());
             int[] data = oneDayValues[j].getValues();
 
-            int len = data.length - 1;
+            int len = data.length;
             //if it is today... check actual length for data
             if(oneDayValues[j].getDate().equals(Tools.nowString("yyyyMMdd")) ) {
-                for (int i = len; i >= 0; i--) {
-                    if (data[i] != 0) {
-                        len = i;
-                        break;
-                    }
-                }
+                Calendar cal = Calendar.getInstance();
+                len = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
             }
 
             for (int i = 0; i < len; ++i) {
                 timeseries.add(current, (double) (data[i]));
                 current = (Minute) current.next();
+                if(data[i] > oneDayValues[0].getMax())
+                    oneDayValues[0].setMax(data[i]);
             }
             timeseriescollection.addSeries(timeseries);
         }
@@ -87,16 +85,12 @@ public class Tools {
         for (int j = 0; j < oneDayValues.size(); j++) {
             int[] data = oneDayValues.get(j).getValues();
             //check actual length for data
-            int len = data.length - 1;
+            int len = data.length;
             if(j == oneDayValues.size()-1) {
                 //if last day is today...
                 if(oneDayValues.get(j).getDate().equals(Tools.nowString("yyyyMMdd"))) {
-                    for (int i = len; i >= 0; i--) {
-                        if (data[i] != 0) {
-                            len = i;
-                            break;
-                        }
-                    }
+                    Calendar cal = Calendar.getInstance();
+                    len = cal.get(Calendar.HOUR_OF_DAY)*60+cal.get(Calendar.MINUTE);
                 }
             }
             for (int i = 0; i < len; ++i) {
@@ -134,56 +128,60 @@ public class Tools {
         XYDataset xydataset = createDataset(data);
         JFreeChart jfreechart = ChartFactory.createTimeSeriesChart(title,
                 "time", "", xydataset, true, true, true);
+        //jfreechart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 
         try {
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
 
+            //线条
+            xyplot.setRangeGridlinePaint(ChartColor.GRAY);
+            xyplot.setBackgroundPaint(ChartColor.WHITE);
+            xyplot.setAxisOffset(new RectangleInsets(0, 0, 0, 0));
+            xyplot.setOutlinePaint(null);//去掉边框
+
             //横轴
             DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();
-            dateaxis.setDateFormatOverride(new SimpleDateFormat("HH:mm"));
-            dateaxis.setLabelFont(new Font("黑体", Font.PLAIN, 16)); //水平底部标题
-            dateaxis.setLabelPaint(ChartColor.gray);
-            dateaxis.setTickLabelFont(new Font("宋体", Font.PLAIN, 16));
-            dateaxis.setTickLabelPaint(ChartColor.GRAY);
+            dateaxis.setDateFormatOverride(new SimpleDateFormat("H"));
+            dateaxis.setLabelFont(new Font("微软雅黑", Font.PLAIN, 14)); //水平底部标题
+            dateaxis.setLabelPaint(ChartColor.black);
+            dateaxis.setTickLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            dateaxis.setTickLabelPaint(ChartColor.black);
 
             GregorianCalendar endgc = (GregorianCalendar)gc.clone();
             endgc.add(GregorianCalendar.DATE, 1);
             dateaxis.setMaximumDate(endgc.getTime());
-
             dateaxis.setTickMarksVisible(true);
             dateaxis.setTickMarkInsideLength(5);
             dateaxis.setTickUnit(new DateTickUnit(DateTickUnitType.HOUR, 2));
-            dateaxis.setVerticalTickLabels(true);
+            //dateaxis.setVerticalTickLabels(true);
             dateaxis.setLabel("");
 
             //纵轴
             ValueAxis rangeAxis = xyplot.getRangeAxis();//获取柱状
-            rangeAxis.setLabelFont(new Font("黑体", Font.PLAIN, 16));
-            rangeAxis.setLabelPaint(ChartColor.gray);
-            rangeAxis.setTickLabelFont(new Font("宋体", Font.PLAIN, 16));
-            rangeAxis.setTickLabelPaint(ChartColor.gray);
+            rangeAxis.setLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            rangeAxis.setLabelPaint(ChartColor.black);
+            rangeAxis.setTickLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            rangeAxis.setTickLabelPaint(ChartColor.black);
             rangeAxis.setLowerBound(0);
+            rangeAxis.setUpperBound(Tools.upperBound(data[0].getMax()));
+
+            NumberAxis numAxis = (NumberAxis) rangeAxis;
+            numAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
             //图例
-            jfreechart.getLegend().setItemFont(new Font("黑体", Font.PLAIN, 12));
-            jfreechart.getLegend().setItemPaint(ChartColor.gray);
-            jfreechart.getLegend().setBorder(0,0,0,0);//去掉边框
+            jfreechart.getLegend().setItemFont(new Font("微软雅黑", Font.PLAIN, 12));
+            jfreechart.getLegend().setItemPaint(ChartColor.black);
+            jfreechart.getLegend().setBorder(0, 0, 0, 0);//去掉边框
 
             //标题
-            jfreechart.getTitle().setFont(new Font("宋体", Font.PLAIN, 18));//设置标题字体
-            jfreechart.getTitle().setPaint(ChartColor.gray);
-
-            //线条
-            xyplot.setRangeGridlinePaint(ChartColor.GRAY);
-            xyplot.setBackgroundPaint(ChartColor.WHITE);
-            xyplot.setOutlinePaint(null);//去掉边框
-
+            jfreechart.getTitle().setFont(new Font("微软雅黑", Font.BOLD, 16));//设置标题字体
+            jfreechart.getTitle().setPaint(ChartColor.black);
 
             int w = 500;
             int h = 300;
 
-            // ChartUtilities.saveChartAsPNG(new File(filename), jfreechart, w, h);
-            ChartUtilities.saveChartAsJPEG(new File(filename),0.8f, jfreechart, w, h);
+            ChartUtilities.saveChartAsPNG(new File(filename), jfreechart, w, h);
+            //ChartUtilities.saveChartAsJPEG(new File(filename),0.8f, jfreechart, w, h);
 
             return "success";
 
@@ -208,17 +206,23 @@ public class Tools {
         XYDataset xydataset = createDaysDataset(data, startgc, chart);
         JFreeChart jfreechart = ChartFactory.createTimeSeriesChart(title,
                 "time", "", xydataset, true, true, true);
+        //jfreechart.getRenderingHints().put(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 
         try {
             XYPlot xyplot = (XYPlot) jfreechart.getPlot();
-
+            //线条
+            xyplot.setRangeGridlinePaint(ChartColor.GRAY);
+            xyplot.setBackgroundPaint(ChartColor.WHITE);
+            xyplot.setAxisOffset(new RectangleInsets(0, 0, 0, 0));
+            xyplot.setOutlinePaint(null);//去掉边框
             //横轴
             DateAxis dateaxis = (DateAxis) xyplot.getDomainAxis();
             dateaxis.setDateFormatOverride(new SimpleDateFormat("MM/dd"));
-            dateaxis.setLabelFont(new Font("黑体", Font.PLAIN, 16)); //水平底部标题
-            dateaxis.setLabelPaint(ChartColor.gray);
-            dateaxis.setTickLabelFont(new Font("宋体", Font.PLAIN, 16));
-            dateaxis.setTickLabelPaint(ChartColor.GRAY);
+
+            dateaxis.setLabelFont(new Font("微软雅黑", Font.PLAIN, 14)); //水平底部标题
+            dateaxis.setLabelPaint(ChartColor.black);
+            dateaxis.setTickLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            dateaxis.setTickLabelPaint(ChartColor.black);
 
             dateaxis.setMinimumDate(startgc.getTime());
             GregorianCalendar endgc = (GregorianCalendar)startgc.clone();
@@ -228,37 +232,34 @@ public class Tools {
             dateaxis.setTickMarksVisible(true);
             dateaxis.setTickMarkInsideLength(5);
             dateaxis.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 1));
-            dateaxis.setVerticalTickLabels(true);
+            //dateaxis.setVerticalTickLabels(true);
             dateaxis.setLabel("");
 
             //纵轴
             ValueAxis rangeAxis = xyplot.getRangeAxis();//获取柱状
-            rangeAxis.setLabelFont(new Font("黑体", Font.PLAIN, 16));
-            rangeAxis.setLabelPaint(ChartColor.gray);
-            rangeAxis.setTickLabelFont(new Font("宋体", Font.PLAIN, 16));
-            rangeAxis.setTickLabelPaint(ChartColor.gray);
+            rangeAxis.setLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            rangeAxis.setLabelPaint(ChartColor.black);
+            rangeAxis.setTickLabelFont(new Font("微软雅黑", Font.PLAIN, 14));
+            rangeAxis.setTickLabelPaint(ChartColor.black);
             rangeAxis.setLowerBound(0);
+            rangeAxis.setUpperBound(Tools.upperBound(chart.getMax()));
+            NumberAxis numAxis = (NumberAxis) rangeAxis;
+            numAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
             //图例
-            jfreechart.getLegend().setItemFont(new Font("黑体", Font.PLAIN, 12));
-            jfreechart.getLegend().setItemPaint(ChartColor.gray);
+            jfreechart.getLegend().setItemFont(new Font("微软雅黑", Font.PLAIN, 12));
+            jfreechart.getLegend().setItemPaint(ChartColor.black);
             jfreechart.getLegend().setBorder(0,0,0,0);//去掉边框
 
             //标题
-            jfreechart.getTitle().setFont(new Font("宋体", Font.PLAIN, 18));//设置标题字体
-            jfreechart.getTitle().setPaint(ChartColor.gray);
-
-            //线条
-            xyplot.setRangeGridlinePaint(ChartColor.GRAY);
-            xyplot.setBackgroundPaint(ChartColor.WHITE);
-            xyplot.setOutlinePaint(null);//去掉边框
+            jfreechart.getTitle().setFont(new Font("微软雅黑", Font.BOLD, 16));//设置标题字体
+            jfreechart.getTitle().setPaint(ChartColor.black);
 
 
             int w = 500;
             int h = 300;
-
-            // ChartUtilities.saveChartAsPNG(new File(filename), jfreechart, w, h);
-            ChartUtilities.saveChartAsJPEG(new File(filename),0.8f, jfreechart, w, h);
+            ChartUtilities.saveChartAsPNG(new File(filename), jfreechart, w, h);
+            //ChartUtilities.saveChartAsJPEG(new File(filename),0.8f, jfreechart, w, h);
 
             return "success";
 
@@ -268,6 +269,14 @@ public class Tools {
             e.printStackTrace();
             return e.getMessage();
         }
+    }
+
+    static public int upperBound(int i)
+    {
+        if(i < 0)
+            return i;
+        int p = (int)Math.pow(10, Integer.toString(i).length()-1);
+        return (i/p+1)*p;
     }
 
     static public  String randInt()

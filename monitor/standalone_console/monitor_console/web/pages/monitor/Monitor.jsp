@@ -17,13 +17,6 @@
 --%>
 
 
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2016/1/25
-  Time: 14:07
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
@@ -145,7 +138,20 @@
 
           $("#right").load(url);
       }
-      
+
+      function fillAttr(str)
+      {
+          if (str == "U")
+          {
+              $("#attribute").val("^(?!sys).+");
+          }
+          else if (str == "S")
+          {
+              $("#attribute").val("^sys.*$");
+          }
+          else
+              $("#attribute").val("");
+      }
         
       function showDataDialog(title, date, index)
       {
@@ -471,6 +477,7 @@
               position: { my: "center", at: "left+800px top+500px ", of: window  } ,
               resizable: false,
           });
+          fillAttr("U");
           onMonitorBtnClicked();
       });
 
@@ -515,8 +522,10 @@
       <label for="server_ip">Server IP:</label>
       <input  class="form-control"  type="text" id="server_ip" placeholder="可选">
       <label for="attribute">属性名:</label>
-      <input  class="form-control" type="text" id="attribute" style="width: 320px"  placeholder="可选,可用英文;分割多个,或者^开头的正则表达式"><br>
-      <label for="attribute">日期:</label>
+      <input  class="form-control" type="text" id="attribute" style="width: 320px"  placeholder="可选,可用英文;分割多个,或者^开头的正则表达式">
+      <button type="button" class="btn-smaller" id="btn_user_property" style="font-size: 6px;" onclick="fillAttr('')" >All</button>
+      <br>
+      <label for="date">日期:</label>
       <input  class="form-control" type="text" id="date" style="width: 320px" placeholder="yyyymmdd,可选.可输入两日期来对比,用;分割" >
       &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn-small" id="btn_query" onclick="onMonitorBtnClicked()">查看</button>
 
