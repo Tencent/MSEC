@@ -2,7 +2,7 @@
 
 ### Q1:毫秒有没有demo和文档可以参考？ ###
 
-**A:** 文档参见[这里](document)，按照文档部署后，可以先看[msec是什么](document/msec/msec_in_a_nutshell.md)，照着例子把航班查询的demo做一下（两台机器就够了），然后可以对照对应语言的[msec服务开发详解](document/msec)深入的做一些例子（1.0版本需要3台机器，2.0及以上需要2台机器）。
+**A:** 文档参见[这里](document)，按照文档部署后，可以先看[msec是什么](document/msec/msec_in_a_nutshell.md)，照着例子把航班查询的demo做一下（两台机器就够了），然后可以对照对应语言的[msec服务开发详解](document/msec#开发详解文档)深入的做一些例子（1.0版本需要3台机器，2.0及以上版本需要2台机器）。
 
 ### Q2:毫秒支持哪些平台和开发语言 ###
 **A：** 毫秒的编译和运行都只支持linux；1.0版本支持的开发语言有c/c++/java/php，2.0版本增加python支持，其他语言我们会看需求情况酌情添加，大家也可以参考php的支持方式自行开发支持喜欢的语言。
@@ -13,7 +13,7 @@
 ### Q4:我按照安装文档部署了docker镜像，docker容器也跑起来了，但是monitor服务（或者mysql服务）没有启动是什么原因？ ###
 **A：** 可以attach到docker容器后，用msec_ps命令看一下关键服务的启动情况；容器里/etc/rc.d/rc.local这个文件有关键服务的安装路径和启动命令，可以研究一下。另外：
 
-1、如果你对docker不熟悉，请快速看一下 《docker入门很简单.doc》
+1、如果你对docker不熟悉，请快速看一下[docker入门很简单](document/msec/docker_guide.md)
 
 2、如果你对mysql zookeepr或者linux常用的操作不熟悉，请google或者系统学习一下，讨论组里其他同学一般没有精力来答疑这些比较基础的问题
 
@@ -29,7 +29,7 @@
 ### Q6:我按照文档指引，在业务运营机上部署agent，启动报错且失败了 ###
 **A：**请注意是否因为在web console页面里没有正确配置monitor和log服务的IP导致的，需要在异构服务那里自行增加一级服务RESERVED，然后在RESERVED下增加二级服务monitor和log，并配置它们的IP（也就是web console服务器的内网IP），并通过扩缩容操作刷写到负载均衡系统里。
 
-详细请参考[msec安装与部署](document/msec/msec_install_guide.md)文档
+详细请参考[msec安装与部署](document/msec/msec_install_guide.md)
 
 ### Q7:为什么要做毫秒开源？ ###
 **A：**QQ后台团队开发运营多年，经历了多次技术更新，积累了一些经验和教训，我们内部沉淀了一些文档和课件，也偶尔对外分享，但是觉得分享的东西到很好的落地实施其实还有较大的距离。
