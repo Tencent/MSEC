@@ -17,22 +17,6 @@
  */
 
 
-/*
- * =====================================================================================
- *
- *       Filename:  judge_proc_center.cpp
- *
- *    Description:  告警逻辑处理中心
- *
- *        Version:  1.0
- *       Revision:  none
- *       Compiler:  g++
- *
- *        Company:  Tencent
- *
- * =====================================================================================
- */
-
 #include "judge_proc_center.h"
 #include "get_proc_center.h"
 #include "log_def.h"

@@ -17,22 +17,6 @@
  */
 
 
-/*
- * =====================================================================================
- *
- *       Filename:  dump_proc_center.cpp
- *
- *    Description:  主要逻辑处理中心
- *
- *        Version:  1.0
- *       Revision:  none
- *       Compiler:  g++
- *
- *        Company:  Tencent
- *
- * =====================================================================================
- */
-
 #include "dump_proc_center.h"
 
 #include "log_def.h"

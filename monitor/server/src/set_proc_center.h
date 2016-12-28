@@ -17,21 +17,6 @@
  */
 
 
-/*
- * =====================================================================================
- *
- *       Filename:  set_proc_center.h
- *
- *    Description:  上报逻辑处理中心
- *
- *        Version:  1.0
- *       Revision:  none
- *       Compiler:  g++
- *
- *        Company:  Tencent
- *
- * =====================================================================================
- */
 #ifndef __SET_PROC_CENTER_H__
 #define __SET_PROC_CENTER_H__
 

@@ -17,21 +17,6 @@
  */
 
 
-/*
- * =====================================================================================
- *
- *       Filename:  get_proc_center.h
- *
- *    Description:  读取逻辑处理中心
- *
- *        Version:  1.0
- *       Revision:  none
- *       Compiler:  g++
- *
- *        Company:  Tencent
- *
- * =====================================================================================
- */
 #ifndef __GET_PROC_CENTER_H__
 #define __GET_PROC_CENTER_H__
 
