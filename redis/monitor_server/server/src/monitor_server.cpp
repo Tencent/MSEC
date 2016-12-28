@@ -75,35 +75,51 @@ bool InitConfig(SConfig& stConfig)
 	oCfg.GetValue("sem", "key", stConfig.dwSemKey, 0x30083);
 
 	// 共享内存
-	oCfg.GetValue("shm", "memory_percent", stConfig.wMemoryPercentage, 80);
+	oCfg.GetValue("shm", "memory_percent", stConfig.wMemoryPercentage, 0);
 	oCfg.GetValue("shm", "memory_left", stConfig.dwMemoryLeft, 0);
 	oCfg.GetValue("shm", "service_key", stConfig.dwServiceShmKey, 0x47000);
 	oCfg.GetValue("shm", "data_key", stConfig.dwDataShmKey, 0x47001);
+	unsigned long memory = tce::getSystemMemory();
+
 	if(stConfig.wMemoryPercentage == 0)
-	{		
-		oCfg.GetValue("shm", "service_size", stConfig.ddwServiceShmSize, 50000000);
-		oCfg.GetValue("shm", "data_size", stConfig.ddwDataShmSize, 500000000);
+	{		if(memory < 1900000000)
+		{
+			cout << "Current machine memory is smaller than 2GB." << endl;
+			return false;
+		}
+		else if(memory < 3900000000UL)
+		{
+			//小内存
+			stConfig.dwMemoryLeft = 1024 * 1024 * 1024;
+			stConfig.wMemoryPercentage = 70;			
+		}
+		else
+		{
+			//大内存
+			stConfig.dwMemoryLeft = (uint32_t)2048 * 1024 * 1024;
+			stConfig.wMemoryPercentage = 90;
+		}
 	}
 	else
 	{
 		if(stConfig.dwMemoryLeft > 0)
 		{
 			stConfig.dwMemoryLeft*=1024*1024;	//Bytes
-			if(tce::getSystemMemory() < stConfig.dwMemoryLeft )
+			if(memory < stConfig.dwMemoryLeft )
 			{
 				cout << "Current machine memory is smaller than " << stConfig.dwMemoryLeft << " Bytes" << endl;
 				return false;
 			}
 		}
-			
 		if(stConfig.wMemoryPercentage > 90)
 			stConfig.wMemoryPercentage = 90;
-		unsigned long memory = (tce::getSystemMemory() - stConfig.dwMemoryLeft)/100 * stConfig.wMemoryPercentage;
-		stConfig.ddwServiceShmSize = memory / 11000000 * 1000000;
-		stConfig.ddwDataShmSize = stConfig.ddwServiceShmSize * 10;
 	}
 	
-	if(stConfig.ddwServiceShmSize < 50000000 || stConfig.ddwDataShmSize < 500000000 )
+	unsigned long use_memory = (memory - stConfig.dwMemoryLeft)/100 * stConfig.wMemoryPercentage;
+	stConfig.ddwServiceShmSize = use_memory / 11000000 * 1000000;
+	stConfig.ddwDataShmSize = stConfig.ddwServiceShmSize * 10;
+	
+	if(stConfig.ddwServiceShmSize < 30000000 || stConfig.ddwDataShmSize < 300000000 )
 	{
 		cout << "The shared memory size is too small, please reconfigure." << endl;
 		return false;
@@ -117,8 +133,8 @@ bool InitConfig(SConfig& stConfig)
 	// 定时器设置 
 	oCfg.GetValue("timer", "to_check_signal", stConfig.dwCheckSignalInterval, 500);
 
-	printf("[定时器信息]: \n");
-	printf("\t 信号处理定时器: %u ms\n", stConfig.dwCheckSignalInterval);
+	printf("[Timer Info]: \n");
+	printf("\t Signal Timer Interval: %u ms\n", stConfig.dwCheckSignalInterval);
 
 	// log信息
 	oCfg.GetValue("log", "LogPath", stConfig.sLogPath, "/msec/monitor/log/");
@@ -135,33 +151,33 @@ bool InitConfig(SConfig& stConfig)
 	msg_log.Init(stConfig.sLogPath+"/"+"msg", stConfig.dwLogFileSize, 
 			stConfig.dwLogFileCount, false);
 
-	printf("[日志信息]: \n");
-	printf("\t日志保存目录: %s\n", stConfig.sLogPath.c_str());
-	printf("\t日志文件大小:%u, 文件个数:%u\n", stConfig.dwLogFileSize, stConfig.dwLogFileCount);
+	printf("[Log]: \n");
+	printf("\tLog Dir: %s\n", stConfig.sLogPath.c_str());
+	printf("\tLog file size:%u, file count:%u\n", stConfig.dwLogFileSize, stConfig.dwLogFileCount);
 
 	// 设置limit
-	printf("[系统配置信息]: \n");
+	printf("[System]: \n");
 	if( !tce::set_file_limit(stConfig.dwMaxOpenFile) ) 
 	{
-		printf("[err]打开文件<count=%u>描述符限制出错:%s\n", stConfig.dwMaxOpenFile, strerror(errno));
-		err_log.Write("[err]打开文件<count=%u>描述符限制出错:%s", stConfig.dwMaxOpenFile, strerror(errno));
+		printf("[err]Open files limit|%u|%s\n", stConfig.dwMaxOpenFile, strerror(errno));
+		err_log.Write("[err]Open files limit|%u|%s", stConfig.dwMaxOpenFile, strerror(errno));
 		return false;
 	}
 	else
 	{
-		printf("\t程序可以使用文件描述符的个数: %u\n", stConfig.dwMaxOpenFile);
+		printf("\tOpen files: %u\n", stConfig.dwMaxOpenFile);
 	}
 
 	if ( stConfig.bUsingCore ) 
 	{
 		if ( !tce::set_core_limit(stConfig.dwMaxCoreFile) ) 
 		{
-			printf("[err]打开core文件<size=%u>限制出错:%s\n", stConfig.dwMaxCoreFile, strerror(errno));
-			err_log.Write("[err]打开core文件<size=%u>限制出错:%s", stConfig.dwMaxCoreFile, strerror(errno));
+			printf("[err]Core file size limit|%u|%s\n", stConfig.dwMaxCoreFile, strerror(errno));
+			err_log.Write("[err]Core file size limit|%u|%s", stConfig.dwMaxCoreFile, strerror(errno));
 		}
 		else
 		{
-			printf("\t程序打开core文件大小: %u\n", stConfig.dwMaxCoreFile);
+			printf("\tCore file size: %u\n", stConfig.dwMaxCoreFile);
 		}
 	}
 
@@ -188,11 +204,11 @@ bool InitConfig(SConfig& stConfig)
 	oCfg.GetValue("tcp_svr", "in_buf_size", stConfig.dwTcpInBufSize, 50*1024*1024);
 	oCfg.GetValue("tcp_svr", "out_buf_size", stConfig.dwTcpOutBufSize, 50*1024*1024);
 
-	printf("[tcp服务配置信息]\n");
-	printf("\t绑定IP: %s, 监听端口: %u|%u.\n", stConfig.sTcpIp.c_str(), stConfig.wSetTcpPort, stConfig.wGetTcpPort);
-	printf("\t服务最大可以连接的客户端数: %u.\n", stConfig.dwTcpMaxClient);
-	printf("\t服务同客户端通信层的超时时间: %u秒.\n", stConfig.dwTcpOverTime);
-	printf("\t服务通信数据缓冲大小: In=%u; Out=%u.\n", stConfig.dwTcpInBufSize, stConfig.dwTcpOutBufSize);
+	printf("[TCP Server]\n");
+	printf("\tIP: %s, Port: %u|%u.\n", stConfig.sTcpIp.c_str(), stConfig.wSetTcpPort, stConfig.wGetTcpPort);
+	printf("\tMaxClient: %u.\n", stConfig.dwTcpMaxClient);
+	printf("\tTiemout: %u s.\n", stConfig.dwTcpOverTime);
+	printf("\tBuffer size: In=%u|Out=%u.\n", stConfig.dwTcpInBufSize, stConfig.dwTcpOutBufSize);
 
 
 	//告警DB	
@@ -212,14 +228,14 @@ bool InitConfig(SConfig& stConfig)
 	oCfg.GetValue("redis_console", "DBName", stConfig.sRedisDBName, "redis_db");
 	oCfg.GetValue("redis_console", "CheckInterval", stConfig.dwCheckRedisDBInterval, 5);	//5s检测1次
 
-	// 其他配置信息 
-	printf("[其他配置信息]: \n");
+	// DB配置信息 
+	printf("[Database]: \n");
 	printf("\tAlarmDB Info: %s@%s:%u#%s\n", stConfig.sAlarmDBUser.c_str(), stConfig.sAlarmDBHost.c_str(), stConfig.wAlarmDBPort, stConfig.sAlarmDBName.c_str());
 	printf("\tRedisDB Info: %s@%s:%u#%s\n", stConfig.sRedisDBUser.c_str(), stConfig.sRedisDBHost.c_str(), stConfig.wRedisDBPort, stConfig.sRedisDBName.c_str());
 
 	if (stConfig.bDaemon) 
 	{
-		cout << "\t启动程序方式: Daemon形式启动" << endl;
+		cout << "Server starts as a daemon." << endl;
 		tce::init_daemon();
 	}
 
@@ -404,7 +420,7 @@ int main(int argc, char* argv[])
 	// 设置网络事件回调函数 
 	tce::CCommMgr::GetInstance().SetSvrCallbackFunc(iSetTcpID, &OnSetRead, &OnSetClose, &OnSetConnect, &OnError);
 	//设置SOCKET参数
-	tce::CCommMgr::GetInstance().SetSvrClientOpt(iSetTcpID, stConfig.dwTcpMaxClient, stConfig.dwTcpOverTime, 2*1024*1024, 128*1024*1024, 256*1024*1024, 256*1024);
+	tce::CCommMgr::GetInstance().SetSvrClientOpt(iSetTcpID, stConfig.dwTcpMaxClient, stConfig.dwTcpOverTime, 2*1024*1024, 64*1024*1024, 64*1024*1024, 64*1024);
 
 	CSetProcCenter::GetInstance().SetTcpID(iSetTcpID);
 	// 初始化CSetProcCenter
@@ -433,7 +449,7 @@ int main(int argc, char* argv[])
 	// 设置网络事件回调函数 
 	tce::CCommMgr::GetInstance().SetSvrCallbackFunc(iGetTcpID, &OnGetRead, &OnGetClose, &OnGetConnect, &OnError);
 	//设置SOCKET参数
-	tce::CCommMgr::GetInstance().SetSvrClientOpt(iGetTcpID, stConfig.dwTcpMaxClient, stConfig.dwTcpOverTime, 2*1024*1024, 128*1024*1024, 256*1024*1024, 256*1024);
+	tce::CCommMgr::GetInstance().SetSvrClientOpt(iGetTcpID, stConfig.dwTcpMaxClient, stConfig.dwTcpOverTime, 2*1024*1024, 64*1024*1024, 64*1024*1024, 64*1024);
 
 	CGetProcCenter::GetInstance().SetTcpID(iGetTcpID);
 	// 初始化CGetProcCenter
