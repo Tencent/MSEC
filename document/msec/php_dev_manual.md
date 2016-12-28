@@ -419,7 +419,17 @@ Content-Length: 63
 配置同c++，详见cpp_dev_manual.md中的[SRPC配置说明](cpp_dev_manual.md#srpc配置说明)一节。
 
 
-## 2.8. 测试用例
+## 2.8. 性能测试
+
+#### 测试环境
+```
+CPU: 4 x Intel(R) Xeon(R) CPU X3320 @ 2.50GHz
+内存: 8 GB
+网卡: 千兆网卡
+业务数据大小：13bytes业务数据
+```
+
+#### 测试用例
 
 使用三台机器做测试，A固定做客户端，B和C做SRPC服务器。A和B属于同一机房，时延0.8毫秒，C为异地机房，A和B和它的时延模拟为100毫秒左右。
 - 用例一 <br/>
