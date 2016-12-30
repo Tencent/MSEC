@@ -1,22 +1,22 @@
 **运行环境**
 
-CPU: Intel(R) Xeon(R) CPU X3440 @ 2.53GHz 8核
-内存：8GB
-网卡：千兆网卡
-Client与Server之间PING值：0.83ms
-Server与Server2之间PING值：0.84ms
+CPU: Intel(R) Xeon(R) CPU X3440 @ 2.53GHz 8<br/>
+内存：8GB<br/>
+网卡：千兆网卡<br/>
+Client与Server之间PING值：0.83ms<br/>
+Server与Server2之间PING值：0.84ms<br/>
 
 **测试程序：**
 
-A.  echo服务：Server将请求字符串直接返回
-B.  延时echo服务：Server先sleep 100ms, 再将请求字符串返回
-C.  rpc-echo服务：Server将请求转发至Server2, Server2将请求字符串直接返回。目标是测试Server的性能。
-D.  延时rpc-echo服务：Server将请求转发至Server2， Server2先sleep 100ms, 再将请求字符串返回。目标是测试Server的性能
+A.  echo服务：Server将请求字符串直接返回<br/>
+B.  延时echo服务：Server先sleep 100ms, 再将请求字符串返回<br/>
+C.  rpc-echo服务：Server将请求转发至Server2, Server2将请求字符串直接返回。目标是测试Server的性能。<br/>
+D.  延时rpc-echo服务：Server将请求转发至Server2， Server2先sleep 100ms, 再将请求字符串返回。目标是测试Server的性能<br/>
 （请求字符串小于100字节）
 
 **TCP请求连接模式：**
 
-短连接：每个请求都需要建立TCP连接
+短连接：每个请求都需要建立TCP连接<br/>
 长连接：建立TCP连接后，保持不断开，连续发送请求
 
 **程序A测试结果(QPS及延时分布)**
