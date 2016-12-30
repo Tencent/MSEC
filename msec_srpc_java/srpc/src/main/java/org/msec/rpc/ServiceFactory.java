@@ -44,6 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ServiceFactory {
     private static Logger log = Logger.getLogger(ServiceFactory.class.getName());
 
+    public static final int SRPC_VERSION = 10000;
     public static final int DEFAULT_PORT = 7963;
     public static final String SRPC_CONF_PATH = "etc/config.ini";
     public static final String LOG4J_CONF_PATH = "etc/log4j.properties";
@@ -60,19 +61,51 @@ public final class ServiceFactory {
         return uniqueSequence++;
     }
 
+    public static String getVersionString(int version) {
+        int major = version / 10000;
+        int minor = (version % 10000) / 100;
+        int patch = version % 100;
+        return Integer.toString(major) + "." + minor + "." + patch;
+    }
+
     protected static String moduleName = null;
     protected static String listenIP = null;
     protected static int listenPort = DEFAULT_PORT;
     protected static String listenType = "tcp";
-    public static synchronized  void initModule(String moduleName) throws Exception {
-        if (ServiceFactory.moduleName == null) {
-            ServiceFactory.moduleName = moduleName;
-            AccessLog.initLog(SRPC_CONF_PATH);
-            AccessMonitor.initialize(MONITOR_AGENT_MMAP_PATH);
-            AccessMonitor.initServiceName(moduleName);
-            PropertyConfigurator.configure(LOG4J_CONF_PATH);
-        }
+    protected static boolean initSucc = false;
+    public static synchronized  void initModule(String moduleName, int version)  {
+        PropertyConfigurator.configure(LOG4J_CONF_PATH);
 
+        try {
+            if (version != SRPC_VERSION) {
+                throw new Exception("SRPC version not compatible: " + getVersionString(version) +
+                        ", " + getVersionString(SRPC_VERSION));
+            }
+
+            log.info("SRPC version: " + getVersionString(SRPC_VERSION));
+            if (ServiceFactory.moduleName == null) {
+                ServiceFactory.moduleName = moduleName;
+                AccessLog.initLog(SRPC_CONF_PATH);
+                AccessMonitor.initialize(MONITOR_AGENT_MMAP_PATH);
+                AccessMonitor.initServiceName(moduleName);
+
+            }
+
+            parseListenConf();
+            initSucc = true;
+        } catch (Exception e) {
+            log.error("init module failed. ", e);
+        }
+    }
+
+    public static String getModuleName() {
+        if (moduleName != null && !moduleName.isEmpty())
+            return ServiceFactory.moduleName;
+        else
+            return "Noname-Module";
+    }
+
+    public static void parseListenConf() throws Exception {
         String listenConf = getConfig("SRPC", "listen");
         if (listenConf != null) {
             int pos = listenConf.indexOf(' ');
@@ -120,14 +153,6 @@ public final class ServiceFactory {
             }
         }
     }
-
-    public static String getModuleName() {
-        if (moduleName != null && !moduleName.isEmpty())
-            return ServiceFactory.moduleName;
-        else
-            return "Noname-Module";
-    }
-
     public static String getConfig(String section, String key) {
         Ini ini = new Ini();
         try {
@@ -137,7 +162,7 @@ public final class ServiceFactory {
                 return sec.get(key);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("get config " + section + ":" + key + " failed.", e);
         }
         return null;
     }
@@ -201,16 +226,22 @@ public final class ServiceFactory {
         return serviceMethodMap;
     }
 
-    public static void runService() throws Exception {
-        NettyServer server;
-        if (listenIP == null) {
-            server = new NettyServer(listenPort);
-        } else {
-            server = new NettyServer(listenIP, listenPort);
-        }
-        server.start();
+    public static void runService() {
+        try {
+            if (!initSucc)  return;
 
-        System.in.read();
+            NettyServer server;
+            if (listenIP == null) {
+                server = new NettyServer(listenPort);
+            } else {
+                server = new NettyServer(listenIP, listenPort);
+            }
+            server.start();
+
+            System.in.read();
+        } catch (Exception e) {
+            log.error("run service failed. ", e);
+        }
     }
 
     public static <T> void addService(Class<T> serviceClass, T serviceObj) {
@@ -250,11 +281,37 @@ public final class ServiceFactory {
 
                     entries.add(new ServiceMethodEntry(serviceObj, oneMethod));
                 } catch (Exception e) {
-                    log.error("Load class failed: " + paramTypeName + " " + returnTypeName);
-                    e.printStackTrace();
+                    log.error("Load class failed: " + paramTypeName + " " + returnTypeName, e);
                 }
             }
         }
+    }
+
+    public static String underscoresToCamelCase(String input, boolean cap_next_letter) {
+        String result = "";
+        for (int i = 0; i < input.length(); i++) {
+            if ('a' <= input.charAt(i) && input.charAt(i) <= 'z') {
+                if (cap_next_letter) {
+                    result += Character.toUpperCase(input.charAt(i));
+                } else {
+                    result += input.charAt(i);
+                }
+                cap_next_letter = false;
+            } else if ('A' <= input.charAt(i) && input.charAt(i) <= 'Z') {
+                if (i == 0 && !cap_next_letter) {
+                    result += Character.toLowerCase(input.charAt(i));
+                } else {
+                    result += input.charAt(i);
+                }
+                cap_next_letter = false;
+            } else if ('0' <= input.charAt(i) && input.charAt(i) <= '9') {
+                result += input.charAt(i);
+                cap_next_letter = true;
+            } else {
+                cap_next_letter = true;
+            }
+        }
+        return result;
     }
 
     public static ServiceMethodEntry getServiceMethodEntry(String serviceKeyName, String methodName) {
@@ -265,7 +322,9 @@ public final class ServiceFactory {
 
         List<ServiceMethodEntry>  entries = methodMap.get(methodName);
         if (entries == null) {
-            return null;
+            entries = methodMap.get(underscoresToCamelCase(methodName, false));
+            if (entries == null)
+                return null;
         }
 
         return entries.get(0);
@@ -278,7 +337,7 @@ public final class ServiceFactory {
         try {
             client = ClientManager.getClient(moduleName, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("get route for [" + moduleName + "] failed.", e);
             return ret;
         }
 
@@ -322,7 +381,7 @@ public final class ServiceFactory {
         try {
             client = ClientManager.getClient(moduleName, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("get route for [" + moduleName + "] failed.", e);
             return ret;
         }
 
@@ -360,7 +419,7 @@ public final class ServiceFactory {
         try {
             client = ClientManager.getClient(moduleName, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("get route for [" + moduleName + "] failed.", e);
             return ret;
         }
 

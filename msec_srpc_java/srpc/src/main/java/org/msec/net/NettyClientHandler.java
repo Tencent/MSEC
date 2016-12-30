@@ -45,6 +45,16 @@ public class NettyClientHandler extends SimpleChannelUpstreamHandler {
     }
 
     @Override
+    public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        client.setConnected(false);
+    }
+
+    @Override
+    public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        client.setConnected(false);
+    }
+
+    @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
         List<RpcResponse> messages = (List<RpcResponse>) e.getMessage();
         for (final RpcResponse response : messages) {
@@ -61,6 +71,6 @@ public class NettyClientHandler extends SimpleChannelUpstreamHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
         client.setConnected(false);
-        super.exceptionCaught(ctx, e);
+        log.error(e.getCause().getMessage(), e.getCause());
     }
 }

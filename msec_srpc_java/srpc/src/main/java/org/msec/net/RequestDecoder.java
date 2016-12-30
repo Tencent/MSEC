@@ -70,11 +70,16 @@ public class RequestDecoder extends OneToOneDecoder {
             RpcRequest rpcRequest = null;
 
             if (stx == (byte) '(')  {
+                if (cb.readableBytes() < Constants.PKG_LEAST_LENGTH - 1) {
+                    setAttachment(channelHandlerContext, channel, cb, lastReadIndex);
+                    break;
+                }
+
                 //Test whether protocol is protobuf
                 //Format:  ( + dwHeadLength + dwBodyLength + strHead + strBody + )
                 int headLength = cb.readInt();
                 int bodyLength = cb.readInt();
-                if (cb.readableBytes() < headLength + bodyLength + 1 || cb.readableBytes() < Constants.PKG_LEAST_LENGTH - 1) {
+                if (cb.readableBytes() < headLength + bodyLength + 1) {
                     setAttachment(channelHandlerContext, channel, cb, lastReadIndex);
                     break;
                 }

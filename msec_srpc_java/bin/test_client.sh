@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -16,9 +17,6 @@
 # and limitations under the License.
 #
 
-
-
-#!/bin/sh
 
 
 BIN_PATH=$(dirname $(readlink -f  $0))

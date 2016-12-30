@@ -108,26 +108,6 @@
                 </execution>
             </executions>
         </plugin>
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution>
-                        <id>gen-proto</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${basedir}/lib/protoc</executable>
-                            <arguments> 
-                                <argument>--java_out=src/main/java/</argument> 
-                                <argument>$(PROTO_FILE)</argument>
-                            </arguments> 
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 

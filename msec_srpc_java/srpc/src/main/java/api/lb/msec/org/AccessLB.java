@@ -31,6 +31,12 @@ import java.io.OutputStream;
 public class AccessLB {
     private native boolean getroutebyname(String name, byte[] ip, byte[] port, byte[] type);
     public native boolean updateroute(String name, String ip, int failed, int cost);
+
+    public boolean updateroutebyname(String name, String ip, int failed, int cost)
+    {
+        return updateroute(name, ip, failed, cost);
+    }
+    
     public boolean getroutebyname(String name,Route r ) throws Exception
     {
         if (System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") >= 0) {

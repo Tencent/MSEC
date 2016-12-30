@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -17,7 +18,5 @@
 #
 
 
-
-#!/bin/sh
 SERVER_ENTRY=echosample.ServiceImpl
 CLIENT_ENTRY=echosample.Client

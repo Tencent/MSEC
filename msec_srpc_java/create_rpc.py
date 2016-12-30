@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#coding:utf-8
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -17,14 +19,32 @@
 #
 
 
-
-#!/usr/bin/env python
-#coding:utf-8
-
 import sys
 import os
 import re
 
+def UnderscoresToCamelCase(str, cap_next_letter):
+    result = ""
+    for i in range(0, len(str)):
+        if ('a' <= str[i] and str[i] <= 'z'):
+            if (cap_next_letter):
+                result += str[i].upper()
+            else:
+                result += str[i]
+            cap_next_letter = False
+        elif ('A' <= str[i] and str[i] <= 'Z'):
+            if (i == 0 and not cap_next_letter):
+                result += str[i].lower()
+            else:
+                result += str[i]
+            cap_next_letter = False
+        elif ('0' <= str[i] and str[i] <= '9'):
+            result += str[i]
+            cap_next_letter = True
+        else:
+            cap_next_letter = True
+
+    return result;
 
 ## parse .proto file, get module/service/method/ info
 def ParseProtoFile(filename):
@@ -34,7 +54,7 @@ def ParseProtoFile(filename):
     
     ## get file name
     proto_begin = filename.rfind('/') + 1
-    dict_pb["proto"] = filename[proto_begin:filename.rfind('.')].capitalize()
+    dict_pb["proto"] = UnderscoresToCamelCase(filename[proto_begin:filename.rfind('.')], True)
     #print dict_pb["proto"]
 
     ## 1. delete //.. /*.. */
@@ -213,6 +233,10 @@ if __name__ == '__main__':
     os.system("mkdir -p %s 2>/dev/null" % (output_path))
     os.system("cp -r %s/* %s/" % (demo_path, output_path))
     os.system("rm -r %s" % (demo_path))
+
+    ## compile .proto file
+    proto_out_path = os.path.abspath(sys.argv[2]) + '/src/main/java/'
+    os.system("protoc -I. --java_out=%s %s" % (proto_out_path, sys.argv[1])) == 0 or sys.exit(-1);
 
     ## create server code
     GenerateRpcServer(pb, output_path)
