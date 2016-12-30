@@ -1,6 +1,6 @@
 **运行环境**
 
-CPU: Intel(R) Xeon(R) CPU X3440 @ 2.53GHz 8<br/>
+CPU: Intel(R) Xeon(R) CPU X3440 @ 2.53GHz 8核<br/>
 内存：8GB<br/>
 网卡：千兆网卡<br/>
 Client与Server之间PING值：0.83ms<br/>
