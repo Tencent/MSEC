@@ -64,9 +64,9 @@ public class QuerySecondLevelServiceDetail extends JsonRPCHandler {
         List<LibraryFile> libraryFileList;
         List<SharedobjectTag> sharedobjectTagList;
         try {
-            //查出开发语言
+            //查出开发语言 port
 
-            sql = "select dev_lang from t_second_level_service where second_level_service_name=?  and first_level_service_name=?";
+            sql = "select dev_lang,port from t_second_level_service where second_level_service_name=?  and first_level_service_name=?";
             params = new ArrayList<Object>();
             params.add(request.getService_name());
             params.add(request.getService_parent());
@@ -80,10 +80,12 @@ public class QuerySecondLevelServiceDetail extends JsonRPCHandler {
             }
             //resp.setFirst_level_service_name(serviceList.get(0).getFirst_level_service_name());
             resp.setDev_lang(serviceList.get(0).getDev_lang());
+            resp.setPort(serviceList.get(0).getPort());
 
             resp.setFirst_level_service_name(request.getService_parent());
             //查出ip列表
-            sql = "select ip,port,status,second_level_service_name,first_level_service_name, release_memo,comm_proto from t_second_level_service_ipinfo where second_level_service_name=? and first_level_service_name=?";
+            sql = "select ip,port,status,second_level_service_name,first_level_service_name, release_memo,comm_proto from " +
+                    "t_second_level_service_ipinfo where second_level_service_name=? and first_level_service_name=?";
             params = new ArrayList<Object>();
             params.add(request.getService_name());
             params.add(resp.getFirst_level_service_name());

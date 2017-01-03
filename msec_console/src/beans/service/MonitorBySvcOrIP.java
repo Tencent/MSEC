@@ -24,6 +24,7 @@ import beans.dbaccess.SecondLevelServiceIPInfo;
 import beans.request.MonitorRequest;
 import beans.response.MonitorResponse;
 import beans.response.OneAttrChart;
+import beans.response.OneAttrDaysChart;
 import com.google.protobuf.ByteString;
 
 import ngse.monitor.Monitor;

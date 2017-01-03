@@ -44,6 +44,19 @@ public class PackDevFile implements Runnable {
     ServletContext servletContext;
 
     String outputFileName ;
+    String resultString = "";
+
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
+    }
+
+    public String getResultString() {
+        return resultString;
+    }
+
+    public void setResultString(String resultString) {
+        this.resultString = resultString;
+    }
 
     public String getOutputFileName()
     {
@@ -89,7 +102,7 @@ public class PackDevFile implements Runnable {
         }
     }
 
-    private String mkdirs(String baseDir)
+    private void mkdirs(String baseDir) throws Exception
     {
         File f = new File(baseDir);
         if (!f.exists()) {f.mkdirs();}
@@ -112,7 +125,6 @@ public class PackDevFile implements Runnable {
         f = new File(s);
         if (!f.exists()) {f.mkdirs();}
 
-        return "success";
 
     }
     private boolean copyFile(File frm, File to)
@@ -141,7 +153,7 @@ public class PackDevFile implements Runnable {
 
     }
 
-    private String copyCnfFile(String baseDir)
+    private void copyCnfFile(String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
 
@@ -151,21 +163,20 @@ public class PackDevFile implements Runnable {
         if (copyFile(new File(srcFile), new File(destFile)))
         {
             logger.info("copy file successfully."+srcFile+" "+destFile);
-            return "success";
         }
         else
         {
             logger.error("failed to copy file:"+srcFile+" "+destFile);
-            return "failed";
+            throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
         }
 
     }
-    private String copyLibraryFile(String baseDir)
+    private void copyLibraryFile(String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
 
         ArrayList<LibraryFile> libraryFiles = getLibraryFilesFromDB(pack.getFirst_level_service_name(), pack.getSecond_level_service_name());
-        if (libraryFiles == null) {return "getLibraryFilesFromDB() failed";}
+
 
         for (int i = 0; i < libraryFiles.size(); i++) {
             String destFile = baseDir+"/lib/"+libraryFiles.get(i).getFile_name();
@@ -179,12 +190,12 @@ public class PackDevFile implements Runnable {
             else
             {
                 logger.error("failed to copy file:"+srcFile+" "+destFile);
-                return "failed";
+                throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
             }
         }
-        return "success";
+
     }
-    private String copySharedobject(String baseDir)
+    private void copySharedobject(String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
 
@@ -195,15 +206,15 @@ public class PackDevFile implements Runnable {
         if (copyFile(new File(srcFile), new File(destFile)))
         {
             logger.info("copy file successfully."+srcFile+" "+destFile);
-            return "success";
+
         }
         else
         {
             logger.error("failed to copy file:"+srcFile+" "+destFile);
-            return "failed";
+           throw new Exception("failed to copy file:"+srcFile+" "+destFile);
         }
     }
-    private String copyIDLFile(String baseDir)
+    private void copyIDLFile(String baseDir) throws Exception
     {
 
         Logger logger = Logger.getLogger(PackDevFile.class);
@@ -216,34 +227,28 @@ public class PackDevFile implements Runnable {
         if (copyFile(new File(srcFile), new File(destFile)))
         {
             logger.info("copy file successfully."+srcFile+" "+destFile);
-            return "success";
+
         }
         else
         {
             logger.error("failed to copy file:"+srcFile+" "+destFile);
-            return "failed";
+            throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
         }
     }
 
 
 
-    private String mktar(String baseDir, String tarFileName)
+    private void mktar(String baseDir, String tarFileName) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
-        try
-        {
-            TarUtil.archive(baseDir, tarFileName);
-        }
-        catch (Exception e)
-        {
-            logger.error(e.toString());
-            return e.getMessage();
-        }
-        logger.info("tar successfully."+tarFileName);
-        return "success";
+
+        TarUtil.archive(baseDir, tarFileName);
+
+        logger.info("tar successfully." + tarFileName);
+
     }
 
-    private String getSppFromResource(String rnd, String baseDir)
+    private void getSppFromResource(String rnd, String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
         //将war包资源中的spp.tar解压到目录baseDir
@@ -255,41 +260,35 @@ public class PackDevFile implements Runnable {
         File f = null;
 
         //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
-        try {
-            OutputStream outputStream = new FileOutputStream(tmpTarFile);
-            byte[] buf = new byte[10240];
-            int len;
-            while (true) {
+
+        OutputStream outputStream = new FileOutputStream(tmpTarFile);
+        byte[] buf = new byte[10240];
+        int len;
+        while (true) {
 
 
-                len = inputStream.read(buf);
+            len = inputStream.read(buf);
 
-                if (len <= 0) {
-                    break;
-                }
-                outputStream.write(buf, 0, len);
-
+            if (len <= 0) {
+                break;
             }
-            outputStream.close();
-            inputStream.close();
+            outputStream.write(buf, 0, len);
 
-
-            //把普通文件解包到目录baseDir
-            TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
-            logger.info("dearchive tar to "+baseDir);
-
-            //删除普通文件
-            new File(tmpTarFile).delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return e.getMessage();
         }
-        return "success";
+        outputStream.close();
+        inputStream.close();
+
+
+        //把普通文件解包到目录baseDir
+        TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
+        logger.info("dearchive tar to " + baseDir);
+
+        //删除普通文件
+        new File(tmpTarFile).delete();
 
 
     }
-    private String getJavaFrameworkFromResource(String rnd, String baseDir)
+    private void getJavaFrameworkFromResource(String rnd, String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackDevFile.class);
 
@@ -301,37 +300,32 @@ public class PackDevFile implements Runnable {
         File f = null;
 
         //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
-        try {
-            byte[] buf = new byte[10240];
-            int len;
-            OutputStream outputStream = new FileOutputStream(tmpTarFile);
-            while (true) {
+
+        byte[] buf = new byte[10240];
+        int len;
+        OutputStream outputStream = new FileOutputStream(tmpTarFile);
+        while (true) {
 
 
-                len = inputStream.read(buf);
+            len = inputStream.read(buf);
 
-                if (len <= 0) {
-                    break;
-                }
-                outputStream.write(buf, 0, len);
-
+            if (len <= 0) {
+                break;
             }
-            outputStream.close();
-            inputStream.close();
+            outputStream.write(buf, 0, len);
 
-
-            //把普通文件解包到目录baseDir
-            TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
-            logger.info("dearchive tar to "+baseDir);
-
-            //删除普通文件
-            new File(tmpTarFile).delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return e.getMessage();
         }
-        return "success";
+        outputStream.close();
+        inputStream.close();
+
+
+        //把普通文件解包到目录baseDir
+        TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
+        logger.info("dearchive tar to " + baseDir);
+
+        //删除普通文件
+        new File(tmpTarFile).delete();
+
 
 
     }
@@ -339,7 +333,7 @@ public class PackDevFile implements Runnable {
 
 
     @Override
-    public void run() {
+    public void run()  {
 
         Logger logger = Logger.getLogger(PackDevFile.class);
 
@@ -349,33 +343,23 @@ public class PackDevFile implements Runnable {
         String gzFileName = tarFileName +".gz";
         String result;
 
-        if (pack.getDev_lang().equals("c++")) {
-            result = getSppFromResource(rnd, baseDir);
-        }
-        else
-        {
-            result = getJavaFrameworkFromResource(rnd, baseDir);
-        }
-        if (!result.equals("success"))
-        {
-            return;
-        }
-
         try {
-
-
-            result = copyLibraryFile(baseDir);
-            if (!result.equals("success")) {
-                logger.error(result);
-                return;
+            if (pack.getDev_lang().equals("c++")) {
+                getSppFromResource(rnd, baseDir);
+            } else if (pack.getDev_lang().equals("java")) {
+                getJavaFrameworkFromResource(rnd, baseDir);
+            } else if (pack.getDev_lang().equals("php")) {
+                getSppFromResource(rnd, baseDir);
+            } else if (pack.getDev_lang().equals("python")) {
+                getSppFromResource(rnd, baseDir);
+            } else {
+                throw  new Exception("invalid dev lang " + pack.getDev_lang());
             }
 
+            copyLibraryFile(baseDir);
 
-            result = copyIDLFile(baseDir);
-            if (!result.equals("success")) {
-                logger.error(result);
-                return;
-            }
+            copyIDLFile(baseDir);
+
 
 
             //执行python脚本，生成目录
@@ -392,7 +376,7 @@ public class PackDevFile implements Runnable {
                 outputDir =  baseDir + "/"+pack.getFirst_level_service_name()+"."+pack.getSecond_level_service_name();
                 cmd[3] = outputDir;
             }
-            else //if (pack.getDev_lang().equals("java"))
+            else if (pack.getDev_lang().equals("java"))
             {
                 pythonScript = baseDir + "/create_rpc.py";
                 new File(pythonScript).setExecutable(true);
@@ -403,27 +387,51 @@ public class PackDevFile implements Runnable {
                 outputDir =  baseDir;
                 cmd[3] = pack.getFirst_level_service_name()+"."+pack.getSecond_level_service_name();;
             }
+            else if (pack.getDev_lang().equals("php"))
+            {
+                pythonScript = baseDir + "/rpc/php_template/create_rpc.py";
+                new File(pythonScript).setExecutable(true);
+
+                cmd[0] = pythonScript;
+                cmd[1] = baseDir + "/msec.proto";
+                cmd[2] = baseDir;
+                outputDir =  baseDir + "/"+pack.getFirst_level_service_name()+"."+pack.getSecond_level_service_name();
+                cmd[3] = outputDir;
+            }
+            else if (pack.getDev_lang().equals("python"))
+            {
+                pythonScript = baseDir + "/rpc/py_template/create_rpc.py";
+                new File(pythonScript).setExecutable(true);
+
+                cmd[0] = pythonScript;
+                cmd[1] = baseDir + "/msec.proto";
+                cmd[2] = baseDir;
+                outputDir =  baseDir + "/"+pack.getFirst_level_service_name()+"."+pack.getSecond_level_service_name();
+                cmd[3] = outputDir;
+            }
+            else
+            {
+                throw new Exception("invalid dev lang"+pack.getDev_lang());
+            }
 
             StringBuffer cmdResult = new StringBuffer();
             if (Tools.runCommand(cmd, cmdResult, true) != 0)
             {
                 logger.error(cmdResult.toString());
-                return;
+                throw  new Exception("create_rpc.py failed:"+cmdResult.toString());
+
             }
             logger.info("run python script successfully.");
 
 
 
 
-            result = mktar(outputDir, tarFileName);
+            mktar(outputDir, tarFileName);
 
-            if (!result.equals("success")) {
-                logger.error(result);
-                return;
-            }
             GzipUtil.zip(tarFileName, gzFileName);
             logger.info("make tar file successfully.");
             outputFileName = gzFileName;
+            setResultString("success");
 
 
 
@@ -434,6 +442,7 @@ public class PackDevFile implements Runnable {
         {
             e.printStackTrace();
             logger.error(e.getMessage());
+            setResultString(e.getMessage());
         }
         finally {
             Tools.deleteDirectory(new File(baseDir));

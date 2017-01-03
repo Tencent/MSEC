@@ -131,68 +131,75 @@ public class PackReleaseFile implements Runnable {
         }
     }
 
-    private String copyCnfFile(String baseDir)
+    private void copyCnfFile(String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
 
         String destFile = baseDir+File.separator+"etc"+File.separator+"config.ini";
         String srcFile = SecondLevelServiceConfigTag.getConfigFileName(plan.getFirst_level_service_name(),
                 plan.getSecond_level_service_name(), plan.getConfig_tag());
-        if (copyFile(new File(srcFile), new File(destFile)))
+        if (!copyFile(new File(srcFile), new File(destFile)))
         {
-            logger.info("copy file successfully:"+srcFile+" "+destFile);
-            return "success";
-        }
-        else
-        {
-            logger.error("failed to copy file:"+srcFile+" "+destFile);
-            return "failed";
+            throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
         }
 
     }
-    private String copyLibraryFile(String baseDir)
+    private void  copyLibraryFile(String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
         ArrayList<LibraryFile> libraryFiles = getLibraryFilesFromDB(plan.getFirst_level_service_name(), plan.getSecond_level_service_name());
-        if (libraryFiles == null) {return "getLibraryFilesFromDB() failed";}
+        if (libraryFiles == null) {throw  new Exception( "getLibraryFilesFromDB() failed");}
 
         for (int i = 0; i < libraryFiles.size(); i++) {
             String destFile = baseDir+"/bin/lib/"+libraryFiles.get(i).getFile_name();
             String srcFile = LibraryFile.getLibraryFileName(plan.getFirst_level_service_name(),
                     plan.getSecond_level_service_name(), libraryFiles.get(i).getFile_name());
-            if (copyFile(new File(srcFile), new File(destFile)))
+            if (!copyFile(new File(srcFile), new File(destFile)))
             {
-                logger.info("copy file successfully:"+srcFile+" "+destFile);
-                continue;
-            }
-            else
-            {
-                logger.error("failed to copy file:"+srcFile+" "+destFile);
-                return "failed";
+               throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
+
             }
         }
-        return "success";
+
     }
-    private String copySharedobject(String baseDir, String dev_lang)
+    private void copySharedobject(String baseDir, String dev_lang) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
         String suffix = "so";//不管什么语言，一开始都是用.so文件先存着的
-        String destFile = baseDir+File.separator+"bin"+File.separator+"msec.so";
-        if (dev_lang.equals("java"))
+        String destFile = "";
+        if (dev_lang.equals("c++"))
+        {
+            destFile = baseDir+File.separator+"bin"+File.separator+"msec.so";
+        }
+        else  if (dev_lang.equals("java"))
         {
             destFile = baseDir+File.separator+"bin"+File.separator+"msec.jar";
         }
+        else if (dev_lang.equals("php"))
+        {
+            destFile = baseDir+File.separator+"bin"+File.separator+"msec.tgz";
+        }
+        else if (dev_lang.equals("python"))
+        {
+            destFile = baseDir+File.separator+"bin"+File.separator+"msec_py.tgz";
+        }
         String srcFile = SharedobjectTag.getSharedobjectName(plan.getFirst_level_service_name(),
                 plan.getSecond_level_service_name(), plan.getSharedobject_tag(), suffix);
-        if (copyFile(new File(srcFile), new File(destFile)))
+        if (!copyFile(new File(srcFile), new File(destFile)))
         {
-            logger.info("copy file successfully:"+srcFile+" "+destFile);
-            return "success";
+           throw  new Exception("failed to copy file:"+srcFile+" "+destFile);
+
         }
-        else
+        // delete bin/python director if necessary, it is so big
+        if (dev_lang.equals("php") || dev_lang.equals("c++"))
         {
-            logger.error("failed to copy file:"+srcFile+" "+destFile);
-            return "failed";
+            String[] cmds = new String[3];
+            cmds[0] = "rm";
+            cmds[1] = "-rf";
+            cmds[2] = baseDir+File.separator+"bin"+File.separator+"python";
+            StringBuffer stringBuffer = new StringBuffer();
+            Tools.runCommand(cmds, stringBuffer, true);
+            logger.info("rm python result:"+stringBuffer.toString());
         }
     }
 
@@ -235,25 +242,17 @@ public class PackReleaseFile implements Runnable {
         }
     }
 
-    private String mktar(String baseDir, String tarFileName)
+    private void mktar(String baseDir, String tarFileName) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
-        try
-        {
-            TarUtil.archive(baseDir, tarFileName);
-            logger.info("make tar successfully." + tarFileName);
-        }
-        catch (Exception e)
-        {
-            logger.error(e.getMessage());
-            return e.getMessage();
-        }
 
-        return "success";
+        TarUtil.archive(baseDir, tarFileName);
+        logger.info("make tar successfully." + tarFileName);
+
     }
 
 
-    private String getSppFromResource(String plan_id, String baseDir)
+    private void getSppFromResource(String plan_id, String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
         //将war包资源中的spp.tar解压到目录baseDir
@@ -265,41 +264,36 @@ public class PackReleaseFile implements Runnable {
         logger.info("copy spp in resource to "+tmpTarFile);
 
         //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
-        try {
-            OutputStream outputStream = new FileOutputStream(tmpTarFile);
-            byte[] buf = new byte[10240];
-            int len;
-            while (true) {
+
+        OutputStream outputStream = new FileOutputStream(tmpTarFile);
+        byte[] buf = new byte[10240];
+        int len;
+        while (true) {
 
 
-                len = inputStream.read(buf);
+            len = inputStream.read(buf);
 
-                if (len <= 0) {
-                    break;
-                }
-                outputStream.write(buf, 0, len);
-
+            if (len <= 0) {
+                break;
             }
-            outputStream.close();
-            inputStream.close();
+            outputStream.write(buf, 0, len);
 
-
-            //把普通文件解包到目录baseDir
-            TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
-            logger.info("dearchive file successfully. dir=" + baseDir);
-
-            //删除普通文件
-            new File(tmpTarFile).delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return e.getMessage();
         }
-        return "success";
+        outputStream.close();
+        inputStream.close();
+
+
+        //把普通文件解包到目录baseDir
+        TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
+        logger.info("dearchive file successfully. dir=" + baseDir);
+
+        //删除普通文件
+        new File(tmpTarFile).delete();
 
 
     }
-    private String getJavaFrameworkFromResource(String plan_id, String baseDir)
+
+    private void getJavaFrameworkFromResource(String plan_id, String baseDir) throws Exception
     {
         Logger logger = Logger.getLogger(PackReleaseFile.class);
         //将war包资源中的spp.tar解压到目录baseDir
@@ -308,40 +302,34 @@ public class PackReleaseFile implements Runnable {
 
         File f = null;
 
-        logger.info("copy java.tar in resource to "+tmpTarFile);
+        logger.info("copy java.tar in resource to " + tmpTarFile);
 
         //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
-        try {
-            OutputStream outputStream = new FileOutputStream(tmpTarFile);
-            byte[] buf = new byte[10240];
-            int len;
-            while (true) {
+
+        OutputStream outputStream = new FileOutputStream(tmpTarFile);
+        byte[] buf = new byte[10240];
+        int len;
+        while (true) {
 
 
-                len = inputStream.read(buf);
+            len = inputStream.read(buf);
 
-                if (len <= 0) {
-                    break;
-                }
-                outputStream.write(buf, 0, len);
-
+            if (len <= 0) {
+                break;
             }
-            outputStream.close();
-            inputStream.close();
+            outputStream.write(buf, 0, len);
 
-
-            //把普通文件解包到目录baseDir
-            TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
-            logger.info("dearchive file successfully. dir="+baseDir);
-
-            //删除普通文件
-            new File(tmpTarFile).delete();
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return e.getMessage();
         }
-        return "success";
+        outputStream.close();
+        inputStream.close();
+
+
+        //把普通文件解包到目录baseDir
+        TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
+        logger.info("dearchive file successfully. dir=" + baseDir);
+
+        //删除普通文件
+        new File(tmpTarFile).delete();
 
 
     }
@@ -358,84 +346,51 @@ public class PackReleaseFile implements Runnable {
 
         String baseDir = ServletConfig.fileServerRootDir+ File.separator+"tmp"+File.separator+plan.getPlan_id();
         String tarFileName = baseDir +".tar";
-        String result;
-
-
-        if (plan.getDev_lang().equals("c++")) {
-            result = getSppFromResource(plan.getPlan_id(), baseDir);
-        }
-        else
-        {
-            result = getJavaFrameworkFromResource(plan.getPlan_id(), baseDir);
-        }
-        if (!result.equals("success"))
-        {
-            updateProcessInfo(plan.getPlan_id(), result);
-            switchPlanStatus(plan.getPlan_id(), false);
-            return;
-        }
-        updateProcessInfo(plan.getPlan_id(), "成功拷贝spp.tar...");
-
 
 
 
         try {
+            if (plan.getDev_lang().equals("c++")) {
+                getSppFromResource(plan.getPlan_id(), baseDir);
+            } else if (plan.getDev_lang().equals("java")) {
+                getJavaFrameworkFromResource(plan.getPlan_id(), baseDir);
+            } else if (plan.getDev_lang().equals("php")) {
+                getSppFromResource(plan.getPlan_id(), baseDir);
+            } else if (plan.getDev_lang().equals("python")) {
+                getSppFromResource(plan.getPlan_id(), baseDir);
+            } else {
+                throw new Exception("invalid dev lang");
+            }
+
+            updateProcessInfo(plan.getPlan_id(), "成功拷贝spp.tar...");
 
             if (plan.getRelease_type().equals("only_config")) {//只发布配置文件
-                result = copyCnfFile(baseDir);
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
+                copyCnfFile(baseDir);
+
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝配置文件...");
-            }
-            else if (plan.getRelease_type().equals("only_library"))//只发布外部库
+            } else if (plan.getRelease_type().equals("only_library"))//只发布外部库
             {
-                result = copyLibraryFile(baseDir);
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
+                copyLibraryFile(baseDir);
+
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝库文件...");
-            }
-            else if (plan.getRelease_type().equals("only_sharedobject"))//只发布业务插件
+            } else if (plan.getRelease_type().equals("only_sharedobject"))//只发布业务插件
             {
-                result = copySharedobject(baseDir, plan.getDev_lang());
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
+                copySharedobject(baseDir, plan.getDev_lang());
+
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝业务逻辑代码...");
-            }
-            else//完整的发布
+            } else//完整的发布
             {
-                result = copyCnfFile(baseDir);
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
+                copyCnfFile(baseDir);
+
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝配置文件...");
 
 
+                copyLibraryFile(baseDir);
 
-                result = copyLibraryFile(baseDir);
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝库文件...");
 
-                result = copySharedobject(baseDir, plan.getDev_lang());
-                if (!result.equals("success")) {
-                    updateProcessInfo(plan.getPlan_id(), result);
-                    switchPlanStatus(plan.getPlan_id(), false);
-                    return;
-                }
+                copySharedobject(baseDir, plan.getDev_lang());
+
                 updateProcessInfo(plan.getPlan_id(), "成功拷贝业务逻辑代码...");
 
                 if (plan.getDev_lang().equals("java")) {
@@ -451,10 +406,9 @@ public class PackReleaseFile implements Runnable {
                     cmd[1] = "bin/msec.jar";
 
                     StringBuffer cmdResult = new StringBuffer();
-                    if (Tools.runCommand(cmd, cmdResult, true) != 0)
-                    {
+                    if (Tools.runCommand(cmd, cmdResult, true) != 0) {
                         logger.error(cmdResult.toString());
-                        updateProcessInfo(plan.getPlan_id(), "执行python脚本失败:"+cmdResult);
+                        updateProcessInfo(plan.getPlan_id(), "执行python脚本失败:" + cmdResult);
                         switchPlanStatus(plan.getPlan_id(), false);
                         return;
                     }
@@ -465,36 +419,27 @@ public class PackReleaseFile implements Runnable {
             }
 
 
-            result = mktar(baseDir, tarFileName);
-            if (!result.equals("success")) {
-                updateProcessInfo(plan.getPlan_id(), result);
-                switchPlanStatus(plan.getPlan_id(), false);
-                return;
-            }
+            mktar(baseDir, tarFileName);
+
             GzipUtil.zip(tarFileName);
             updateProcessInfo(plan.getPlan_id(), "tar文件归档成功");
             switchPlanStatus(plan.getPlan_id(), true);
 
             //删除临时目录
             Tools.deleteDirectory(new File(baseDir));
+            new File(tarFileName).delete();
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
+            updateProcessInfo(plan.getPlan_id(), "Exception:" + e.getMessage());
+            switchPlanStatus(plan.getPlan_id(), false);
+
             e.printStackTrace();
             logger.error(e.getMessage());
-        }
-        finally {
+
+            return;
+        } finally {
             new File(baseDir).delete();
         }
-
-
-
-
-
-
-
-
 
     }
 }

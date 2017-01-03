@@ -36,28 +36,35 @@ import org.apache.log4j.Logger;
  */
 public class DelService extends JsonRPCHandler{
 
-    private boolean checkIfHasSecondLevel(String first_level_service_name, DBUtil util)
+    private boolean checkIfHasSecondLevel(String first_level_service_name, DBUtil util) throws Exception
     {
        String sql = "select count(*) as record_number from t_second_level_service where first_level_service_name=?";
         List<Object> params = new ArrayList<Object>();
         params.add(first_level_service_name);
-        try
-        {
-            DBAnalyzeInfo dbinfo = util.findSimpleRefResult(sql, params, DBAnalyzeInfo.class);
-            if (dbinfo.getRecord_number() > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+
+        DBAnalyzeInfo dbinfo = util.findSimpleRefResult(sql, params, DBAnalyzeInfo.class);
+        if (dbinfo.getRecord_number() > 0) {
             return true;
+        } else {
+            return false;
         }
+
+    }
+    private boolean checkIfOnService(String flsn, String slsn, DBUtil util) throws Exception
+    {
+        String sql = "select count(*) as record_number from t_second_level_service_ipinfo where first_level_service_name=?" +
+                " and second_level_service_name=? and status='enabled'";
+        List<Object> params = new ArrayList<Object>();
+        params.add(flsn);
+        params.add(slsn);
+
+        DBAnalyzeInfo dbinfo = util.findSimpleRefResult(sql, params, DBAnalyzeInfo.class);
+        if (dbinfo.getRecord_number() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 
@@ -101,30 +108,38 @@ public class DelService extends JsonRPCHandler{
     }
     String sql;
     List<Object> params = new ArrayList<Object>();
-    if (request.getService_level().equals("first_level")) {
-        //检查一下一级服务下还有没有二级服务，有的话不能删除
-        if (checkIfHasSecondLevel(request.getService_name(), util) != false)
-        {
-            response.setMessage("还有二级服务挂靠在该一级服务下，不能删除该服务.");
-            response.setStatus(100);
-            return response;
-        }
 
-        sql = "delete from t_first_level_service where first_level_service_name=?";
-        logger.info(sql);
-        params.add(request.getService_name());
-
-    }
-    else
-    {
-        sql = "delete from t_second_level_service where second_level_service_name=? and first_level_service_name=?";
-        logger.info(sql);
-        params.add(request.getService_name());
-        params.add(request.getService_parent());
-    }
 
 
     try {
+        if (request.getService_level().equals("first_level")) {
+            //检查一下一级服务下还有没有二级服务，有的话不能删除
+            if (checkIfHasSecondLevel(request.getService_name(), util) != false)
+            {
+                response.setMessage("还有二级服务挂靠在该一级服务下，不能删除该服务.");
+                response.setStatus(100);
+                return response;
+            }
+
+            sql = "delete from t_first_level_service where first_level_service_name=?";
+            logger.info(sql);
+            params.add(request.getService_name());
+
+        }
+        else
+        {
+            if (checkIfOnService(request.getService_parent(), request.getService_name(), util) != false)
+            {
+                response.setMessage("还有IP在该二级服务下提供服务。请先缩容后删除服务。");
+                response.setStatus(100);
+                return response;
+            }
+
+            sql = "delete from t_second_level_service where second_level_service_name=? and first_level_service_name=?";
+            logger.info(sql);
+            params.add(request.getService_name());
+            params.add(request.getService_parent());
+        }
         int delNum = util.updateByPreparedStatement(sql, params);
         if (delNum == 1)
         {
@@ -150,9 +165,9 @@ public class DelService extends JsonRPCHandler{
         }
 
     }
-    catch (SQLException e)
+    catch (Exception e)
     {
-        response.setMessage("del record failed:"+e.toString());
+        response.setMessage("exception:"+e.toString());
         response.setStatus(100);
         e.printStackTrace();
         return response;

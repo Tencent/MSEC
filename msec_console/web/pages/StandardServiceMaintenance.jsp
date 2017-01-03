@@ -117,10 +117,15 @@
           var   service_level= $("#service_level").val();
           var   service_parent= $("#service_parent").val();
           var   dev_lang = $("#dev_lang").val();
+          var   port = $("#port").val();
           if (service_name == null || service_name.length < 1)
           {
               showTips("服务名不能为空");
               return;
+          }
+          if (port == null || port.length < 1)
+          {
+              port = 7963;
           }
           if (!/^[a-zA-Z][a-zA-Z_0-9]+$/.test(service_name))
           {
@@ -133,12 +138,14 @@
               return;
           }
 
+
           var   request={
               "handleClass":"beans.service.AddService",
               "requestBody": {"service_name": service_name,
                   "service_level":service_level,
                   "service_parent": service_parent,
-                  "dev_lang":dev_lang},
+                  "dev_lang":dev_lang,
+                  "port":port},
           };
           $.post("/JsonRPCServlet",
                   {request_string:JSON.stringify(request)},
@@ -273,7 +280,12 @@
         <select class="form-control" id="dev_lang">
             <option value="c++">c/c++</option>
             <option value="java">java</option>
+            <option value="php">php</option>
+            <option value="python">python</option>
         </select>
+        <br>
+        <label for="dev_lang"  >监听端口:</label>
+        <input type="number" class="form-control" id="port" maxlength="6" value="7963">如果一台服务器上部署多个业务，注意错开业务的端口。
     </div>
     <br>
   <button type="button" class="btn-small" id="btn_add" onclick="onAddBtnClicked()">增加</button>

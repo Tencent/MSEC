@@ -28,7 +28,8 @@
 <html>
 <%
   String agent = request.getHeader("User-Agent");
-  if (agent.indexOf("Chrome") < 0 || agent.indexOf("MSIE") > 0)
+  agent = agent.toLowerCase();
+  if (agent.indexOf("chrome") < 0 || agent.indexOf("msie") > 0)
   {
     response.sendRedirect("/pages/uncompatible.jsp");
   }

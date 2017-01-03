@@ -27,6 +27,7 @@ public class AddServiceRequest {
     String service_level;
     String service_parent;
     String dev_lang;
+    int  port;
 
     public String getDev_lang() {
         return dev_lang;
@@ -58,5 +59,13 @@ public class AddServiceRequest {
 
     public void setService_parent(String service_parent) {
         this.service_parent = service_parent;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }

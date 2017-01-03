@@ -45,10 +45,6 @@ public class RollbackReleasePlan extends JsonRPCHandler {
     private String release_type;
     private String release_memo;
 
-    private String list_ps = "\nsleep 1;echo 'ps|grep  srpc...'\n"+
-            "ps auxw|grep srpc_|grep -v grep;echo ''\n"+
-            "echo 'ps |grep agent...'\n"+
-            "ps auxw|grep -e monitor_agent -e nlbagent -e flume -e remote_shell_agent |grep -v grep\n";
 
 
     private String geneCmdFileForRollback()
@@ -71,7 +67,7 @@ public class RollbackReleasePlan extends JsonRPCHandler {
                 flsn, slsn, //mkdir -p
                 plan_id, flsn, slsn, //cp -R
                 flsn, slsn); //cd
-        content =  content+list_ps;
+        content =  content+CarryOutReleasePlan.showProcessCmds(flsn, slsn);
 
         try {
             FileOutputStream out = new FileOutputStream(cmdFileName);

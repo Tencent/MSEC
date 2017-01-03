@@ -180,8 +180,6 @@
       }
       function addNewField()
       {
-
-
           var   new_field_name= $("#new_field_name").val();
           var   new_field_type= $("#new_field_type").val();
           if (new_field_name == null || new_field_name.length<1||
@@ -196,9 +194,6 @@
               showTips("字段名只能由字母数字和下划线组成，且只能由字母开头");
               return;
           }
-
-
-
           var   request={
               "handleClass":"beans.service.AddBusiLogField",
               "requestBody":   {

@@ -216,12 +216,20 @@ public class DBUtil {
                 resultSet = null;
 
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try
+        {
             if (connection != null) {
                 connection.close();
                 connection = null;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch (SQLException e2)
+        {
+            e2.printStackTrace();
         }
     }
 }

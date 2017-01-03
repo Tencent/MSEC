@@ -195,7 +195,7 @@ public class LoadBalance {
 
         JSONObject obj = new JSONObject(jsonStr);
         int  cpu = obj.getInt("cpu");
-        cpu = cpu / 100;
+        //cpu = cpu / 100;
         return cpu;
     }
 

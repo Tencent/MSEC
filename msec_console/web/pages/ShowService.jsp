@@ -44,6 +44,8 @@
   <script type="text/javascript">
       var g_service_name = "<%=service%>";
       var g_service_parent = "<%=service_parent%>";
+      var g_port = 7963;
+      var g_dev_lang = "c++";
 
       function onReleaseBtnClicked()
       {
@@ -102,6 +104,9 @@
                               $("#second_level_service_name_of_new_sharedobject").val(g_service_name);
 
                               $("#dev_lang").append(data.dev_lang);
+                              $("#port").append(data.port);
+                              g_port = data.port;
+                              g_dev_lang = data.dev_lang;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
                               var str = "";
@@ -266,7 +271,7 @@
           console.log("clicked!")
           var   new_ip= $("#new_ip").val();
          // var   new_port= parseInt($("#new_port").val());
-          var new_port = 7963;
+          var new_port = g_port;
           if (new_ip == null || new_ip.length < 1 ||
             new_port == null || new_port.length<1)
           {
@@ -279,12 +284,17 @@
               return;
 
           }
+          var comm_proto = "tcp and udp";
+          if (g_dev_lang == "java")
+          {
+              comm_proto = "tcp";
+          }
 
           var   request={
               "handleClass":"beans.service.AddSecondLevelServiceIPInfo",
               "requestBody": {"ip": new_ip,
                   "port":new_port,
-                  "comm_proto":"tcp and udp",
+                  "comm_proto":comm_proto,
                   "status": "disabled",
                   "first_level_service_name":g_service_parent,
                 "second_level_service_name":g_service_name},
@@ -455,7 +465,7 @@
               showTips("tag name不能为空");
               return;
           }
-          if (!/^[A-Za-z][A-Za-z0-9]+$/.test(new_tag_name))
+          if (!/^[A-Za-z][A-Za-z0-9_]+$/.test(new_tag_name))
           {
               showTips("tag name 只能由字母数字和下划线组成，且只能由字母开头");
               return;
@@ -632,7 +642,7 @@
               showTips("tag name不能为空");
               return;
           }
-          if (!/^[A-Za-z][A-Za-z0-9]+$/.test(new_tag_name))
+          if (!/^[A-Za-z][A-Za-z0-9_]+$/.test(new_tag_name))
           {
               showTips("tag name 只能由字母数字和下划线组成，且只能由字母开头");
               return;
@@ -894,7 +904,7 @@
           {
               if (formData[i].name=="new_sharedobject_tag")
               {
-                  if (!/^[a-zA-Z][a-zA-Z0-9]+$/.test(formData[i].value))
+                  if (!/^[a-zA-Z][a-zA-Z0-9_]+$/.test(formData[i].value))
                   {
                       showTips("tag只能由字母数字下划线组成，且只能使用字母开头");
                       return false;
@@ -942,10 +952,11 @@
           var str = "[LOG]\n";
           str += "Level=INFO\n"
           str += "[COLOR]\n";
-          str += "FieldName0=uin\n";
-          str += "FieldValue0=11228491\n";
-          str += "FieldName1=merchID\n";
-          str += "FieldValue1=M1234\n";
+          str += ";FieldName0=uin\n";
+          str += ";FieldValue0=11228491\n";
+          str += ";FieldName1=merchID\n";
+          str += ";FieldValue1=M1234\n";
+
 
           $("#config_content").val(str);
       }
@@ -982,9 +993,12 @@ service FooService {\n\
     <label id="service_name"></label>
     ,&nbsp;
 
-
     <label for="dev_lang"  >开发语言:</label>
     <label id="dev_lang"  ></label>
+    ,&nbsp;
+
+    <label for="port"  >监听端口:</label>
+    <label id="port"  ></label>
 
     <button clas="btn-small" style="float:right" id="btn_DownloadDev" onclick="onDownloadDevBtnClicked()">获取开发环境...</button>
     <button clas="btn-small" style="float:right" id="btn_release" onclick="onReleaseBtnClicked()">制定发布计划...</button>

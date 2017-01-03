@@ -61,7 +61,8 @@ public class QueryOddSecondLevelServiceDetail extends JsonRPCHandler {
         try {
 
             //查出ip列表
-            sql = "select ip,port,status,second_level_service_name,first_level_service_name,comm_proto from t_second_level_service_ipinfo where second_level_service_name=? and first_level_service_name=?";
+            sql = "select ip,port,status,second_level_service_name,first_level_service_name,comm_proto from " +
+                    "t_second_level_service_ipinfo where second_level_service_name=? and first_level_service_name=?";
             params = new ArrayList<Object>();
             params.add(request.getSecond_level_service_name());
             params.add(request.getFirst_level_service_name());

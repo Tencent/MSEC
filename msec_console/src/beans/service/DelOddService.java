@@ -85,9 +85,9 @@ public class DelOddService extends JsonRPCHandler{
         response.setStatus(100);
         return response;
     }
-        if (request.getService_parent().equals("RESERVED") ||
-                request.getService_name().equals("log") ||
-                request.getService_name().equals("monitor"))
+        if (request.getService_parent().equals("RESERVED") &&
+                (request.getService_name().equals("log") ||
+                request.getService_name().equals("monitor") ) )
         {
             response.setMessage("The reserved services can NOT be deleted.");
             response.setStatus(100);

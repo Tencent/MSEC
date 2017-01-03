@@ -43,10 +43,6 @@ public class QueryProcessInfo extends JsonRPCHandler {
     private String flsn;
     private String slsn;
 
-    private String list_ps = "echo 'ps|grep  srpc...'\n"+
-            "ps auxw|grep srpc|grep -v grep;echo ''\n"+
-            "echo 'ps |grep agent...'\n"+
-            "ps auxw|grep -e monitor_agent -e nlbagent -e flume -e remote_shell_agent |grep -v grep\n";
 
 
     private String getLocalResultFileName()
@@ -61,7 +57,7 @@ public class QueryProcessInfo extends JsonRPCHandler {
         String  rnd = Tools.randInt();
         String cmdFileName = ServletConfig.fileServerRootDir+"/tmp/show_process_"+ rnd+".sh";
 
-        String content = list_ps;
+        String content = CarryOutReleasePlan.showProcessCmds(flsn, slsn);
 
         new File(cmdFileName).delete();
         FileOutputStream out = new FileOutputStream(cmdFileName);
@@ -159,6 +155,7 @@ public class QueryProcessInfo extends JsonRPCHandler {
                     out.print(new String(buffer, 0, len));
                 }
                 in.close();
+                new File(localResultFileName).delete();
 
 
 
