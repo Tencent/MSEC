@@ -19,12 +19,14 @@
 
 package beans.service;
 
+import beans.dbaccess.SecondLevelService;
 import beans.request.AddSecondLevelServiceIPInfoRequest;
 import beans.response.AddSecondLevelServiceIPInfoResponse;
 import beans.response.AddServiceResponse;
 import ngse.org.DBUtil;
 import ngse.org.JsonRPCHandler;
 import ngse.org.Tools;
+import org.apache.log4j.Logger;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,11 +38,13 @@ import java.util.List;
  * 一开始没有规划好，搞的这几个bean的名字都怪怪的
  */
 public class AddSecondLevelServiceIPInfo extends JsonRPCHandler {
+
     public AddSecondLevelServiceIPInfoResponse exec(AddSecondLevelServiceIPInfoRequest request)
     {
         AddSecondLevelServiceIPInfoResponse response = new AddSecondLevelServiceIPInfoResponse();
         response.setMessage("unkown error.");
         response.setStatus(100);
+        Logger logger = Logger.getLogger(AddSecondLevelServiceIPInfo.class);
 
         String result = checkIdentity();
         if (!result.equals("success"))
@@ -70,6 +74,7 @@ public class AddSecondLevelServiceIPInfo extends JsonRPCHandler {
         }
 
 
+
         DBUtil util = new DBUtil();
         if (util.getConnection() == null)
         {
@@ -77,6 +82,16 @@ public class AddSecondLevelServiceIPInfo extends JsonRPCHandler {
             response.setStatus(100);
             return response;
         }
+        /*
+        if (request.getPort() == -1)// -1表示由该业务全局port配置项决定，在t_second_level_service表里
+        {
+            int port = getStandardServicePort(util, request.getFirst_level_service_name(),
+                                                    request.getSecond_level_service_name());
+            request.setPort(port);
+        }
+        logger.info("request.port="+request.getPort());
+        */
+
 
         ArrayList<String> addedIPs = new ArrayList<String>();
         try {

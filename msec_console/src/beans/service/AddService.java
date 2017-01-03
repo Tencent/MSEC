@@ -81,11 +81,12 @@ public class AddService extends JsonRPCHandler {
         }
         else
         {
-             sql = "insert into t_second_level_service(second_level_service_name, first_level_service_name, type,dev_lang) values(?,?,'standard',?)";
+             sql = "insert into t_second_level_service(second_level_service_name, first_level_service_name, type,dev_lang,port) values(?,?,'standard',?,?)";
 
             params.add(request.getService_name());
             params.add(request.getService_parent());
             params.add(request.getDev_lang());
+            params.add(request.getPort());
         }
 
 

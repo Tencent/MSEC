@@ -29,7 +29,7 @@ import ngse.org.JsonRPCHandler;
 import ngse.org.JsonRPCResponseBase;
 import ngse.org.ServletConfig;
 import org.apache.log4j.Logger;
-//import org.graphviz.Graphviz;
+import org.graphviz.Graphviz;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -173,7 +173,7 @@ public class QueryBusinessLog extends JsonRPCHandler {
             String dotLang = jsonObject.getString("graph");
             if ( !(dotLang == null || dotLang.equals("")) ) {
                 String filename = getGraphFilename(ReqID);
-                //Graphviz.drawGraph(dotLang, filename);
+                Graphviz.drawGraph(dotLang, filename);
 
 
                 BusinessLogResult businessLogResult = (BusinessLogResult) (this.getHttpRequest().getSession().getAttribute(BUSI_LOG_RESULT_IN_SESSION));

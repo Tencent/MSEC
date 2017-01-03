@@ -35,18 +35,17 @@ import java.io.*;
 public class IDLGeneCodeAndDownload extends JsonRPCHandler {
 
 
+
     private void copy3rdAPI(String destDir) throws Exception
     {
         Logger logger = Logger.getLogger(IDLGeneCodeAndDownload.class);
-        //将war包资源中的spp.tar解压到目录baseDir
-        InputStream inputStream = this.getServlet().getServletContext().getResourceAsStream("/resource/3rd_API.zip");
-        String destFile = destDir + File.separator + "3rd_API.zip";
+
+        InputStream inputStream = this.getServlet().getServletContext().getResourceAsStream("/resource/3rd_API.tar.gz");
+        String destFile = destDir + File.separator + "3rd_API.tar.gz";
 
         logger.info("copy 3rd API to " + destFile);
 
         File f = null;
-
-        //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
         OutputStream outputStream = new FileOutputStream(destFile);
         byte[] buf = new byte[10240];
         int len;
@@ -65,6 +64,79 @@ public class IDLGeneCodeAndDownload extends JsonRPCHandler {
 
 
     }
+    private  void genPhpCode(String protofile, String outputDir) throws Exception
+    {
+        Logger logger = Logger.getLogger(PackDevFile.class);
+
+
+        String rnd = ""+(int)(Math.random() * 1000000);
+        InputStream inputStream = getServlet().getServletContext().getResourceAsStream("/resource/spp_dev.tar");
+        String tmpTarFile = ServletConfig.fileServerRootDir + "/tmp/genPhpCode"+rnd+".tar";
+        String baseDir = ServletConfig.fileServerRootDir + "/tmp/genPhpCode"+rnd+"_basedir";
+
+
+        logger.info("copy php framework from resource to "+tmpTarFile);
+
+        File f = null;
+
+        //将资源文件拷贝到文件系统中的普通文件，并解压缩为目录baseDir
+        try
+        {
+            byte[] buf = new byte[10240];
+            int len;
+            OutputStream outputStream = new FileOutputStream(tmpTarFile);
+            while (true) {
+
+
+                len = inputStream.read(buf);
+
+                if (len <= 0) {
+                    break;
+                }
+                outputStream.write(buf, 0, len);
+
+            }
+            outputStream.close();
+            inputStream.close();
+
+
+            //把普通文件解包到目录baseDir
+            TarUtil.dearchive(new File(tmpTarFile), new File(baseDir));
+            logger.info("dearchive tar to " + baseDir);
+
+            //执行python脚本产生php代码
+            String[] cmd = new String[5];
+            String pythonScript;
+            pythonScript = baseDir + "/rpc/php_template/create_rpc.py";
+            new File(pythonScript).setExecutable(true);
+
+            cmd[0] = pythonScript;
+            cmd[1] = protofile;
+            cmd[2] = baseDir;
+            cmd[3] = outputDir;
+            cmd[4] = "--protoc";
+
+            StringBuffer cmdResult = new StringBuffer();
+            if (Tools.runCommand(cmd, cmdResult, true) != 0)
+            {
+                throw  new Exception("gene php code failed:"+cmdResult);
+
+            }
+            logger.info("run python script successfully.");
+
+        }
+        finally {
+            //删除普通文件
+            try {
+                new File(tmpTarFile).delete();
+                Tools.deleteDirectory(new File(baseDir));
+            }
+            catch (Exception e){}
+        }
+
+    }
+
+
 
     public JsonRPCResponseBase exec(IDL request)
     {
@@ -94,14 +166,28 @@ public class IDLGeneCodeAndDownload extends JsonRPCHandler {
         logger.info("call protoc to generate code");
         String rnd = String.format("%d", (int)( Math.random()*Integer.MAX_VALUE) );
         String destDir = ServletConfig.fileServerRootDir+ File.separator+"tmp"+File.separator+"IDLGeneCode_"+slsn+"_"+rnd;
+        String cpp_out = destDir + File.separator+"cpp";
+        String java_out = destDir + File.separator+"java";
+        String php_out = destDir + File.separator+"php";
+        String py_out = destDir + File.separator+"python";
 
         logger.info("code generation destDir="+destDir);
 
         File f = new File(destDir);
-        if (!f.exists())
+        if (f.isFile())
         {
-            f.mkdirs();
+            f.delete();
         }
+        else if  (f.isDirectory())
+        {
+            Tools.deleteDirectory(f);
+        }
+
+        f.mkdir();
+        new File(cpp_out).mkdir();
+        new File(java_out).mkdir();
+        new File(php_out).mkdir();
+        new File(py_out).mkdir();
         //将第三方（例如cgi）要用到的库拷贝到目标目录
         try
         {
@@ -119,16 +205,18 @@ public class IDLGeneCodeAndDownload extends JsonRPCHandler {
         try {
             // protoc 命令生成代码
             String idlFileName = IDL.getIDLFileName(flsn, slsn, tag);
-            String newIDLFileName = destDir + "/msec.proto";
+            String newIDLFileName = destDir + File.separator+ flsn+"_"+slsn+".proto";
             Tools.copyFile(idlFileName, newIDLFileName);
-            String[] cmd = {"protoc", "--cpp_out=" + destDir, "--java_out=" + destDir, "-I"+destDir, newIDLFileName};
+            String[] cmd = {"protoc", "--cpp_out=" + cpp_out, "--java_out=" + java_out,"--python_out="+py_out, "-I"+destDir, newIDLFileName};
             StringBuffer sb = new StringBuffer();
             int v = Tools.runCommand(cmd, sb, true);
             if (v != 0)
             {
-                new Exception("Cmd protoc failed!");
+                throw new Exception("Cmd protoc failed!"+sb.toString());
             }
             logger.info(String.format("protoc compile:%d, %s", v, sb.toString()));
+            // pb这个版本不支持直接生成php的代码，只好自己实现
+            genPhpCode(newIDLFileName,php_out);
 
             //打成tar包
             logger.info("generate tar file...");

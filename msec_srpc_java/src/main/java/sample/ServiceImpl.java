@@ -27,7 +27,7 @@ import org.msec.rpc.ServiceFactory;
 public class ServiceImpl implements $(INTERFACE_LIST_REPLACE) {
 
     public static void main(String[] args) throws Exception {
-        ServiceFactory.initModule("$(MODULE_REPLACE)");
+        ServiceFactory.initModule("$(MODULE_REPLACE)", ServiceFactory.SRPC_VERSION);
     $(SERVICE_REGISTER_BEGIN)
         ServiceFactory.addService("$(PKG_REPLACE).$(SERVICE_REPLACE)", $(PROTO_REPLACE).$(SERVICE_REPLACE).BlockingInterface.class, new ServiceImpl());
     $(SERVICE_REGISTER_END)

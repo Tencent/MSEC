@@ -104,6 +104,12 @@ public class DownloadDevGO extends JsonRPCHandler  {
         logger.info("begin making dev package...");
         PackDevFile packDevFile = new PackDevFile(plan, getServlet().getServletContext());
         packDevFile.run();
+        if (!packDevFile.getResultString().equals("success"))
+        {
+            response.setMessage(packDevFile.getResultString());
+            response.setStatus(100);
+            return response;
+        }
         String fileName = packDevFile.getOutputFileName();
         logger.info("dev package path:"+fileName);
         File f = new File(fileName);

@@ -44,10 +44,13 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
     private String release_type;
     private String release_memo;
 
-    private String list_ps = "\nsleep 1;echo 'ps|grep  srpc...'\n"+
-            "ps auxw|grep srpc|grep -v grep;echo ''\n"+
-            "echo 'ps |grep agent...'\n"+
-            "ps auxw|grep -e monitor_agent -e nlbagent -e flume -e remote_shell_agent |grep -v grep\n";
+    public static  String showProcessCmds(String flsn, String slsn) {
+        String ps = "\nsleep 1;echo 'ps|grep  srpc...'\n" +
+                "ps auxw|grep srpc_%s_%s|grep -v grep;echo ''\n" +
+                "echo 'ps |grep agent...'\n" +
+                "ps auxw|grep -e monitor_agent -e nlbagent -e flume -e remote_shell_agent |grep -v grep\n";
+        return String.format(ps, flsn, slsn);
+    }
 
     //备份起来，用于回滚
     private String backupCmdString( boolean isFirstTimeFlag)
@@ -84,7 +87,7 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
                 plan_id,// rm -rf
                 flsn, slsn,//cp
                 flsn, slsn);//restart
-        content = backupCmdString(isFirstTimeFlag) +  content+list_ps;
+        content = backupCmdString(isFirstTimeFlag) +  content+showProcessCmds(flsn,slsn);
         try {
             FileOutputStream out = new FileOutputStream(cmdFileName);
             out.write(content.getBytes());
@@ -114,7 +117,7 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
                 plan_id,// rm -rf
                 flsn, slsn,//cp
                 flsn, slsn);//restart
-        content = backupCmdString(isFirstTimeFlag) + content+list_ps;
+        content = backupCmdString(isFirstTimeFlag) + content+showProcessCmds(flsn,slsn);
         try {
             FileOutputStream out = new FileOutputStream(cmdFileName);
             out.write(content.getBytes());
@@ -132,6 +135,7 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
     {
 
         String fmt = "";
+        //主要差异在第四行：业务插件的名字
         if (dev_lang.equals("c++")) {
             fmt = "rm /msec/%s/%s/bin/msec.so\n" +
                     "cd /tmp; tar zxf %s\n" +
@@ -139,12 +143,28 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
                     "cp /tmp/framework/bin/msec.so /msec/%s/%s/bin\n" +
                     "cd /msec/%s/%s/bin;chmod a+x ./*; ./srpc.sh stop; ./srpc.sh start";
         }
-        else
+        else if  (dev_lang.equals("java"))
         {
             fmt = "rm /msec/%s/%s/bin/msec.jar\n" +
                     "cd /tmp; tar zxf %s\n" +
                     "rm -rf /tmp/framework; mv /tmp/%s /tmp/framework\n" +
                     "cp /tmp/framework/bin/msec.jar /msec/%s/%s/bin\n" +
+                    "cd /msec/%s/%s/bin;chmod a+x ./*; ./srpc.sh stop; ./srpc.sh start";
+        }
+        else if (dev_lang.equals("php"))
+        {
+            fmt = "rm /msec/%s/%s/bin/msec.tgz\n" +
+                    "cd /tmp; tar zxf %s\n" +
+                    "rm -rf /tmp/framework; mv /tmp/%s /tmp/framework\n" +
+                    "cp /tmp/framework/bin/msec.tgz /msec/%s/%s/bin\n" +
+                    "cd /msec/%s/%s/bin;chmod a+x ./*; ./srpc.sh stop; ./srpc.sh start";
+        }
+        else if (dev_lang.equals("python"))
+        {
+            fmt = "rm /msec/%s/%s/bin/msec_py.tgz\n" +
+                    "cd /tmp; tar zxf %s\n" +
+                    "rm -rf /tmp/framework; mv /tmp/%s /tmp/framework\n" +
+                    "cp /tmp/framework/bin/msec_py.tgz /msec/%s/%s/bin\n" +
                     "cd /msec/%s/%s/bin;chmod a+x ./*; ./srpc.sh stop; ./srpc.sh start";
         }
 
@@ -156,7 +176,7 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
                 plan_id,// rm -rf
                 flsn, slsn,//cp
                 flsn, slsn);//restart
-        content = backupCmdString(isFirstTimeFlag) + content+list_ps;
+        content = backupCmdString(isFirstTimeFlag) + content+showProcessCmds(flsn,slsn);
         try {
             FileOutputStream out = new FileOutputStream(cmdFileName);
             out.write(content.getBytes());
@@ -196,7 +216,7 @@ public class CarryOutReleasePlan extends JsonRPCHandler {
                 flsn, slsn, plan_id, flsn, slsn, //mv
                 flsn, slsn,//start
                 flsn, slsn, remoteFileBaseName); //rm
-        content = backupCmdString(isFirstTimeFlag) + content+list_ps;
+        content = backupCmdString(isFirstTimeFlag) + content+showProcessCmds(flsn,slsn);
 
         try {
             FileOutputStream out = new FileOutputStream(cmdFileName);

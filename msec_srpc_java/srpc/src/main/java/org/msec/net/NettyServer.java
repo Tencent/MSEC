@@ -63,6 +63,7 @@ public class NettyServer  {
         pipeline.addLast("encode", new ResponseEncoder());
         pipeline.addLast("handler", new NettyServerHandler(NettyServer.this));
 
+        this.bootstrap.setOption("backlog", 8102);
         this.bootstrap.setOption("child.tcpNoDelay", true);
         this.bootstrap.setOption("child.keepAlive", true);
         this.bootstrap.setOption("child.reuseAddress", true);

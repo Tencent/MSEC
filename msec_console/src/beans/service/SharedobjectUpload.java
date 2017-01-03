@@ -57,7 +57,8 @@ public class SharedobjectUpload extends FileUploadServlet {
         String sql;
         List<Object> params = new ArrayList<Object>();
 
-        sql = "insert into t_sharedobject_tag(first_level_service_name,  second_level_service_name,tag_name, memo) values(?,?,?,?)";
+        sql = "insert into t_sharedobject_tag(first_level_service_name,  " +
+                "second_level_service_name,tag_name, memo) values(?,?,?,?)";
         params.add(firstName);
        params.add(secondName);
         params.add(tagName);
@@ -105,6 +106,7 @@ public class SharedobjectUpload extends FileUploadServlet {
 
         File oldFile = new File(fileNames.get(0));
       //  String baseName = oldFile.getName();
+        //不管什么开发语言，一开始都是用.so文件先存着的，发布打包的时候才会修改
         String destName = SharedobjectTag.getSharedobjectName(first_name, second_name, tag_name, "so");//先默认是c++开发
         File newFile = new File(destName);
         if (newFile.exists())

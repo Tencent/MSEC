@@ -54,7 +54,8 @@ public class ClientManager {
         if (fromCache) {
             client = clientCache.get(route);
         }
-        log.info("getRouteByName " + serviceName + " addr: " + route.getIp() + ":" + route.getPort() + " incache: " + (client != null));
+        log.info("getRouteByName " + serviceName + " addr: " + route.getIp() + ":" + route.getPort() + " incache: " + (client != null) +
+                 " connected: " + ((client != null) && client.isConnected()));
         if (client == null) {
             client = new NettyClient(route.getIp(), route.getPort());
             clientCache.put(route, client);

@@ -58,9 +58,9 @@ public class DownloadAlarmChart extends JsonRPCHandler {
             File file = new File(filename);
             FileInputStream in = new FileInputStream(file);
             // set the MIME type.
-            getHttpResponse().setContentType("image/jpg");
+            getHttpResponse().setContentType("image/png");
             getHttpResponse().setHeader("Content_Length", String.format("%d", file.length()));
-
+            getHttpResponse().setHeader("Content-Disposition", "inline; filename=\"chart.png\"");
 
             ServletOutputStream out = getHttpResponse().getOutputStream();
             byte[] buf = new byte[10240];

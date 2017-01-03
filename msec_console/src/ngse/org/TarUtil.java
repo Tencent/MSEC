@@ -27,10 +27,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.nio.file.*;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.utils.IOUtils;
 
 //打包和拆包.tar文件的工具类
 public abstract class TarUtil {
@@ -64,9 +66,6 @@ public abstract class TarUtil {
         taos.flush();
         taos.close();
     }
-
-
-
 
     private static void archive(File srcFile, TarArchiveOutputStream taos,
                                 String basePath) throws Exception {
@@ -103,22 +102,24 @@ public abstract class TarUtil {
                                     String dir) throws Exception {
 
 
-        TarArchiveEntry entry = new TarArchiveEntry(dir + file.getName());
-
-        entry.setSize(file.length());
-
+        boolean is_symbolic = Files.isSymbolicLink(file.toPath());
+        TarArchiveEntry entry;
+        if(is_symbolic) {
+            entry = new TarArchiveEntry(dir + file.getName(), TarArchiveEntry.LF_SYMLINK);
+            entry.setLinkName(Files.readSymbolicLink(file.toPath()).toString());
+        }
+        else {
+            entry = new TarArchiveEntry(dir + file.getName());
+            entry.setSize(file.length());
+            if (file.canExecute()) {
+                // -rwxr-xr-x
+                entry.setMode(493);
+            }
+        }
         taos.putArchiveEntry(entry);
 
-        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
-                file));
-        int count;
-        byte data[] = new byte[BUFFERSZ];
-        while ((count = bis.read(data, 0, BUFFERSZ)) != -1) {
-            taos.write(data, 0, count);
-        }
-
-        bis.close();
-
+        if(!is_symbolic)
+            IOUtils.copy(new FileInputStream(file), taos);
         taos.closeArchiveEntry();
     }
 
@@ -158,8 +159,13 @@ public abstract class TarUtil {
 
             if (entry.isDirectory()) {
                 dirFile.mkdirs();
+            } else if (entry.isSymbolicLink()) {
+                File target = new File(entry.getLinkName());
+                Files.createSymbolicLink(dirFile.toPath(), target.toPath());
             } else {
+                boolean executable = (entry.getMode() % 2) == 1;
                 dearchiveFile(dirFile, tais);
+                dirFile.setExecutable(executable);
             }
 
         }

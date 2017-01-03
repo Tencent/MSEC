@@ -35,6 +35,15 @@ public class QuerySecondLevelServiceDetailResponse extends JsonRPCResponseBase {
     ArrayList<SharedobjectTag> sharedobjectTagList;
     String first_level_service_name;
     String dev_lang;
+    int port;
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
 
     public String getDev_lang() {
         return dev_lang;

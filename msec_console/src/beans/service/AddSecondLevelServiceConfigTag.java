@@ -19,12 +19,15 @@
 
 package beans.service;
 
+import beans.dbaccess.SecondLevelService;
 import beans.dbaccess.SecondLevelServiceConfigTag;
 import beans.request.AddSecondLevelServiceConfigTagRequest;
 import beans.response.AddSecondLevelServiceConfigTagResponse;
 import beans.response.AddSecondLevelServiceConfigTagResponse;
 import ngse.org.DBUtil;
 import ngse.org.JsonRPCHandler;
+import org.apache.log4j.Logger;
+import org.ini4j.Ini;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,6 +36,7 @@ import java.nio.charset.Charset;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by Administrator on 2016/1/28.
@@ -55,6 +59,66 @@ public class AddSecondLevelServiceConfigTag extends JsonRPCHandler {
             e.printStackTrace();
             return false;
         }
+
+    }
+    private int getStandardServicePort(DBUtil util, String flsn, String slsn) throws Exception
+    {
+        Logger logger = Logger.getLogger(AddSecondLevelServiceConfigTag.class);
+
+        String sql = "select port from t_second_level_service where first_level_service_name=? " +
+                "and second_level_service_name=? and type='standard'";
+        List<Object> params = new ArrayList<>();
+        params.add(flsn);
+        params.add(slsn);
+
+        List<SecondLevelService> svcList = util.findMoreRefResult(sql, params, SecondLevelService.class);
+        if (svcList == null || svcList.size() != 1) {
+            throw new Exception("invalid record in t_second_level_service:" + flsn + "." + slsn);
+        }
+        return svcList.get(0).getPort();
+
+    }
+    public  void addPortConfig(String filename, int port) throws Exception
+    {
+
+        final String  SECTION_NAME = "SRPC";
+        final String  KEY = "listen";
+        //listen=e123/udp 234/tcp
+        final String VALUE = String.format("%d/udp %d/tcp", port, port);
+        Ini ini = new Ini();
+        ini.load(new File(filename));
+        Ini.Section section = ini.get(SECTION_NAME);
+        boolean bChanged = false;
+        if (section == null)
+        {
+            section = ini.add(SECTION_NAME);
+            section.add(KEY, VALUE);
+            bChanged = true;
+        }
+        else
+        {
+            String valueStr = section.get(KEY);
+            if (valueStr == null)
+            {
+                section.add(KEY, VALUE);
+                bChanged = true;
+            }
+            else
+            {
+                if (!valueStr.equalsIgnoreCase(VALUE))
+                {
+                    //logger.error("port config exists,but value mismatch!"+valueStr+"!="+VALUE);
+                    section.put(KEY, VALUE);
+                    bChanged = true;
+                }
+            }
+        }
+        if (bChanged)
+        {
+            ini.store(new File(filename));
+        }
+
+
 
     }
     public AddSecondLevelServiceConfigTagResponse exec(AddSecondLevelServiceConfigTagRequest request)
@@ -101,6 +165,12 @@ public class AddSecondLevelServiceConfigTag extends JsonRPCHandler {
                 response.setStatus(100);
                 return response;
             }
+            //写入端口配置信息
+            int port = getStandardServicePort(util, request.getFirst_level_service_name(),
+                                    request.getSecond_level_service_name());
+
+            addPortConfig(filename, port);
+
 
             //插入数据库
             String sql;
@@ -128,7 +198,7 @@ public class AddSecondLevelServiceConfigTag extends JsonRPCHandler {
                 return response;
             }
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             response.setMessage("add record failed:"+e.toString());
             response.setStatus(100);

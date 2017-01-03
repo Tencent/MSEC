@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#coding:utf-8
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -16,10 +18,6 @@
 # and limitations under the License.
 #
 
-
-
-#!/usr/bin/env python
-#coding:utf-8
 
 import sys
 import os

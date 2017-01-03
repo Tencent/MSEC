@@ -42,9 +42,14 @@
       var g_plan_id ="<%=g_plan_id%>";
       var g_flsn = "";
       var g_slsn = "";
+      var g_status = "";
 
       function do_release(plan_id)
       {
+          if (g_status == "creating")
+          {
+              return;
+          }
           if (!confirm("确定要发布吗？"))
           {
               return;
@@ -84,6 +89,7 @@
 
                                 g_flsn = rec.first_level_service_name;
                                 g_slsn = rec.second_level_service_name;
+                              g_status = rec.status;
 
 
 
@@ -106,8 +112,12 @@
 
 
 
+
+
                               $("#plan_detail").empty();
                               $("#plan_detail").append(str);
+
+
                           }
                           else if (data.status == 99)
                           {
@@ -152,7 +162,7 @@
   <div class="form-group">
 
     <button type="button" class="btn-small" onclick="show_plan_detail()">刷新</button>
-      <button type="button" class="btn-small" onclick="do_release()">发布</button>
+      <button id="btn_doRelease" type="button" class="btn-small" onclick="do_release()">发布</button>
       <p id="plan_detail"></p>
 
   </div>

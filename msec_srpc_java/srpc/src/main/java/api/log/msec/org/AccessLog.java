@@ -79,9 +79,11 @@ public class AccessLog {
 
     public static synchronized void log(int level, Map<String, String> headers, String body)
     {
-        for (Map.Entry<String, String> entry : headers.entrySet())
-        {
-            s_instance.setHeader(entry.getKey(), entry.getValue());
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.entrySet())
+            {
+                s_instance.setHeader(entry.getKey(), entry.getValue());
+            }
         }
         s_instance.log(level, body);
     }
@@ -89,28 +91,24 @@ public class AccessLog {
     public static void doLog(int level, String body) {
         StackTraceElement  ste = Thread.currentThread().getStackTrace()[2];
         RpcContext  context = (RpcContext)RequestProcessor.getThreadContext("session");
-        if (context != null) {
-            //System.out.println("session log options: " + context.getLogOptions());
+        if (context == null) {
+            s_instance.log(level, null, body);
         } else {
-            //System.out.println("no context for log options.");
+            context.getLogOptions().put("FileLine", ste.getFileName() + ":" + ste.getLineNumber());
+            context.getLogOptions().put("Function", ste.getClassName() + ":" + ste.getMethodName());
+            s_instance.log(level, context.getLogOptions(), body);
         }
-        context.getLogOptions().put("FileLine", ste.getFileName() + ":" + ste.getLineNumber());
-        context.getLogOptions().put("Function", ste.getClassName() + ":" + ste.getMethodName());
-        s_instance.log(level, context.getLogOptions(), body);
     }
 
     public static void doLog(int level, Map<String, String> headers, String body) {
         StackTraceElement  ste = Thread.currentThread().getStackTrace()[2];
         RpcContext  context = (RpcContext)RequestProcessor.getThreadContext("session");
         if (context != null) {
-            //System.out.println("session log options: " + context.getLogOptions());
-        } else {
-            //System.out.println("no context for log options.");
+            for (Map.Entry<String, String> entry : context.getLogOptions().entrySet()) {
+                headers.put(entry.getKey(), entry.getValue());
+            }
         }
 
-        for (Map.Entry<String, String> entry : context.getLogOptions().entrySet()) {
-            headers.put(entry.getKey(), entry.getValue());
-        }
         headers.put("FileLine", ste.getFileName() + ":" + ste.getLineNumber());
         headers.put("Function", ste.getClassName() + ":" + ste.getMethodName());
         s_instance.log(level, headers, body);

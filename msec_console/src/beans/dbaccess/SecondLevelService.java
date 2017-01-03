@@ -31,6 +31,7 @@ public class SecondLevelService {
     String first_level_service_name;
     String type;
     String dev_lang;
+    int port;
 
     public String getDev_lang() {
         return dev_lang;
@@ -62,5 +63,13 @@ public class SecondLevelService {
 
     public void setFirst_level_service_name(String first_level_service_name) {
         this.first_level_service_name = first_level_service_name;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 }
