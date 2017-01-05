@@ -177,9 +177,11 @@ msec环境搭建好以后，为了安全起见，需要重新生成priv.txt和pu
 
 2.0及以后的毫秒版本: 执行
 
+```shell
 export CLASSPATH=/usr/local/remote_shell/bin/bcprov-jdk16-1.46.jar:/usr/local/remote_shell/bin/jackson-all-1.6.0.jar:/usr/local/remote_shell/bin/junit-4.12.jar:/usr/local/remote_shell/bin/org.json.jar:/usr/local/remote_shell/bin/remote_shell_server.jar
 
 java ngse.remote_shell.Main newRSAKey
+```
 
 
 **step2:**
