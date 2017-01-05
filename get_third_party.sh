@@ -97,7 +97,7 @@ wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/ia
 cd -
 
 mkdir -p http-parser; cd http-parser
-wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/benoitc/http-parser/tar.gz/0.8.3'
+wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/nodejs/http-parser/tar.gz/v2.7.1'
 cd -
 
 mkdir -p libunwind; cd libunwind
@@ -106,6 +106,22 @@ cd -
 
 mkdir -p jansson; cd jansson
 wget --content-disposition --timeout=5 --tries=5 'http://www.digip.org/jansson/releases/jansson-2.9.tar.gz'
+cd -
+
+mkdir -p php; cd php
+wget --content-disposition --timeout=5 --tries=5 'http://cn2.php.net/distributions/php-5.6.25.tar.gz'
+cd -
+
+mkdir -p python; cd python
+wget --content-disposition --timeout=5 --tries=5 'https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz'
+cd -
+
+mkdir -p json2pb; cd json2pb
+wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/downup2u/json2pb-master/zip/master' 
+cd -
+
+mkdir -p setuptools; cd setuptools
+wget --content-disposition --timeout=5 --tries=5 'https://codeload.github.com/pypa/setuptools/tar.gz/v32.0.0'
 cd -
 
 cd -
