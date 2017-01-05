@@ -161,20 +161,34 @@ shell身份认证
 ## 3.remote shell身份认证
 
 部署在业务运营机上的remote\_shell\_agent接受web console服务器上的remote\_shell
-server.jar程序的管理，server.jar可以向agent发送文件、从agent获取文件、让agent执行一个脚本。
+\_server.jar程序的管理(1.0和以前的版本叫server.jar)，remote\_shell\_server.jar可以向agent发送文件、从agent获取文件、让agent执行一个脚本。
 
-如果坏人恶意冒充server.jar，就可以对装有remote\_shell\_agent的机器为所欲为。
+如果坏人恶意冒充remote\_shell\_server.jar，就可以对装有remote\_shell\_agent的机器为所欲为。
 
-为了安全起见，server.jar和remote\_shell\_agent之间通过公钥密码算法对server.jar进行身份认证，即要求server.jar使用一个事先约定的保密的私钥对欲执行的命令脚本进行数字签名。Server.jar所在目录下的priv.txt就是私钥文件，而业务运营机的/msec/agent/remote_shell目录下的pub.txt文件就是公钥文件。
+为了安全起见，remote\_shell\_server.jar和remote\_shell\_agent之间通过公钥密码算法对remote\_shell\_server.jar进行身份认证，即要求remote\_shell\_server.jar使用一个事先约定的保密的私钥对欲执行的命令脚本进行数字签名。remote\_shell\_server.jar所在目录下的priv.txt就是私钥文件，而业务运营机的/msec/agent/remote_shell目录下的pub.txt文件就是公钥文件。
+
+另外，remote\_shell\_agent也只接受来自web console服务器这个IP的tcp连接，这也是一个安全措施。
 
 msec环境搭建好以后，为了安全起见，需要重新生成priv.txt和pub.txt文件并分发到正确的目录下：
 
-step1:执行java -jar server.jar newRSAKey，生成两个文件priv.txt pub.txt，是新的密钥文件
+**step1:**
 
-step2:将
-pub.txt分发到所有业务运营机的/msec/agent/remote\_shell目录下，并重新启动remote\_shell\_agent。因为是使用docker，建议将这个改动commit到msec:console镜像。
+1.0及以前的毫秒版本：执行java -jar server.jar newRSAKey，生成两个文件priv.txt pub.txt，是新的密钥文件
 
-step3:重新启动web console上的remote\_shell
+2.0及以后的毫秒版本: 执行
+
+export CLASSPATH=/usr/local/remote_shell/bin/bcprov-jdk16-1.46.jar:/usr/local/remote_shell/bin/jackson-all-1.6.0.jar:/usr/local/remote_shell/bin/junit-4.12.jar:/usr/local/remote_shell/bin/org.json.jar:/usr/local/remote_shell/bin/remote_shell_server.jar
+
+java ngse.remote_shell.Main newRSAKey
+
+
+**step2:**
+
+将pub.txt分发到所有业务运营机的/msec/agent/remote\_shell目录下，并重新启动remote\_shell\_agent。因为是使用docker，建议将这个改动commit到msec:console镜像。
+
+**step3:**
+
+重新启动web console上的remote\_shell
 
 注意：后续部署新的业务运营机的agent，都需要使用新生成的pub.txt文件
 
