@@ -7,7 +7,7 @@ DEBUG= -g
 
 INCCOMM=-I$(FRAME_INC_PATH) -I$(PB_INC)  -I$(FRAME_INC_PATH)/internal -I$(FRAME_INC_PATH)/spp_incl/ -I$(FRAME_INC_PATH)/sync_incl
 LIBCOMM=-L$(FRAME_LIB) -lrpc_clt_comm -lnlbapi -lprotobuf -lmt -ldl
-BINARY = client_$(MODULE_REPLACE)_sync
+BINARY = client_$(MODULE_FILENAME_REPLACE)_sync
 
 ### rules
 ALLPROTOBUF=$(wildcard ./*.proto)
@@ -85,7 +85,7 @@ proto: $(ALLPROTOBUF_H)
 LIB_OBJ = $(patsubst %.cpp,%.o,$(wildcard *.cpp)) $(patsubst %.c,%.o,$(wildcard *.c)) \
           $(patsubst %.cc,%.o,$(wildcard *.cc)) $(patsubst %.cxx,%.o,$(wildcard *.cxx)) $(ALLPROTOBUF_OBJ)
 
-client_$(MODULE_REPLACE)_sync: $(LIB_OBJ)
+client_$(MODULE_FILENAME_REPLACE)_sync: $(LIB_OBJ)
 	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED)
 	@-rm -f $@ 
 	@$(CC) -o $@ $^  $(C_ARGS) $(LIBCOMM) $(CRESET)

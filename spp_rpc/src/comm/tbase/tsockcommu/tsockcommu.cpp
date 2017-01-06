@@ -31,6 +31,7 @@
 #include "../../global.h"
 #include "../tlog.h"
 #include "../../singleton.h"
+#include "../../timestamp.h"
 #include "../tcommu.h"
 #include "../notify.h"
 #include "../monitor.h"
@@ -52,8 +53,6 @@ using namespace tbase::notify;
 using namespace spp::comm;
 using namespace spp::singleton;
 using namespace tbase::tcommu::tsockcommu;
-
-extern struct timeval __spp_g_now_tv; // defaultproxy.cpp
 
 struct CTSockCommu::TInternal
 {
@@ -130,7 +129,7 @@ int CTSockCommu::clear()
 /* 控制空闲连接超时 */
 void CTSockCommu::check_expire(void)
 {
-    time_t now = __spp_g_now_tv.tv_sec;
+    time_t now = get_time_s();
     if (0 != expiretime_ && unlikely(now - lastchecktime_ > 1))
     {
         unsigned flow;
@@ -552,8 +551,6 @@ int CTSockCommu::poll(bool block)
 
     CEPollFlowResult result = ix_->epollflow_->wait(timeout);
 
-    gettimeofday(&__spp_g_now_tv, NULL);
-
     int fd = 0;
     unsigned flow = 0;
     int ret = 0;
@@ -745,7 +742,7 @@ int CTSockCommu::poll(bool block)
 
             //在执行完一个连接的EPOLL事件后，立刻检查是否超时
             if(expiretime_ != 0) {
-                if(ix_->connset_->check_per_expire(flow, __spp_g_now_tv.tv_sec - expiretime_)) {
+                if(ix_->connset_->check_per_expire(flow, get_time_s() - expiretime_)) {
                     if (unlikely(func_list_[CB_DISCONNECT] != NULL))
                     {
                         func_list_[CB_DISCONNECT](flow, &buff_blob_, func_args_[CB_DISCONNECT]);
@@ -759,8 +756,6 @@ int CTSockCommu::poll(bool block)
                 }
             }
         }
-
-        gettimeofday(&__spp_g_now_tv, NULL);
     }// process poll events
 
     check_expire();
@@ -804,7 +799,9 @@ int CTSockCommu::sendto(unsigned flow, void* arg1, void* arg2)
         return 0;
     }
 
-	int64_t time_delay = CMisc::time_diff(__spp_g_now_tv, cc->_access);
+    struct timeval now;
+    gettimeofday(&now, NULL);
+	int64_t time_delay = CMisc::time_diff(now, cc->_access);
 	if(time_delay <= 1)
 	{
 		MONITOR(MONITOR_PROXY_RELAY_DELAY_1);

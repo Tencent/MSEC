@@ -36,9 +36,11 @@
 #include "../comm/singleton.h"
 #include "../comm/keygen.h"
 #include "../comm/tbase/misc.h"
+#include "../comm/tbase/misc.h"
 #include "../comm/tbase/notify.h"
 #include "../comm/config/config.h"
 #include "../comm/shmcommu.h"
+#include "../comm/timestamp.h"
 #include "srpc_log.h"
 
 #define PROXY_STAT_BUF_SIZE 1<<14
@@ -53,7 +55,6 @@ using namespace spp::statdef;
 using namespace tbase::notify;
 using namespace srpc;
 
-extern struct timeval __spp_g_now_tv;
 int g_spp_groupid;
 int g_spp_groups_sum;
 
@@ -71,7 +72,6 @@ public:
 
 CDefaultProxy::CDefaultProxy(): ator_(NULL), iplimit_(IPLIMIT_DISABLE)
 {
-    gettimeofday(&__spp_g_now_tv, NULL);
 }
 
 CDefaultProxy::~CDefaultProxy()
@@ -118,18 +118,18 @@ void CDefaultProxy::realrun(int argc, char* argv[])
             spp_global::set_cur_group_id(it->first);
             processed += it->second->poll(true); // block
         }
-        if (unlikely(__spp_g_now_tv.tv_sec - fstattime > ix_->fstat_inter_time_))
+        if (unlikely(get_time_s() - fstattime > ix_->fstat_inter_time_))
         {
-            fstattime = __spp_g_now_tv.tv_sec;
+            fstattime = get_time_s();
             fstat_.op(PIDX_CUR_CONN, ((CTSockCommu*)ator_)->getconn());
         }
-        if ( unlikely(__spp_g_now_tv.tv_sec - montime > ix_->moni_inter_time_) )
+        if ( unlikely(get_time_s() - montime > ix_->moni_inter_time_) )
         {
 
             // 上报信息到ctrl进程
-            CLI_SEND_INFO(&moncli_)->timestamp_ = __spp_g_now_tv.tv_sec;
+            CLI_SEND_INFO(&moncli_)->timestamp_ = get_time_s();
             moncli_.run();
-            montime = __spp_g_now_tv.tv_sec;
+            montime = get_time_s();
             flog_.LOG_P_PID(LOG_DEBUG, "moncli run!\n");
 
             //输出监控信息
@@ -145,7 +145,7 @@ void CDefaultProxy::realrun(int argc, char* argv[])
                 it->second->ctrl(0, CT_STAT, ctor_stat, &ctor_stat_len);
             }
 
-            flog_.LOG_P_NOTIME(LOG_INFO, "%s\n", ctor_stat);
+            //flog_.LOG_P_NOTIME(LOG_INFO, "%s\n", ctor_stat);
         }
 
         //检查quit信号
@@ -186,11 +186,20 @@ unsigned CDefaultProxy::GetListenIp(const char *intf)
 // 框架循环调用
 int CDefaultProxy::loop()
 {
+    static int64_t config_mtime;
     static uint64_t last = 0;
     uint64_t now = (uint64_t)time(NULL);
 
     if (now > (last + 5))
     {
+        int64_t mtime;
+        mtime = CMisc::get_file_mtime(ix_->argv_[1]);
+        if ((mtime < 0) || (mtime == config_mtime))
+        {
+            last = now;
+            return 0;
+        }
+        
         // 更新本地日志级别
         ConfigLoader loader;
         if (loader.Init(ix_->argv_[1]) != 0)
@@ -212,6 +221,7 @@ int CDefaultProxy::loop()
         }
 
         last = now;
+        config_mtime = mtime;
     }
 
     return 0;
@@ -353,7 +363,7 @@ int CDefaultProxy::initconf(bool reload)
     for (unsigned i = 0; i < shms.size(); ++i)
     {
         CTCommu* commu = NULL;
-        commu = new CShmCommu;
+        commu = new CTShmCommu;
         int commu_ret = 0;
         commu_ret = commu->init(&shms[i]);
 

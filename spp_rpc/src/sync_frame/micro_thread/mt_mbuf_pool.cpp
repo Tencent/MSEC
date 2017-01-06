@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_mbuf_pool.cpp
- *  @info Î¢Ïß³ÌÏûÏ¢buf³Ø¹ÜÀíÊµÏÖ
+ *  @info å¾®çº¿ç¨‹æ¶ˆæ¯bufæ± ç®¡ç†å®ç°
  *  @time 20130924
  **/
 
@@ -31,8 +31,8 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief Á¬½Ó¹ÜÀíÈ«¾Ö·ÃÎÊ½Ó¿Ú
- * @return È«¾Ö¾ä±úÖ¸Õë
+ * @brief è¿æ¥ç®¡ç†å…¨å±€è®¿é—®æ¥å£
+ * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
  */
 MsgBuffPool* MsgBuffPool::_instance = NULL;
 MsgBuffPool* MsgBuffPool::Instance (void)
@@ -46,7 +46,7 @@ MsgBuffPool* MsgBuffPool::Instance (void)
 }
 
 /**
- * @brief Á¬½Ó¹ÜÀíÈ«¾ÖµÄÏú»Ù½Ó¿Ú
+ * @brief è¿æ¥ç®¡ç†å…¨å±€çš„é”€æ¯æ¥å£
  */
 void MsgBuffPool::Destroy()
 {
@@ -59,7 +59,7 @@ void MsgBuffPool::Destroy()
 
 
 /**
- * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+ * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
  */
 MsgBuffPool::MsgBuffPool(int max_free)
 {
@@ -68,7 +68,7 @@ MsgBuffPool::MsgBuffPool(int max_free)
 }
 
 /**
- * @brief ÏûÏ¢buffµÄÎö¹¹º¯Êı
+ * @brief æ¶ˆæ¯buffçš„ææ„å‡½æ•°
  */
 MsgBuffPool::~MsgBuffPool()
 {
@@ -92,8 +92,8 @@ MsgBuffPool::~MsgBuffPool()
 }
 
 /**
- *  @brief »ñÈ¡ÏûÏ¢buffÔªËØ
- *  @return msgbufÖ¸Õë, Ê§°ÜÎªNULL
+ *  @brief è·å–æ¶ˆæ¯buffå…ƒç´ 
+ *  @return msgbufæŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
  */
 MtMsgBuf* MsgBuffPool::GetMsgBuf(int max_size)
 {
@@ -128,8 +128,8 @@ MtMsgBuf* MsgBuffPool::GetMsgBuf(int max_size)
 }
 
 /**
- *  @brief »ñÈ¡ÏûÏ¢buffÔªËØ
- *  @return msgbufÖ¸Õë, Ê§°ÜÎªNULL
+ *  @brief è·å–æ¶ˆæ¯buffå…ƒç´ 
+ *  @return msgbufæŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
  */
 void MsgBuffPool::FreeMsgBuf(MtMsgBuf* msg_buf)
 {

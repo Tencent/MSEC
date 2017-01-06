@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_session.h
- *  @info Î¢Ïß³ÌµÄÊÂ¼ş»á»°¹ÜÀí²¿·Ö, Ã¿¸öºó¶ËÁ¬½Ó¹ØÁªÒ»sessionĞÅÏ¢
+ *  @info å¾®çº¿ç¨‹çš„äº‹ä»¶ä¼šè¯ç®¡ç†éƒ¨åˆ†, æ¯ä¸ªåç«¯è¿æ¥å…³è”ä¸€sessionä¿¡æ¯
  *  @time 20130924
  **/
 
@@ -35,19 +35,19 @@ class IMtConnection;
 
 enum SESSION_FLAG
 {
-    SESSION_IDLE    = 0,    ///< SESSION Î´¼ÓÈëhash¹ÜÀí
-    SESSION_INUSE   = 1,    ///< SESSION ½øÈë¹ÜÀí×´Ì¬
+    SESSION_IDLE    = 0,    ///< SESSION æœªåŠ å…¥hashç®¡ç†
+    SESSION_INUSE   = 1,    ///< SESSION è¿›å…¥ç®¡ç†çŠ¶æ€
 };
 
 /**
- * @brief ²¢·¢ÇëÇósession½Ó¿Ú¶¨Òå, ¸ù¾İsession¿ÉÓ³Éä³öthread,actionµÈ
+ * @brief å¹¶å‘è¯·æ±‚sessionæ¥å£å®šä¹‰, æ ¹æ®sessionå¯æ˜ å°„å‡ºthread,actionç­‰
  */
 class ISession : public HashKey
 {
 public:
 
     /**
-     * @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     * @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     ISession() : _session_id(0), _session_flg(0), _thread(NULL), _connection(NULL) {};
     virtual ~ISession();
@@ -55,7 +55,7 @@ public:
 public:
 
     /**
-     * @brief »á»°IDµÄÉèÖÃÓë»ñÈ¡
+     * @brief ä¼šè¯IDçš„è®¾ç½®ä¸è·å–
      */
     void SetSessionId(int id) {
         _session_id = id;    
@@ -65,7 +65,7 @@ public:
     };
 
     /**
-     * @brief ¹ØÁªÏß³ÌµÄÉèÖÃÓë»ñÈ¡
+     * @brief å…³è”çº¿ç¨‹çš„è®¾ç½®ä¸è·å–
      */
     MicroThread* GetOwnerThread(){
         return _thread;
@@ -75,7 +75,7 @@ public:
     };
 
     /**
-     * @brief ¹ØÁªÁ¬½ÓµÄÉèÖÃÓë»ñÈ¡
+     * @brief å…³è”è¿æ¥çš„è®¾ç½®ä¸è·å–
      */
     IMtConnection* GetSessionConn(){
         return _connection;
@@ -85,7 +85,7 @@ public:
     };
 
     /**
-     * @brief »á»°flagµÄÉèÖÃÓë»ñÈ¡
+     * @brief ä¼šè¯flagçš„è®¾ç½®ä¸è·å–
      */
     void SetSessionFlag(int flag) {
         _session_flg = flag;    
@@ -95,16 +95,16 @@ public:
     };
 
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue(){
         return _session_id;
     }; 
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs){
         return this->_session_id - (int)rhs->HashValue();
@@ -112,33 +112,33 @@ public:
 
 protected:
 
-    int  _session_id;               // »á»°idĞÅÏ¢
-    int  _session_flg;              // ¼ÇÂ¼session×´Ì¬ 0 -²»ÔÚhashÖĞ, 1 -hash¹ÜÀíÖĞ
-    MicroThread* _thread;           // »á»°ËùÊôµÄsession  
-    IMtConnection* _connection;     // »á»°¹ØÁªµÄÁ¬½Ó
+    int  _session_id;               // ä¼šè¯idä¿¡æ¯
+    int  _session_flg;              // è®°å½•sessionçŠ¶æ€ 0 -ä¸åœ¨hashä¸­, 1 -hashç®¡ç†ä¸­
+    MicroThread* _thread;           // ä¼šè¯æ‰€å±çš„session  
+    IMtConnection* _connection;     // ä¼šè¯å…³è”çš„è¿æ¥
 };
 
 /**
- * @brief È«¾ÖµÄsession¹ÜÀí½á¹¹
+ * @brief å…¨å±€çš„sessionç®¡ç†ç»“æ„
  */
 class SessionMgr
 {
 public:
 
     /**
-     * @brief »á»°ÉÏÏÂÎÄµÄÈ«¾Ö¹ÜÀí¾ä±ú½Ó¿Ú
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief ä¼šè¯ä¸Šä¸‹æ–‡çš„å…¨å±€ç®¡ç†å¥æŸ„æ¥å£
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     static SessionMgr* Instance (void);
 
     /**
-     * @brief È«¾ÖµÄÉ¾³ı½Ó¿Ú
+     * @brief å…¨å±€çš„åˆ é™¤æ¥å£
      */
     static void Destroy();
 
     /**
-     * @brief »ñÈ¡sessionid
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief è·å–sessionid
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     int GetSessionId(void) {
         _curr_session++;
@@ -149,35 +149,35 @@ public:
     };
 
     /**
-     * @brief SessionÊı¾İ´æ´¢
+     * @brief Sessionæ•°æ®å­˜å‚¨
      */
     int InsertSession(ISession* session);
 
     /**
-     * @brief ²éÑ¯sessionÊı¾İ
+     * @brief æŸ¥è¯¢sessionæ•°æ®
      */
     ISession* FindSession(int session_id);
 
     /**
-     * @brief É¾³ısessionÊı¾İ
+     * @brief åˆ é™¤sessionæ•°æ®
      */
     void RemoveSession(int session_id);
 
     /**
-     * @brief Îö¹¹º¯Êı
+     * @brief ææ„å‡½æ•°
      */
     ~SessionMgr();
     
 private:
 
     /**
-     * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+     * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
      */
     SessionMgr();
 
-    static SessionMgr * _instance;          ///<  µ¥ÀıÀà¾ä±ú
-    int       _curr_session;                ///<  sessionÖÖ×Ó
-    HashList* _hash_map;                    ///<  °´sessionid hash´æ´¢
+    static SessionMgr * _instance;          ///<  å•ä¾‹ç±»å¥æŸ„
+    int       _curr_session;                ///<  sessionç§å­
+    HashList* _hash_map;                    ///<  æŒ‰sessionid hashå­˜å‚¨
 };
 
 }

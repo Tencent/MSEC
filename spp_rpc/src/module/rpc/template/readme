@@ -1,2 +1,5 @@
 ###  
 python create_rpc.py  service.proto ../../ ./
+
+#if you use php, please use command
+#python create_rpc_for_php.py service.proto ../../ ./

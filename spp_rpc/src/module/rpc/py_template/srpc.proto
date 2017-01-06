@@ -1,0 +1,18 @@
+package srpc;
+
+// RPC消息头定义
+message CRpcHead
+{
+    required uint64 sequence        = 10;   // RPC序列号      : 用于检验每个回包正确性
+    optional uint32 coloring        = 20;   // RPC请求染色标志: 当前请求是否染色
+    optional uint64 color_id        = 21;   // RPC日志染色ID  : 每个方法一个
+    optional uint64 flow_id         = 30;   // RPC调用ID      : 每个客户端请求唯一标识
+    optional int32  err             = 40;   // 框架错误码
+    optional int32  result          = 41;   // 业务接口返回值
+    optional bytes  err_msg         = 42;   // 错误描述
+    optional bytes  caller          = 50;   // RPC调用方业务名
+    required bytes  method_name     = 51;   // RPC方法名
+    repeated bytes  caller_stack    = 60;   // RPC调用栈信息  : 存放方法名
+}
+
+

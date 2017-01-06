@@ -24,18 +24,18 @@
 #ifndef __MT_MONITOR_H__
 #define __MT_MONITOR_H__
 
-#define MONITOR_MT_EPOLL_FD_ERR     "frm.mt fd error"               // Î¢Ïß³Ìfd·Ç·¨
-#define MONITOR_MT_EPOLL_ERR        "frm.mt epoll error"            // epoll´íÎó
-#define MONITOR_MT_POLL_EMPTY       "frm.mt pool empty"             // Î¢Ïß³Ì³Ø¿ÕÁË
-#define MONITOR_MT_OVERLOAD         "frm.mt overload"               // Î¢Ïß³Ì¸öÊı´ïµ½ÉÏÏß
-#define MONITOR_MT_POLL_INIT_FAIL   "frm.mt pool init failed"       // Î¢Ïß³Ì³Ø³õÊ¼»¯Ê§°Ü
-#define MONITOR_MT_HEAP_ERROR       "frm.mt timer heap error"       // Î¢Ïß³Ì¶¨Ê±Æ÷¶Ñ´íÎó
-#define MONITOR_MT_POOL_SIZE        "frm.mt pool size"              // Î¢Ïß³Ì³Ø´óĞ¡
+#define MONITOR_MT_EPOLL_FD_ERR     "frm.mt fd error"               // å¾®çº¿ç¨‹fdéæ³•
+#define MONITOR_MT_EPOLL_ERR        "frm.mt epoll error"            // epollé”™è¯¯
+#define MONITOR_MT_POLL_EMPTY       "frm.mt pool empty"             // å¾®çº¿ç¨‹æ± ç©ºäº†
+#define MONITOR_MT_OVERLOAD         "frm.mt overload"               // å¾®çº¿ç¨‹ä¸ªæ•°è¾¾åˆ°ä¸Šçº¿
+#define MONITOR_MT_POLL_INIT_FAIL   "frm.mt pool init failed"       // å¾®çº¿ç¨‹æ± åˆå§‹åŒ–å¤±è´¥
+#define MONITOR_MT_HEAP_ERROR       "frm.mt timer heap error"       // å¾®çº¿ç¨‹å®šæ—¶å™¨å †é”™è¯¯
+#define MONITOR_MT_POOL_SIZE        "frm.mt pool size"              // å¾®çº¿ç¨‹æ± å¤§å°
 #define MONITOR_MT_SOCKET_ERR       "frm.mt create socket failed"   // 320842
-#define MONITOR_MT_SEND_ERR         "frm.mt send failed"            // ·¢ËÍÊ§°Ü
-#define MONITOR_MT_RECV_FAIL        "frm.mt recv failed"            // ½ÓÊÕÊ§°Ü
-#define MONITOR_MT_CONNECT_FAIL     "frm.mt connect failed"         // Á¬½ÓÊ§°Ü
-#define MONITOR_MT_SESSION_EXPIRE   "frm.mt session expired"        // udp session³¬Ê±
+#define MONITOR_MT_SEND_ERR         "frm.mt send failed"            // å‘é€å¤±è´¥
+#define MONITOR_MT_RECV_FAIL        "frm.mt recv failed"            // æ¥æ”¶å¤±è´¥
+#define MONITOR_MT_CONNECT_FAIL     "frm.mt connect failed"         // è¿æ¥å¤±è´¥
+#define MONITOR_MT_SESSION_EXPIRE   "frm.mt session expired"        // udp sessionè¶…æ—¶
 
 #endif
 

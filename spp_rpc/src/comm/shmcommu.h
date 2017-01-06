@@ -39,7 +39,7 @@ public:
     int init(const void* config);
     int clear();
     int poll(bool block = false);
-    int sendto(unsigned flow, void* arg1/*数据blob*/, void* arg2/*暂时保留*/);
+    int sendto(unsigned flow, void* arg1/*鏁版嵁blob*/, void* arg2/*鏆傛椂淇濈暀*/);
     int ctrl(unsigned flow, ctrl_type type, void* arg1, void* arg2);
     int get_msg_count();
 protected:

@@ -26,6 +26,7 @@
 #include "spp_incl/serverbase.h"	//服务器容器
 #include "spp_incl/ICostStat.h"
 #include "spp_incl/monitor.h"
+#include "spp_incl/configini.h"
 
 #define GROUPID(x) (((x)|1<<31))
 

@@ -21,14 +21,14 @@
  * @brief 自动生成的业务代码逻辑实现
  */
 
-#ifndef __$(MODULE_REPLACE)_MSG_HEAD_H__
-#define __$(MODULE_REPLACE)_MSG_HEAD_H__
+#ifndef __$(MODULE_FILENAME_REPLACE)_MSG_HEAD_H__
+#define __$(MODULE_FILENAME_REPLACE)_MSG_HEAD_H__
 
 #include "syncincl.h"
 #include "srpcincl.h"
 #include "$(PROTO_FILE).pb.h"
 
-using namespace $(MODULE_REPLACE);
+using namespace $(MODULE_NAMESPACE_REPLACE);
 
 $(CODE_BEGIN)
 

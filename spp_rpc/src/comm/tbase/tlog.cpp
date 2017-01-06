@@ -397,6 +397,9 @@ int CTLog::shift_file()
 #ifndef _MP_MODE
     cur_file_no_ = new_file_no;
 #endif
+
+    (void)((int)cur_file_no_ == (int)new_file_no);
+
     return open_file();
 }
 

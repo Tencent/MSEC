@@ -19,8 +19,8 @@
 
 /**
  *  @filename mt_sys_hook.h
- *  @info  Î¢Ïß³ÌhookÏµÍ³api, ÒÔ²»ÓÃ¶îÍâ±àÒëµÄÓÅÊÆ, ×ªÍ¬²½ÎªÒì²½¿â
- *         HOOK ²¿·Ö, ²Î¿¼pthÓëlibcoÊµÏÖ
+ *  @info  å¾®çº¿ç¨‹hookç³»ç»Ÿapi, ä»¥ä¸ç”¨é¢å¤–ç¼–è¯‘çš„ä¼˜åŠ¿, è½¬åŒæ­¥ä¸ºå¼‚æ­¥åº“
+ *         HOOK éƒ¨åˆ†, å‚è€ƒpthä¸libcoå®ç°
  */
 
 #ifndef _MT_SYS_HOOK___
@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 /******************************************************************************/
-/*         1. HOOK µÄº¯Êı¶¨Òå²¿·Ö                                             */
+/*         1. HOOK çš„å‡½æ•°å®šä¹‰éƒ¨åˆ†                                             */
 /******************************************************************************/
 
 typedef int (*func_socket)(int domain, int type, int protocol);
@@ -61,11 +61,11 @@ typedef unsigned int (*func_sleep)(unsigned int seconds);
 
 
 /******************************************************************************/
-/*         2.  È«¾ÖµÄhookº¯Êı½á¹¹                                             */
+/*         2.  å…¨å±€çš„hookå‡½æ•°ç»“æ„                                             */
 /******************************************************************************/
 
 /**
- * @brief HookµÄÔ­Ê¼º¯Êı¼¯ÖĞ¹ÜÀí¶¨Òå, Ö§³Ö¶¯Ì¬ĞÂÔö´¦Àí
+ * @brief Hookçš„åŸå§‹å‡½æ•°é›†ä¸­ç®¡ç†å®šä¹‰, æ”¯æŒåŠ¨æ€æ–°å¢å¤„ç†
  */ 
 typedef struct mt_syscall_func_tab
 {
@@ -82,19 +82,19 @@ typedef struct mt_syscall_func_tab
     func_fcntl              real_fcntl;
     func_ioctl              real_ioctl;
     
-    func_sleep              real_sleep;             // Ôİ²»Ö§³Ö£¬ÒòÎªÃ»ÓĞÓëfd¹ØÁª, ·ÀÖ¹ÀÄÓÃ
-    func_select             real_select;            // Ôİ²»Ö§³Ö, 1024ÏŞÖÆÎÊÌâ
-    func_poll               real_poll;              // Ôİ²»Ö§³Ö, È·ÈÏĞèÇóºóÊµÊ©
+    func_sleep              real_sleep;             // æš‚ä¸æ”¯æŒï¼Œå› ä¸ºæ²¡æœ‰ä¸fdå…³è”, é˜²æ­¢æ»¥ç”¨
+    func_select             real_select;            // æš‚ä¸æ”¯æŒ, 1024é™åˆ¶é—®é¢˜
+    func_poll               real_poll;              // æš‚ä¸æ”¯æŒ, ç¡®è®¤éœ€æ±‚åå®æ–½
 
     func_accept             real_accept;
 }MtSyscallFuncTab;
 
 
 /******************************************************************************/
-/*         3.  Ö±½Óµ÷ÓÃÔ­Ê¼ÏµÍ³apiµÄ½Ó¿Ú                                      */
+/*         3.  ç›´æ¥è°ƒç”¨åŸå§‹ç³»ç»Ÿapiçš„æ¥å£                                      */
 /******************************************************************************/
-extern MtSyscallFuncTab  g_mt_syscall_tab;            // È«¾Ö·ûºÅ±í
-extern int               g_mt_hook_flag;              // È«¾Ö¿ØÖÆ±ê¼Ç
+extern MtSyscallFuncTab  g_mt_syscall_tab;            // å…¨å±€ç¬¦å·è¡¨
+extern int               g_mt_hook_flag;              // å…¨å±€æ§åˆ¶æ ‡è®°
 
 #define mt_hook_syscall(name)                                                  \
 do  {                                                                          \

@@ -35,7 +35,7 @@ public final class Head {
      * <code>required uint64 sequence = 10;</code>
      *
      * <pre>
-     * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+     * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
      * </pre>
      */
     boolean hasSequence();
@@ -43,7 +43,7 @@ public final class Head {
      * <code>required uint64 sequence = 10;</code>
      *
      * <pre>
-     * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+     * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
      * </pre>
      */
     long getSequence();
@@ -52,7 +52,7 @@ public final class Head {
      * <code>optional uint32 coloring = 20;</code>
      *
      * <pre>
-     * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+     * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
      * </pre>
      */
     boolean hasColoring();
@@ -60,7 +60,7 @@ public final class Head {
      * <code>optional uint32 coloring = 20;</code>
      *
      * <pre>
-     * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+     * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
      * </pre>
      */
     int getColoring();
@@ -69,7 +69,7 @@ public final class Head {
      * <code>optional uint64 color_id = 21;</code>
      *
      * <pre>
-     * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+     * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
      * </pre>
      */
     boolean hasColorId();
@@ -77,7 +77,7 @@ public final class Head {
      * <code>optional uint64 color_id = 21;</code>
      *
      * <pre>
-     * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+     * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
      * </pre>
      */
     long getColorId();
@@ -86,7 +86,7 @@ public final class Head {
      * <code>optional uint64 flow_id = 30;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+     * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
      * </pre>
      */
     boolean hasFlowId();
@@ -94,7 +94,7 @@ public final class Head {
      * <code>optional uint64 flow_id = 30;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+     * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
      * </pre>
      */
     long getFlowId();
@@ -103,7 +103,7 @@ public final class Head {
      * <code>optional int32 err = 40;</code>
      *
      * <pre>
-     * ¿ò¼Ü´íÎóÂë
+     * æ¡†æ¶é”™è¯¯ç 
      * </pre>
      */
     boolean hasErr();
@@ -111,7 +111,7 @@ public final class Head {
      * <code>optional int32 err = 40;</code>
      *
      * <pre>
-     * ¿ò¼Ü´íÎóÂë
+     * æ¡†æ¶é”™è¯¯ç 
      * </pre>
      */
     int getErr();
@@ -120,7 +120,7 @@ public final class Head {
      * <code>optional int32 result = 41;</code>
      *
      * <pre>
-     * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+     * ä¸šåŠ¡æ¥å£è¿”å›å€¼
      * </pre>
      */
     boolean hasResult();
@@ -128,7 +128,7 @@ public final class Head {
      * <code>optional int32 result = 41;</code>
      *
      * <pre>
-     * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+     * ä¸šåŠ¡æ¥å£è¿”å›å€¼
      * </pre>
      */
     int getResult();
@@ -137,7 +137,7 @@ public final class Head {
      * <code>optional bytes err_msg = 42;</code>
      *
      * <pre>
-     * ´íÎóÃèÊö
+     * é”™è¯¯æè¿°
      * </pre>
      */
     boolean hasErrMsg();
@@ -145,7 +145,7 @@ public final class Head {
      * <code>optional bytes err_msg = 42;</code>
      *
      * <pre>
-     * ´íÎóÃèÊö
+     * é”™è¯¯æè¿°
      * </pre>
      */
     com.google.protobuf.ByteString getErrMsg();
@@ -154,7 +154,7 @@ public final class Head {
      * <code>optional bytes caller = 50;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃ·½ÒµÎñÃû
+     * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
      * </pre>
      */
     boolean hasCaller();
@@ -162,7 +162,7 @@ public final class Head {
      * <code>optional bytes caller = 50;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃ·½ÒµÎñÃû
+     * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
      * </pre>
      */
     com.google.protobuf.ByteString getCaller();
@@ -171,7 +171,7 @@ public final class Head {
      * <code>required bytes method_name = 51;</code>
      *
      * <pre>
-     * RPC·½·¨Ãû
+     * RPCæ–¹æ³•å
      * </pre>
      */
     boolean hasMethodName();
@@ -179,7 +179,7 @@ public final class Head {
      * <code>required bytes method_name = 51;</code>
      *
      * <pre>
-     * RPC·½·¨Ãû
+     * RPCæ–¹æ³•å
      * </pre>
      */
     com.google.protobuf.ByteString getMethodName();
@@ -188,7 +188,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     java.util.List<com.google.protobuf.ByteString> getCallerStackList();
@@ -196,7 +196,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     int getCallerStackCount();
@@ -204,7 +204,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     com.google.protobuf.ByteString getCallerStack(int index);
@@ -213,7 +213,7 @@ public final class Head {
    * Protobuf type {@code srpc.CRpcHead}
    *
    * <pre>
-   * RPCÏûÏ¢Í·¶¨Òå
+   * RPCæ¶ˆæ¯å¤´å®šä¹‰
    * </pre>
    */
   public static final class CRpcHead extends
@@ -367,7 +367,7 @@ public final class Head {
      * <code>required uint64 sequence = 10;</code>
      *
      * <pre>
-     * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+     * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
      * </pre>
      */
     public boolean hasSequence() {
@@ -377,7 +377,7 @@ public final class Head {
      * <code>required uint64 sequence = 10;</code>
      *
      * <pre>
-     * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+     * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
      * </pre>
      */
     public long getSequence() {
@@ -390,7 +390,7 @@ public final class Head {
      * <code>optional uint32 coloring = 20;</code>
      *
      * <pre>
-     * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+     * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
      * </pre>
      */
     public boolean hasColoring() {
@@ -400,7 +400,7 @@ public final class Head {
      * <code>optional uint32 coloring = 20;</code>
      *
      * <pre>
-     * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+     * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
      * </pre>
      */
     public int getColoring() {
@@ -413,7 +413,7 @@ public final class Head {
      * <code>optional uint64 color_id = 21;</code>
      *
      * <pre>
-     * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+     * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
      * </pre>
      */
     public boolean hasColorId() {
@@ -423,7 +423,7 @@ public final class Head {
      * <code>optional uint64 color_id = 21;</code>
      *
      * <pre>
-     * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+     * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
      * </pre>
      */
     public long getColorId() {
@@ -436,7 +436,7 @@ public final class Head {
      * <code>optional uint64 flow_id = 30;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+     * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
      * </pre>
      */
     public boolean hasFlowId() {
@@ -446,7 +446,7 @@ public final class Head {
      * <code>optional uint64 flow_id = 30;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+     * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
      * </pre>
      */
     public long getFlowId() {
@@ -459,7 +459,7 @@ public final class Head {
      * <code>optional int32 err = 40;</code>
      *
      * <pre>
-     * ¿ò¼Ü´íÎóÂë
+     * æ¡†æ¶é”™è¯¯ç 
      * </pre>
      */
     public boolean hasErr() {
@@ -469,7 +469,7 @@ public final class Head {
      * <code>optional int32 err = 40;</code>
      *
      * <pre>
-     * ¿ò¼Ü´íÎóÂë
+     * æ¡†æ¶é”™è¯¯ç 
      * </pre>
      */
     public int getErr() {
@@ -482,7 +482,7 @@ public final class Head {
      * <code>optional int32 result = 41;</code>
      *
      * <pre>
-     * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+     * ä¸šåŠ¡æ¥å£è¿”å›å€¼
      * </pre>
      */
     public boolean hasResult() {
@@ -492,7 +492,7 @@ public final class Head {
      * <code>optional int32 result = 41;</code>
      *
      * <pre>
-     * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+     * ä¸šåŠ¡æ¥å£è¿”å›å€¼
      * </pre>
      */
     public int getResult() {
@@ -505,7 +505,7 @@ public final class Head {
      * <code>optional bytes err_msg = 42;</code>
      *
      * <pre>
-     * ´íÎóÃèÊö
+     * é”™è¯¯æè¿°
      * </pre>
      */
     public boolean hasErrMsg() {
@@ -515,7 +515,7 @@ public final class Head {
      * <code>optional bytes err_msg = 42;</code>
      *
      * <pre>
-     * ´íÎóÃèÊö
+     * é”™è¯¯æè¿°
      * </pre>
      */
     public com.google.protobuf.ByteString getErrMsg() {
@@ -528,7 +528,7 @@ public final class Head {
      * <code>optional bytes caller = 50;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃ·½ÒµÎñÃû
+     * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
      * </pre>
      */
     public boolean hasCaller() {
@@ -538,7 +538,7 @@ public final class Head {
      * <code>optional bytes caller = 50;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃ·½ÒµÎñÃû
+     * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
      * </pre>
      */
     public com.google.protobuf.ByteString getCaller() {
@@ -551,7 +551,7 @@ public final class Head {
      * <code>required bytes method_name = 51;</code>
      *
      * <pre>
-     * RPC·½·¨Ãû
+     * RPCæ–¹æ³•å
      * </pre>
      */
     public boolean hasMethodName() {
@@ -561,7 +561,7 @@ public final class Head {
      * <code>required bytes method_name = 51;</code>
      *
      * <pre>
-     * RPC·½·¨Ãû
+     * RPCæ–¹æ³•å
      * </pre>
      */
     public com.google.protobuf.ByteString getMethodName() {
@@ -574,7 +574,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     public java.util.List<com.google.protobuf.ByteString>
@@ -585,7 +585,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     public int getCallerStackCount() {
@@ -595,7 +595,7 @@ public final class Head {
      * <code>repeated bytes caller_stack = 60;</code>
      *
      * <pre>
-     * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+     * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
      * </pre>
      */
     public com.google.protobuf.ByteString getCallerStack(int index) {
@@ -801,7 +801,7 @@ public final class Head {
      * Protobuf type {@code srpc.CRpcHead}
      *
      * <pre>
-     * RPCÏûÏ¢Í·¶¨Òå
+     * RPCæ¶ˆæ¯å¤´å®šä¹‰
      * </pre>
      */
     public static final class Builder extends
@@ -1022,7 +1022,7 @@ public final class Head {
        * <code>required uint64 sequence = 10;</code>
        *
        * <pre>
-       * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+       * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
        * </pre>
        */
       public boolean hasSequence() {
@@ -1032,7 +1032,7 @@ public final class Head {
        * <code>required uint64 sequence = 10;</code>
        *
        * <pre>
-       * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+       * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
        * </pre>
        */
       public long getSequence() {
@@ -1042,7 +1042,7 @@ public final class Head {
        * <code>required uint64 sequence = 10;</code>
        *
        * <pre>
-       * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+       * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
        * </pre>
        */
       public Builder setSequence(long value) {
@@ -1055,7 +1055,7 @@ public final class Head {
        * <code>required uint64 sequence = 10;</code>
        *
        * <pre>
-       * RPCĞòÁĞºÅ      : ÓÃÓÚ¼ìÑéÃ¿¸ö»Ø°üÕıÈ·ĞÔ
+       * RPCåºåˆ—å·      : ç”¨äºæ£€éªŒæ¯ä¸ªå›åŒ…æ­£ç¡®æ€§
        * </pre>
        */
       public Builder clearSequence() {
@@ -1070,7 +1070,7 @@ public final class Head {
        * <code>optional uint32 coloring = 20;</code>
        *
        * <pre>
-       * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+       * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
        * </pre>
        */
       public boolean hasColoring() {
@@ -1080,7 +1080,7 @@ public final class Head {
        * <code>optional uint32 coloring = 20;</code>
        *
        * <pre>
-       * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+       * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
        * </pre>
        */
       public int getColoring() {
@@ -1090,7 +1090,7 @@ public final class Head {
        * <code>optional uint32 coloring = 20;</code>
        *
        * <pre>
-       * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+       * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
        * </pre>
        */
       public Builder setColoring(int value) {
@@ -1103,7 +1103,7 @@ public final class Head {
        * <code>optional uint32 coloring = 20;</code>
        *
        * <pre>
-       * RPCÇëÇóÈ¾É«±êÖ¾: µ±Ç°ÇëÇóÊÇ·ñÈ¾É«
+       * RPCè¯·æ±‚æŸ“è‰²æ ‡å¿—: å½“å‰è¯·æ±‚æ˜¯å¦æŸ“è‰²
        * </pre>
        */
       public Builder clearColoring() {
@@ -1118,7 +1118,7 @@ public final class Head {
        * <code>optional uint64 color_id = 21;</code>
        *
        * <pre>
-       * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+       * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
        * </pre>
        */
       public boolean hasColorId() {
@@ -1128,7 +1128,7 @@ public final class Head {
        * <code>optional uint64 color_id = 21;</code>
        *
        * <pre>
-       * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+       * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
        * </pre>
        */
       public long getColorId() {
@@ -1138,7 +1138,7 @@ public final class Head {
        * <code>optional uint64 color_id = 21;</code>
        *
        * <pre>
-       * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+       * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
        * </pre>
        */
       public Builder setColorId(long value) {
@@ -1151,7 +1151,7 @@ public final class Head {
        * <code>optional uint64 color_id = 21;</code>
        *
        * <pre>
-       * RPCÈÕÖ¾È¾É«ID  : Ã¿¸ö·½·¨Ò»¸ö
+       * RPCæ—¥å¿—æŸ“è‰²ID  : æ¯ä¸ªæ–¹æ³•ä¸€ä¸ª
        * </pre>
        */
       public Builder clearColorId() {
@@ -1166,7 +1166,7 @@ public final class Head {
        * <code>optional uint64 flow_id = 30;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+       * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
        * </pre>
        */
       public boolean hasFlowId() {
@@ -1176,7 +1176,7 @@ public final class Head {
        * <code>optional uint64 flow_id = 30;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+       * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
        * </pre>
        */
       public long getFlowId() {
@@ -1186,7 +1186,7 @@ public final class Head {
        * <code>optional uint64 flow_id = 30;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+       * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
        * </pre>
        */
       public Builder setFlowId(long value) {
@@ -1199,7 +1199,7 @@ public final class Head {
        * <code>optional uint64 flow_id = 30;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃID      : Ã¿¸ö¿Í»§¶ËÇëÇóÎ¨Ò»±êÊ¶
+       * RPCè°ƒç”¨ID      : æ¯ä¸ªå®¢æˆ·ç«¯è¯·æ±‚å”¯ä¸€æ ‡è¯†
        * </pre>
        */
       public Builder clearFlowId() {
@@ -1214,7 +1214,7 @@ public final class Head {
        * <code>optional int32 err = 40;</code>
        *
        * <pre>
-       * ¿ò¼Ü´íÎóÂë
+       * æ¡†æ¶é”™è¯¯ç 
        * </pre>
        */
       public boolean hasErr() {
@@ -1224,7 +1224,7 @@ public final class Head {
        * <code>optional int32 err = 40;</code>
        *
        * <pre>
-       * ¿ò¼Ü´íÎóÂë
+       * æ¡†æ¶é”™è¯¯ç 
        * </pre>
        */
       public int getErr() {
@@ -1234,7 +1234,7 @@ public final class Head {
        * <code>optional int32 err = 40;</code>
        *
        * <pre>
-       * ¿ò¼Ü´íÎóÂë
+       * æ¡†æ¶é”™è¯¯ç 
        * </pre>
        */
       public Builder setErr(int value) {
@@ -1247,7 +1247,7 @@ public final class Head {
        * <code>optional int32 err = 40;</code>
        *
        * <pre>
-       * ¿ò¼Ü´íÎóÂë
+       * æ¡†æ¶é”™è¯¯ç 
        * </pre>
        */
       public Builder clearErr() {
@@ -1262,7 +1262,7 @@ public final class Head {
        * <code>optional int32 result = 41;</code>
        *
        * <pre>
-       * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+       * ä¸šåŠ¡æ¥å£è¿”å›å€¼
        * </pre>
        */
       public boolean hasResult() {
@@ -1272,7 +1272,7 @@ public final class Head {
        * <code>optional int32 result = 41;</code>
        *
        * <pre>
-       * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+       * ä¸šåŠ¡æ¥å£è¿”å›å€¼
        * </pre>
        */
       public int getResult() {
@@ -1282,7 +1282,7 @@ public final class Head {
        * <code>optional int32 result = 41;</code>
        *
        * <pre>
-       * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+       * ä¸šåŠ¡æ¥å£è¿”å›å€¼
        * </pre>
        */
       public Builder setResult(int value) {
@@ -1295,7 +1295,7 @@ public final class Head {
        * <code>optional int32 result = 41;</code>
        *
        * <pre>
-       * ÒµÎñ½Ó¿Ú·µ»ØÖµ
+       * ä¸šåŠ¡æ¥å£è¿”å›å€¼
        * </pre>
        */
       public Builder clearResult() {
@@ -1310,7 +1310,7 @@ public final class Head {
        * <code>optional bytes err_msg = 42;</code>
        *
        * <pre>
-       * ´íÎóÃèÊö
+       * é”™è¯¯æè¿°
        * </pre>
        */
       public boolean hasErrMsg() {
@@ -1320,7 +1320,7 @@ public final class Head {
        * <code>optional bytes err_msg = 42;</code>
        *
        * <pre>
-       * ´íÎóÃèÊö
+       * é”™è¯¯æè¿°
        * </pre>
        */
       public com.google.protobuf.ByteString getErrMsg() {
@@ -1330,7 +1330,7 @@ public final class Head {
        * <code>optional bytes err_msg = 42;</code>
        *
        * <pre>
-       * ´íÎóÃèÊö
+       * é”™è¯¯æè¿°
        * </pre>
        */
       public Builder setErrMsg(com.google.protobuf.ByteString value) {
@@ -1346,7 +1346,7 @@ public final class Head {
        * <code>optional bytes err_msg = 42;</code>
        *
        * <pre>
-       * ´íÎóÃèÊö
+       * é”™è¯¯æè¿°
        * </pre>
        */
       public Builder clearErrMsg() {
@@ -1361,7 +1361,7 @@ public final class Head {
        * <code>optional bytes caller = 50;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃ·½ÒµÎñÃû
+       * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
        * </pre>
        */
       public boolean hasCaller() {
@@ -1371,7 +1371,7 @@ public final class Head {
        * <code>optional bytes caller = 50;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃ·½ÒµÎñÃû
+       * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
        * </pre>
        */
       public com.google.protobuf.ByteString getCaller() {
@@ -1381,7 +1381,7 @@ public final class Head {
        * <code>optional bytes caller = 50;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃ·½ÒµÎñÃû
+       * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
        * </pre>
        */
       public Builder setCaller(com.google.protobuf.ByteString value) {
@@ -1397,7 +1397,7 @@ public final class Head {
        * <code>optional bytes caller = 50;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃ·½ÒµÎñÃû
+       * RPCè°ƒç”¨æ–¹ä¸šåŠ¡å
        * </pre>
        */
       public Builder clearCaller() {
@@ -1412,7 +1412,7 @@ public final class Head {
        * <code>required bytes method_name = 51;</code>
        *
        * <pre>
-       * RPC·½·¨Ãû
+       * RPCæ–¹æ³•å
        * </pre>
        */
       public boolean hasMethodName() {
@@ -1422,7 +1422,7 @@ public final class Head {
        * <code>required bytes method_name = 51;</code>
        *
        * <pre>
-       * RPC·½·¨Ãû
+       * RPCæ–¹æ³•å
        * </pre>
        */
       public com.google.protobuf.ByteString getMethodName() {
@@ -1432,7 +1432,7 @@ public final class Head {
        * <code>required bytes method_name = 51;</code>
        *
        * <pre>
-       * RPC·½·¨Ãû
+       * RPCæ–¹æ³•å
        * </pre>
        */
       public Builder setMethodName(com.google.protobuf.ByteString value) {
@@ -1448,7 +1448,7 @@ public final class Head {
        * <code>required bytes method_name = 51;</code>
        *
        * <pre>
-       * RPC·½·¨Ãû
+       * RPCæ–¹æ³•å
        * </pre>
        */
       public Builder clearMethodName() {
@@ -1469,7 +1469,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public java.util.List<com.google.protobuf.ByteString>
@@ -1480,7 +1480,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public int getCallerStackCount() {
@@ -1490,7 +1490,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public com.google.protobuf.ByteString getCallerStack(int index) {
@@ -1500,7 +1500,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public Builder setCallerStack(
@@ -1517,7 +1517,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public Builder addCallerStack(com.google.protobuf.ByteString value) {
@@ -1533,7 +1533,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public Builder addAllCallerStack(
@@ -1548,7 +1548,7 @@ public final class Head {
        * <code>repeated bytes caller_stack = 60;</code>
        *
        * <pre>
-       * RPCµ÷ÓÃÕ»ĞÅÏ¢  : ´æ·Å·½·¨Ãû
+       * RPCè°ƒç”¨æ ˆä¿¡æ¯  : å­˜æ”¾æ–¹æ³•å
        * </pre>
        */
       public Builder clearCallerStack() {

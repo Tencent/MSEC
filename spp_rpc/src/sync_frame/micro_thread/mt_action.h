@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_action.h
- *  @info ΢�߳�ACTION���ඨ��
+ *  @info 微线程ACTION基类定义
  **/
 
 #ifndef __MT_ACTION_H__
@@ -35,121 +35,121 @@ namespace NS_MICRO_THREAD {
 
 
 /**
- * @brief ��������״̬��Ƕ���
+ * @brief 并发处理状态标记定义
  */
 enum MULTI_STATE 
 {
-    MULTI_FLAG_UNDEF   = 0x0,       ///< ��ʼ��, δ����
-    MULTI_FLAG_INIT    = 0x1,       ///< socket�����ѳɹ�
-    MULTI_FLAG_OPEN    = 0x2,       ///< socket�����Ѵ�
-    MULTI_FLAG_SEND    = 0x4,       ///< �������Ѿ�����
-    MULTI_FLAG_FIN     = 0x8,       ///< Ӧ�����Ѿ����յ�
+    MULTI_FLAG_UNDEF   = 0x0,       ///< 初始化, 未启动
+    MULTI_FLAG_INIT    = 0x1,       ///< socket创建已成功
+    MULTI_FLAG_OPEN    = 0x2,       ///< socket连接已打开
+    MULTI_FLAG_SEND    = 0x4,       ///< 请求报文已经发送
+    MULTI_FLAG_FIN     = 0x8,       ///< 应答报文已经接收到
 };
 
 /**
- * @brief Э���������Ͷ���
+ * @brief 协议连接类型定义
  */
 enum MULTI_CONNECT 
 {
     CONN_UNKNOWN        = 0,
-    CONN_TYPE_SHORT     = 0x1,          ///< ������, һ�ν�����ر�
-    CONN_TYPE_LONG      = 0x2,          ///< �����ӣ�ÿ��ʹ�ú�, �ɻ����ظ�ʹ��
-    CONN_TYPE_SESSION   = 0x4,          ///< �����ӣ���session id ����, ������
+    CONN_TYPE_SHORT     = 0x1,          ///< 短连接, 一次交互后关闭
+    CONN_TYPE_LONG      = 0x2,          ///< 长连接，每次使用后, 可回收重复使用
+    CONN_TYPE_SESSION   = 0x4,          ///< 长连接，按session id 复用, 防串包
 };
 
 /**
- * @brief �����붨��
+ * @brief 错误码定义
  */
 enum MULTI_ERROR 
 {
     ERR_NONE            =  0,          
-    ERR_SOCKET_FAIL     = -1,          ///< ����sockʧ��
-    ERR_CONNECT_FAIL    = -2,          ///< ����ʧ��
-    ERR_SEND_FAIL       = -3,          ///< ���ͱ���ʧ��
-    ERR_RECV_FAIL       = -4,          ///< ����ʧ��
-    ERR_RECV_TIMEOUT    = -5,          ///< ���ճ�ʱ
-    ERR_EPOLL_FAIL      = -6,          ///< epollʧ��
-    ERR_FRAME_ERROR     = -7,          ///< ���ʧ��
-    ERR_PEER_CLOSE      = -8,          ///< �Է��ر� 
-    ERR_PARAM_ERROR     = -9,          ///< ��������  
-    ERR_MEMORY_ERROR    = -10,         ///< �ڴ�����ʧ��
-    ERR_ENCODE_ERROR    = -11,         ///< ���ʧ��
-    ERR_DST_ADDR_ERROR  = -12,         ///< Ŀ���ַ��ȡʧ��
+    ERR_SOCKET_FAIL     = -1,          ///< 创建sock失败
+    ERR_CONNECT_FAIL    = -2,          ///< 连接失败
+    ERR_SEND_FAIL       = -3,          ///< 发送报文失败
+    ERR_RECV_FAIL       = -4,          ///< 接收失败
+    ERR_RECV_TIMEOUT    = -5,          ///< 接收超时
+    ERR_EPOLL_FAIL      = -6,          ///< epoll失败
+    ERR_FRAME_ERROR     = -7,          ///< 框架失败
+    ERR_PEER_CLOSE      = -8,          ///< 对方关闭 
+    ERR_PARAM_ERROR     = -9,          ///< 参数错误  
+    ERR_MEMORY_ERROR    = -10,         ///< 内存申请失败
+    ERR_ENCODE_ERROR    = -11,         ///< 封包失败
+    ERR_DST_ADDR_ERROR  = -12,         ///< 目标地址获取失败
 };
 
 
 
 
 /**
- * @brief  ΢�̵߳ĺ�˽����������
+ * @brief  微线程的后端交互抽象基类
  */
 class IMtAction : public ISession
 {
 public:
 
     /**
-     * @brief ΢�̲߳�����Ϊ����
+     * @brief 微线程并发行为基类
      */
     IMtAction();
     virtual ~IMtAction();
 
 	/**
-	 * @brief ������������Ϣ (��֤�ӿ����������, ��ʹ��inline)
-     * @param  dst -����������͵ĵ�ַ
+	 * @brief 设置请求报文信息 (保证接口最大灵活兼容, 不使用inline)
+     * @param  dst -请求包待发送的地址
 	 */
 	void SetMsgDstAddr(struct sockaddr_in* dst) {
         memcpy(&_addr, dst, sizeof(_addr));
 	};
 	
 	/**
-	 * @brief ��ȡ��ϢĿ�ĵ�ַ��Ϣ
-     * @return  ע���Ŀ�ĵ�ַ
+	 * @brief 获取消息目的地址信息
+     * @return  注册的目的地址
 	 */
 	struct sockaddr_in* GetMsgDstAddr() {
         return &_addr;
 	};
 
     /**
-     * @brief ����buff��С, ����ʵ��ʹ�õ�msgbuff����
-     * @return  0�ɹ�
+     * @brief 设置buff大小, 决定实际使用的msgbuff队列
+     * @return  0成功
      */
     void SetMsgBuffSize(int buff_size) {
         _buff_size = buff_size;
     };
 
     /**
-     * @brief ��ȡԤ�õ�buff��С
-     * @return  ����������Ϣbuff��󳤶�
+     * @brief 获取预置的buff大小
+     * @return  框架申请的消息buff最大长度
      */
     int GetMsgBuffSize()     {
         return (_buff_size > 0) ? _buff_size : 65535;
     }	 
 
     /**
-     * @brief ���ó�����session������id
-     * @return  0�ɹ�
+     * @brief 设置长连接session的名字id
+     * @return  0成功
      */
     void SetSessionName(int name) {
         _ntfy_name = name;
     };
 
     /**
-     * @brief ��ȡ����session������id
-     * @return  session ע����
+     * @brief 获取连接session的名字id
+     * @return  session 注册名
      */
     int GetSessionName()     {
         return _ntfy_name;
     }	 
 
     /**
-     * @brief ���ñ��δ�����proto��Ϣ
+     * @brief 设置本次处理的proto信息
      */
     void SetProtoType(MULTI_PROTO proto) {
         _proto = proto;
     };
 
     /**
-     * @brief ��ȡ���δ�����proto��Ϣ
+     * @brief 获取本次处理的proto信息
      * @return proto type
      */
     MULTI_PROTO GetProtoType() {
@@ -157,14 +157,14 @@ public:
     };
 
     /**
-     * @brief ���ñ��δ���������������Ϣ
+     * @brief 设置本次处理的连接类型信息
      */
     void SetConnType(MULTI_CONNECT type) {
         _conn_type = type;
     };
 
     /**
-     * @brief ��ȡ���δ���������������Ϣ
+     * @brief 获取本次处理的连接类型信息
      * @return conn type
      */
     MULTI_CONNECT GetConnType() {
@@ -172,14 +172,14 @@ public:
     };     
 
     /**
-     * @brief ���ñ��δ�����errno
+     * @brief 设置本次处理的errno
      */
     void SetErrno(MULTI_ERROR err) {
         _errno = err; 
     };
 
     /**
-     * @brief ��ȡ���δ�����ERRNO��Ϣ
+     * @brief 获取本次处理的ERRNO信息
      * @return ERRONO
      */
     MULTI_ERROR GetErrno() {
@@ -187,14 +187,14 @@ public:
     };     
 
     /**
-     * @brief ���ñ��δ�����timecost
+     * @brief 设置本次处理的timecost
      */
     void SetCost(int cost) {
         _time_cost = cost;
     };
 
     /**
-     * @brief ��ȡ���δ�����timecost��Ϣ
+     * @brief 获取本次处理的timecost信息
      * @return timecost
      */
     int GetCost() {
@@ -202,75 +202,75 @@ public:
     }; 
 
 	/**
-	 * @brief ���ô���״̬��Ϣ
-     * @param  flag -��Ϣ����״̬
+	 * @brief 设置处理状态信息
+     * @param  flag -消息处理状态
 	 */
 	void SetMsgFlag(MULTI_STATE flag) {
         _flag = flag;
 	};
 	 
     /**
-     * @brief ��ȡ����״̬��Ϣ
-     * @return flag -��Ϣ����״̬
+     * @brief 获取处理状态信息
+     * @return flag -消息处理状态
      */
     MULTI_STATE GetMsgFlag() {
         return _flag;
     };
 
     /**
-     * @brief �����ڲ���Ϣָ��
-     * @return IMtConnָ��
+     * @brief 设置内部消息指针
+     * @return IMtConn指针
      */
     void SetIMsgPtr(IMtMsg* msg  ) {
         _msg = msg;
     };
 
     /**
-     * @brief ��ȡ�ڲ���Ϣָ��
-     * @return IMtConnָ��
+     * @brief 获取内部消息指针
+     * @return IMtConn指针
      */
     IMtMsg* GetIMsgPtr() {
         return _msg;
     };
      
     /**
-     * @brief �����ڲ�������ָ��
-     * @return IMtConnָ��
+     * @brief 设置内部连接器指针
+     * @return IMtConn指针
      */
     void SetIConnection(IMtConnection* conn) {
         _conn = conn;
     };
 
     /**
-     * @brief ��ȡ�ڲ�������ָ��
-     * @return IMtConnָ��
+     * @brief 获取内部连接器指针
+     * @return IMtConn指针
      */
     IMtConnection* GetIConnection() {
         return _conn;
     };
 
     /**
-     * @brief ��ʼ����Ҫ�ֶ���Ϣ
+     * @brief 初始化必要字段信息
      */
     void Init();
 
     /**
-     * @brief ��������, ����Action״̬
+     * @brief 允许复用, 清理Action状态
      */
     void Reset();
 
     /**
-     * @brief ��ȡ���Ӷ���, ֪ͨ����, ��Ϣ����
+     * @brief 获取连接对象, 通知对象, 消息对象
      */
     EpollerObj* GetNtfyObj();
 
     /**
-     * @brief ��ȡ���Ӷ���, ֪ͨ����, ��Ϣ����
+     * @brief 获取连接对象, 通知对象, 消息对象
      */
     int InitConnEnv();
 
     /**
-     * @brief �����麯��, �򻯽ӿ���ʵ�ֲ���
+     * @brief 代理虚函数, 简化接口与实现部分
      */
     int DoEncode();
     int DoInput();
@@ -280,44 +280,44 @@ public:
 public:
 
     /**
-     * @brief �������ӵ���Ϣ����ӿ�
-     * @return >0 -�ɹ�, < 0 ʧ�� 
+     * @brief 本次连接的消息打包接口
+     * @return >0 -成功, < 0 失败 
      */
     virtual int HandleEncode(void* buf, int& len, IMtMsg* msg){return 0;};
 
     /**
-     * @brief �������ӵ�CHECK�ӿ�, TCP�ķְ��ӿ�
-     * @return > 0 �Ѿ��ɹ�����,������������С, =0 �����ȴ�, <0 ����(����-65535 UDP����) 
+     * @brief 本次连接的CHECK接口, TCP的分包接口
+     * @return > 0 已经成功接收,返回完整包大小, =0 继续等待, <0 出错(其中-65535 UDP串包) 
      */
     virtual int HandleInput(void* buf, int len, IMtMsg* msg){return 0;};
 
     /**
-     * @brief �������ӵ�Ӧ�����ӿ�, ����һ�������ֶΰ������
-     * @return 0 �ɹ�, ����ʧ��
+     * @brief 本次连接的应答处理接口, 接收一个完整分段包后调用
+     * @return 0 成功, 其他失败
      */
     virtual int HandleProcess(void* buf, int len, IMtMsg* msg){return 0;};
 
     /**
-     * @brief �������Ӵ����Ĵ���֪ͨ, ����μ� MULTI_ERROR ö��
-     * @info  ��handleprocessʧ��, �����쳣�����øýӿ�
-     * @return 0 �ɹ�, ����ʧ��
+     * @brief 本次连接处理的错误通知, 定义参见 MULTI_ERROR 枚举
+     * @info  除handleprocess失败, 其它异常都调用该接口
+     * @return 0 成功, 其他失败
      */
     virtual int HandleError(int err, IMtMsg* msg){return 0;};
 
 
 protected:
 
-    MULTI_STATE         _flag;      // �������������Ϣ, ��ǰ״̬��Ϣ
-    MULTI_PROTO         _proto;     // Э������ UDP/TCP
-    MULTI_CONNECT       _conn_type; // �������� ��������
-	MULTI_ERROR         _errno;     // ��������Ϣ, 0�ɹ���������	
-	struct sockaddr_in  _addr;      // ����ʱ��д��ָ�����͵�stAddr	
-	int                 _time_cost; // ��������Ӧ���ʱ, ����
-	int                 _buff_size; // �����������������Ӧ�𳤶�
-	int                 _ntfy_name; // ������session ntfy������, sessionģ������
+    MULTI_STATE         _flag;      // 处理结束标记信息, 当前状态信息
+    MULTI_PROTO         _proto;     // 协议类型 UDP/TCP
+    MULTI_CONNECT       _conn_type; // 连接类型 长短连接
+	MULTI_ERROR         _errno;     // 错误码信息, 0成功其他错误	
+	struct sockaddr_in  _addr;      // 请求时填写，指定发送的stAddr	
+	int                 _time_cost; // 本次请求应答耗时, 毫秒
+	int                 _buff_size; // 本次请求最大请求与应答长度
+	int                 _ntfy_name; // 关联的session ntfy的名字, session模型适用
 	
-	IMtMsg*             _msg;       // ��Ϣָ��, �ϼ�ָ��
-	IMtConnection*      _conn;      // ������ָ��, �¼�ָ��, ����������
+	IMtMsg*             _msg;       // 消息指针, 上级指针
+	IMtConnection*      _conn;      // 连接器指针, 下级指针, 管理生存期
 
 };
 

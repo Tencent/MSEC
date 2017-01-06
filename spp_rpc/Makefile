@@ -37,3 +37,6 @@ release: all
 	@mv srpc_bin_pkg.tar.gz ./dist
 	@make dev_pkg -C ./src/module
 	@mv ./src/module/srpc_dev_pkg.tar.gz ./dist
+	@make 3nd_api_pkg -C ./src/rpc/php
+	@make 3nd_api_pkg -C ./src/rpc
+	@make 3nd_api_pkg -C ./src/rpc/python

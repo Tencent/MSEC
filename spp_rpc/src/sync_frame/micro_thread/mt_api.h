@@ -19,7 +19,7 @@
 
 /**
  *  @filename mt_api.h
- *  @info  ΢�̷߳�װϵͳapi, ͬ������΢�߳�API��ʵ���첽����
+ *  @info  微线程封装系统api, 同步调用微线程API，实现异步调度
  */
  
 #ifndef __MT_API_H__
@@ -33,64 +33,64 @@ using std::vector;
 namespace NS_MICRO_THREAD {
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: UDP�������շ��ӿ�                                     */
+/*  微线程用户接口定义: UDP短连接收发接口                                     */
 /******************************************************************************/
 
 /**
- * @brief ��������˿ڵ�socket�շ��ӿ�, ��socket������������, ҵ������֤������
- *        [ע��] UDP����buff, ���Ƽ�static����, ��һ�����յ��������Ĵ���[��Ҫ]
- * @param dst -�����͵�Ŀ�ĵ�ַ
- * @param pkg -�������װ�İ���
- * @param len -�������װ�İ��峤��
- * @param rcv_buf -����Ӧ�����buff
- * @param buf_size -modify-����Ӧ�����buff��С, �ɹ�����ʱ, �޸�ΪӦ�������
- * @param timeout -��ʱʱ��, ��λms
- * @return  0 �ɹ�, -1 ��socketʧ��, -2 ��������ʧ��, -3 ����Ӧ��ʧ��, �ɴ�ӡerrno
+ * @brief 采用随机端口的socket收发接口, 由socket来决定上下文, 业务来保证上下文
+ *        [注意] UDP发送buff, 不推荐static变量, 有一定风险导致上下文错乱[重要]
+ * @param dst -请求发送的目的地址
+ * @param pkg -请求包封装的包体
+ * @param len -请求包封装的包体长度
+ * @param rcv_buf -接收应答包的buff
+ * @param buf_size -modify-接收应答包的buff大小, 成功返回时, 修改为应答包长度
+ * @param timeout -超时时间, 单位ms
+ * @return  0 成功, -1 打开socket失败, -2 发送请求失败, -3 接收应答失败, 可打印errno
  */
 int mt_udpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int& buf_size, int timeout);
 
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: TCP���ӳ��շ��ӿ�                                     */
+/*  微线程用户接口定义: TCP连接池收发接口                                     */
 /******************************************************************************/
 
 /**
- * @brief TCP��ⱨ���Ƿ���������Ļص���������
- * @param buf ���ı��滺����
- * @param len �Ѿ����յĳ���
- * @return >0 ʵ�ʵı��ĳ���; 0 ����Ҫ�ȴ�����; <0 �����쳣
+ * @brief TCP检测报文是否接收完整的回调函数定义
+ * @param buf 报文保存缓冲区
+ * @param len 已经接收的长度
+ * @return >0 实际的报文长度; 0 还需要等待接收; <0 报文异常
  */
 typedef int (*MtFuncTcpMsgLen)(void* buf, int len);
 
 /**
- * @brief TCP��������ӳصķ�ʽ����IP/PORT����, ���ӱ���Ĭ��10����
- *        [ע��] tcp���շ���buff, ��������static����, ����������Ĵ��� [��Ҫ]
- * @param dst -�����͵�Ŀ�ĵ�ַ
- * @param pkg -�������װ�İ���
- * @param len -�������װ�İ��峤��
- * @param rcv_buf -����Ӧ�����buff
- * @param buf_size -modify-����Ӧ�����buff��С, �ɹ�����ʱ, �޸�ΪӦ�������
- * @param timeout -��ʱʱ��, ��λms
- * @param check_func -��ⱨ���Ƿ�ɹ����ﺯ��
- * @return  0 �ɹ�, -1 ��socketʧ��, -2 ��������ʧ��, -3 ����Ӧ��ʧ��, 
- *          -4 ����ʧ��, -5 ��ⱨ��ʧ��, -6 ���տռ䲻��, -7 ��������ر����ӣ�-10 ������Ч
+ * @brief TCP会采用连接池的方式复用IP/PORT连接, 连接保持默认10分钟
+ *        [注意] tcp接收发送buff, 不可以是static变量, 否则会上下文错乱 [重要]
+ * @param dst -请求发送的目的地址
+ * @param pkg -请求包封装的包体
+ * @param len -请求包封装的包体长度
+ * @param rcv_buf -接收应答包的buff
+ * @param buf_size -modify-接收应答包的buff大小, 成功返回时, 修改为应答包长度
+ * @param timeout -超时时间, 单位ms
+ * @param check_func -检测报文是否成功到达函数
+ * @return  0 成功, -1 打开socket失败, -2 发送请求失败, -3 接收应答失败, 
+ *          -4 连接失败, -5 检测报文失败, -6 接收空间不够, -7 后端主动关闭连接，-10 参数无效
  */
 int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int& buf_size, 
                   int timeout, MtFuncTcpMsgLen chek_func);
 
 /**
- * @brief TCP��������ӳصķ�ʽ����IP/PORT����, ���ӱ���Ĭ��10����
- *        [ע��] tcp���շ���buff, ��������static����, ����������Ĵ��� [��Ҫ]
- *        [ע��] �޸Ľӿڣ���ע�ⲻҪ����޸ķ���ֵ������֤��mt_tcpsendrcv_ex����ֵƥ�� [��Ҫ]
- * @param dst -�����͵�Ŀ�ĵ�ַ
- * @param pkg -�������װ�İ���
- * @param len -�������װ�İ��峤��
- * @param rcv_buf -����Ӧ�����buff
- * @param buf_size -modify-����Ӧ�����buff��С, �ɹ�����ʱ, �޸�ΪӦ�������
- * @param timeout -��ʱʱ��, ��λms
- * @param check_func -��ⱨ���Ƿ�ɹ����ﺯ��
- * @return  0 �ɹ�, -1 ��socketʧ��, -2 ��������ʧ��, -3 ����Ӧ��ʧ��, 
- *          -4 ����ʧ��, -5 ��ⱨ��ʧ��, -6 ���տռ䲻��, -7 ��������ر����ӣ�-10 ������Ч, -11�ڴ����ʧ��
+ * @brief TCP会采用连接池的方式复用IP/PORT连接, 连接保持默认10分钟
+ *        [注意] tcp接收发送buff, 不可以是static变量, 否则会上下文错乱 [重要]
+ *        [注意] 修改接口，请注意不要随便修改返回值，并保证和mt_tcpsendrcv_ex返回值匹配 [重要]
+ * @param dst -请求发送的目的地址
+ * @param pkg -请求包封装的包体
+ * @param len -请求包封装的包体长度
+ * @param rcv_buf -接收应答包的buff
+ * @param buf_size -modify-接收应答包的buff大小, 成功返回时, 修改为应答包长度
+ * @param timeout -超时时间, 单位ms
+ * @param check_func -检测报文是否成功到达函数
+ * @return  0 成功, -1 打开socket失败, -2 发送请求失败, -3 接收应答失败, 
+ *          -4 连接失败, -5 检测报文失败, -6 接收空间不够, -7 后端主动关闭连接，-10 参数无效, -11内存分配失败
  */
 int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf, int& buf_size,
                       int timeout, MtFuncTcpMsgLen func);
@@ -98,55 +98,55 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
 
 enum MT_TCP_CONN_TYPE
 {
-    MT_TCP_SHORT         = 1, /// ������
-    MT_TCP_LONG          = 2, /// ������
-    MT_TCP_SHORT_SNDONLY = 3, /// ������ֻ��
-    MT_TCP_LONG_SNDONLY  = 4, /// ������ֻ��
+    MT_TCP_SHORT         = 1, /// 短连接
+    MT_TCP_LONG          = 2, /// 长连接
+    MT_TCP_SHORT_SNDONLY = 3, /// 短连接只发
+    MT_TCP_LONG_SNDONLY  = 4, /// 长连接只发
     MT_TCP_BUTT
 };
 
 /**
- * @brief TCP�շ��ӿڣ�����ѡ���˱������ӻ��߶�����
- *        [ע��] tcp���շ���buff, ��������static����, ����������Ĵ��� [��Ҫ]
- * @param dst -�����͵�Ŀ�ĵ�ַ
- * @param pkg -�������װ�İ���
- * @param len -�������װ�İ��峤��
- * @param rcv_buf -����Ӧ�����buff��ֻ�����տ�������ΪNULL
- * @param buf_size -modify-����Ӧ�����buff��С, �ɹ�����ʱ, �޸�ΪӦ������ȣ�ֻ�����գ�����ΪNULL
- * @param timeout -��ʱʱ��, ��λms
- * @param check_func -��ⱨ���Ƿ�ɹ����ﺯ��
- * @param type - ��������
- *               MT_TCP_SHORT: һ��һ�������ӣ�
- *               MT_TCP_LONG : һ��һ�ճ����ӣ�
- *               MT_TCP_LONG_SNDONLY : ֻ�����ճ����ӣ� 
- *               MT_TCP_SHORT_SNDONLY: ֻ�����ն����ӣ�
- * @return  0 �ɹ�, -1 ��socketʧ��, -2 ��������ʧ��, -3 ����Ӧ��ʧ��, 
- *          -4 ����ʧ��, -5 ��ⱨ��ʧ��, -6 ���տռ䲻��, -7 ��������ر�����, -10 ������Ч
+ * @brief TCP收发接口，可以选择后端保持连接或者短连接
+ *        [注意] tcp接收发送buff, 不可以是static变量, 否则会上下文错乱 [重要]
+ * @param dst -请求发送的目的地址
+ * @param pkg -请求包封装的包体
+ * @param len -请求包封装的包体长度
+ * @param rcv_buf -接收应答包的buff，只发不收可以设置为NULL
+ * @param buf_size -modify-接收应答包的buff大小, 成功返回时, 修改为应答包长度，只发不收，设置为NULL
+ * @param timeout -超时时间, 单位ms
+ * @param check_func -检测报文是否成功到达函数
+ * @param type - 连接类型
+ *               MT_TCP_SHORT: 一收一发短连接；
+ *               MT_TCP_LONG : 一发一收长连接；
+ *               MT_TCP_LONG_SNDONLY : 只发不收长连接； 
+ *               MT_TCP_SHORT_SNDONLY: 只发不收短连接；
+ * @return  0 成功, -1 打开socket失败, -2 发送请求失败, -3 接收应答失败, 
+ *          -4 连接失败, -5 检测报文失败, -6 接收空间不够, -7 后端主动关闭连接, -10 参数无效
  */
 int mt_tcpsendrcv_ex(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int* buf_size,
                      int timeout, MtFuncTcpMsgLen func, MT_TCP_CONN_TYPE type = MT_TCP_LONG);
 
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: ΢�߳�Task��·����ģ�ͽӿڶ���                        */
+/*  微线程用户接口定义: 微线程Task多路并发模型接口定义                        */
 /******************************************************************************/
 
 /**
- * @brief  ΢�߳������������
+ * @brief  微线程子任务对象定义
  */
 class IMtTask
 {
 public:
 
     /**
-     * @brief  ΢�߳�������Ĵ���������ں���
-     * @return 0 -�ɹ�, < 0 ʧ�� 
+     * @brief  微线程任务类的处理流程入口函数
+     * @return 0 -成功, < 0 失败 
      */
     virtual int Process() { return -1; };
 
     /**
-     * @brief ����taskִ�н��
-     * @info  ��Process����ֵ
+     * @brief 设置task执行结果
+     * @info  即Process返回值
      */
     void SetResult(int rc)
     {
@@ -154,8 +154,8 @@ public:
     }
 
     /**
-     * @brief ��ȡtaskִ�н��
-     * @info  ��Process����ֵ
+     * @brief 获取task执行结果
+     * @info  即Process返回值
      */
     int GetResult(void)
     {
@@ -163,7 +163,7 @@ public:
     }
 
     /**
-     * @brief ����task����
+     * @brief 设置task类型
      */
     void SetTaskType(int type)
     {
@@ -171,9 +171,9 @@ public:
     }
 
     /**
-     * @brief  ��ȡtask����
-     * @info   ���ҵ���ж���task������ʹ�ø��ֶ����ֲ�ͬ��task����
-     * @return ��ȡtask����
+     * @brief  获取task类型
+     * @info   如果业务有多种task，可以使用该字段区分不同的task类型
+     * @return 获取task类型
      */
     int GetTaskType(void)
     {
@@ -181,194 +181,194 @@ public:
     }
  
     /**
-     * @brief  ΢�߳�������๹��������
+     * @brief  微线程任务基类构造与析构
      */
     IMtTask() {};
     virtual ~IMtTask() {};
 
 protected:
 
-    int _type;      // task���ͣ���������task��ҵ������Զ������ͣ�����ӻ���ת��
-    int _result;    // taskִ�н������Process����ֵ
+    int _type;      // task类型，多种类型task，业务可以自定义类型，方便从基类转换
+    int _result;    // task执行结果，即Process返回值
 };
 
 typedef vector<IMtTask*>  IMtTaskList;
 
 /**
- * @brief ��·IO����, Task-fork-waitģʽ�ӿ�
- * @param req_list -task list ��װ����api��task�б�
- * @return  0 �ɹ�, -1 �������߳�ʧ��
+ * @brief 多路IO并发, Task-fork-wait模式接口
+ * @param req_list -task list 封装独立api的task列表
+ * @return  0 成功, -1 创建子线程失败
  */
 int mt_exec_all_task(IMtTaskList& req_list);
 
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: ΢�̷߳�װϵͳ�ӿ�                                    */
+/*  微线程用户接口定义: 微线程封装系统接口                                    */
 /******************************************************************************/
 
 /**
- * @brief ΢�߳�����sleep�ӿ�, ��λms
- * @info  ҵ����Ҫ�����ó�CPUʱʹ��
+ * @brief 微线程主动sleep接口, 单位ms
+ * @info  业务需要主动让出CPU时使用
  */
 void mt_sleep(int ms);
 
 /**
- * @brief ΢�̻߳�ȡϵͳʱ�䣬��λms
+ * @brief 微线程获取系统时间，单位ms
  */
 unsigned long long mt_time_ms(void);
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: ΢�߳��û�˽�����ݽӿ�                                */
+/*  微线程用户接口定义: 微线程用户私有数据接口                                */
 /******************************************************************************/
 
 /**
- * @brief ���õ�ǰIMtMsg��˽�б���
- * @info  ֻ����ָ�룬�ڴ���Ҫҵ�����
+ * @brief 设置当前IMtMsg的私有变量
+ * @info  只保存指针，内存需要业务分配
  */
 void mt_set_msg_private(void *data);
 
 /**
- * @brief  ��ȡ��ǰIMtMsg��˽�б���
- * @return ˽�б���ָ��
+ * @brief  获取当前IMtMsg的私有变量
+ * @return 私有变量指针
  */
 void* mt_get_msg_private();
 
 
 /******************************************************************************/
-/*  ΢�߳��û��ӿڶ���: ΢�̷߳�װϵͳ�ӿ�(���Ƽ�ʹ��)                        */
+/*  微线程用户接口定义: 微线程封装系统接口(不推荐使用)                        */
 /******************************************************************************/
 
 /**
- * @brief  ΢�߳̿�ܳ�ʼ��
- * @info   ҵ��ʹ��spp������΢�̣߳���Ҫ���øú�����ʼ����ܣ�
- *         ʹ��spp��ֱ�ӵ���SyncFrame�Ŀ�ܳ�ʼ����������
- * @return false:��ʼ��ʧ��  true:��ʼ���ɹ�
+ * @brief  微线程框架初始化
+ * @info   业务不使用spp，裸用微线程，需要调用该函数初始化框架；
+ *         使用spp，直接调用SyncFrame的框架初始化函数即可
+ * @return false:初始化失败  true:初始化成功
  */
 bool mt_init_frame(void);
 
 /**
- * @brief ����΢�̶߳���ջ�ռ��С
- * @info  �Ǳ������ã�Ĭ�ϴ�СΪ128K
+ * @brief 设置微线程独立栈空间大小
+ * @info  非必须设置，默认大小为128K
  */
 void mt_set_stack_size(unsigned int bytes);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� recvfrom
- * @param fd ϵͳsocket��Ϣ
- * @param buf ������Ϣ������ָ��
- * @param len ������Ϣ����������
- * @param from ��Դ��ַ��ָ��
- * @param fromlen ��Դ��ַ�Ľṹ����
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ճ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 recvfrom
+ * @param fd 系统socket信息
+ * @param buf 接收消息缓冲区指针
+ * @param len 接收消息缓冲区长度
+ * @param from 来源地址的指针
+ * @param fromlen 来源地址的结构长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功接收长度, <0 失败
  */
 int mt_recvfrom(int fd, void *buf, int len, int flags, struct sockaddr *from, socklen_t *fromlen, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� sendto
- * @param fd ϵͳsocket��Ϣ
- * @param msg �����͵���Ϣָ��
- * @param len �����͵���Ϣ����
- * @param to Ŀ�ĵ�ַ��ָ��
- * @param tolen Ŀ�ĵ�ַ�Ľṹ����
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ͳ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 sendto
+ * @param fd 系统socket信息
+ * @param msg 待发送的消息指针
+ * @param len 待发送的消息长度
+ * @param to 目的地址的指针
+ * @param tolen 目的地址的结构长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功发送长度, <0 失败
  */
 int mt_sendto(int fd, const void *msg, int len, int flags, const struct sockaddr *to, int tolen, int timeout);
 
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� connect
- * @param fd ϵͳsocket��Ϣ
- * @param addr ָ��server��Ŀ�ĵ�ַ
- * @param addrlen ��ַ�ĳ���
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ͳ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 connect
+ * @param fd 系统socket信息
+ * @param addr 指定server的目的地址
+ * @param addrlen 地址的长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功发送长度, <0 失败
  */
 int mt_connect(int fd, const struct sockaddr *addr, int addrlen, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� accept
- * @param fd �����׽���
- * @param addr �ͻ��˵�ַ
- * @param addrlen ��ַ�ĳ���
- * @param timeout ��ȴ�ʱ��, ����
- * @return >=0 accept��socket������, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 accept
+ * @param fd 监听套接字
+ * @param addr 客户端地址
+ * @param addrlen 地址的长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >=0 accept的socket描述符, <0 失败
  */
 int mt_accept(int fd, struct sockaddr *addr, socklen_t *addrlen, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� read
- * @param fd ϵͳsocket��Ϣ
- * @param buf ������Ϣ������ָ��
- * @param nbyte ������Ϣ����������
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ճ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 read
+ * @param fd 系统socket信息
+ * @param buf 接收消息缓冲区指针
+ * @param nbyte 接收消息缓冲区长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功接收长度, <0 失败
  */
 ssize_t mt_read(int fd, void *buf, size_t nbyte, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� write
- * @param fd ϵͳsocket��Ϣ
- * @param buf �����͵���Ϣָ��
- * @param nbyte �����͵���Ϣ����
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ͳ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 write
+ * @param fd 系统socket信息
+ * @param buf 待发送的消息指针
+ * @param nbyte 待发送的消息长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功发送长度, <0 失败
  */
 ssize_t mt_write(int fd, const void *buf, size_t nbyte, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� recv
- * @param fd ϵͳsocket��Ϣ
- * @param buf ������Ϣ������ָ��
- * @param len ������Ϣ����������
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ճ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 recv
+ * @param fd 系统socket信息
+ * @param buf 接收消息缓冲区指针
+ * @param len 接收消息缓冲区长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功接收长度, <0 失败
  */
 ssize_t mt_recv(int fd, void *buf, int len, int flags, int timeout);
 
 /**
- * @brief ΢�̰߳�����ϵͳIO���� send
- * @param fd ϵͳsocket��Ϣ
- * @param buf �����͵���Ϣָ��
- * @param nbyte �����͵���Ϣ����
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 �ɹ����ͳ���, <0 ʧ��
+ * @brief 微线程包裹的系统IO函数 send
+ * @param fd 系统socket信息
+ * @param buf 待发送的消息指针
+ * @param nbyte 待发送的消息长度
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 成功发送长度, <0 失败
  */
 ssize_t mt_send(int fd, const void *buf, size_t nbyte, int flags, int timeout);
 
 
 /**
- * @brief ΢�̵߳ȴ�epoll�¼��İ�������
- * @param fd ϵͳsocket��Ϣ
- * @param events �ȴ����¼� IN/OUT
- * @param timeout ��ȴ�ʱ��, ����
- * @return >0 ������¼�, <0 ʧ��
+ * @brief 微线程等待epoll事件的包裹函数
+ * @param fd 系统socket信息
+ * @param events 等待的事件 IN/OUT
+ * @param timeout 最长等待时间, 毫秒
+ * @return >0 到达的事件, <0 失败
  */
 int mt_wait_events(int fd, int events, int timeout);
 
 /**
- * @brief ����΢�߳�
- * @param entry   ��ں���ָ�룬���ͼ�ThreadStart
- * @param args    ��ں�������
- * @return   MicroThreadָ��  NULL ʧ��
+ * @brief 创建微线程
+ * @param entry   入口函数指针，类型见ThreadStart
+ * @param args    入口函数参数
+ * @return   MicroThread指针  NULL 失败
  */
 void* mt_start_thread(void* entry, void* args);
 
 /**
- * @brief ��TCP���ӳ��л�ȡ���ӣ����û�У����´���
- * @param dst  Ŀ�ĵ�ַ
- * @param sock socket�ļ�������
- * @return ����΢�߳�TCP���Ӷ���
+ * @brief 从TCP连接池中获取连接，如果没有，则新创建
+ * @param dst  目的地址
+ * @param sock socket文件描述符
+ * @return 返回微线程TCP连接对象
  */
 void *mt_get_keep_conn(struct sockaddr_in* dst, int *sock);
 
 
 /**
- * @brief  �ͷ�TCP���ӵ����ӳ�
- * @param  conn   mt_get_keep_conn���ص����Ӷ���ָ��
- * @param  force  true  -> ǿ���ͷ����ӣ�����������ӳ�
- * @param         false -> �ͷŵ����ӳأ����ӳ����ˣ��ر�����
+ * @brief  释放TCP连接到连接池
+ * @param  conn   mt_get_keep_conn返回的连接对象指针
+ * @param  force  true  -> 强制释放连接，不会放入连接池
+ * @param         false -> 释放到连接池，连接池满了，关闭连接
  */
 void mt_free_keep_conn(void *conn, bool force);
 

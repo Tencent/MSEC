@@ -31,46 +31,46 @@ namespace NS_MICRO_THREAD
 {
 
 /**
- * @brief ¶¨Ê±Æ÷¶ÔÏó»ùÀà
+ * @brief å®šæ—¶å™¨å¯¹è±¡åŸºç±»
  */
 class CTimerNotify : public HeapEntry
 {
 public:
 
     /**
-     * @brief ³¬Ê±Í¨Öªº¯Êı, ×ÓÀàÊµÏÖÂß¼­
+     * @brief è¶…æ—¶é€šçŸ¥å‡½æ•°, å­ç±»å®ç°é€»è¾‘
      */
     virtual void timer_notify() { return;};
     
     /**
-     *  @brief ¶ÑÔªËØÈ¡Öµº¯Êı, ÓÃÓÚ·µ»ØÖµ±È½Ï, Ğè×Óº¯ÊıÊµÏÖ, ·ñÔòÄ¬ÈÏÎŞĞò
-     *  @return ¶ÑÔªËØÓ³ÉäµÄÖµ
+     *  @brief å †å…ƒç´ å–å€¼å‡½æ•°, ç”¨äºè¿”å›å€¼æ¯”è¾ƒ, éœ€å­å‡½æ•°å®ç°, å¦åˆ™é»˜è®¤æ— åº
+     *  @return å †å…ƒç´ æ˜ å°„çš„å€¼
      */
     virtual unsigned long long HeapValue() {
         return (unsigned long long)_time_expired;
     }; 
 
     /**
-     * @brief ¹¹Ôìº¯Êı
+     * @brief æ„é€ å‡½æ•°
      */
     CTimerNotify() : _time_expired(0) {};
 
     /**
-     * @brief ĞéÎö¹¹º¯Êı
+     * @brief è™šææ„å‡½æ•°
      */
     virtual ~CTimerNotify(){};
 
     /**
-     * @brief ÉèÖÃ¾ø¶Ô³¬Ê±Ê±¼ä, µ¥Î»ms
-     * @param expired ¾ø¶Ô³¬Ê±Ê±¼ä msµ¥Î»
+     * @brief è®¾ç½®ç»å¯¹è¶…æ—¶æ—¶é—´, å•ä½ms
+     * @param expired ç»å¯¹è¶…æ—¶æ—¶é—´ mså•ä½
      */
     void set_expired_time(uint64_t expired) {
         _time_expired = expired;    
     };
 
     /**
-     * @brief »ñÈ¡¾ø¶Ô³¬Ê±Ê±¼ä, µ¥Î»ms
-     * @return ¾ø¶Ô³¬Ê±Ê±¼ä msµ¥Î»
+     * @brief è·å–ç»å¯¹è¶…æ—¶æ—¶é—´, å•ä½ms
+     * @return ç»å¯¹è¶…æ—¶æ—¶é—´ mså•ä½
      */
     uint64_t get_expired_time() {
         return _time_expired;        
@@ -78,12 +78,12 @@ public:
 
 private:
 
-    uint64_t        _time_expired;     // ¾ø¶ÔµÄ³¬Ê±Ê±¼ämsµ¥Î»
+    uint64_t        _time_expired;     // ç»å¯¹çš„è¶…æ—¶æ—¶é—´mså•ä½
 };
 
 
 /**
- * @brief ¶¨Ê±Æ÷¹ÜÀíµ¥ÀıÀà
+ * @brief å®šæ—¶å™¨ç®¡ç†å•ä¾‹ç±»
  */
 class CTimerMng
 {
@@ -91,38 +91,38 @@ public:
 
 
     /**
-     * @brief ¹¹Ôìº¯Êı
-     * @param max_item ×î´ó¿É¹ÜÀíµÄ¶¨Ê±Æ÷¶ÔÏóÊıÄ¿(Ö¸ÕëÊıÄ¿)
+     * @brief æ„é€ å‡½æ•°
+     * @param max_item æœ€å¤§å¯ç®¡ç†çš„å®šæ—¶å™¨å¯¹è±¡æ•°ç›®(æŒ‡é’ˆæ•°ç›®)
      */
     explicit CTimerMng(uint32_t max_item = 100000);    
 
     /**
-     * @brief Îö¹¹º¯Êı
+     * @brief ææ„å‡½æ•°
      */
     ~CTimerMng();
 
     /**
-     * @brief ¶¨Ê±Æ÷ÉèÖÃº¯Êı
-     * @param timerable ¶¨Ê±Æ÷¶ÔÏó
-     * @param interval  ³¬Ê±µÄ¼ä¸ô msµ¥Î»
-     * @return ³É¹¦·µ»Øtrue, ·ñÔòÊ§°Ü
+     * @brief å®šæ—¶å™¨è®¾ç½®å‡½æ•°
+     * @param timerable å®šæ—¶å™¨å¯¹è±¡
+     * @param interval  è¶…æ—¶çš„é—´éš” mså•ä½
+     * @return æˆåŠŸè¿”å›true, å¦åˆ™å¤±è´¥
      */
     bool start_timer(CTimerNotify* timerable, uint32_t interval);    
 
     /**
-     * @brief ¶¨Ê±Æ÷Í£Ö¹½Ó¿Úº¯Êı
-     * @param timerable ¶¨Ê±Æ÷¶ÔÏó
+     * @brief å®šæ—¶å™¨åœæ­¢æ¥å£å‡½æ•°
+     * @param timerable å®šæ—¶å™¨å¯¹è±¡
      */
     void stop_timer(CTimerNotify* timerable);
 
     /**
-     * @brief ¶¨Ê±Æ÷³¬Ê±¼ì²âº¯Êı
+     * @brief å®šæ—¶å™¨è¶…æ—¶æ£€æµ‹å‡½æ•°
      */
     void check_expired();
 
 private:
     
-    HeapList*           _heap;      // ×îĞ¡¶ÑÖ¸Õë
+    HeapList*           _heap;      // æœ€å°å †æŒ‡é’ˆ
 };
 
 }

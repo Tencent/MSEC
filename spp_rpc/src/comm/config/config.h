@@ -34,49 +34,49 @@ using namespace std;
 #define NLB_GROUP "NLB"
 #define LOG_GROUP "LOG"
 
-// ÈÕÖ¾ÅäÖÃ
+// æ—¥å¿—é…ç½®
 struct Log
 {
-    int level;       // ÈÕÖ¾µÈ¼¶
-    int type;        // ÈÕÖ¾ÀàĞÍ
-    int maxfilesize; // ÈÕÖ¾ÎÄ¼ş´óĞ¡
-    int maxfilenum;  // ÈÕÖ¾ÎÄ¼ş¸öÊı
+    int level;       // æ—¥å¿—ç­‰çº§
+    int type;        // æ—¥å¿—ç±»å‹
+    int maxfilesize; // æ—¥å¿—æ–‡ä»¶å¤§å°
+    int maxfilenum;  // æ—¥å¿—æ–‡ä»¶ä¸ªæ•°
 
     Log():level(tbase::tlog::LOG_ERROR), type(tbase::tlog::LOG_TYPE_CYCLE), maxfilesize(10240000), maxfilenum(10) {}
 };
 
-// ¼àÌıµØÖ·
+// ç›‘å¬åœ°å€
 struct Listen
 {
-    std::string type;       // ¼àÌıµØÖ·ÀàĞÍ  TCP/UDP
-    std::string intf;       // ½Ó¿ÚµØÖ·      eth0/eth1...
-    int         port;       // ¼àÌı¶Ë¿Ú
-    int         oob;        // ÊÇ·ñ´ò¿ªoob
+    std::string type;       // ç›‘å¬åœ°å€ç±»å‹  TCP/UDP
+    std::string intf;       // æ¥å£åœ°å€      eth0/eth1...
+    int         port;       // ç›‘å¬ç«¯å£
+    int         oob;        // æ˜¯å¦æ‰“å¼€oob
 
     Listen(): port(-1), oob(0) {}
 };
 
-// ËùÓĞÅäÖÃĞÅÏ¢
+// æ‰€æœ‰é…ç½®ä¿¡æ¯
 struct Config
 {
-    std::vector<Listen> listens;    // ¼àÌıµØÖ·
+    std::vector<Listen> listens;    // ç›‘å¬åœ°å€
     //std::vector<std::string> nlb_preload;
-    std::string         service;    // ÒµÎñÃû
-    std::string         module;     // ÒµÎñso
-    std::string         conf;       // ÒµÎñÅäÖÃÎÄ¼şÂ·¾¶
-    Log  log;                       // ÈÕÖ¾
-    int  timeout;                   // ¿ÕÏĞÁ¬½Ó³¬Ê±Ê±¼ä µ¥Î»: Ãë
-    int  msg_timeout;               // ÏûÏ¢¹ıÔØ±£»¤ÊÂ¼ş µ¥Î»: ms
-    int  global;                    // dlopen ±êÖ¾ RTLD_GLOBAL
-    int  procnum;                   // ½ø³ÌÊı
-    int  shmsize;                   // ¹²ÏíÄÚ´æ´óĞ¡
-    int  heartbeat;                 // ĞÄÌøÊ±¼ä
-    int  reload;                    // ÈÈ¼ÓÔØ±ê¼Ç
+    std::string         service;    // ä¸šåŠ¡å
+    std::string         module;     // ä¸šåŠ¡so
+    std::string         conf;       // ä¸šåŠ¡é…ç½®æ–‡ä»¶è·¯å¾„
+    Log  log;                       // æ—¥å¿—
+    int  timeout;                   // ç©ºé—²è¿æ¥è¶…æ—¶æ—¶é—´ å•ä½: ç§’
+    int  msg_timeout;               // æ¶ˆæ¯è¿‡è½½ä¿æŠ¤äº‹ä»¶ å•ä½: ms
+    int  global;                    // dlopen æ ‡å¿— RTLD_GLOBAL
+    int  procnum;                   // è¿›ç¨‹æ•°
+    int  shmsize;                   // å…±äº«å†…å­˜å¤§å°
+    int  heartbeat;                 // å¿ƒè·³æ—¶é—´
+    int  reload;                    // çƒ­åŠ è½½æ ‡è®°
 
     Config(): module("./msec.so"), timeout(60), msg_timeout(800), global(1), procnum(4), shmsize(16), heartbeat(60), reload(0) {}
 };
 
-// ÅäÖÃ¶ÁÈ¡Àà
+// é…ç½®è¯»å–ç±»
 class ConfigLoader
 {
 public:
@@ -85,6 +85,7 @@ public:
 
     void SetDefaultListen(void);
     void SetDefaultService(void);
+    void SetDefaultProcnum(void);
     int Init(const char *filename);
     int Reload(const char *filename);
     Config &GetConfig(void);
@@ -96,60 +97,65 @@ public:
     static string filename_;
 };
 
+// è·å–ä¸šåŠ¡å
+// "/msec/s1/s2/bin", ç”Ÿæˆ"s1.s2"
+int GetServiceName(string &name);
+
+int GetConfig(const string &session, const string &key, string &val);
 
 #if 0
-// È«¾ÖÅäÖÃ
+// å…¨å±€é…ç½®
 struct Global
 {
-    std::vector<Listen> listens;  // ¼àÌıµØÖ·
-    std::string         service;  // ÒµÎñÃû
-    int  timeout;    // ¿ÕÏĞÁ¬½Ó³¬Ê±Ê±¼ä µ¥Î»: Ãë
-    int  TOS;        // ÊÇ·ñ´ò¿ªTOS
-    bool udpclose;   // udp»Ø°ü¹Ø±Õ±êÖ¾
+    std::vector<Listen> listens;  // ç›‘å¬åœ°å€
+    std::string         service;  // ä¸šåŠ¡å
+    int  timeout;    // ç©ºé—²è¿æ¥è¶…æ—¶æ—¶é—´ å•ä½: ç§’
+    int  TOS;        // æ˜¯å¦æ‰“å¼€TOS
+    bool udpclose;   // udpå›åŒ…å…³é—­æ ‡å¿—
 
     Global(): timeout(60), TOS(0), udpclose(true) {}
 };
 
-// controllerÅäÖÃ
+// controlleré…ç½®
 struct CtrlConf
 {
-    Log  flog;       // ÈÕÖ¾
+    Log  flog;       // æ—¥å¿—
 };
 
-// proxyÅäÖÃ
+// proxyé…ç½®
 struct ProxyConf
 {
-    int interval;       // ÉÏ±¨ĞÄÌøÊ±¼ä¼ä¸ô
-    int global;         // dlopen ±êÖ¾ RTLD_GLOBAL
-    int maxconn;        // ×î´óÁ¬½ÓÊı
+    int interval;       // ä¸ŠæŠ¥å¿ƒè·³æ—¶é—´é—´éš”
+    int global;         // dlopen æ ‡å¿— RTLD_GLOBAL
+    int maxconn;        // æœ€å¤§è¿æ¥æ•°
     int maxpkg;
     int sendcache_limit;
-    Log flog;           // ¿ò¼ÜÈÕÖ¾
-    Log log;            // ÒµÎñÈÕÖ¾
+    Log flog;           // æ¡†æ¶æ—¥å¿—
+    Log log;            // ä¸šåŠ¡æ—¥å¿—
 
-    std::string module; // ÒµÎñso
+    std::string module; // ä¸šåŠ¡so
     std::string result;
-    std::string conf;   // ÒµÎñË½ÓĞÅäÖÃÎÄ¼şÂ·¾¶
+    std::string conf;   // ä¸šåŠ¡ç§æœ‰é…ç½®æ–‡ä»¶è·¯å¾„
     std::string type;   // 
 
     ProxyConf(): interval(20), global(0), maxconn(100000), sendcache_limit(-1) {}
 };
 
-// workerÅäÖÃ
+// workeré…ç½®
 struct WorkerConf
 {
-    int id;         // worker×éID
-    int procnum;    // ½ø³ÌÊı
-    int interval;   // ÉÏ±¨ĞÄÌøÊ±¼ä¼ä¸ô
-    int reload;     // ÈÈÖØÆô±ê¼Ç
-    int global;     // dlopen ±êÖ¾ RTLD_GLOBAL
-    int shmsize;    // ¹²ÏíÄÚ´æ´óĞ¡ µ¥Î»:MB
-    int timeout;    // ¹ıÔØÊ±¼ä µ¥Î»:ms
-    int TOS;        // ºó¶Ë½»»¥ÊÇ·ñ´ò¿ªTOS
-    int exitsignal; // ÍË³öĞÅºÅ
+    int id;         // workerç»„ID
+    int procnum;    // è¿›ç¨‹æ•°
+    int interval;   // ä¸ŠæŠ¥å¿ƒè·³æ—¶é—´é—´éš”
+    int reload;     // çƒ­é‡å¯æ ‡è®°
+    int global;     // dlopen æ ‡å¿— RTLD_GLOBAL
+    int shmsize;    // å…±äº«å†…å­˜å¤§å° å•ä½:MB
+    int timeout;    // è¿‡è½½æ—¶é—´ å•ä½:ms
+    int TOS;        // åç«¯äº¤äº’æ˜¯å¦æ‰“å¼€TOS
+    int exitsignal; // é€€å‡ºä¿¡å·
 
-    Log flog;       // ¿ò¼ÜÈÕÖ¾
-    Log log;        // ÒµÎñÈÕÖ¾
+    Log flog;       // æ¡†æ¶æ—¥å¿—
+    Log log;        // ä¸šåŠ¡æ—¥å¿—
 
     std::string module;
     std::string result;

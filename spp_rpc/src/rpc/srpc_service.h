@@ -54,6 +54,10 @@ int32_t CallMethod(const std::string &service_name,
                    Message &response,
                    int32_t timeout=800,
                    int32_t proto=PORT_TYPE_ALL);
+enum {
+    PROTO_TYPE_PB   = 1,
+    PROTO_TYPE_JSON = 2,
+};
 
 /**
  * @brief RPC的消息基类定义
@@ -72,10 +76,14 @@ public:
     // 对象注册克隆用法
     virtual CRpcMsgBase* New() = 0;
 
+    // 设置协议类型 PROTO_TYPE_PB/PROTO_TYPE_JSON
+    void SetProtoType(int type = PROTO_TYPE_PB);
+
+    // 获取协议类型
+    int GetProtoType(void);
+
     // 设置method信息
-    void SetMethodInfo(CMethodInfo *method_info) {
-        m_method_info = method_info;
-    }
+    void SetMethodInfo(CMethodInfo *method_info);
 
     // 获取日志选项
     CLogOption& GetLogOption() {
@@ -100,6 +108,7 @@ public:
     Message*        m_response;
     Service*        m_service;
     const MethodDescriptor* m_method;
+    int             m_proto_type;
 };
 
 /**

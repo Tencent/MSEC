@@ -53,7 +53,7 @@ namespace NS_MICRO_THREAD {
 
 
 /******************************************************************************/
-/*  ²Ù×÷ÏµÍ³Í·ÎÄ¼şÊÊÅä¶¨Òå                                                    */
+/*  æ“ä½œç³»ç»Ÿå¤´æ–‡ä»¶é€‚é…å®šä¹‰                                                    */
 /******************************************************************************/
 
 /**
@@ -96,30 +96,30 @@ do {                                                                        \
 
 
 /******************************************************************************/
-/*  Epoll proxy ¶¨ÒåÓëÊµÏÖ²¿·Ö                                                */
+/*  Epoll proxy å®šä¹‰ä¸å®ç°éƒ¨åˆ†                                                */
 /******************************************************************************/
 
 class EpollProxy;
 class MicroThread;
 
 /**
- *  @brief epollÍ¨Öª¶ÔÏó»ùÀà¶¨Òå
+ *  @brief epollé€šçŸ¥å¯¹è±¡åŸºç±»å®šä¹‰
  */
 class EpollerObj
 {
 protected:
-    int _fd;                ///< ÏµÍ³FD »ò socket
-    int _events;            ///< ¼àÌıµÄÊÂ¼şÀàĞÍ
-    int _revents;           ///< ÊÕµ½µÄÊÂ¼şÀàĞÍ
-    int _type;              ///< ¹¤³§Àà±ğ¶¨Òå
-    MicroThread* _thread;   ///< ¹ØÁªÏß³ÌÖ¸Õë¶ÔÏó
+    int _fd;                ///< ç³»ç»ŸFD æˆ– socket
+    int _events;            ///< ç›‘å¬çš„äº‹ä»¶ç±»å‹
+    int _revents;           ///< æ”¶åˆ°çš„äº‹ä»¶ç±»å‹
+    int _type;              ///< å·¥å‚ç±»åˆ«å®šä¹‰
+    MicroThread* _thread;   ///< å…³è”çº¿ç¨‹æŒ‡é’ˆå¯¹è±¡
 
 public:
 
-    TAILQ_ENTRY(EpollerObj) _entry;       ///< ¹ØÁªÎ¢Ïß³ÌµÄ¹ÜÀíÈë¿Ú
+    TAILQ_ENTRY(EpollerObj) _entry;       ///< å…³è”å¾®çº¿ç¨‹çš„ç®¡ç†å…¥å£
     
     /**
-     *  @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     *  @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     explicit EpollerObj(int fd = -1) {
         _fd      = fd;
@@ -131,72 +131,72 @@ public:
     virtual ~EpollerObj(){};
 
     /**
-     *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int InputNotify();
     
     /**
-     *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int OutputNotify();
     
     /**
-     *  @brief Òì³£Í¨Öª½Ó¿Ú
-     *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+     *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+     *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
      */
     virtual int HangupNotify();
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlAdd(void* args);
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlDel(void* args);
 
     /**
-     *  @brief fd´ò¿ª¿É¶ÁÊÂ¼şÕìÌı
+     *  @brief fdæ‰“å¼€å¯è¯»äº‹ä»¶ä¾¦å¬
      */
     void EnableInput() {    _events |= EPOLLIN; };
 
     /**
-     *  @brief fd´ò¿ª¿ÉĞ´ÊÂ¼şÕìÌı
+     *  @brief fdæ‰“å¼€å¯å†™äº‹ä»¶ä¾¦å¬
      */
     void EnableOutput() {     _events |= EPOLLOUT; };
 
     /**
-     *  @brief fd¹Ø±Õ¿É¶ÁÊÂ¼şÕìÌı
+     *  @brief fdå…³é—­å¯è¯»äº‹ä»¶ä¾¦å¬
      */
     void DisableInput() {   _events &= ~EPOLLIN; };
 
     /**
-     *  @brief fd¹Ø±Õ¿ÉĞ´ÊÂ¼şÕìÌı
+     *  @brief fdå…³é—­å¯å†™äº‹ä»¶ä¾¦å¬
      */
     void DisableOutput() {    _events &= ~EPOLLOUT; };
 
     /**
-     *  @brief ÏµÍ³socketÉèÖÃ¶ÁÈ¡·â×°
+     *  @brief ç³»ç»Ÿsocketè®¾ç½®è¯»å–å°è£…
      */
     int GetOsfd() { return _fd; };
     void SetOsfd(int fd) {   _fd = fd; };
 
     /**
-     *  @brief ¼àÌıÊÂ¼şÓëÊÕµ½ÊÂ¼şµÄ·ÃÎÊ·½·¨
+     *  @brief ç›‘å¬äº‹ä»¶ä¸æ”¶åˆ°äº‹ä»¶çš„è®¿é—®æ–¹æ³•
      */
     int GetEvents() { return _events; };
     void SetRcvEvents(int revents) { _revents = revents; };
     int GetRcvEvents() { return _revents; };
 
     /**
-     *  @brief ¹¤³§¹ÜÀí·½·¨, »ñÈ¡ÕæÊµÀàĞÍ
+     *  @brief å·¥å‚ç®¡ç†æ–¹æ³•, è·å–çœŸå®ç±»å‹
      */
     int GetNtfyType() {    return _type; };
     virtual void Reset() {
@@ -208,35 +208,35 @@ public:
     };
         
     /**
-     *  @brief ÉèÖÃÓë»ñÈ¡ËùÊôµÄÎ¢Ïß³Ì¾ä±ú½Ó¿Ú
-     *  @param thread ¹ØÁªµÄÏß³ÌÖ¸Õë
+     *  @brief è®¾ç½®ä¸è·å–æ‰€å±çš„å¾®çº¿ç¨‹å¥æŸ„æ¥å£
+     *  @param thread å…³è”çš„çº¿ç¨‹æŒ‡é’ˆ
      */
     void SetOwnerThread(MicroThread* thread) {      _thread = thread; };
     MicroThread* GetOwnerThread() {        return _thread; };
     
 };
 
-typedef TAILQ_HEAD(__EpFdList, EpollerObj) EpObjList;  ///< ¸ßĞ§µÄË«Á´¹ÜÀí 
-typedef struct epoll_event EpEvent;                 ///< ÖØ¶¨ÒåÒ»ÏÂepoll event
+typedef TAILQ_HEAD(__EpFdList, EpollerObj) EpObjList;  ///< é«˜æ•ˆçš„åŒé“¾ç®¡ç† 
+typedef struct epoll_event EpEvent;                 ///< é‡å®šä¹‰ä¸€ä¸‹epoll event
 
 
 /**
- *  @brief EPOLLÖ§³ÖÍ¬Ò»FD¶à¸öÏß³ÌÕìÌı, ½¨Á¢Ò»¸öÒıÓÃ¼ÆÊıÊı×é, ÔªËØ¶¨Òå
- *  @info  ÒıÓÃ¼ÆÊı±×´óÓÚÀû, Ã»ÓĞÊµ¼ÊÒâÒå, ×Ö¶Î±£Áô, ¹¦ÄÜÒÆ³ıµô 20150623
+ *  @brief EPOLLæ”¯æŒåŒä¸€FDå¤šä¸ªçº¿ç¨‹ä¾¦å¬, å»ºç«‹ä¸€ä¸ªå¼•ç”¨è®¡æ•°æ•°ç»„, å…ƒç´ å®šä¹‰
+ *  @info  å¼•ç”¨è®¡æ•°å¼Šå¤§äºåˆ©, æ²¡æœ‰å®é™…æ„ä¹‰, å­—æ®µä¿ç•™, åŠŸèƒ½ç§»é™¤æ‰ 20150623
  */
 class FdRef
 {
 private:
-    int _wr_ref;             ///< ¼àÌıĞ´µÄÒıÓÃ¼ÆÊı
-    int _rd_ref;             ///< ¼àÌı¶ÁµÄÒıÓÃ¼ÆÊı
-    int _events;             ///< µ±Ç°ÕıÔÚÕìÌıµÄÊÂ¼şÁĞ±í
-    int _revents;            ///< µ±Ç°¸ÃfdÊÕµ½µÄÊÂ¼şĞÅÏ¢, ½öÔÚepoll_waitºó´¦ÀíÖĞÓĞĞ§
-    EpollerObj* _epobj;      ///< µ¥¶À×¢²áµ÷¶ÈÆ÷¶ÔÏó£¬Ò»¸öfd¹ØÁªÒ»¸ö¶ÔÏó
+    int _wr_ref;             ///< ç›‘å¬å†™çš„å¼•ç”¨è®¡æ•°
+    int _rd_ref;             ///< ç›‘å¬è¯»çš„å¼•ç”¨è®¡æ•°
+    int _events;             ///< å½“å‰æ­£åœ¨ä¾¦å¬çš„äº‹ä»¶åˆ—è¡¨
+    int _revents;            ///< å½“å‰è¯¥fdæ”¶åˆ°çš„äº‹ä»¶ä¿¡æ¯, ä»…åœ¨epoll_waitåå¤„ç†ä¸­æœ‰æ•ˆ
+    EpollerObj* _epobj;      ///< å•ç‹¬æ³¨å†Œè°ƒåº¦å™¨å¯¹è±¡ï¼Œä¸€ä¸ªfdå…³è”ä¸€ä¸ªå¯¹è±¡
 
 public:
 
     /**
-     *  @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     *  @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     FdRef() {
         _wr_ref  = 0;
@@ -248,7 +248,7 @@ public:
     ~FdRef(){};
 
     /**
-     *  @brief ¼àÌıÊÂ¼ş»ñÈ¡ÓëÉèÖÃ½Ó¿Ú
+     *  @brief ç›‘å¬äº‹ä»¶è·å–ä¸è®¾ç½®æ¥å£
      */
     void SetListenEvents(int events) {
         _events = events;
@@ -258,7 +258,7 @@ public:
     };
 
     /**
-     *  @brief ¼àÌı¶ÔÏó»ñÈ¡ÓëÉèÖÃ½Ó¿Ú
+     *  @brief ç›‘å¬å¯¹è±¡è·å–ä¸è®¾ç½®æ¥å£
      */
     void SetNotifyObj(EpollerObj* ntfy) {
         _epobj = ntfy;
@@ -268,7 +268,7 @@ public:
     };
 
     /**
-     *  @brief ¼àÌıÒıÓÃ¼ÆÊıµÄ¸üĞÂ
+     *  @brief ç›‘å¬å¼•ç”¨è®¡æ•°çš„æ›´æ–°
      */
     void AttachEvents(int event) {
         if (event & EPOLLIN) {
@@ -296,7 +296,7 @@ public:
     };
 
     /**
-     * @brief »ñÈ¡ÒıÓÃ¼ÆÊı
+     * @brief è·å–å¼•ç”¨è®¡æ•°
      */
     int ReadRefCnt() { return _rd_ref; };
     int WriteRefCnt() { return _wr_ref; };
@@ -305,101 +305,101 @@ public:
 
 
 /**
- *  @brief EPOLL´úÀí, ·â×°epoll²Ù×÷ÓëepollÈ«¾ÖÊı¾İ
+ *  @brief EPOLLä»£ç†, å°è£…epollæ“ä½œä¸epollå…¨å±€æ•°æ®
  */
 class EpollProxy
 {
 public:
-    static const int DEFAULT_MAX_FD_NUM = 100000;   ///< Ä¬ÈÏ×î´ó¼à¿ØµÄfd
+    static const int DEFAULT_MAX_FD_NUM = 100000;   ///< é»˜è®¤æœ€å¤§ç›‘æ§çš„fd
     
 private:  
-    int                 _epfd;                      ///< epoll Ö÷¾ä±ú
-    int                 _maxfd;                     ///< ×î´óµÄÎÄ¼ş¾ä±úÊı    
-    EpEvent*            _evtlist;                   ///< epoll·µ»Ø¸øÓÃ»§µÄÊÂ¼şÁĞ±íÖ¸Õë
-    FdRef*              _eprefs;                    ///< ÓÃ»§¼àÌıµÄÊÂ¼ş±¾µØ¹ÜÀíÊı×é
+    int                 _epfd;                      ///< epoll ä¸»å¥æŸ„
+    int                 _maxfd;                     ///< æœ€å¤§çš„æ–‡ä»¶å¥æŸ„æ•°    
+    EpEvent*            _evtlist;                   ///< epollè¿”å›ç»™ç”¨æˆ·çš„äº‹ä»¶åˆ—è¡¨æŒ‡é’ˆ
+    FdRef*              _eprefs;                    ///< ç”¨æˆ·ç›‘å¬çš„äº‹ä»¶æœ¬åœ°ç®¡ç†æ•°ç»„
     
 public:  
 
     /**
-     *  @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     *  @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     EpollProxy();
     virtual ~EpollProxy(){};
 
     /**
-     *  @brief epoll³õÊ¼»¯ÓëÖÕÖ¹´¦Àí, ÉêÇë¶¯Ì¬ÄÚ´æµÈ
-     *  @param max_num ×î´ó¿É¹ÜÀíµÄfdÊıÄ¿
+     *  @brief epollåˆå§‹åŒ–ä¸ç»ˆæ­¢å¤„ç†, ç”³è¯·åŠ¨æ€å†…å­˜ç­‰
+     *  @param max_num æœ€å¤§å¯ç®¡ç†çš„fdæ•°ç›®
      */
     int InitEpoll(int max_num);
     void TermEpoll(void);
 
     /**
-     *  @brief epoll_wait »ñÈ¡×î´óµÈ´ıÊ±¼ä½Ó¿Ú
-     *  @return Ä¿Ç°ĞèÒªµÈ´ıµÄÊ±¼ä, µ¥Î»MS
+     *  @brief epoll_wait è·å–æœ€å¤§ç­‰å¾…æ—¶é—´æ¥å£
+     *  @return ç›®å‰éœ€è¦ç­‰å¾…çš„æ—¶é—´, å•ä½MS
      */
     virtual int EpollGetTimeout(void) {     return 0;};
 
     /**
-     *  @brief epoll ´¥·¢µ÷¶È½Ó¿Ú
-     *  @param fdlist ¶àÂ·²¢·¢ÇëÇó, ËùÓĞ·¢ËÍµÄsocket¼¯ºÏ
-     *  @param fd    µ¥¸ösocket, ´¥·¢µÈ´ı
-     *  @param timeout ³¬Ê±Ê±¼äÉèÖÃ, ºÁÃë
-     *  @return true ³É¹¦, false Ê§°Ü
+     *  @brief epoll è§¦å‘è°ƒåº¦æ¥å£
+     *  @param fdlist å¤šè·¯å¹¶å‘è¯·æ±‚, æ‰€æœ‰å‘é€çš„socketé›†åˆ
+     *  @param fd    å•ä¸ªsocket, è§¦å‘ç­‰å¾…
+     *  @param timeout è¶…æ—¶æ—¶é—´è®¾ç½®, æ¯«ç§’
+     *  @return true æˆåŠŸ, false å¤±è´¥
      */
     virtual bool EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout) { return false;};
     
     /**
-     *  @brief ½«Ò»¸öÎ¢Ïß³ÌÕìÌıµÄËùÓĞsocketËÍÈëepoll¹ÜÀí
-     *  @param fdset Î¢Ïß³ÌÕìÌıµÄsocket¼¯ºÏ
-     *  @return true ³É¹¦, false Ê§°Ü
+     *  @brief å°†ä¸€ä¸ªå¾®çº¿ç¨‹ä¾¦å¬çš„æ‰€æœ‰socketé€å…¥epollç®¡ç†
+     *  @param fdset å¾®çº¿ç¨‹ä¾¦å¬çš„socketé›†åˆ
+     *  @return true æˆåŠŸ, false å¤±è´¥
      */
     bool EpollAdd(EpObjList& fdset);
 
     /**
-     *  @brief ½«Ò»¸öÎ¢Ïß³ÌÕìÌıµÄËùÓĞsocketÒÆ³ıepoll¹ÜÀí
-     *  @param fdset Î¢Ïß³ÌÕìÌıµÄsocket¼¯ºÏ
-     *  @return true ³É¹¦, false Ê§°Ü
+     *  @brief å°†ä¸€ä¸ªå¾®çº¿ç¨‹ä¾¦å¬çš„æ‰€æœ‰socketç§»é™¤epollç®¡ç†
+     *  @param fdset å¾®çº¿ç¨‹ä¾¦å¬çš„socketé›†åˆ
+     *  @return true æˆåŠŸ, false å¤±è´¥
      */
     bool EpollDel(EpObjList& fdset);
 
     /**
-     *  @brief epoll_wait ÒÔ¼°·Ö·¢´¦Àí¹ı³Ì
+     *  @brief epoll_wait ä»¥åŠåˆ†å‘å¤„ç†è¿‡ç¨‹
      */
     void EpollDispath(void);
 
     /**
-     *  @brief µ¥¶ÀÒ»¸öfd×¢²á, ¹ØÁªÕìÌıÊÂ¼ş
-     *  @param fd ÎÄ¼ş¾ä±úÓëÊÂ¼şĞÅÏ¢
-     *  @param obj epoll»Øµ÷¶ÔÏó
+     *  @brief å•ç‹¬ä¸€ä¸ªfdæ³¨å†Œ, å…³è”ä¾¦å¬äº‹ä»¶
+     *  @param fd æ–‡ä»¶å¥æŸ„ä¸äº‹ä»¶ä¿¡æ¯
+     *  @param obj epollå›è°ƒå¯¹è±¡
      */
     bool EpollAddObj(EpollerObj* obj);
 
     /**
-     *  @brief È¡ÏûÒ»¸öfd×¢²á, ¹ØÁªÕìÌıÊÂ¼ş
-     *  @param fd ÎÄ¼ş¾ä±úÓëÊÂ¼şĞÅÏ¢
-     *  @param obj epoll»Øµ÷¶ÔÏó
+     *  @brief å–æ¶ˆä¸€ä¸ªfdæ³¨å†Œ, å…³è”ä¾¦å¬äº‹ä»¶
+     *  @param fd æ–‡ä»¶å¥æŸ„ä¸äº‹ä»¶ä¿¡æ¯
+     *  @param obj epollå›è°ƒå¯¹è±¡
      */
     bool EpollDelObj(EpollerObj* obj);
 
     /**
-     * @brief ·â×°epoll ctlµÄ´¦ÀíÓëµ±Ç°¼àÌıÊÂ¼şµÄ¼ÇÂ¼, ÄÚ²¿½Ó¿Ú
-     * @param fd ²Ù×÷µÄÎÄ¼ş¾ä±ú
-     * @param new_events ĞèÒªĞÂÔöµÄ¼àÌıÊÂ¼ş
+     * @brief å°è£…epoll ctlçš„å¤„ç†ä¸å½“å‰ç›‘å¬äº‹ä»¶çš„è®°å½•, å†…éƒ¨æ¥å£
+     * @param fd æ“ä½œçš„æ–‡ä»¶å¥æŸ„
+     * @param new_events éœ€è¦æ–°å¢çš„ç›‘å¬äº‹ä»¶
      */
     bool EpollCtrlAdd(int fd, int new_events);
 
     /**
-     * @brief ·â×°epoll ctlµÄ´¦ÀíÓëµ±Ç°¼àÌıÊÂ¼şµÄ¼ÇÂ¼, ÄÚ²¿½Ó¿Ú
-     * @param fd ²Ù×÷µÄÎÄ¼ş¾ä±ú
-     * @param new_events ĞèÒªĞÂÉ¾³ıµÄ¼àÌıÊÂ¼ş
+     * @brief å°è£…epoll ctlçš„å¤„ç†ä¸å½“å‰ç›‘å¬äº‹ä»¶çš„è®°å½•, å†…éƒ¨æ¥å£
+     * @param fd æ“ä½œçš„æ–‡ä»¶å¥æŸ„
+     * @param new_events éœ€è¦æ–°åˆ é™¤çš„ç›‘å¬äº‹ä»¶
      */
     bool EpollCtrlDel(int fd, int new_events);    
     bool EpollCtrlDelRef(int fd, int new_events, bool use_ref);
     
     /**
-     *  @brief ¸ù¾İfd»ñÈ¡±¾µØÒıÓÃµÄ½á¹¹, °´fdÉú³É²ßÂÔ, Ä¿Ç°¼òµ¥¹ÜÀí
-     *  @param fd ÎÄ¼şÃèÊö·û
-     *  @return ±¾µØÎÄ¼şÒıÓÃ½á¹¹, NULL ±íÊ¾Ê§°Ü
+     *  @brief æ ¹æ®fdè·å–æœ¬åœ°å¼•ç”¨çš„ç»“æ„, æŒ‰fdç”Ÿæˆç­–ç•¥, ç›®å‰ç®€å•ç®¡ç†
+     *  @param fd æ–‡ä»¶æè¿°ç¬¦
+     *  @return æœ¬åœ°æ–‡ä»¶å¼•ç”¨ç»“æ„, NULL è¡¨ç¤ºå¤±è´¥
      */
     FdRef* FdRefGet(int fd) {
         return ((fd >= _maxfd) || (fd < 0)) ? (FdRef*)NULL : &_eprefs[fd];        
@@ -407,9 +407,9 @@ public:
 
     
     /**
-     * @brief µ¥¶ÀµÄ×¢²á½Ó¿Ú, ÓÃÓÚ×¢²á»òÈ¡Ïû×¢²áÍ¨Öª¶ÔÏó
-     * @param fd ²Ù×÷µÄÎÄ¼ş¾ä±ú
-     * @param obj ´ı×¢²á»òÈ¡Ïû×¢²áµÄ¶ÔÏó
+     * @brief å•ç‹¬çš„æ³¨å†Œæ¥å£, ç”¨äºæ³¨å†Œæˆ–å–æ¶ˆæ³¨å†Œé€šçŸ¥å¯¹è±¡
+     * @param fd æ“ä½œçš„æ–‡ä»¶å¥æŸ„
+     * @param obj å¾…æ³¨å†Œæˆ–å–æ¶ˆæ³¨å†Œçš„å¯¹è±¡
      */
     void EpollNtfyReg(int fd, EpollerObj* obj) {
         FdRef* ref = FdRefGet(fd);
@@ -421,8 +421,8 @@ public:
 protected: 
 
     /**
-     *  @brief ¸üĞÂÃ¿¸ösocketµÄ×îĞÂ½ÓÊÕÊÂ¼şĞÅÏ¢
-     *  @param evtfdnum ÊÕµ½ÊÂ¼şµÄfd¼¯ºÏÊıÄ¿
+     *  @brief æ›´æ–°æ¯ä¸ªsocketçš„æœ€æ–°æ¥æ”¶äº‹ä»¶ä¿¡æ¯
+     *  @param evtfdnum æ”¶åˆ°äº‹ä»¶çš„fdé›†åˆæ•°ç›®
      */
     void EpollRcvEventList(int evtfdnum);
 

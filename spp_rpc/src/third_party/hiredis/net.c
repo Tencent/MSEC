@@ -358,7 +358,7 @@ addrretry:
         c->fd = s;
         c->flags &= ~REDIS_NEW_CONN;
 
-        // 检查是否新连接
+        // 妫�鏌ユ槸鍚︽柊杩炴帴
         if (getpeername(s, &addr, &addrlen) == -1) {
             if (errno == ENOTCONN) {
                 c->flags |= REDIS_NEW_CONN;

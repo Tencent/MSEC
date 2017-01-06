@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -15,10 +16,6 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 #
-
-
-
-#!/bin/sh
 
 DEFAULT_PROXY_STAT=../stat/stat_srpc_proxy.dat
 DEFAULT_WORKER_STAT=../stat/stat_srpc_worker1.dat

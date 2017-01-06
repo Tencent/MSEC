@@ -23,7 +23,7 @@
 
 #include "syncincl.h"
 #include "srpcincl.h"
-#include "msg_$(MODULE_REPLACE)_impl.h"
+#include "msg_$(MODULE_FILENAME_REPLACE)_impl.h"
 
 
 $(CODE_BEGIN)

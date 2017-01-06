@@ -28,7 +28,7 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief ¹¹Ôìº¯Êı
+ * @brief æ„é€ å‡½æ•°
  */
 CTimerMng::CTimerMng(uint32_t max_item)
 {
@@ -44,7 +44,7 @@ CTimerMng::CTimerMng(uint32_t max_item)
 
 
 /**
- * @brief Îö¹¹º¯Êı
+ * @brief ææ„å‡½æ•°
  */
 CTimerMng::~CTimerMng()
 {
@@ -56,10 +56,10 @@ CTimerMng::~CTimerMng()
 
 
 /**
- * @brief ¶¨Ê±Æ÷ÉèÖÃº¯Êı
- * @param timerable ¶¨Ê±Æ÷¶ÔÏó
- * @param interval  ³¬Ê±µÄ¼ä¸ô msµ¥Î»
- * @return ³É¹¦·µ»Øtrue, ·ñÔòÊ§°Ü
+ * @brief å®šæ—¶å™¨è®¾ç½®å‡½æ•°
+ * @param timerable å®šæ—¶å™¨å¯¹è±¡
+ * @param interval  è¶…æ—¶çš„é—´éš” mså•ä½
+ * @return æˆåŠŸè¿”å›true, å¦åˆ™å¤±è´¥
  */
 bool CTimerMng::start_timer(CTimerNotify* timerable, uint32_t interval)
 {
@@ -79,8 +79,8 @@ bool CTimerMng::start_timer(CTimerNotify* timerable, uint32_t interval)
 }
 
 /**
- * @brief ¶¨Ê±Æ÷Í£Ö¹½Ó¿Úº¯Êı
- * @param timerable ¶¨Ê±Æ÷¶ÔÏó
+ * @brief å®šæ—¶å™¨åœæ­¢æ¥å£å‡½æ•°
+ * @param timerable å®šæ—¶å™¨å¯¹è±¡
  */
 void CTimerMng::stop_timer(CTimerNotify* timerable)
 {
@@ -93,7 +93,7 @@ void CTimerMng::stop_timer(CTimerNotify* timerable)
 }
 
 /**
- * @brief ¶¨Ê±Æ÷³¬Ê±¼ì²âº¯Êı
+ * @brief å®šæ—¶å™¨è¶…æ—¶æ£€æµ‹å‡½æ•°
  */
 void CTimerMng::check_expired() 
 {

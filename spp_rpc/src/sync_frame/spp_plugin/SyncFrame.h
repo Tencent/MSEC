@@ -19,7 +19,7 @@
 
 /**
  *  @file SyncFrame.h
- *  @info Í¬²½Ïß³ÌÂß¼­¿ò¼Ü´¦Àí
+ *  @info åŒæ­¥çº¿ç¨‹é€»è¾‘æ¡†æ¶å¤„ç†
  *  @time 20130515
  **/
 
@@ -42,15 +42,15 @@ do {                                                                        \
 
 
 /**
- * @brief Î¢Ïß³ÌÍ¬²½¿ò¼Ü¶ÔÏó
+ * @brief å¾®çº¿ç¨‹åŒæ­¥æ¡†æ¶å¯¹è±¡
  */
 class CSyncFrame
 {
     public:
-        static bool _init_flag;        ///< ³õÊ¼»¯×´Ì¬±ê¼Ç
-        static int  _iNtfySock;        ///< socketÀàĞÍµÄÍ¨Öª¾ä±ú         
+        static bool _init_flag;        ///< åˆå§‹åŒ–çŠ¶æ€æ ‡è®°
+        static int  _iNtfySock;        ///< socketç±»å‹çš„é€šçŸ¥å¥æŸ„         
         
-		unsigned int _uMsgNo;           ///ÏûÏ¢ÊµÀıÊı
+		unsigned int _uMsgNo;           ///æ¶ˆæ¯å®ä¾‹æ•°
 
     public:
         static CSyncFrame* Instance (void);
@@ -60,32 +60,32 @@ class CSyncFrame
         ~CSyncFrame();
 
         /**
-         * ³õÊ¼»¯Òì²½¿ò¼Ü£¬ÓÉ²å¼şÔÚworker½ø³ÌµÄspp_handle_initÀïµ÷ÓÃ
+         * åˆå§‹åŒ–å¼‚æ­¥æ¡†æ¶ï¼Œç”±æ’ä»¶åœ¨workerè¿›ç¨‹çš„spp_handle_inité‡Œè°ƒç”¨
          *
-         * @param pServBase CServerBase¶ÔÏóÖ¸Õë
-         * @param max_thread_num ×î´ó²¢·¢Ïß³ÌÊı, ¿É¿ØÖÆ¼«ÏŞÇé¿öÄÚ´æÕ¼ÓÃ
-         * @param min_thread_num ×îĞ¡±£ÁôÏß³ÌÊı, ¿É¿ØÖÆÏß³Ì³ØµÄ¿ÕÏĞÏß³ÌÊıÄ¿
+         * @param pServBase CServerBaseå¯¹è±¡æŒ‡é’ˆ
+         * @param max_thread_num æœ€å¤§å¹¶å‘çº¿ç¨‹æ•°, å¯æ§åˆ¶æé™æƒ…å†µå†…å­˜å ç”¨
+         * @param min_thread_num æœ€å°ä¿ç•™çº¿ç¨‹æ•°, å¯æ§åˆ¶çº¿ç¨‹æ± çš„ç©ºé—²çº¿ç¨‹æ•°ç›®
          *
-         * @return 0: ³É¹¦£» ÆäËû£ºÊ§°Ü
+         * @return 0: æˆåŠŸï¼› å…¶ä»–ï¼šå¤±è´¥
          *
          */
         int InitFrame(CServerBase *pServBase, int max_thread_num = 50000, int min_thread_num = 200);
 
         /**
-         * ´¦ÀíÇëÇó£¬ÓÉ²å¼şÔÚspp_handle_process·½·¨Àïµ÷ÓÃ
+         * å¤„ç†è¯·æ±‚ï¼Œç”±æ’ä»¶åœ¨spp_handle_processæ–¹æ³•é‡Œè°ƒç”¨
          *
-         * @param pMsg CMsgBaseÅÉÉúÀà¶ÔÏóÖ¸Õë£¬´æ·ÅºÍÇëÇóÏà¹ØµÄÊı¾İ£¬¸Ã¶ÔÏóĞèÒª²å¼şÒÔnewµÄ·½Ê½·ÖÅä£¬ÊÍ·ÅÓÉ¿ò¼Ü¸ºÔğ
+         * @param pMsg CMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡æŒ‡é’ˆï¼Œå­˜æ”¾å’Œè¯·æ±‚ç›¸å…³çš„æ•°æ®ï¼Œè¯¥å¯¹è±¡éœ€è¦æ’ä»¶ä»¥newçš„æ–¹å¼åˆ†é…ï¼Œé‡Šæ”¾ç”±æ¡†æ¶è´Ÿè´£
          *
-         * @return 0: ³É¹¦£» ÆäËû£ºÊ§°Ü
+         * @return 0: æˆåŠŸï¼› å…¶ä»–ï¼šå¤±è´¥
          *
          */ 
         int Process(CSyncMsg *pMsg);
 
         /**
-         * »ñÈ¡CServerBase¶ÔÏóÖ¸Õë£¬¸Ã¶ÔÏóÌá¹©ÈÕÖ¾¡¢Í³¼Æ¹¦ÄÜ
-         * ºê¶¨ÒåFRAME_LOGÊÇÎªÁË¼ò»¯ÈÕÖ¾¼ÇÂ¼µÄ¡£
+         * è·å–CServerBaseå¯¹è±¡æŒ‡é’ˆï¼Œè¯¥å¯¹è±¡æä¾›æ—¥å¿—ã€ç»Ÿè®¡åŠŸèƒ½
+         * å®å®šä¹‰FRAME_LOGæ˜¯ä¸ºäº†ç®€åŒ–æ—¥å¿—è®°å½•çš„ã€‚
          *
-         * @return CServerBase¶ÔÏóÖ¸Õë
+         * @return CServerBaseå¯¹è±¡æŒ‡é’ˆ
          **/
         CServerBase* GetServerBase()     {
             return _pServBase;
@@ -93,50 +93,50 @@ class CSyncFrame
 
         
         /**
-         *  Ö÷Ïß³ÌÑ­»·, Ã¿´ÎÇĞ»»ÉÏÏÂÎÄ, ÈÃ³öCPU, µ÷¶È¿ò¼Üºó¶Ëepoll
+         *  ä¸»çº¿ç¨‹å¾ªç¯, æ¯æ¬¡åˆ‡æ¢ä¸Šä¸‹æ–‡, è®©å‡ºCPU, è°ƒåº¦æ¡†æ¶åç«¯epoll
          */
         void WaitNotifyFd(int utime);
 
         /**
-         *  Î¢Ïß³ÌÆô¶¯±êÖ¾, SPP×¢²áÄÚ²¿½Ó¿Ú
+         *  å¾®çº¿ç¨‹å¯åŠ¨æ ‡å¿—, SPPæ³¨å†Œå†…éƒ¨æ¥å£
          */
         bool GetMtFlag();
 
         /**
-         *  Ö÷Ïß³ÌÑ­»·, ¸ù¾İÇ°¶ËÊÇ·ñÓĞÇëÇó, ¾ö¶¨epollµÈ´ı»úÖÆ
+         *  ä¸»çº¿ç¨‹å¾ªç¯, æ ¹æ®å‰ç«¯æ˜¯å¦æœ‰è¯·æ±‚, å†³å®šepollç­‰å¾…æœºåˆ¶
          */
         void HandleSwitch(bool block);
 
         /**
-         *  »ñÈ¡µ±Ç°´¦ÀíµÄÇëÇó
+         *  è·å–å½“å‰å¤„ç†çš„è¯·æ±‚
          */
         CSyncMsg* GetCurrentMsg();
 		
         /**
-         *  ¼ì²éµ±Ç°Õ»ÊÇ·ñ°²È«
+         *  æ£€æŸ¥å½“å‰æ ˆæ˜¯å¦å®‰å…¨
          */
 		bool CheckCurrentStack(long lESP);
 
 		/**
-         *	»ñÈ¡ÏûÏ¢Êı
+         *	è·å–æ¶ˆæ¯æ•°
          */
          int GetThreadNum();
 
         /**
-         * ÉèÖÃ×éID
+         * è®¾ç½®ç»„ID
          */
         void SetGroupId(int id);
 
 		/**
-         *	ĞİÃß£¨ÇĞ»»£©
+         *	ä¼‘çœ ï¼ˆåˆ‡æ¢ï¼‰
          */
 		void sleep(int ms);
 
     protected:
-        static CSyncFrame *_s_instance;     ///< È«¾Öµ¥Àı¾ä±ú
-        CServerBase *_pServBase;            ///< SPP·şÎñÆ÷¾ä±ú    
-        int _iGroupId;                      ///< SPP WORKER×éid
-        int _iNtfyFd;                       ///< ¹²ÏíÄÚ´æÓ³ÉäµÄ¹ÜµÀ¾ä±ú
+        static CSyncFrame *_s_instance;     ///< å…¨å±€å•ä¾‹å¥æŸ„
+        CServerBase *_pServBase;            ///< SPPæœåŠ¡å™¨å¥æŸ„    
+        int _iGroupId;                      ///< SPP WORKERç»„id
+        int _iNtfyFd;                       ///< å…±äº«å†…å­˜æ˜ å°„çš„ç®¡é“å¥æŸ„
 
 };
 

@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_action.cpp
- *  @info Î¢Ïß³ÌACTION»ùÀàÊµÏÖ
+ *  @info å¾®çº¿ç¨‹ACTIONåŸºç±»å®ç°
  *  @time 20130924
  **/
 
@@ -34,7 +34,7 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief ³õÊ¼item×´Ì¬
+ * @brief åˆå§‹itemçŠ¶æ€
  */
 void IMtAction::Init()
 {
@@ -51,11 +51,11 @@ void IMtAction::Init()
 }
 
 /**
- * @brief ÔÊĞí¸´ÓÃ, ÇåÀíitem×´Ì¬
+ * @brief å…è®¸å¤ç”¨, æ¸…ç†itemçŠ¶æ€
  */
 void IMtAction::Reset()
 {
-    // ³¤Á¬½Ó, ´¦Àí³É¹¦²Å¸´ÓÃ, ·ñÔòÇ¿ÖÆ¹Ø±Õ
+    // é•¿è¿æ¥, å¤„ç†æˆåŠŸæ‰å¤ç”¨, å¦åˆ™å¼ºåˆ¶å…³é—­
     bool force_free = false;
     if (_errno != ERR_NONE) {
         force_free = true;
@@ -68,7 +68,7 @@ void IMtAction::Reset()
 }
 
 /**
- * @brief »ñÈ¡Á¬½Ó¶ÔÏó, Í¨Öª¶ÔÏó, ÏûÏ¢¶ÔÏó
+ * @brief è·å–è¿æ¥å¯¹è±¡, é€šçŸ¥å¯¹è±¡, æ¶ˆæ¯å¯¹è±¡
  */
 EpollerObj* IMtAction::GetNtfyObj() {
     IMtConnection* conn = GetIConnection();
@@ -81,7 +81,7 @@ EpollerObj* IMtAction::GetNtfyObj() {
 
 
 /**
- * @brief ºó¶ËÁ¬½Ó»·¾³³õÊ¼»¯
+ * @brief åç«¯è¿æ¥ç¯å¢ƒåˆå§‹åŒ–
  */
 int IMtAction::InitConnEnv()
 {
@@ -96,23 +96,23 @@ int IMtAction::InitConnEnv()
         return -100;
     }
 
-    // 1. ·ÖÀà»ñÈ¡conn¾ä±ú
+    // 1. åˆ†ç±»è·å–connå¥æŸ„
     CONN_OBJ_TYPE conn_obj_type = OBJ_CONN_UNDEF;
     NTFY_OBJ_TYPE ntfy_obj_type = NTFY_OBJ_UNDEF;
     
     MULTI_PROTO proto = this->GetProtoType();
     MULTI_CONNECT type = this->GetConnType();
-    if ((MT_UDP == proto) && (CONN_TYPE_SESSION == type))   // UDP sessionÄ£Ê½
+    if ((MT_UDP == proto) && (CONN_TYPE_SESSION == type))   // UDP sessionæ¨¡å¼
     {
         conn_obj_type = OBJ_UDP_SESSION;
         ntfy_obj_type = NTFY_OBJ_SESSION;
     }
-    else if (MT_UDP == proto)  // UDP ÆäËüÄ£Ê½
+    else if (MT_UDP == proto)  // UDP å…¶å®ƒæ¨¡å¼
     {   
         conn_obj_type = OBJ_SHORT_CONN;
         ntfy_obj_type = NTFY_OBJ_THREAD;
     }
-    else    // TCP Ä£Ê½
+    else    // TCP æ¨¡å¼
     {
         conn_obj_type = OBJ_TCP_KEEP;
         ntfy_obj_type = NTFY_OBJ_THREAD;
@@ -125,7 +125,7 @@ int IMtAction::InitConnEnv()
     }
     _conn->SetIMtActon(this);
 
-    // 2. »ñÈ¡msg buff¾ä±ú
+    // 2. è·å–msg buffå¥æŸ„
     int max_len = this->GetMsgBuffSize();
     MtMsgBuf* msg_buff = msgmgr->GetMsgBuf(max_len);
     if (!msg_buff) {
@@ -135,7 +135,7 @@ int IMtAction::InitConnEnv()
     msg_buff->SetBuffType(BUFF_SEND);
     _conn->SetMtMsgBuff(msg_buff);
 
-    // 3. »ñÈ¡ ntfy ¶ÔÏó¾ä±ú
+    // 3. è·å– ntfy å¯¹è±¡å¥æŸ„
     EpollerObj* ntfy_obj = ntfymgr->GetNtfyObj(ntfy_obj_type, _ntfy_name);
     if (!ntfy_obj) {
         MTLOG_ERROR("Maybe no memory, ntfy type: %d, get failed", ntfy_obj_type);
@@ -143,7 +143,7 @@ int IMtAction::InitConnEnv()
     }
     _conn->SetNtfyObj(ntfy_obj);
 
-    // 4. SESSIONÄ£ĞÍ, ½¨Á¢session
+    // 4. SESSIONæ¨¡å‹, å»ºç«‹session
     MicroThread* thread = mtframe->GetActiveThread();
     ntfy_obj->SetOwnerThread(thread);
     this->SetIMsgPtr((IMtMsg*)thread->GetThreadArgs());
@@ -160,7 +160,7 @@ int IMtAction::InitConnEnv()
 
 
 /**
- * @brief ´úÀíĞéº¯Êı, ¼ò»¯½Ó¿ÚÓëÊµÏÖ²¿·Ö
+ * @brief ä»£ç†è™šå‡½æ•°, ç®€åŒ–æ¥å£ä¸å®ç°éƒ¨åˆ†
  */
 int IMtAction::DoEncode()
 {
@@ -186,7 +186,7 @@ int IMtAction::DoEncode()
 }
 
 /**
- * @brief ´úÀíĞéº¯Êı, ¼ò»¯½Ó¿ÚÓëÊµÏÖ²¿·Ö
+ * @brief ä»£ç†è™šå‡½æ•°, ç®€åŒ–æ¥å£ä¸å®ç°éƒ¨åˆ†
  */
 int IMtAction::DoInput()
 {
@@ -241,7 +241,7 @@ int IMtAction::DoError()
 
 
 /**
- * @brief ¹¹ÔìÓëÎö¹¹´¦Àí
+ * @brief æ„é€ ä¸ææ„å¤„ç†
  */
 IMtAction::IMtAction()
 {

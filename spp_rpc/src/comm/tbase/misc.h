@@ -36,6 +36,7 @@ namespace spp
         public:
             static unsigned getip(const char* ifname);
             static unsigned getmemused();
+            static int64_t get_file_mtime(const char *path);
             
             // 判断进程是否存在？
             // 返回值： 0 - 不存在； 1 - 存在

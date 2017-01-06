@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_connection.h
- *  @info Î¢Ïß³ÌÁ¬½Ó¹ÜÀí¶¨Òå²¿·Ö
+ *  @info å¾®çº¿ç¨‹è¿æ¥ç®¡ç†å®šä¹‰éƒ¨åˆ†
  *  @time 20130924
  **/
 
@@ -37,84 +37,84 @@ namespace NS_MICRO_THREAD {
 using std::queue;
 
 /**
- * @brief Á¬½Ó¶ÔÏóÀàĞÍ
+ * @brief è¿æ¥å¯¹è±¡ç±»å‹
  */
 enum CONN_OBJ_TYPE
 {
-    OBJ_CONN_UNDEF     = 0,     ///< Î´¶¨ÒåµÄÁ¬½Ó¶ÔÏó
-    OBJ_SHORT_CONN     = 1,     ///< ¶ÌÁ¬½Ó¶ÔÏó, fd¹ØÁª»á»°, Ã¿´ÎÓÃÍêCLOSE
-    OBJ_TCP_KEEP       = 2,     ///< TCPµÄ¸´ÓÃÄ£ĞÍ, Ã¿´ÎÃ¿Á¬½ÓÊ¹ÓÃ¸Ãfd, ÓÃÍê¿É¸´ÓÃ
-    OBJ_UDP_SESSION    = 3,     ///< UDPµÄsessionÄ£ĞÍ, Ã¿Á¬½Ó¿É¹©ÈÎÒâÏß³ÌÊ¹ÓÃ
+    OBJ_CONN_UNDEF     = 0,     ///< æœªå®šä¹‰çš„è¿æ¥å¯¹è±¡
+    OBJ_SHORT_CONN     = 1,     ///< çŸ­è¿æ¥å¯¹è±¡, fdå…³è”ä¼šè¯, æ¯æ¬¡ç”¨å®ŒCLOSE
+    OBJ_TCP_KEEP       = 2,     ///< TCPçš„å¤ç”¨æ¨¡å‹, æ¯æ¬¡æ¯è¿æ¥ä½¿ç”¨è¯¥fd, ç”¨å®Œå¯å¤ç”¨
+    OBJ_UDP_SESSION    = 3,     ///< UDPçš„sessionæ¨¡å‹, æ¯è¿æ¥å¯ä¾›ä»»æ„çº¿ç¨‹ä½¿ç”¨
 };
 
 /**
- * @brief Î¢Ïß³ÌÒ»¸öºó¶ËÇëÇó, Ó³ÉäÒ»¸öÁ¬½Ó¶ÔÏó
+ * @brief å¾®çº¿ç¨‹ä¸€ä¸ªåç«¯è¯·æ±‚, æ˜ å°„ä¸€ä¸ªè¿æ¥å¯¹è±¡
  */
 class IMtConnection
 {
 public:
 
     /**
-     * @brief  Î¢Ïß³ÌÁ¬½Ó»ùÀà¹¹ÔìÓëÎö¹¹
+     * @brief  å¾®çº¿ç¨‹è¿æ¥åŸºç±»æ„é€ ä¸ææ„
      */
     IMtConnection();
     virtual ~IMtConnection();
 
     /**
-     * @brief Á¬½Ó»ØÊÕ¸´ÓÃÇåÀí²Ù×÷
+     * @brief è¿æ¥å›æ”¶å¤ç”¨æ¸…ç†æ“ä½œ
      */
     virtual void Reset();
     
     /**
-     * @brief »ñÈ¡Á¬½Ó¶ÔÏóµÄÀàĞÍĞÅÏ¢
+     * @brief è·å–è¿æ¥å¯¹è±¡çš„ç±»å‹ä¿¡æ¯
      */
     CONN_OBJ_TYPE GetConnType() {
         return _type;    
     };
     
     /**
-     * @brief ÉèÖÃÄÚ²¿ACTIONÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è®¾ç½®å†…éƒ¨ACTIONæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     void SetIMtActon(IMtAction* action  ) {
         _action = action;
     };
 
     /**
-     * @brief »ñÈ¡ÄÚ²¿ACTIONÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è·å–å†…éƒ¨ACTIONæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     IMtAction* GetIMtActon() {
         return _action;
     };
 
     /**
-     * @brief ÉèÖÃÄÚ²¿ACTIONÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è®¾ç½®å†…éƒ¨ACTIONæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     void SetNtfyObj(EpollerObj* obj  ) {
         _ntfy_obj = obj;
     };
 
     /**
-     * @brief »ñÈ¡ÄÚ²¿ACTIONÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è·å–å†…éƒ¨ACTIONæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     EpollerObj* GetNtfyObj() {
         return _ntfy_obj;
     };
     
     /**
-     * @brief ÉèÖÃÄÚ²¿msgbuffÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è®¾ç½®å†…éƒ¨msgbuffæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     void SetMtMsgBuff(MtMsgBuf* msg_buf) {
         _msg_buff = msg_buf;
     };
 
     /**
-     * @brief »ñÈ¡ÄÚ²¿msgbuffÖ¸Õë
-     * @return IMtConnÖ¸Õë
+     * @brief è·å–å†…éƒ¨msgbuffæŒ‡é’ˆ
+     * @return IMtConnæŒ‡é’ˆ
      */
     MtMsgBuf* GetMtMsgBuff() {
         return _msg_buff;
@@ -123,52 +123,52 @@ public:
 public:
     
     /**
-     * @brief  Á¬½ÓµÄsocket½¨Á¢, ÒÀÀµÁ¬½ÓµÄĞ­ÒéÀàĞÍµÈ
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  è¿æ¥çš„socketå»ºç«‹, ä¾èµ–è¿æ¥çš„åè®®ç±»å‹ç­‰
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CreateSocket() {return 0;};
     
     /**
-     * @brief  Á¬½Ó´ò¿ªÓëÔ¶¶Ë»á»°Í¨µÀ, ÈçTCPµÄconnectµÈ
-     * @return 0 -³É¹¦, < 0 Ê§°Ü 
+     * @brief  è¿æ¥æ‰“å¼€ä¸è¿œç«¯ä¼šè¯é€šé“, å¦‚TCPçš„connectç­‰
+     * @return 0 -æˆåŠŸ, < 0 å¤±è´¥ 
      */
     virtual int OpenCnnect() {return 0;};
 
     /**
-     * @brief  Á¬½Ó·¢ËÍÊı¾İ
-     * @return >0 -³É¹¦, ·µ»ØÊµ¼Ê·¢ËÍ³¤¶È, < 0 Ê§°Ü 
+     * @brief  è¿æ¥å‘é€æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›å®é™…å‘é€é•¿åº¦, < 0 å¤±è´¥ 
      */
     virtual int SendData() {return 0;};
 
     /**
-     * @brief  Á¬½Ó½ÓÊÕÊı¾İ
-     * @return >0 -³É¹¦, ·µ»Ø±¾´Î½ÓÊÕ³¤¶È, < 0 Ê§°Ü(-1 ¶Ô¶Ë¹Ø±Õ; -2 ½ÓÊÕ´íÎó)
+     * @brief  è¿æ¥æ¥æ”¶æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›æœ¬æ¬¡æ¥æ”¶é•¿åº¦, < 0 å¤±è´¥(-1 å¯¹ç«¯å…³é—­; -2 æ¥æ”¶é”™è¯¯)
      */
     virtual int RecvData() {return 0;};
 
     /**
-     * @brief  ¹Ø±Õsocket¶Ë¿Ú
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  å…³é—­socketç«¯å£
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CloseSocket() {return 0;};
 
 protected:
 
-    CONN_OBJ_TYPE       _type;      // Ô¤ÖÃµÄtype, ¿É°´type×ö¹¤³§¹ÜÀí
-    IMtAction*          _action;    // ¹ØÁªµÄactionÖ¸Õë, ÉÏ¼¶Ö¸Õë, ²»¹ØĞÄ×ÊÔ´Éú´æÆÚ
-    EpollerObj*         _ntfy_obj;  // EPOLLÍ¨Öª¶ÔÏó, ÏÂ¼¶Ö¸Õë, ¹ØĞÄÉú´æÆÚ
-    MtMsgBuf*           _msg_buff;  // ¶¯Ì¬¹ÜÀíµÄbuff×Ö¶Î, ÏÂ¼¶Ö¸Õë, ¹ØĞÄÉú´æÆÚ
+    CONN_OBJ_TYPE       _type;      // é¢„ç½®çš„type, å¯æŒ‰typeåšå·¥å‚ç®¡ç†
+    IMtAction*          _action;    // å…³è”çš„actionæŒ‡é’ˆ, ä¸Šçº§æŒ‡é’ˆ, ä¸å…³å¿ƒèµ„æºç”Ÿå­˜æœŸ
+    EpollerObj*         _ntfy_obj;  // EPOLLé€šçŸ¥å¯¹è±¡, ä¸‹çº§æŒ‡é’ˆ, å…³å¿ƒç”Ÿå­˜æœŸ
+    MtMsgBuf*           _msg_buff;  // åŠ¨æ€ç®¡ç†çš„buffå­—æ®µ, ä¸‹çº§æŒ‡é’ˆ, å…³å¿ƒç”Ÿå­˜æœŸ
 };
 
 /**
- * @brief »ùÓÚsockµÄ¶ÌÁ¬½ÓÀàĞÍ
+ * @brief åŸºäºsockçš„çŸ­è¿æ¥ç±»å‹
  */
 class UdpShortConn : public IMtConnection
 {
 public:
 
     /**
-     * @brief »ùÓÚsocketµÄ¶ÌÁ¬½ÓµÄ¹¹ÔìÓëÎö¹¹
+     * @brief åŸºäºsocketçš„çŸ­è¿æ¥çš„æ„é€ ä¸ææ„
      */
     UdpShortConn() {
         _osfd = -1;
@@ -179,36 +179,36 @@ public:
     };
 
     /**
-     * @brief Á¬½Ó»ØÊÕ¸´ÓÃÇåÀí²Ù×÷
+     * @brief è¿æ¥å›æ”¶å¤ç”¨æ¸…ç†æ“ä½œ
      */
     virtual void Reset();
 
     /**
-     * @brief  Á¬½ÓµÄsocket½¨Á¢, ÒÀÀµÁ¬½ÓµÄĞ­ÒéÀàĞÍµÈ
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  è¿æ¥çš„socketå»ºç«‹, ä¾èµ–è¿æ¥çš„åè®®ç±»å‹ç­‰
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CreateSocket();
 
     /**
-     * @brief  Á¬½Ó·¢ËÍÊı¾İ
-     * @return >0 -³É¹¦, ·µ»ØÊµ¼Ê·¢ËÍ³¤¶È, < 0 Ê§°Ü 
+     * @brief  è¿æ¥å‘é€æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›å®é™…å‘é€é•¿åº¦, < 0 å¤±è´¥ 
      */
     virtual int SendData();
 
     /**
-     * @brief  Á¬½Ó½ÓÊÕÊı¾İ
-     * @return >0 -³É¹¦, ·µ»Ø±¾´Î½ÓÊÕ³¤¶È, < 0 Ê§°Ü(-1 ¶Ô¶Ë¹Ø±Õ; -2 ½ÓÊÕ´íÎó)
+     * @brief  è¿æ¥æ¥æ”¶æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›æœ¬æ¬¡æ¥æ”¶é•¿åº¦, < 0 å¤±è´¥(-1 å¯¹ç«¯å…³é—­; -2 æ¥æ”¶é”™è¯¯)
      */
     virtual int RecvData();
 
     /**
-     * @brief  ¹Ø±Õsocket¶Ë¿Ú
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  å…³é—­socketç«¯å£
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CloseSocket();
     
 protected:
-    int                 _osfd;      // Ã¿´ÎÁ¬½Óµ¥¶À´´½¨socket
+    int                 _osfd;      // æ¯æ¬¡è¿æ¥å•ç‹¬åˆ›å»ºsocket
 };
 
 
@@ -219,14 +219,14 @@ enum TcpKeepFlag
 };
 
 /**
- * @brief »ùÓÚsessionµÄUDP¸´ÓÃÁ¬½Ó
+ * @brief åŸºäºsessionçš„UDPå¤ç”¨è¿æ¥
  */
 class UdpSessionConn : public IMtConnection
 {
 public:
 
     /**
-     * @brief »ùÓÚsocketµÄ¶ÌÁ¬½ÓµÄ¹¹ÔìÓëÎö¹¹
+     * @brief åŸºäºsocketçš„çŸ­è¿æ¥çš„æ„é€ ä¸ææ„
      */
     UdpSessionConn() {
         _type = OBJ_UDP_SESSION;
@@ -234,32 +234,32 @@ public:
     virtual ~UdpSessionConn() {    };
 
     /**
-     * @brief  Á¬½ÓµÄsocket½¨Á¢, ÒÀÀµÁ¬½ÓµÄĞ­ÒéÀàĞÍµÈ
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  è¿æ¥çš„socketå»ºç«‹, ä¾èµ–è¿æ¥çš„åè®®ç±»å‹ç­‰
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CreateSocket();
 
     /**
-     * @brief  Á¬½Ó·¢ËÍÊı¾İ
-     * @return >0 -³É¹¦, ·µ»ØÊµ¼Ê·¢ËÍ³¤¶È, < 0 Ê§°Ü 
+     * @brief  è¿æ¥å‘é€æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›å®é™…å‘é€é•¿åº¦, < 0 å¤±è´¥ 
      */
     virtual int SendData();
 
     /**
-     * @brief  Á¬½Ó½ÓÊÕÊı¾İ
-     * @return >0 -³É¹¦, ·µ»Ø±¾´Î½ÓÊÕ³¤¶È, < 0 Ê§°Ü(-1 ¶Ô¶Ë¹Ø±Õ; -2 ½ÓÊÕ´íÎó)
+     * @brief  è¿æ¥æ¥æ”¶æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›æœ¬æ¬¡æ¥æ”¶é•¿åº¦, < 0 å¤±è´¥(-1 å¯¹ç«¯å…³é—­; -2 æ¥æ”¶é”™è¯¯)
      */
     virtual int RecvData();
 
     /**
-     * @brief  ¹Ø±Õsocket¶Ë¿Ú
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  å…³é—­socketç«¯å£
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CloseSocket();
 };
 
 /**
- * @brief »ùÓÚsockµÄTCP¸´ÓÃÁ¬½Ó
+ * @brief åŸºäºsockçš„TCPå¤ç”¨è¿æ¥
  */
 typedef TAILQ_ENTRY(TcpKeepConn) KeepConnLink;
 typedef TAILQ_HEAD(__KeepConnTailq, TcpKeepConn) KeepConnList;
@@ -267,15 +267,15 @@ class TcpKeepConn : public IMtConnection, public CTimerNotify
 {
 public:
 
-    int           _keep_flag;  // ¶ÓÁĞ×´Ì¬±ê¼Ç
-    KeepConnLink  _keep_entry; // ¶ÓÁĞ¹ÜÀíÈë¿Ú
+    int           _keep_flag;  // é˜Ÿåˆ—çŠ¶æ€æ ‡è®°
+    KeepConnLink  _keep_entry; // é˜Ÿåˆ—ç®¡ç†å…¥å£
 
     /**
-     * @brief »ùÓÚsocketµÄ¶ÌÁ¬½ÓµÄ¹¹ÔìÓëÎö¹¹
+     * @brief åŸºäºsocketçš„çŸ­è¿æ¥çš„æ„é€ ä¸ææ„
      */
     TcpKeepConn() {
         _osfd = -1;
-        _keep_time = 10*60*1000; // Ä¬ÈÏ10·ÖÖÓ, ¿ÉÒÔ°´Ğèµ÷Õû
+        _keep_time = 10*60*1000; // é»˜è®¤10åˆ†é’Ÿ, å¯ä»¥æŒ‰éœ€è°ƒæ•´
         _keep_flag = 0;
         _type = OBJ_TCP_KEEP;
         _keep_ntfy.SetKeepNtfyObj(this);
@@ -285,100 +285,100 @@ public:
     };
 
     /**
-     * @brief Á¬½Ó»ØÊÕ¸´ÓÃÇåÀí²Ù×÷
+     * @brief è¿æ¥å›æ”¶å¤ç”¨æ¸…ç†æ“ä½œ
      */
     virtual void Reset();
     
     /**
-     * @brief  Á¬½Ó´ò¿ªÓëÔ¶¶Ë»á»°Í¨µÀ, ÈçTCPµÄconnectµÈ
-     * @return 0 -³É¹¦, < 0 Ê§°Ü 
+     * @brief  è¿æ¥æ‰“å¼€ä¸è¿œç«¯ä¼šè¯é€šé“, å¦‚TCPçš„connectç­‰
+     * @return 0 -æˆåŠŸ, < 0 å¤±è´¥ 
      */
     virtual int OpenCnnect();
 
     /**
-     * @brief  Á¬½ÓµÄsocket½¨Á¢, ÒÀÀµÁ¬½ÓµÄĞ­ÒéÀàĞÍµÈ
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  è¿æ¥çš„socketå»ºç«‹, ä¾èµ–è¿æ¥çš„åè®®ç±»å‹ç­‰
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CreateSocket();
 
     /**
-     * @brief  Á¬½Ó·¢ËÍÊı¾İ
-     * @return >0 -³É¹¦, ·µ»ØÊµ¼Ê·¢ËÍ³¤¶È, < 0 Ê§°Ü 
+     * @brief  è¿æ¥å‘é€æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›å®é™…å‘é€é•¿åº¦, < 0 å¤±è´¥ 
      */
     virtual int SendData();
 
     /**
-     * @brief  Á¬½Ó½ÓÊÕÊı¾İ
-     * @return >0 -³É¹¦, ·µ»Ø±¾´Î½ÓÊÕ³¤¶È, < 0 Ê§°Ü(-1 ¶Ô¶Ë¹Ø±Õ; -2 ½ÓÊÕ´íÎó)
+     * @brief  è¿æ¥æ¥æ”¶æ•°æ®
+     * @return >0 -æˆåŠŸ, è¿”å›æœ¬æ¬¡æ¥æ”¶é•¿åº¦, < 0 å¤±è´¥(-1 å¯¹ç«¯å…³é—­; -2 æ¥æ”¶é”™è¯¯)
      */
     virtual int RecvData();
 
     /**
-     * @brief  ¹Ø±Õsocket¶Ë¿Ú
-     * @return >0 -³É¹¦, ·µ»ØÏµÍ³fd, < 0 Ê§°Ü 
+     * @brief  å…³é—­socketç«¯å£
+     * @return >0 -æˆåŠŸ, è¿”å›ç³»ç»Ÿfd, < 0 å¤±è´¥ 
      */
     virtual int CloseSocket();
 
     /**
-     * @brief Á¬½Ó±£³Ö¸´ÓÃ
+     * @brief è¿æ¥ä¿æŒå¤ç”¨
      */
     void ConnReuseClean();
 
     /**
-     * @brief Idle»º´æ´¦Àí, epoll ÕìÌıÔ¶¶Ë¹Ø±ÕµÈ
+     * @brief Idleç¼“å­˜å¤„ç†, epoll ä¾¦å¬è¿œç«¯å…³é—­ç­‰
      */
     bool IdleAttach();
 
     /**
-     * @brief IdleÈ¡Ïû»º´æ´¦Àí, ²»ÔÙÓÉ¿ÕÏĞÏß³ÌÕìÌıÔ¶¶Ë¹Ø±Õ
+     * @brief Idleå–æ¶ˆç¼“å­˜å¤„ç†, ä¸å†ç”±ç©ºé—²çº¿ç¨‹ä¾¦å¬è¿œç«¯å…³é—­
      */
     bool IdleDetach();
 
     /**
-     * @brief ´æ´¢Ä¿µÄµØÖ·ĞÅÏ¢, ÓÃÓÚ¸´ÓÃ
+     * @brief å­˜å‚¨ç›®çš„åœ°å€ä¿¡æ¯, ç”¨äºå¤ç”¨
      */
     void SetDestAddr(struct sockaddr_in* dst) {
         memcpy(&_dst_addr, dst, sizeof(_dst_addr));
     }
 
     /**
-     * @brief »ñÈ¡Ä¿µÄµØÖ·ĞÅÏ¢
+     * @brief è·å–ç›®çš„åœ°å€ä¿¡æ¯
      */
     struct sockaddr_in* GetDestAddr() {
         return &_dst_addr;
     }
 
     /**
-     * @brief ³¬Ê±Í¨Öªº¯Êı, ×ÓÀàÊµÏÖÂß¼­
+     * @brief è¶…æ—¶é€šçŸ¥å‡½æ•°, å­ç±»å®ç°é€»è¾‘
      */
     virtual void timer_notify();
 
     /**
-     * @brief ÉèÖÃ³¬Ê±Ê±¼ä, ºÁÃëµ¥Î»
+     * @brief è®¾ç½®è¶…æ—¶æ—¶é—´, æ¯«ç§’å•ä½
      */
     void SetKeepTime(unsigned int time) {
         _keep_time = time;    
     };
     
 protected:
-    int                 _osfd;      // Ã¿´ÎÁ¬½Óµ¥¶À´´½¨socket
-    unsigned int        _keep_time; // ÉèÖÃ±£»îµÄÊ±¼ä
-    TcpKeepNtfy         _keep_ntfy; // ¹ØÁªÒ»¸ö±£»îÁ¬½Ó¶ÔÏó
-    struct sockaddr_in  _dst_addr;  // Ô¶¶ËµØÖ·ĞÅÏ¢
+    int                 _osfd;      // æ¯æ¬¡è¿æ¥å•ç‹¬åˆ›å»ºsocket
+    unsigned int        _keep_time; // è®¾ç½®ä¿æ´»çš„æ—¶é—´
+    TcpKeepNtfy         _keep_ntfy; // å…³è”ä¸€ä¸ªä¿æ´»è¿æ¥å¯¹è±¡
+    struct sockaddr_in  _dst_addr;  // è¿œç«¯åœ°å€ä¿¡æ¯
     
 };
 
 
 
 /**
- * @brief °´µØÖ·hash»º´æ³¤Á¬½Ó
+ * @brief æŒ‰åœ°å€hashç¼“å­˜é•¿è¿æ¥
  */
 class TcpKeepKey : public HashKey
 {
 public:
 
     /**
-     * @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     * @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     TcpKeepKey() {
         _addr_ipv4  = 0;
@@ -395,23 +395,23 @@ public:
     };
 
     /**
-     * @brief ÕâÀïÔİ²»ÇåÀíconn
+     * @brief è¿™é‡Œæš‚ä¸æ¸…ç†conn
      */
     ~TcpKeepKey() {
         TAILQ_INIT(&_keep_list);
     };
 
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue(){
         return _addr_ipv4 ^ ((_net_port << 16) | _net_port);
     }; 
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs){
         TcpKeepKey* data = dynamic_cast<TcpKeepKey*>(rhs);
@@ -429,13 +429,13 @@ public:
 
 
     /**
-     * @brief Á¬½Ó¶ÔÏó¹ÜÀí
+     * @brief è¿æ¥å¯¹è±¡ç®¡ç†
      */
     void InsertConn(TcpKeepConn* conn) {
         if (conn->_keep_flag & TCP_KEEP_IN_LIST) {
             return;
         }
-        TAILQ_INSERT_TAIL(&_keep_list, conn, _keep_entry);
+        TAILQ_INSERT_HEAD(&_keep_list, conn, _keep_entry);
         conn->_keep_flag |= TCP_KEEP_IN_LIST;
     };
     
@@ -452,24 +452,24 @@ public:
     };    
 
 private:
-    uint32_t            _addr_ipv4;     ///< ipµØÖ·
-    uint16_t            _net_port;      ///< port ÍøÂçĞòÁĞ
-    KeepConnList        _keep_list;     ///< Êµ¼ÊµÄ¿ÕÏĞ¶ÓÁĞ
+    uint32_t            _addr_ipv4;     ///< ipåœ°å€
+    uint16_t            _net_port;      ///< port ç½‘ç»œåºåˆ—
+    KeepConnList        _keep_list;     ///< å®é™…çš„ç©ºé—²é˜Ÿåˆ—
     
 };
 
 
 /**
- * @brief TCP³¤Á¬½ÓµÄÁ¬½Ó¶ÔÏó¹ÜÀíÓëÄÚ´æcache
+ * @brief TCPé•¿è¿æ¥çš„è¿æ¥å¯¹è±¡ç®¡ç†ä¸å†…å­˜cache
  */
 class TcpKeepMgr
 {
 public:
 
-    typedef CPtrPool<TcpKeepConn>   TcpKeepQueue;   ///< ÄÚ´æ»º³å³Ø
+    typedef CPtrPool<TcpKeepConn>   TcpKeepQueue;   ///< å†…å­˜ç¼“å†²æ± 
 
     /**
-     * @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     * @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     TcpKeepMgr();
 
@@ -477,34 +477,34 @@ public:
 
 
     /**
-     * @brief °´IPµØÖ·»ñÈ¡TCPµÄ±£³ÖÁ¬½Ó
+     * @brief æŒ‰IPåœ°å€è·å–TCPçš„ä¿æŒè¿æ¥
      */
     TcpKeepConn* GetTcpKeepConn(struct sockaddr_in*       dst);
     
     /**
-     * @brief °´IPµØÖ·»º´æTCPµÄ±£³ÖÁ¬½Ó
+     * @brief æŒ‰IPåœ°å€ç¼“å­˜TCPçš„ä¿æŒè¿æ¥
      */
     bool CacheTcpKeepConn(TcpKeepConn* conn);    
 
     /**
-     * @brief °´IPµØÖ·»º´æTCPµÄ±£³ÖÁ¬½Ó, È¥³ıCACHE
+     * @brief æŒ‰IPåœ°å€ç¼“å­˜TCPçš„ä¿æŒè¿æ¥, å»é™¤CACHE
      */
     bool RemoveTcpKeepConn(TcpKeepConn* conn); 
 
     /**
-     * @brief ¹Ø±Õ»ò»º´ætcp³¤Á¬½Ó
+     * @brief å…³é—­æˆ–ç¼“å­˜tcpé•¿è¿æ¥
      */
     void FreeTcpKeepConn(TcpKeepConn* conn, bool force_free);    
     
 private:
 
-    HashList*       _keep_hash;            ///< hash±í, ´æ´¢°´IPË÷ÒıµÄÁ¬½Ó¶ÓÁĞ
-    TcpKeepQueue    _mem_queue;            ///< mem¶ÓÁĞ, ¹ÜÀíconnÄÚ´æ¿é
+    HashList*       _keep_hash;            ///< hashè¡¨, å­˜å‚¨æŒ‰IPç´¢å¼•çš„è¿æ¥é˜Ÿåˆ—
+    TcpKeepQueue    _mem_queue;            ///< memé˜Ÿåˆ—, ç®¡ç†connå†…å­˜å—
 };
 
 
 /**
- * @brief Á¬½Ó¹ÜÀí¹¤³§Ä£ĞÍ
+ * @brief è¿æ¥ç®¡ç†å·¥å‚æ¨¡å‹
  */
 class ConnectionMgr
 {
@@ -514,47 +514,47 @@ public:
     typedef CPtrPool<UdpSessionConn>    UdpSessionQueue;
 
     /**
-     * @brief ÏûÏ¢buffµÄÈ«¾Ö¹ÜÀí¾ä±ú½Ó¿Ú
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief æ¶ˆæ¯buffçš„å…¨å±€ç®¡ç†å¥æŸ„æ¥å£
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     static ConnectionMgr* Instance (void);
 
     /**
-     * @brief ÏûÏ¢ÇåÀí½Ó¿Ú
+     * @brief æ¶ˆæ¯æ¸…ç†æ¥å£
      */
     static void Destroy(void);
 
     /**
-     * @brief »ñÈ¡½Ó¿Ú
+     * @brief è·å–æ¥å£
      */
     IMtConnection* GetConnection(CONN_OBJ_TYPE type, struct sockaddr_in*     dst);
     
     /**
-     * @brief »ØÊÕ½Ó¿Ú
+     * @brief å›æ”¶æ¥å£
      */
     void FreeConnection(IMtConnection* conn, bool force_free);
 
     /**
-     * @brief ¹Ø±ÕidleµÄtcp³¤Á¬½Ó
+     * @brief å…³é—­idleçš„tcpé•¿è¿æ¥
      */
     void CloseIdleTcpKeep(TcpKeepConn* conn);
 
     /**
-     * @brief ÏûÏ¢buffµÄÎö¹¹º¯Êı
+     * @brief æ¶ˆæ¯buffçš„ææ„å‡½æ•°
      */
     ~ConnectionMgr();
 
 private:
     /**
-     * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+     * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
      */
     ConnectionMgr();
 
-    static ConnectionMgr * _instance;         ///< µ¥ÀıÀà¾ä±ú 
+    static ConnectionMgr * _instance;         ///< å•ä¾‹ç±»å¥æŸ„ 
 
-    UdpShortQueue  _udp_short_queue;          ///< ¶ÌÁ¬½ÓµÄ¶ÓÁĞ³Ø 
-    UdpSessionQueue  _udp_session_queue;      ///< udp session Á¬½Ó³Ø
-    TcpKeepMgr      _tcp_keep_mgr;            ///< tcp keep ¹ÜÀíÆ÷
+    UdpShortQueue  _udp_short_queue;          ///< çŸ­è¿æ¥çš„é˜Ÿåˆ—æ±  
+    UdpSessionQueue  _udp_session_queue;      ///< udp session è¿æ¥æ± 
+    TcpKeepMgr      _tcp_keep_mgr;            ///< tcp keep ç®¡ç†å™¨
 };
 
 }

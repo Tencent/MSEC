@@ -34,7 +34,7 @@ void CTimerObject::TimerNotify(void)
 void CTimerObject::AttachTimer(class CTimerList *lst)
 {
     if (lst->timeout > 0)
-        objexp = __spp_get_now_ms() + lst->timeout;
+        objexp = get_time_ms() + lst->timeout;
 
     ListMoveTail(lst->tlist);
 }
@@ -44,7 +44,7 @@ int CTimerList::CheckExpired(int64_t now)
     int n = 0;
 
     if (now == 0) {
-        now = __spp_get_now_ms();
+        now = get_time_ms();
     }
 
     while (!tlist.ListEmpty()) {
@@ -118,7 +118,7 @@ int CTimerUnit::ExpireMicroSeconds(int msec)
     int64_t now;
     CTimerList *tl;
 
-    now = __spp_get_now_ms();
+    now = get_time_ms();
     exp = now + msec;
 
     for (tl = next; tl; tl = tl->next) {
@@ -156,7 +156,7 @@ int CTimerUnit::CheckPending(void)
 int CTimerUnit::CheckExpired(int64_t now)
 {
     if (now == 0)
-        now = __spp_get_now_ms();
+        now = get_time_ms();
 
     int n = CheckPending();;
     CTimerList *tl;

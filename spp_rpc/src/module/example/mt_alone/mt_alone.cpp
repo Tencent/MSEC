@@ -19,7 +19,7 @@
 
 /**
  * @file mt_alone.cpp
- * @info Î¢Ïß³Ìµ¥¶ÀÊ¹ÓÃÊÂÀı
+ * @info å¾®çº¿ç¨‹å•ç‹¬ä½¿ç”¨äº‹ä¾‹
  */
 
 #include <stdio.h>
@@ -31,13 +31,13 @@
 #define  REMOTE_IP      "127.0.0.1"
 #define  REMOTE_PORT    9988
 
-// TaskÊÂÀıÀà:Ê¹ÓÃUDPµ¥·¢µ¥ÊÕ½Ó¿Ú
+// Taskäº‹ä¾‹ç±»:ä½¿ç”¨UDPå•å‘å•æ”¶æ¥å£
 class UdpSndRcvTask
     : public IMtTask
 {
 public:
     virtual int Process() {
-        // »ñÈ¡Ä¿µÄµØÖ·ĞÅÏ¢, ¼òµ¥Ê¾Àı
+        // è·å–ç›®çš„åœ°å€ä¿¡æ¯, ç®€å•ç¤ºä¾‹
         static struct sockaddr_in server_addr;
         static int initflg = 0;
 
@@ -65,7 +65,7 @@ public:
 
 
 #define PKG_LEN  100
-// ¼ì²é±¨ÎÄÊÇ·ñ½ÓÊÜÍê³É
+// æ£€æŸ¥æŠ¥æ–‡æ˜¯å¦æ¥å—å®Œæˆ
 int CheckPkgLen(void *buf, int len) {
     if (len < PKG_LEN)
     {
@@ -75,13 +75,13 @@ int CheckPkgLen(void *buf, int len) {
     return PKG_LEN;
 }
 
-// TaskÊÂÀıÀà£¬Ê¹ÓÃTCPÁ¬½Ó³Øµ¥·¢µ¥ÊÕ½Ó¿Ú
+// Taskäº‹ä¾‹ç±»ï¼Œä½¿ç”¨TCPè¿æ¥æ± å•å‘å•æ”¶æ¥å£
 class TcpSndRcvTask
     : public IMtTask
 {
 public:
     virtual int Process() {
-        // »ñÈ¡Ä¿µÄµØÖ·ĞÅÏ¢, ¼òµ¥Ê¾Àı
+        // è·å–ç›®çš„åœ°å€ä¿¡æ¯, ç®€å•ç¤ºä¾‹
         static struct sockaddr_in server_addr;
         static int initflg = 0;
 
@@ -107,14 +107,14 @@ public:
     };
 };
 
-// TaskÊÂÀıÀà: ÒµÎñ¿ÉÒÔÓÃÀ´ÑéÖ¤Î¢Ïß³ÌAPI¿ÉÓÃĞÔ
+// Taskäº‹ä¾‹ç±»: ä¸šåŠ¡å¯ä»¥ç”¨æ¥éªŒè¯å¾®çº¿ç¨‹APIå¯ç”¨æ€§
 class ApiVerifyTask
     : public IMtTask
 {
 public:
     virtual int Process() {
 
-        // µ÷ÓÃÒµÎñÊ¹ÓÃÎ¢Ïß³ÌAPI
+        // è°ƒç”¨ä¸šåŠ¡ä½¿ç”¨å¾®çº¿ç¨‹API
 	printf("This is the api verify task!!!\n");
 
         return 0;
@@ -123,7 +123,7 @@ public:
 
 int main(void)
 {
-    // ³õÊ¼»¯Î¢Ïß³Ì¿ò¼Ü
+    // åˆå§‹åŒ–å¾®çº¿ç¨‹æ¡†æ¶
     bool init_ok = mt_init_frame();
     if (!init_ok)
     {
@@ -131,16 +131,16 @@ int main(void)
         return -1;
     }
 
-    // ´¥·¢Î¢Ïß³ÌÇĞ»»
+    // è§¦å‘å¾®çº¿ç¨‹åˆ‡æ¢
     mt_sleep(0);
 
     UdpSndRcvTask task1;
     TcpSndRcvTask task2;
     ApiVerifyTask task3;
 
-    // ÏÖÔÚÔ­ÉúÏß³ÌÒÑ¾­ÔÚdemonµÄµ÷¶ÈÖĞÁË
+    // ç°åœ¨åŸç”Ÿçº¿ç¨‹å·²ç»åœ¨demonçš„è°ƒåº¦ä¸­äº†
     while (true)
-    { // ÕâÀïÊ¾ÀıÒ»¸ö²¢·¢²Ù×÷
+    { // è¿™é‡Œç¤ºä¾‹ä¸€ä¸ªå¹¶å‘æ“ä½œ
         IMtTaskList task_list;
         task_list.push_back(&task1);
         task_list.push_back(&task2);
@@ -153,7 +153,7 @@ int main(void)
             return -2;
         }
 
-        // Ñ­»·¼ì²éÃ¿Ò»¸ötaskÊÇ·ñÖ´ĞĞ³É¹¦£¬¼´ProcessµÄ·µ»ØÖµ
+        // å¾ªç¯æ£€æŸ¥æ¯ä¸€ä¸ªtaskæ˜¯å¦æ‰§è¡ŒæˆåŠŸï¼Œå³Processçš„è¿”å›å€¼
         for (unsigned int i = 0; i < task_list.size(); i++)
         {
             IMtTask *task = task_list[i];
@@ -165,7 +165,7 @@ int main(void)
             }
         }
 
-        // Ë¯Ãß500ms
+        // ç¡çœ 500ms
         mt_sleep(500);
     }
 

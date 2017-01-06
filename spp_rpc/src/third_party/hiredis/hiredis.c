@@ -679,8 +679,8 @@ int redisReconnect(redisContext *c) {
 }
 
 /**
- * @brief ¼ì²éÎ¢Ïß³ÌÁ¬½ÓÊÇ·ñÎªÐÂÁ¬½Ó
- * @return 1 ÐÂÁ¬½Ó 0 ÀÏÁ¬½Ó
+ * @brief æ£€æŸ¥å¾®çº¿ç¨‹è¿žæŽ¥æ˜¯å¦ä¸ºæ–°è¿žæŽ¥
+ * @return 1 æ–°è¿žæŽ¥ 0 è€è¿žæŽ¥
  */
 int redisIsNewConnectMt(redisContext *c) {
     if (c && (c->flags & REDIS_NEW_CONN)) {

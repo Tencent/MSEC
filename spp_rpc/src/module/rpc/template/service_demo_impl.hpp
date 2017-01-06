@@ -21,13 +21,13 @@
  * @brief service impl
  */
 
-#ifndef __$(MODULE_REPLACE)_HEAD_H__
-#define __$(MODULE_REPLACE)_HEAD_H__
+#ifndef __$(MODULE_FILENAME_REPLACE)_HEAD_H__
+#define __$(MODULE_FILENAME_REPLACE)_HEAD_H__
 
 #include <string>
 #include "syncincl.h"
 #include "srpcincl.h"
-#include "msg_$(MODULE_REPLACE)_impl.h"
+#include "msg_$(MODULE_FILENAME_REPLACE)_impl.h"
 
 $(CODE_BEGIN)
 
@@ -35,7 +35,7 @@ $(SERVICE_DEFINE_BEGIN)
 /**
  * @brief 默认生成的服务实现类型
  */
-class CRpc$(SERVICE_REPLACE)Impl : public $(MODULE_REPLACE)::$(SERVICE_REPLACE)
+class CRpc$(SERVICE_REPLACE)Impl : public $(MODULE_NAMESPACE_REPLACE)::$(SERVICE_REPLACE)
 {
 public:
 

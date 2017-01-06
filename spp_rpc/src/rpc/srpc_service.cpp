@@ -32,6 +32,7 @@
 #include "srpc_service.h"
 #include "srpc_network.h"
 #include "srpc_intf.h"
+#include "http_support.h"
 
 using namespace SPP_SYNCFRAME;
 using namespace NS_MICRO_THREAD;
@@ -39,13 +40,13 @@ using namespace srpc;
 using namespace google::protobuf;
 
 #define SRPC_PACK_PKG(pkg, len, head, body) ({ \
-        int32_t ret; \
+        int32_t _ret; \
         if ((NULL == body) || (body->ByteSize() == 0)) { \
-            ret = SrpcPackPkgNoBody(pkg, len, head); \
+            _ret = SrpcPackPkgNoBody(pkg, len, head); \
         } else { \
-            ret = SrpcPackPkg(pkg, len, head, body); \
+            _ret = SrpcPackPkg(pkg, len, head, body); \
         } \
-        ret; \
+        _ret; \
     })
 
 namespace srpc
@@ -109,6 +110,7 @@ CRpcMsgBase::CRpcMsgBase()
     m_method_info   = NULL;
     m_request       = NULL;
     m_response      = NULL;
+    m_proto_type    = PROTO_TYPE_PB;
 }
 
 // msg基类析构函数
@@ -120,19 +122,41 @@ CRpcMsgBase::~CRpcMsgBase()
         delete m_response;
 }
 
+void CRpcMsgBase::SetMethodInfo(CMethodInfo * method_info)
+{
+    m_method_info   = method_info;
+    m_request       = m_method_info->m_request->New();
+    m_response      = m_method_info->m_response->New();
+}
+
+void CRpcMsgBase::SetProtoType(int type)
+{
+    m_proto_type = type;
+}
+
+int CRpcMsgBase::GetProtoType(void)
+{
+    return m_proto_type;
+}
+
+
 // 消息处理过程
 int CRpcMsgBase::HandleProcess()
 {
+    int32_t msg_len;
+    char*   rsp_buff;
+    std::string rsp_str;
+    std::string body_str;
+    blob_type resblob;
+
     // 1. 新建请求和回复报文
-    m_request   = m_method_info->m_request->New();
-    m_response  = m_method_info->m_response->New();
     m_service   = m_method_info->m_service;
     m_method    = m_method_info->m_method;
 
     // 2. 记录流水信息
-    GetLogOption().Set("Coloring", "1");
-    NGLOG_INFO("srpc system water");
-    GetLogOption().Set("Coloring", "0");
+    //GetLogOption().Set("Coloring", "1");
+    //NGLOG_INFO("srpc system water");
+    //GetLogOption().Set("Coloring", "0");
 
     // 3. 解析请求报文
     int32_t ret = SrpcUnpackPkg((char *)this->GetReqPkg().data(), (int)this->GetReqPkg().size(), &m_head, m_request);
@@ -146,7 +170,7 @@ int CRpcMsgBase::HandleProcess()
 
     if (!m_head.has_flow_id() || !m_head.flow_id())
     {
-        m_head.set_flow_id((uint64_t)random());
+        m_head.set_flow_id(newseq());
         GetLogOption().Set("ReqID", m_head.flow_id());
     }
 
@@ -167,10 +191,31 @@ int CRpcMsgBase::HandleProcess()
     NGLOG_DEBUG("msg process ok, method %s",  m_method_info->m_method->full_name().c_str());
         
 EXIT_LABEL:
+    if (GetProtoType() == PROTO_TYPE_PB)
+    {
+        goto PB_RET;
+    }
+    else
+    {
+        goto JSON_RET;
+    }
 
+JSON_RET:
+    try {
+        body_str = CHttpHelper::Pb2Json(*m_response);
+    } catch (std::exception &e){
+        body_str = "pb2json failed";
+    }
+
+    CHttpHelper::GenJsonResponse((int)m_head.err(), body_str.c_str(), body_str.size(), rsp_str);
+    resblob.data = (char *)rsp_str.data();
+    resblob.len  = (int)rsp_str.size();
+    this->SendToClient(resblob);
+
+    return 0;
+
+PB_RET:
     // 5. 组包并回包
-    int32_t msg_len;
-    char*   rsp_buff;
     ret = SRPC_PACK_PKG(&rsp_buff, &msg_len, &m_head, m_response);
     if (ret < 0) {
         RPC_REPORT(errmsg(ret));
@@ -178,7 +223,6 @@ EXIT_LABEL:
         return -1;
     }
 
-    blob_type resblob;
     resblob.data = rsp_buff;
     resblob.len  = msg_len;
     this->SendToClient(resblob);
@@ -199,6 +243,7 @@ CMethodManager::~CMethodManager()
     while (!m_method_name_map.empty())
     {
         delete (m_method_name_map.begin())->second;
+        m_method_name_map.erase(m_method_name_map.begin());
     }
 }
 

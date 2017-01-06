@@ -1,0 +1,6 @@
+1.请使用如下命令生成php demo代码:
+./create_rpc.py ./service.proto ../../ ./
+
+2.build.sh用来打包代码
+打包好后放到运营机bin/php目录下解压出来即可
+自己的文件请不要叫msec_py.tgz

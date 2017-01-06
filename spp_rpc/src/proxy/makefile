@@ -27,16 +27,15 @@ MT=../sync_frame/micro_thread
 SYNCFRAME=../sync_frame/spp_plugin
 STATMGR=../comm/stat_mgr
 LIB_PATH=../bin/lib/
+LIB_INSTALL_PATH=../../bin/lib
 INTERNAL=../internal
-
-ifeq ($(ARCH),32)
-	CFLAGS += -m32 -march=pentium4
-endif
+PHPLIB=../third_party/php/lib
 
 CFLAGS += -g -Wall -D_GNU_SOURCE -D_SPP_PROXY -D_MP_MODE -Wno-write-strings -Werror -DTIXML_USE_STL#-DOPEN_PRINT
 INC += -I$(COMM) -I$(TBASE) -I$(TBASE)/tsockcommu -I$(STATMGR) -I$(RPC)
 LIB += -lpthread -ldl -rdynamic -L$(RPC) -lrpc_svr_comm -L$(COMM) -L$(SYNCFRAME) -L$(MT) -lcommon \
-       -lmtspp -lmt -L$(INTERNAL)/monitor/lib -lmonitor -Wl,-rpath,$(LIB_PATH) 
+       -L$(PHPLIB) -lphp5 -lmtspp -lmt -L$(INTERNAL)/monitor/lib -lmonitor -Wl,-rpath,$(LIB_PATH) \
+       -L$(LIB_INSTALL_PATH) -lhttpsupport -ljansson
   
 TARGET=srpc_proxy
 all : $(TARGET)

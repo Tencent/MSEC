@@ -22,5 +22,4 @@
 
 using namespace::spp::comm;
 	
-struct timeval __spp_g_now_tv;
 

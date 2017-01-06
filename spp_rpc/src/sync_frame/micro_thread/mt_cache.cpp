@@ -19,7 +19,7 @@
 
 /**
  *  @filename mt_cache.cpp
- *  @info   TCP½ÓÈëbuffer¹ÜÀíÊµÏÖ
+ *  @info   TCPæ¥å…¥bufferç®¡ç†å®ç°
  */
  
 #include <stdlib.h>
@@ -38,9 +38,9 @@ namespace NS_MICRO_THREAD {
 
 
 /**
- * @brief  Buffer´´½¨²Ù×÷
- * @param  size Êµ¼ÊµÄbuff´óĞ¡
- * @return ·ÇNULL block¿é, ÆäËüÊ§°Ü
+ * @brief  Bufferåˆ›å»ºæ“ä½œ
+ * @param  size å®é™…çš„buffå¤§å°
+ * @return éNULL blockå—, å…¶å®ƒå¤±è´¥
  */
 TSkBuffer* new_sk_buffer(uint32_t size)
 {
@@ -66,8 +66,8 @@ TSkBuffer* new_sk_buffer(uint32_t size)
 
 
 /**
- * @brief  BufferÊÍ·Å²Ù×÷
- * @param  block -buff¿é
+ * @brief  Bufferé‡Šæ”¾æ“ä½œ
+ * @param  block -buffå—
  */
 void delete_sk_buffer(TSkBuffer* block)
 {
@@ -80,10 +80,10 @@ void delete_sk_buffer(TSkBuffer* block)
 
 
 /**
- * @brief ±£Áô¸ü´ó³¤¶ÈĞÅÏ¢(·Ç×ÊÔ´³Ø»¯µÄbuff,¿ÉÀ©Õ¹)
- * @param buff -ÒÑÓĞµÄbuffÖ¸Õë
- * @param size -ĞèÒªÀ©Õ¹µÄ×îÖÕ³¤¶È´óĞ¡
- * @return Êµ¼ÊµÄbuffĞÅÏ¢
+ * @brief ä¿ç•™æ›´å¤§é•¿åº¦ä¿¡æ¯(éèµ„æºæ± åŒ–çš„buff,å¯æ‰©å±•)
+ * @param buff -å·²æœ‰çš„buffæŒ‡é’ˆ
+ * @param size -éœ€è¦æ‰©å±•çš„æœ€ç»ˆé•¿åº¦å¤§å°
+ * @return å®é™…çš„buffä¿¡æ¯
  */
 TSkBuffer* reserve_sk_buffer(TSkBuffer* buff, uint32_t size)
 {
@@ -108,10 +108,10 @@ TSkBuffer* reserve_sk_buffer(TSkBuffer* buff, uint32_t size)
 
 
 /**
- * @brief  cache ³ØµÄ³õÊ¼»¯½Ó¿Ú
- * @param  mng -¹ÜÀí³ØµÄÖ¸Õë
- * @param  expired -±£»îµÄÊ±¼ä, µ¥Î»Ãë
- * @param  size -±¾¹ÜÀí¿éÄ¬ÈÏÉú³ÉµÄ¿é´óĞ¡
+ * @brief  cache æ± çš„åˆå§‹åŒ–æ¥å£
+ * @param  mng -ç®¡ç†æ± çš„æŒ‡é’ˆ
+ * @param  expired -ä¿æ´»çš„æ—¶é—´, å•ä½ç§’
+ * @param  size -æœ¬ç®¡ç†å—é»˜è®¤ç”Ÿæˆçš„å—å¤§å°
  */
 void sk_buffer_mng_init(TSkBuffMng* mng, uint32_t expired, uint32_t size)
 {
@@ -122,8 +122,8 @@ void sk_buffer_mng_init(TSkBuffMng* mng, uint32_t expired, uint32_t size)
 }
 
 /**
- * @brief  cache ³ØµÄÏú»Ù½Ó¿Ú
- * @param  mng -¹ÜÀí³ØµÄÖ¸Õë
+ * @brief  cache æ± çš„é”€æ¯æ¥å£
+ * @param  mng -ç®¡ç†æ± çš„æŒ‡é’ˆ
  */
 void sk_buffer_mng_destroy(TSkBuffMng * mng)
 {
@@ -139,9 +139,9 @@ void sk_buffer_mng_destroy(TSkBuffMng * mng)
 
 
 /**
- * @brief  ÉêÇë»ò¸´ÓÃÒ»¿ébuff
- * @param  mng -¹ÜÀí³ØµÄÖ¸Õë
- * @return ·ÇNULLÎª³É¹¦»ñÈ¡µÄbuff¿éÖ¸Õë
+ * @brief  ç”³è¯·æˆ–å¤ç”¨ä¸€å—buff
+ * @param  mng -ç®¡ç†æ± çš„æŒ‡é’ˆ
+ * @return éNULLä¸ºæˆåŠŸè·å–çš„buffå—æŒ‡é’ˆ
  */
 TSkBuffer* alloc_sk_buffer(TSkBuffMng* mng)
 {
@@ -168,9 +168,9 @@ TSkBuffer* alloc_sk_buffer(TSkBuffMng* mng)
 
 
 /**
- * @brief ÊÍ·ÅÖ¸¶¨µÄbuff¿é
- * @param  mng -¹ÜÀí³ØµÄÖ¸Õë
- * @param  buff -´ıÊÍ·ÅµÄbuffÖ¸Õë
+ * @brief é‡Šæ”¾æŒ‡å®šçš„buffå—
+ * @param  mng -ç®¡ç†æ± çš„æŒ‡é’ˆ
+ * @param  buff -å¾…é‡Šæ”¾çš„buffæŒ‡é’ˆ
  */
 void free_sk_buffer(TSkBuffMng* mng, TSkBuffer* buff)
 {
@@ -188,9 +188,9 @@ void free_sk_buffer(TSkBuffMng* mng, TSkBuffer* buff)
 
 
 /**
- * @brief »ØÊÕ¹ıÆÚµÄbuff¿é
- * @param  mng -¹ÜÀí³ØµÄÖ¸Õë
- * @param  now -µ±Ç°µÄÊ±¼ä, Ãë¼¶±ğ
+ * @brief å›æ”¶è¿‡æœŸçš„buffå—
+ * @param  mng -ç®¡ç†æ± çš„æŒ‡é’ˆ
+ * @param  now -å½“å‰çš„æ—¶é—´, ç§’çº§åˆ«
  */
 void recycle_sk_buffer(TSkBuffMng* mng, uint32_t now)
 {
@@ -211,9 +211,9 @@ void recycle_sk_buffer(TSkBuffMng* mng, uint32_t now)
 
 
 /**
- * @brief Cache¹ÜÀíÁ´³õÊ¼»¯
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param pool -buff³ØÖ¸Õë
+ * @brief Cacheç®¡ç†é“¾åˆå§‹åŒ–
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param pool -buffæ± æŒ‡é’ˆ
  */
 void rw_cache_init(TRWCache* cache, TSkBuffMng* pool)
 {
@@ -224,8 +224,8 @@ void rw_cache_init(TRWCache* cache, TSkBuffMng* pool)
 }
 
 /**
- * @brief Cache¹ÜÀíÁ´Ïú»Ù
- * @param cache -¹ÜÀí¿éÖ¸Õë
+ * @brief Cacheç®¡ç†é“¾é”€æ¯
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
  */
 void rw_cache_destroy(TRWCache* cache)
 {
@@ -247,11 +247,11 @@ void rw_cache_destroy(TRWCache* cache)
 
 
 /**
- * @brief CacheÉ¾³ı²¢¿½±´Ö¸¶¨³¤¶ÈÊı¾İ
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param buff -´æ·ÅbuffµÄÖ¸Õë
- * @param len -´ıÉ¾³ıµÄ³¤¶È
- * @return Êµ¼Ê¿½±´³¤¶È
+ * @brief Cacheåˆ é™¤å¹¶æ‹·è´æŒ‡å®šé•¿åº¦æ•°æ®
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param buff -å­˜æ”¾buffçš„æŒ‡é’ˆ
+ * @param len -å¾…åˆ é™¤çš„é•¿åº¦
+ * @return å®é™…æ‹·è´é•¿åº¦
  */
 uint32_t cache_copy_out(TRWCache* cache, void* buff, uint32_t len)
 {
@@ -265,7 +265,7 @@ uint32_t cache_copy_out(TRWCache* cache, void* buff, uint32_t len)
     TSkBuffer* tmp = NULL;
     TAILQ_FOREACH_SAFE(item, &cache->list, entry, tmp)
     {
-        // 1. È·ÈÏ¿½±´Êı¾İ´óĞ¡
+        // 1. ç¡®è®¤æ‹·è´æ•°æ®å¤§å°
         skip_len = (item->data_len > left) ? left : item->data_len;
         if (out_buff != NULL)
         {
@@ -281,21 +281,21 @@ uint32_t cache_copy_out(TRWCache* cache, void* buff, uint32_t len)
             break;
         }
   
-        // 2. ÒÆ³ıÒ»¸öblock
+        // 2. ç§»é™¤ä¸€ä¸ªblock
         if (cache->count > 0) {
             cache->count--;
         }
         TAILQ_REMOVE(&cache->list, item, entry);
         free_sk_buffer(cache->pool, item);
 
-        // 3. Ñ­»·±äÁ¿¿ØÖÆ
+        // 3. å¾ªç¯å˜é‡æ§åˆ¶
         if (left == 0)
         {
             break;
         }
     }
 
-    // ÕûÌå¿¼ÂÇÊı¾İ³¤¶ÈÎÊÌâ, ÊÇ·ñÓĞ×ã¹»µÄÊı¾İÒÆ³ı
+    // æ•´ä½“è€ƒè™‘æ•°æ®é•¿åº¦é—®é¢˜, æ˜¯å¦æœ‰è¶³å¤Ÿçš„æ•°æ®ç§»é™¤
     skip_len = len - left;
     if (cache->len > skip_len) 
     { 
@@ -311,9 +311,9 @@ uint32_t cache_copy_out(TRWCache* cache, void* buff, uint32_t len)
 
 
 /**
- * @brief CacheÉ¾³ıµôÖ¸¶¨³¤¶ÈÊı¾İ
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param len -´ıÉ¾³ıµÄ³¤¶È
+ * @brief Cacheåˆ é™¤æ‰æŒ‡å®šé•¿åº¦æ•°æ®
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param len -å¾…åˆ é™¤çš„é•¿åº¦
  */
 void cache_skip_data(TRWCache* cache, uint32_t len)
 {
@@ -321,9 +321,9 @@ void cache_skip_data(TRWCache* cache, uint32_t len)
 }
 
 /**
- * @brief Cache×·¼ÓÖ¸¶¨³¤¶ÈÊı¾İ
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param buff -´ı×·¼ÓµÄ¿éÖ¸Õë
+ * @brief Cacheè¿½åŠ æŒ‡å®šé•¿åº¦æ•°æ®
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param buff -å¾…è¿½åŠ çš„å—æŒ‡é’ˆ
  */
 void cache_append_buffer(TRWCache* cache, TSkBuffer* buff)
 {
@@ -338,8 +338,8 @@ void cache_append_buffer(TRWCache* cache, TSkBuffer* buff)
 }
 
 /**
- * @brief CacheÒÆ³ıµÚÒ»¿éÄÚ´æ, µ«²»free
- * @param cache -¹ÜÀí¿éÖ¸Õë
+ * @brief Cacheç§»é™¤ç¬¬ä¸€å—å†…å­˜, ä½†ä¸free
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
  */
 TSkBuffer* cache_skip_first_buffer(TRWCache* cache)
 {
@@ -365,10 +365,10 @@ TSkBuffer* cache_skip_first_buffer(TRWCache* cache)
 
 
 /**
- * @brief Cache×·¼ÓÖ¸¶¨³¤¶ÈÊı¾İ
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param data -´ı×·¼ÓµÄÖ¸Õë
- * @param len -´ı×·¼ÓµÄ³¤¶È
+ * @brief Cacheè¿½åŠ æŒ‡å®šé•¿åº¦æ•°æ®
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param data -å¾…è¿½åŠ çš„æŒ‡é’ˆ
+ * @param len -å¾…è¿½åŠ çš„é•¿åº¦
  */
 int32_t cache_append_data(TRWCache* cache, const void* data, uint32_t len)
 {
@@ -385,7 +385,7 @@ int32_t cache_append_data(TRWCache* cache, const void* data, uint32_t len)
     uint32_t left = len;
     uint32_t remain = 0;
 
-    // 1. Î²¿Õ¼äÏÈ½øĞĞappend, ÒòÎªĞèÒª»Ø¹ö, Ç°Ò»²¿·ÖÏÈ²»¿½±´
+    // 1. å°¾ç©ºé—´å…ˆè¿›è¡Œappend, å› ä¸ºéœ€è¦å›æ»š, å‰ä¸€éƒ¨åˆ†å…ˆä¸æ‹·è´
     TSkBuffer* tail = TAILQ_LAST(&cache->list, __sk_buff_list);
     if (tail != NULL)
     {
@@ -403,7 +403,7 @@ int32_t cache_append_data(TRWCache* cache, const void* data, uint32_t len)
         }
     }
     
-    // 2. ÓĞÊ£Óàbuff´ı´¦Àí, ÏÈÉêÇëÊ£ÓàµÄbuff, ÔÚĞŞ¸ÄÎ²½Úµã
+    // 2. æœ‰å‰©ä½™buffå¾…å¤„ç†, å…ˆç”³è¯·å‰©ä½™çš„buff, åœ¨ä¿®æ”¹å°¾èŠ‚ç‚¹
     TRWCache keep_list;
     rw_cache_init(&keep_list, cache->pool);
     left -= remain;
@@ -429,7 +429,7 @@ int32_t cache_append_data(TRWCache* cache, const void* data, uint32_t len)
         left -= item->size;
     }
     
-    // 3. ³¢ÊÔ¿½±´×î³õµÄbuff, ÕâÀï²»»á»Ø¹öÁË
+    // 3. å°è¯•æ‹·è´æœ€åˆçš„buff, è¿™é‡Œä¸ä¼šå›æ»šäº†
     if ((tail != NULL) && (remain > 0))
     {
         memcpy(tail->data + tail->data_len, data, remain);
@@ -445,11 +445,11 @@ int32_t cache_append_data(TRWCache* cache, const void* data, uint32_t len)
 
 
 /**
- * @brief CacheÕûºÏµÄUDPÊÕ±¨½Ó¿Ú, ÏûºÄÄÚ´æ±È½Ï¶à, ²»½¨Òé32Î»Ê¹ÓÃ
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param fd - ×¼±¸ÊÕ±¨µÄfd¾ä±ú
- * @param remote_addr -¶Ô¶ËipµØÖ·
- * @return Êµ¼Ê½ÓÊÕ³¤¶È
+ * @brief Cacheæ•´åˆçš„UDPæ”¶æŠ¥æ¥å£, æ¶ˆè€—å†…å­˜æ¯”è¾ƒå¤š, ä¸å»ºè®®32ä½ä½¿ç”¨
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param fd - å‡†å¤‡æ”¶æŠ¥çš„fdå¥æŸ„
+ * @param remote_addr -å¯¹ç«¯ipåœ°å€
+ * @return å®é™…æ¥æ”¶é•¿åº¦
  */
 int32_t cache_udp_recv(TRWCache* cache, uint32_t fd, struct sockaddr_in* remote_addr)
 {
@@ -495,10 +495,10 @@ int32_t cache_udp_recv(TRWCache* cache, uint32_t fd, struct sockaddr_in* remote_
 
 
 /**
- * @brief CacheÕûºÏµÄTCPÊÕ±¨½Ó¿Ú
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param fd - ×¼±¸ÊÕ±¨µÄfd¾ä±ú
- * @return Êµ¼Ê½ÓÊÕ³¤¶È
+ * @brief Cacheæ•´åˆçš„TCPæ”¶æŠ¥æ¥å£
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param fd - å‡†å¤‡æ”¶æŠ¥çš„fdå¥æŸ„
+ * @return å®é™…æ¥æ”¶é•¿åº¦
  */
 int32_t cache_tcp_recv(TRWCache* cache, uint32_t fd)
 {
@@ -510,7 +510,7 @@ int32_t cache_tcp_recv(TRWCache* cache, uint32_t fd)
     int32_t total = 0;
     for (uint32_t i = 0; i < 100; i++)
     {
-        // 1. Ã¿´Î¼ì²éÎ²¿Õ¼ä, ¿Õ¼äÂú»ò³õÊ¼×´Ì¬, ÉêÇëĞÂ¿Õ¼ä
+        // 1. æ¯æ¬¡æ£€æŸ¥å°¾ç©ºé—´, ç©ºé—´æ»¡æˆ–åˆå§‹çŠ¶æ€, ç”³è¯·æ–°ç©ºé—´
         TSkBuffer* item = TAILQ_LAST(&cache->list, __sk_buff_list);
         if ((NULL == item) 
             || ((item->data_len + item->data) >= item->end))
@@ -523,7 +523,7 @@ int32_t cache_tcp_recv(TRWCache* cache, uint32_t fd)
             cache_append_buffer(cache, item);
         }
 
-        // 2. µ¥´Î×î¶à½ÓÊÕsize´óĞ¡, Ä¬ÈÏ64K
+        // 2. å•æ¬¡æœ€å¤šæ¥æ”¶sizeå¤§å°, é»˜è®¤64K
         uint8_t* buff = item->data + item->data_len;
         uint32_t remain = item->end - item->data - item->data_len;
         mt_hook_syscall(recv);
@@ -550,7 +550,7 @@ int32_t cache_tcp_recv(TRWCache* cache, uint32_t fd)
             item->data_len += recvd_len;
             cache->len += recvd_len;
             total += recvd_len;
-            if (recvd_len < (int32_t)remain) // ÊÕ²»Âú, ¿ÉÈÏÎª±¾´ÎOK
+            if (recvd_len < (int32_t)remain) // æ”¶ä¸æ»¡, å¯è®¤ä¸ºæœ¬æ¬¡OK
             {
                 return total;
             }
@@ -561,10 +561,10 @@ int32_t cache_tcp_recv(TRWCache* cache, uint32_t fd)
 }
 
 /**
- * @brief CacheÕûºÏµÄTCP·¢ËÍ½Ó¿Ú
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param fd - ×¼±¸·¢°üµÄfd¾ä±ú
- * @return Êµ¼Ê·¢ËÍ³¤¶È
+ * @brief Cacheæ•´åˆçš„TCPå‘é€æ¥å£
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param fd - å‡†å¤‡å‘åŒ…çš„fdå¥æŸ„
+ * @return å®é™…å‘é€é•¿åº¦
  */
 int32_t cache_tcp_send(TRWCache* cache, uint32_t fd)
 {
@@ -613,12 +613,12 @@ int32_t cache_tcp_send(TRWCache* cache, uint32_t fd)
 
 
 /**
- * @brief CacheÕûºÏµÄTCP·¢ËÍ½Ó¿Ú, Î´Ê¹ÓÃIOVEC
- * @param cache -¹ÜÀí¿éÖ¸Õë
- * @param fd - ×¼±¸·¢°üµÄfd¾ä±ú
- * @param data -·¢ËÍÍêcacheºó, ¼ÌĞø·¢ËÍµÄbuff
- * @param len  -¼ÌĞø·¢ËÍµÄbuff³¤¶È
- * @return Êµ¼Ê·¢ËÍ³¤¶È
+ * @brief Cacheæ•´åˆçš„TCPå‘é€æ¥å£, æœªä½¿ç”¨IOVEC
+ * @param cache -ç®¡ç†å—æŒ‡é’ˆ
+ * @param fd - å‡†å¤‡å‘åŒ…çš„fdå¥æŸ„
+ * @param data -å‘é€å®Œcacheå, ç»§ç»­å‘é€çš„buff
+ * @param len  -ç»§ç»­å‘é€çš„buffé•¿åº¦
+ * @return å®é™…å‘é€é•¿åº¦
  */
 int32_t cache_tcp_send_buff(TRWCache* cache, uint32_t fd, const void* data, uint32_t len)
 {
@@ -627,7 +627,7 @@ int32_t cache_tcp_send_buff(TRWCache* cache, uint32_t fd, const void* data, uint
         return -1;
     }
 
-    // 1. ÓÅÏÈ·¢ËÍCACHEÊı¾İ
+    // 1. ä¼˜å…ˆå‘é€CACHEæ•°æ®
     int32_t ret = cache_tcp_send(cache, fd);
     if (ret < 0)
     {
@@ -635,7 +635,7 @@ int32_t cache_tcp_send_buff(TRWCache* cache, uint32_t fd, const void* data, uint
         return ret;
     }
 
-    // 2. CACHEÒÑ¾­ÎŞÊı¾İ
+    // 2. CACHEå·²ç»æ— æ•°æ®
     int32_t send_len = 0;
     if (cache->len == 0)
     {
@@ -667,9 +667,9 @@ int32_t cache_tcp_send_buff(TRWCache* cache, uint32_t fd, const void* data, uint
 
 
 /**
- * @brief »ñÈ¡cacheÓĞĞ§Êı¾İ×Ü³¤¶È
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @return Êµ¼ÊÓĞĞ§Êı¾İ³¤¶È
+ * @brief è·å–cacheæœ‰æ•ˆæ•°æ®æ€»é•¿åº¦
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @return å®é™…æœ‰æ•ˆæ•°æ®é•¿åº¦
  */
 uint32_t get_data_len(TBuffVecPtr multi)
 {
@@ -682,9 +682,9 @@ uint32_t get_data_len(TBuffVecPtr multi)
 }
 
 /**
- * @brief »ñÈ¡cacheÓĞĞ§Êı¾İ¿é¸öÊı
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @return Êµ¼ÊÓĞĞ§Êı¾İ¿é¸öÊı
+ * @brief è·å–cacheæœ‰æ•ˆæ•°æ®å—ä¸ªæ•°
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @return å®é™…æœ‰æ•ˆæ•°æ®å—ä¸ªæ•°
  */
 uint32_t get_block_count(TBuffVecPtr multi)
 {
@@ -697,9 +697,9 @@ uint32_t get_block_count(TBuffVecPtr multi)
 }
 
 /**
- * @brief »ñÈ¡cacheµÄµÚÒ»¿éÊı¾İÖ¸Õë
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @return µÚÒ»¿éÊı¾İÖ¸Õë
+ * @brief è·å–cacheçš„ç¬¬ä¸€å—æ•°æ®æŒ‡é’ˆ
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @return ç¬¬ä¸€å—æ•°æ®æŒ‡é’ˆ
  */
 TBuffBlockPtr get_first_block(TBuffVecPtr multi)
 {
@@ -712,10 +712,10 @@ TBuffBlockPtr get_first_block(TBuffVecPtr multi)
 }
 
 /**
- * @brief »ñÈ¡cacheµÄÏÂÒ»¿éÊı¾İÖ¸Õë
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @param block -µ±Ç°¿éÖ¸Õë
- * @return ÏÂÒ»¿éÊı¾İÖ¸Õë
+ * @brief è·å–cacheçš„ä¸‹ä¸€å—æ•°æ®æŒ‡é’ˆ
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @param block -å½“å‰å—æŒ‡é’ˆ
+ * @return ä¸‹ä¸€å—æ•°æ®æŒ‡é’ˆ
  */
 TBuffBlockPtr get_next_block(TBuffVecPtr multi, TBuffBlockPtr block)
 {
@@ -731,10 +731,10 @@ TBuffBlockPtr get_next_block(TBuffVecPtr multi, TBuffBlockPtr block)
 }
 
 /**
- * @brief »ñÈ¡Êı¾İ¿éµÄÖ¸ÕëÓëÊı¾İ³¤¶È
- * @param block -µ±Ç°¿éÖ¸Õë
- * @param data -Êı¾İÖ¸Õë-modify²ÎÊı
- * @param len  -³¤¶ÈÖ¸Õë modify²ÎÊı
+ * @brief è·å–æ•°æ®å—çš„æŒ‡é’ˆä¸æ•°æ®é•¿åº¦
+ * @param block -å½“å‰å—æŒ‡é’ˆ
+ * @param data -æ•°æ®æŒ‡é’ˆ-modifyå‚æ•°
+ * @param len  -é•¿åº¦æŒ‡é’ˆ modifyå‚æ•°
  */
 void get_block_data(TBuffBlockPtr block, const void** data, int32_t* len)
 {
@@ -757,11 +757,11 @@ void get_block_data(TBuffBlockPtr block, const void** data, int32_t* len)
 
 
 /**
- * @brief »ñÈ¡Êı¾İ¿éµÄÖ¸ÕëÓëÊı¾İ³¤¶È
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @param data -Êı¾İĞ´ÈëÇøÓòÖ¸Õë
- * @param len  -³¤¶È
- * @return Êı¾İ¶ÁÈ¡µÄÊı¾İ³¤¶È
+ * @brief è·å–æ•°æ®å—çš„æŒ‡é’ˆä¸æ•°æ®é•¿åº¦
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @param data -æ•°æ®å†™å…¥åŒºåŸŸæŒ‡é’ˆ
+ * @param len  -é•¿åº¦
+ * @return æ•°æ®è¯»å–çš„æ•°æ®é•¿åº¦
  */
 uint32_t read_cache_data(TBuffVecPtr multi, void* data, uint32_t len)
 {
@@ -805,11 +805,11 @@ uint32_t read_cache_data(TBuffVecPtr multi, void* data, uint32_t len)
 
 
 /**
- * @brief »ñÈ¡Êı¾İ¿éµÄÖ¸ÕëÓëÊı¾İ³¤¶È
- * @param multi -¹ÜÀí¿éÖ¸Õë
- * @param data -Êı¾İĞ´ÈëÇøÓòÖ¸Õë
- * @param len  -³¤¶È
- * @return Êı¾İ¶ÁÈ¡µÄÊı¾İ³¤¶È
+ * @brief è·å–æ•°æ®å—çš„æŒ‡é’ˆä¸æ•°æ®é•¿åº¦
+ * @param multi -ç®¡ç†å—æŒ‡é’ˆ
+ * @param data -æ•°æ®å†™å…¥åŒºåŸŸæŒ‡é’ˆ
+ * @param len  -é•¿åº¦
+ * @return æ•°æ®è¯»å–çš„æ•°æ®é•¿åº¦
  */
 uint32_t read_cache_begin(TBuffVecPtr multi, uint32_t begin, void* data, uint32_t len)
 {
@@ -828,7 +828,7 @@ uint32_t read_cache_begin(TBuffVecPtr multi, uint32_t begin, void* data, uint32_
     TSkBuffer* item = NULL;
     TAILQ_FOREACH(item, &cache->list, entry)
     {
-        // 1. ¿ªÊ¼Î»ÖÃÓĞÊ£Óà, ÔòÌø¹ı¸Ã²¿·Ö
+        // 1. å¼€å§‹ä½ç½®æœ‰å‰©ä½™, åˆ™è·³è¿‡è¯¥éƒ¨åˆ†
         uint8_t* start_ptr = item->data;
         uint32_t real_left = item->data_len;
         if (pos_left > 0)
@@ -839,13 +839,13 @@ uint32_t read_cache_begin(TBuffVecPtr multi, uint32_t begin, void* data, uint32_
             start_ptr += skip_len;
         }
 
-        // 2. Ìø¹ıºóÎŞ³¤¶ÈÊ£Óà, ÔòµÈ´ıÏÂÒ»¿é
+        // 2. è·³è¿‡åæ— é•¿åº¦å‰©ä½™, åˆ™ç­‰å¾…ä¸‹ä¸€å—
         if (real_left == 0)
         {
             continue;
         }
 
-        // 3. ÓĞÊ£Óà, ¾¡Á¦¿½±´×î´ó³¤¶È
+        // 3. æœ‰å‰©ä½™, å°½åŠ›æ‹·è´æœ€å¤§é•¿åº¦
         uint32_t copy_len = copy_left > real_left ? real_left : copy_left;
         if (data != NULL)
         {

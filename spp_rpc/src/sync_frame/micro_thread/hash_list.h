@@ -19,8 +19,8 @@
 
 /**
   *   @filename  hash_list.h
-  *   @info  ¿ªÁ´hashÀà, ¼òµ¥hash´æ´¢ÊµÏÖ; ¼Ì³ĞÀ´ÊµÏÖhashÓ³Éä, ×¢Òâ²åÈëÔªËØµÄ
-  *          ÉúÃüÖÜÆÚ, ÈçÕ»±äÁ¿µÈ»á×Ô¶¯Îö¹¹µÄÔªËØ, ²»Òª´æ·ÅÓÚ´Ë, ·ñÔò»á»µÁ´
+  *   @info  å¼€é“¾hashç±», ç®€å•hashå­˜å‚¨å®ç°; ç»§æ‰¿æ¥å®ç°hashæ˜ å°„, æ³¨æ„æ’å…¥å…ƒç´ çš„
+  *          ç”Ÿå‘½å‘¨æœŸ, å¦‚æ ˆå˜é‡ç­‰ä¼šè‡ªåŠ¨ææ„çš„å…ƒç´ , ä¸è¦å­˜æ”¾äºæ­¤, å¦åˆ™ä¼šåé“¾
   *   @time  2013-06-11
   */
 
@@ -36,46 +36,46 @@
 namespace NS_MICRO_THREAD {
 
 /**
- *  @brief Hash´æ·ÅÔªËØµÄ»ùÀà, ¼Ì³Ğ¸ÃÔªËØ¼´¿ÉÊµÏÖÀ©Õ¹
+ *  @brief Hashå­˜æ”¾å…ƒç´ çš„åŸºç±», ç»§æ‰¿è¯¥å…ƒç´ å³å¯å®ç°æ‰©å±•
  */
 class HashKey
 {
 private:
-    HashKey*  _next_entry;          ///< ¿ªÁ´hashµÄÁ´½ÓÔªËØ
-    uint32_t  _hash_value;          ///< hash valueĞÅÏ¢, ½ÚÔ¼±È½ÏµÄÊ±¼ä
-    void*     _data_ptr;            ///< hash dataÊı¾İÖ¸Õë, ¿Ékey - value ¾ÛºÏ´æ´¢
+    HashKey*  _next_entry;          ///< å¼€é“¾hashçš„é“¾æ¥å…ƒç´ 
+    uint32_t  _hash_value;          ///< hash valueä¿¡æ¯, èŠ‚çº¦æ¯”è¾ƒçš„æ—¶é—´
+    void*     _data_ptr;            ///< hash dataæ•°æ®æŒ‡é’ˆ, å¯key - value èšåˆå­˜å‚¨
     
 public:
 
-    friend class HashList;          ///< hash±í¿ÉÒÔÖ±½Ó·ÃÎÊnextÖ¸Õë
+    friend class HashList;          ///< hashè¡¨å¯ä»¥ç›´æ¥è®¿é—®nextæŒ‡é’ˆ
 
     /**
-     *  @brief ¹¹ÔìÓëĞéÎö¹¹º¯Êı
+     *  @brief æ„é€ ä¸è™šææ„å‡½æ•°
      */
     HashKey():_next_entry(NULL), _hash_value(0), _data_ptr(NULL) {};
     virtual ~HashKey(){};
 
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue() = 0; 
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs) = 0; 
     
     /**
-     *  @brief ¶Ñ±éÀú½Ó¿Ú, ÓÃÓÚµ÷ÊÔ, ÔÚ±éÀúÃ¿¸öÔªËØÊ±±»µ÷ÓÃ, ¿ÉÑ¡ÊµÏÖ
+     *  @brief å †éå†æ¥å£, ç”¨äºè°ƒè¯•, åœ¨éå†æ¯ä¸ªå…ƒç´ æ—¶è¢«è°ƒç”¨, å¯é€‰å®ç°
      */
     virtual void HashIterate() {  
         return;
     };
 
     /**
-     *  @brief ½ÚµãÔªËØµÄÊµ¼ÊÊı¾İÖ¸ÕëÉèÖÃÓë»ñÈ¡
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„å®é™…æ•°æ®æŒ‡é’ˆè®¾ç½®ä¸è·å–
      */
     void* GetDataPtr() {
         return _data_ptr;
@@ -89,14 +89,14 @@ public:
 
 
 /**
- *  @brief Hash¹ÜÀíÀà, ¿ªÁ´Ê½hash, ×¢ÒâÑ¡ÔñºÏÊÊµÄhashº¯Êı, ±ÜÃâ³åÍ»¹ı³¤
+ *  @brief Hashç®¡ç†ç±», å¼€é“¾å¼hash, æ³¨æ„é€‰æ‹©åˆé€‚çš„hashå‡½æ•°, é¿å…å†²çªè¿‡é•¿
  */
 class HashList
 {
 public:
 
     /**
-     *  @brief ¹¹Ôìº¯ÊıÓëÎö¹¹º¯Êı
+     *  @brief æ„é€ å‡½æ•°ä¸ææ„å‡½æ•°
      */
 	explicit HashList(int max = 100000) {
         _max = GetMaxPrimeNum((max > 2) ? max : 100000);
@@ -112,17 +112,17 @@ public:
 	};
 
     /**
-     *  @brief »ñÈ¡hashµÄÔªËØ¸öÊı
-     *  @return ¶ÑÔªËØÊµ¼ÊÊıÄ¿
+     *  @brief è·å–hashçš„å…ƒç´ ä¸ªæ•°
+     *  @return å †å…ƒç´ å®é™…æ•°ç›®
      */
     int HashSize() {
         return _count;
     };
 
     /**
-     *  @brief hash²åÈëÔªËØ, ÒªÔÚ¸ÃÔªËØÎö¹¹Ç°, µ÷ÓÃremove
-     *  @param key ´ı²åÈëµÄÔªËØÖ¸Õë, ×¢ÒâÔªËØµÄÉúÃüÖÜÆÚ, ²»Òª²åÈëÕ»±äÁ¿
-     *  @return 0 ³É¹¦, -1 ²ÎÊıÎŞĞ§»òÎ´³õÊ¼»¯, -2 ÖØ¸´²åÈë»òÔàÊı¾İ
+     *  @brief hashæ’å…¥å…ƒç´ , è¦åœ¨è¯¥å…ƒç´ ææ„å‰, è°ƒç”¨remove
+     *  @param key å¾…æ’å…¥çš„å…ƒç´ æŒ‡é’ˆ, æ³¨æ„å…ƒç´ çš„ç”Ÿå‘½å‘¨æœŸ, ä¸è¦æ’å…¥æ ˆå˜é‡
+     *  @return 0 æˆåŠŸ, -1 å‚æ•°æ— æ•ˆæˆ–æœªåˆå§‹åŒ–, -2 é‡å¤æ’å…¥æˆ–è„æ•°æ®
      */
     int HashInsert(HashKey* key) {
         if (!key || !_buckets) {
@@ -144,9 +144,9 @@ public:
     }
 
     /**
-     *  @brief hash²éÕÒÔªËØ
-     *  @param key ´ı²éÑ¯µÄkeyÖ¸Õë
-     *  @return ²éÑ¯½á¹û¶ÔÏóÖ¸Õë, NULL±íÃ÷ÎŞÊı¾İ
+     *  @brief hashæŸ¥æ‰¾å…ƒç´ 
+     *  @param key å¾…æŸ¥è¯¢çš„keyæŒ‡é’ˆ
+     *  @return æŸ¥è¯¢ç»“æœå¯¹è±¡æŒ‡é’ˆ, NULLè¡¨æ˜æ— æ•°æ®
      */
     HashKey* HashFind(HashKey* key) {
         if (!key || !_buckets) {
@@ -171,9 +171,9 @@ public:
     }
     
     /**
-     *  @brief hash²éÕÒÔªËØ
-     *  @param key ´ı²éÑ¯µÄkeyÖ¸Õë
-     *  @return ²éÑ¯½á¹û¶ÔÏóÖ¸Õë, NULL±íÃ÷ÎŞÊı¾İ
+     *  @brief hashæŸ¥æ‰¾å…ƒç´ 
+     *  @param key å¾…æŸ¥è¯¢çš„keyæŒ‡é’ˆ
+     *  @return æŸ¥è¯¢ç»“æœå¯¹è±¡æŒ‡é’ˆ, NULLè¡¨æ˜æ— æ•°æ®
      */
     void* HashFindData(HashKey* key) {
         HashKey* item = HashFind(key);
@@ -186,8 +186,8 @@ public:
     
 
     /**
-     *  @brief hashÉ¾³ıÔªËØ
-     *  @param key ´ıÉ¾³ıµÄkeyÖ¸Õë
+     *  @brief hashåˆ é™¤å…ƒç´ 
+     *  @param key å¾…åˆ é™¤çš„keyæŒ‡é’ˆ
      */
     void HashRemove(HashKey* key) {
         if (!key || !_buckets) {
@@ -215,7 +215,7 @@ public:
     }
 
     /**
-     *  @brief hash±éÀúÔªËØ, µ÷ÓÃµü´úº¯Êı
+     *  @brief hashéå†å…ƒç´ , è°ƒç”¨è¿­ä»£å‡½æ•°
      */
     void HashForeach() {
         if (!_buckets) {
@@ -231,7 +231,7 @@ public:
     }
     
     /**
-     *  @brief hashÇåÀí±éÀú, ĞÔÄÜµÍÏÂ, Ö»ÓÃÓÚ×îÖÕ±éÀúÇåÀí
+     *  @brief hashæ¸…ç†éå†, æ€§èƒ½ä½ä¸‹, åªç”¨äºæœ€ç»ˆéå†æ¸…ç†
      */
     HashKey* HashGetFirst() {
         if (!_buckets) {
@@ -250,7 +250,7 @@ public:
 private:
 
     /**
-     *  @brief »ñÈ¡Í°³¤¶ÈµÄ×î´óÖÊÊı
+     *  @brief è·å–æ¡¶é•¿åº¦çš„æœ€å¤§è´¨æ•°
      */
     int GetMaxPrimeNum(int num) 
     {
@@ -278,9 +278,9 @@ private:
 
 
 private:
-    HashKey** _buckets;             ///< Í°Ö¸Õë
-    int       _count;               ///< ÓĞĞ§ÔªËØ¸öÊı
-    int       _max;                 ///< ×î´ó½Úµã¸öÊı
+    HashKey** _buckets;             ///< æ¡¶æŒ‡é’ˆ
+    int       _count;               ///< æœ‰æ•ˆå…ƒç´ ä¸ªæ•°
+    int       _max;                 ///< æœ€å¤§èŠ‚ç‚¹ä¸ªæ•°
 };
 
 }

@@ -19,7 +19,7 @@
 
 /**
  *  @file SyncFrame.cpp
- *  @info Í¬²½Ïß³Ì×´Ì¬¿ò¼ÜÊµÏÖ
+ *  @info åŒæ­¥çº¿ç¨‹çŠ¶æ€æ¡†æ¶å®ç°
  *  @time 20130515
  **/
 #include <stdio.h>
@@ -61,35 +61,35 @@ using namespace spp::statdef;
 using namespace NS_MICRO_THREAD;
 using namespace SPP_SYNCFRAME;
 
-#define MONITOR_SYNC_START          "syncframe start"                   // Æô¶¯
-#define MONITOR_SYNC_STOP           "syncframe stop"                    // Íê±Ï
-#define MONITOR_SYNC_ILL_MSG        "syncframe illegal msg"             // ÏûÏ¢·Ç·¨
-#define MONITOR_SYNC_MSG_FAIL       "syncframe msg failed"              // ÏûÏ¢Ê§°Ü
-#define MONITOR_SYNC_CREATE_FAIL    "syncframe create microthread fail" // ´´½¨Ê§°Ü
-#define MONITOR_SYNC_MSG_SIZE       "syncframe msg count"               // Î¢Ïß³ÌÏûÏ¢Êı
+#define MONITOR_SYNC_START          "syncframe start"                   // å¯åŠ¨
+#define MONITOR_SYNC_STOP           "syncframe stop"                    // å®Œæ¯•
+#define MONITOR_SYNC_ILL_MSG        "syncframe illegal msg"             // æ¶ˆæ¯éæ³•
+#define MONITOR_SYNC_MSG_FAIL       "syncframe msg failed"              // æ¶ˆæ¯å¤±è´¥
+#define MONITOR_SYNC_CREATE_FAIL    "syncframe create microthread fail" // åˆ›å»ºå¤±è´¥
+#define MONITOR_SYNC_MSG_SIZE       "syncframe msg count"               // å¾®çº¿ç¨‹æ¶ˆæ¯æ•°
 
 namespace SPP_SYNCFRAME {
 /**
- * @brief SPPÈÕÖ¾ÊÊÅäÎ¢Ïß³Ì¿ò¼Ü¶¨Òå²¿·Ö
+ * @brief SPPæ—¥å¿—é€‚é…å¾®çº¿ç¨‹æ¡†æ¶å®šä¹‰éƒ¨åˆ†
  */
 #define LOG_MAX_LEN     4096
 class SppLogAdpt : public LogAdapter
 {
 private:
-    CServerBase *_base;                    ///< sppµÄ·şÎñÆ÷¶ÔÏó
-    char        _buff[LOG_MAX_LEN];        ///< ÈÕÖ¾ÁÙÊ±»º´æ
+    CServerBase *_base;                    ///< sppçš„æœåŠ¡å™¨å¯¹è±¡
+    char        _buff[LOG_MAX_LEN];        ///< æ—¥å¿—ä¸´æ—¶ç¼“å­˜
     
 public:
 
     /**
-     * @brief ¹¹ÔìÓëÎö¹¹
+     * @brief æ„é€ ä¸ææ„
      */
     SppLogAdpt(CServerBase* base)  :  _base(base) {
     }; 
     virtual ~SppLogAdpt(){};
 
     /**
-     * @brief ÈÕÖ¾¼¶±ğ¹ıÂË¼ì²é½Ó¿ÚÊµÏÖ
+     * @brief æ—¥å¿—çº§åˆ«è¿‡æ»¤æ£€æŸ¥æ¥å£å®ç°
      */
     bool CheckLogLvl(LOG_LEVEL lvl) {
         if (!_base) { 
@@ -116,7 +116,7 @@ public:
     
 
     /**
-     * @brief DEBUG½Ó¿ÚÊµÏÖ
+     * @brief DEBUGæ¥å£å®ç°
      */
     virtual void LogDebug(char* fmt, ...){
         if (_base) {            
@@ -130,7 +130,7 @@ public:
     };
 
     /**
-     * @brief TRACE½Ó¿ÚÊµÏÖ
+     * @brief TRACEæ¥å£å®ç°
      */
     virtual void LogTrace(char* fmt, ...){
         if (_base) {        
@@ -144,7 +144,7 @@ public:
     };
 
     /**
-     * @brief ERROR½Ó¿ÚÊµÏÖ
+     * @brief ERRORæ¥å£å®ç°
      */
     virtual void LogError(char* fmt, ...){           
         if (_base) { 
@@ -158,7 +158,7 @@ public:
     }; 
 
     /**
-     * @brief attr½Ó¿ÚÊµÏÖ
+     * @brief attræ¥å£å®ç°
      */
     virtual void AttrReportAdd(int attr, int iValue) {
     	MONITOR_INC(attr, iValue);
@@ -166,7 +166,7 @@ public:
 
 
 	/**
-     * @brief attr½Ó¿ÚÊµÏÖ
+     * @brief attræ¥å£å®ç°
      */
     virtual void AttrReportSet(int attr, int iValue) {
     	MONITOR_SET(attr, iValue);
@@ -175,10 +175,10 @@ public:
 			CDefaultWorker* worker = (CDefaultWorker*)_base;
 			switch(attr)
 			{			
-				case 492069://Î¢Ïß³Ì³Ø´óĞ¡						
+				case 492069://å¾®çº¿ç¨‹æ± å¤§å°						
 					worker->fstat_.op(WIDX_MT_THREAD_NUM, iValue);
 					break;
-				case 493212://Î¢Ïß³ÌÏûÏ¢Êı				
+				case 493212://å¾®çº¿ç¨‹æ¶ˆæ¯æ•°				
 					worker->fstat_.op(WIDX_MT_MSG_NUM, iValue);
 					break;
 			}
@@ -186,7 +186,7 @@ public:
     };
 
     /**
-     * @brief attr½Ó¿ÚÊµÏÖ
+     * @brief attræ¥å£å®ç°
      */
     virtual void AttrReportAdd(const char *attr, int iValue) {
         MONITOR_INC(attr, iValue);
@@ -194,7 +194,7 @@ public:
 
 
     /**
-     * @brief attr½Ó¿ÚÊµÏÖ
+     * @brief attræ¥å£å®ç°
      */
     virtual void AttrReportSet(const char *attr, int iValue) {
         MONITOR_SET(attr, iValue);
@@ -205,25 +205,25 @@ public:
 
 
 /**
- * Ïß³ÌÍ³Ò»Èë¿Úº¯Êı, »áµ÷ÓÃÏûÏ¢µÄ´¦Àíº¯Êı
+ * çº¿ç¨‹ç»Ÿä¸€å…¥å£å‡½æ•°, ä¼šè°ƒç”¨æ¶ˆæ¯çš„å¤„ç†å‡½æ•°
  *
- * @param pMsg CMsgBaseÅÉÉúÀà¶ÔÏóÖ¸Õë£¬´æ·ÅºÍÇëÇóÏà¹ØµÄÊı¾İ£¬¸Ã¶ÔÏóĞèÒª²å¼şÒÔnewµÄ·½Ê½·ÖÅä£¬ÊÍ·ÅÓÉ¿ò¼Ü¸ºÔğ
+ * @param pMsg CMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡æŒ‡é’ˆï¼Œå­˜æ”¾å’Œè¯·æ±‚ç›¸å…³çš„æ•°æ®ï¼Œè¯¥å¯¹è±¡éœ€è¦æ’ä»¶ä»¥newçš„æ–¹å¼åˆ†é…ï¼Œé‡Šæ”¾ç”±æ¡†æ¶è´Ÿè´£
  *
- * @return 0: ³É¹¦£» ÆäËû£ºÊ§°Ü
+ * @return 0: æˆåŠŸï¼› å…¶ä»–ï¼šå¤±è´¥
  *
  */ 
 void ThreadEntryFunc(void* arg)
 {
 	CSyncFrame::Instance()->_uMsgNo++;
-    MT_ATTR_API_SET(MONITOR_SYNC_MSG_SIZE, CSyncFrame::Instance()->_uMsgNo); // Î¢Ïß³ÌÏûÏ¢Êı
+    MT_ATTR_API_SET(MONITOR_SYNC_MSG_SIZE, CSyncFrame::Instance()->_uMsgNo); // å¾®çº¿ç¨‹æ¶ˆæ¯æ•°
 
-    MT_ATTR_API(MONITOR_SYNC_START, 1); // Æô¶¯
+    MT_ATTR_API(MONITOR_SYNC_START, 1); // å¯åŠ¨
     
     int rc = 0;
     CSyncMsg* msg = (CSyncMsg*)arg;
     if (!msg)
     {
-        MT_ATTR_API(MONITOR_SYNC_ILL_MSG, 1); // ÏûÏ¢·Ç·¨
+        MT_ATTR_API(MONITOR_SYNC_ILL_MSG, 1); // æ¶ˆæ¯éæ³•
         SF_LOG(LOG_ERROR, "Invalid arg, error");
         goto EXIT_LABEL;
     }
@@ -231,7 +231,7 @@ void ThreadEntryFunc(void* arg)
     rc = msg->HandleProcess();
     if (rc != 0)
     { 
-        MT_ATTR_API(MONITOR_SYNC_MSG_FAIL, 1); // ÏûÏ¢Ê§°Ü
+        MT_ATTR_API(MONITOR_SYNC_MSG_FAIL, 1); // æ¶ˆæ¯å¤±è´¥
         SF_LOG(LOG_DEBUG, "User msg process failed(%d), close connset", rc);
         
         blob_type rspblob;        
@@ -248,14 +248,14 @@ EXIT_LABEL:
         delete msg;
     } 
 
-    MT_ATTR_API(MONITOR_SYNC_STOP, 1); // Íê±Ï
+    MT_ATTR_API(MONITOR_SYNC_STOP, 1); // å®Œæ¯•
 
     return;
 };
 
 
 /**
- *  Õª×ÔSPPµÄnotify´¦Àí, Ê¡È¥ÎÄ¼şÒÀÀµ
+ *  æ‘˜è‡ªSPPçš„notifyå¤„ç†, çœå»æ–‡ä»¶ä¾èµ–
  */
 int SppShmNotify(int key)
 {
@@ -285,7 +285,7 @@ int SppShmNotify(int key)
 
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼şÈ«¾Ö³ÉÔ±³õÊ¼»¯
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶å…¨å±€æˆå‘˜åˆå§‹åŒ–
  */
 CSyncFrame *CSyncFrame::_s_instance = NULL;
 bool CSyncFrame::_init_flag  = false;
@@ -293,7 +293,7 @@ int  CSyncFrame::_iNtfySock  = -1;
 
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼şÈ«¾Ö¾ä±ú»ñÈ¡
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶å…¨å±€å¥æŸ„è·å–
  */
 CSyncFrame* CSyncFrame::Instance (void)
 {
@@ -307,7 +307,7 @@ CSyncFrame* CSyncFrame::Instance (void)
 
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼ş¹¹Ôì
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶æ„é€ 
  */
 CSyncFrame::CSyncFrame() 
 {
@@ -318,7 +318,7 @@ CSyncFrame::CSyncFrame()
 }
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼şÎö¹¹
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶ææ„
  */
 CSyncFrame::~CSyncFrame() 
 { 
@@ -330,7 +330,7 @@ CSyncFrame::~CSyncFrame()
 }
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼ş·´³õÊ¼»¯
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶ååˆå§‹åŒ–
  */
 void CSyncFrame::Destroy (void)
 {
@@ -353,7 +353,7 @@ void CSyncFrame::Destroy (void)
 }
 
 /**
- *  @brief  Í¬²½¿ò¼Ü²å¼ş³õÊ¼»¯
+ *  @brief  åŒæ­¥æ¡†æ¶æ’ä»¶åˆå§‹åŒ–
  */
 int CSyncFrame::InitFrame(CServerBase *pServBase, int max_thread_num, int min_thread_num)
 {
@@ -362,11 +362,11 @@ int CSyncFrame::InitFrame(CServerBase *pServBase, int max_thread_num, int min_th
         SF_LOG(LOG_ERROR, "CSyncFrame already init ok");
         return 0;
     }
-    CSyncFrame::_init_flag = true;  // Í¬²½Ïß³Ì±ê¼ÇÎ»
+    CSyncFrame::_init_flag = true;  // åŒæ­¥çº¿ç¨‹æ ‡è®°ä½
     
     _pServBase = pServBase;    
 
-    ///< ³õÊ¼»¯MT¿â
+    ///< åˆå§‹åŒ–MTåº“
     static SppLogAdpt s_log(_pServBase);
     MtFrame::Instance()->SetDefaultThreadNum(min_thread_num);
     bool rc = MtFrame::Instance()->InitFrame(&s_log, max_thread_num);
@@ -376,7 +376,7 @@ int CSyncFrame::InitFrame(CServerBase *pServBase, int max_thread_num, int min_th
         return -2;
     }
 
-    ///< È¡GROUPID, ÕìÌıÃüÃû¹ÜµÀ, »ñÈ¡¿É¶ÁÊÂ¼şÍ¨Öª 20130523
+    ///< å–GROUPID, ä¾¦å¬å‘½åç®¡é“, è·å–å¯è¯»äº‹ä»¶é€šçŸ¥ 20130523
     _iNtfyFd = SppShmNotify(_iGroupId*2); // notify comsume
     int flags;
     if ((flags = fcntl(_iNtfyFd, F_GETFL, 0)) < 0 || 
@@ -394,18 +394,18 @@ int CSyncFrame::InitFrame(CServerBase *pServBase, int max_thread_num, int min_th
 
 
 /**
- * Í¬²½ÏûÏ¢µÄµ÷¶ÈÈë¿Ú
+ * åŒæ­¥æ¶ˆæ¯çš„è°ƒåº¦å…¥å£
  *
- * @param pMsg CMsgBaseÅÉÉúÀà¶ÔÏóÖ¸Õë£¬´æ·ÅºÍÇëÇóÏà¹ØµÄÊı¾İ£¬¸Ã¶ÔÏóĞèÒª²å¼şÒÔnewµÄ·½Ê½·ÖÅä£¬ÊÍ·ÅÓÉ¿ò¼Ü¸ºÔğ
+ * @param pMsg CMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡æŒ‡é’ˆï¼Œå­˜æ”¾å’Œè¯·æ±‚ç›¸å…³çš„æ•°æ®ï¼Œè¯¥å¯¹è±¡éœ€è¦æ’ä»¶ä»¥newçš„æ–¹å¼åˆ†é…ï¼Œé‡Šæ”¾ç”±æ¡†æ¶è´Ÿè´£
  *
- * @return 0: ³É¹¦£» ÆäËû£ºÊ§°Ü
+ * @return 0: æˆåŠŸï¼› å…¶ä»–ï¼šå¤±è´¥
  *
  */ 
 int CSyncFrame::Process(CSyncMsg *pMsg)
 {
     if (MtFrame::CreateThread(ThreadEntryFunc, pMsg) == NULL) 
     {
-        MT_ATTR_API(MONITOR_SYNC_CREATE_FAIL, 1); // ´´½¨Ê§°Ü
+        MT_ATTR_API(MONITOR_SYNC_CREATE_FAIL, 1); // åˆ›å»ºå¤±è´¥
         SF_LOG(LOG_ERROR, "Sync frame start thread failed, error");
         delete pMsg;
         return -1;
@@ -414,7 +414,7 @@ int CSyncFrame::Process(CSyncMsg *pMsg)
 };
 
 /**
- *  Ö÷Ïß³ÌÑ­»·, Ã¿´ÎÇĞ»»ÉÏÏÂÎÄ, ÈÃ³öCPU, µ÷¶È¿ò¼Üºó¶Ëepoll
+ *  ä¸»çº¿ç¨‹å¾ªç¯, æ¯æ¬¡åˆ‡æ¢ä¸Šä¸‹æ–‡, è®©å‡ºCPU, è°ƒåº¦æ¡†æ¶åç«¯epoll
  */
 void CSyncFrame::WaitNotifyFd(int utime)
 {
@@ -431,7 +431,7 @@ void CSyncFrame::WaitNotifyFd(int utime)
 
 
 /**
- *  Î¢Ïß³ÌÆô¶¯±êÖ¾, SPP×¢²áÄÚ²¿½Ó¿Ú
+ *  å¾®çº¿ç¨‹å¯åŠ¨æ ‡å¿—, SPPæ³¨å†Œå†…éƒ¨æ¥å£
  */
 bool CSyncFrame::GetMtFlag()
 {
@@ -439,7 +439,7 @@ bool CSyncFrame::GetMtFlag()
 }
 
 /**
- *  Ö÷Ïß³ÌÑ­»·, ¸ù¾İÇ°¶ËÊÇ·ñÓĞÇëÇó, ¾ö¶¨epollµÈ´ı»úÖÆ
+ *  ä¸»çº¿ç¨‹å¾ªç¯, æ ¹æ®å‰ç«¯æ˜¯å¦æœ‰è¯·æ±‚, å†³å®šepollç­‰å¾…æœºåˆ¶
  */
 void CSyncFrame::HandleSwitch(bool block)
 {

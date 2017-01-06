@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_concurrent.h
- *  @info À©Õ¹×´Ì¬Ïß³ÌµÄ´¦ÀíÄ£ĞÍ
+ *  @info æ‰©å±•çŠ¶æ€çº¿ç¨‹çš„å¤„ç†æ¨¡å‹
  *  @time 20130515
  **/
 
@@ -37,60 +37,60 @@ class IMtAction;
 typedef vector<IMtAction*>  IMtActList;
 
 /******************************************************************************/
-/*  Î¢Ïß³ÌÓÃ»§½Ó¿Ú¶¨Òå: Î¢Ïß³ÌAction¶àÂ·²¢·¢Ä£ĞÍ½Ó¿Ú¶¨Òå                      */
+/*  å¾®çº¿ç¨‹ç”¨æˆ·æ¥å£å®šä¹‰: å¾®çº¿ç¨‹Actionå¤šè·¯å¹¶å‘æ¨¡å‹æ¥å£å®šä¹‰                      */
 /******************************************************************************/
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí½Ó¿Ú, ·â×°ACTON½Ó¿ÚÄ£ĞÍ, ÄÚ²¿¹ØÁªmsg
- * @param req_list -action list ÊµÏÖ·â×°º¯Êı½Ó¿Ú
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -100 ½ÓÊÕÓ¦´ğ²¿·ÖÊ§°Ü, ¿É´òÓ¡errno
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†æ¥å£, å°è£…ACTONæ¥å£æ¨¡å‹, å†…éƒ¨å…³è”msg
+ * @param req_list -action list å®ç°å°è£…å‡½æ•°æ¥å£
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -100 æ¥æ”¶åº”ç­”éƒ¨åˆ†å¤±è´¥, å¯æ‰“å°errno
  */
 int mt_msg_sendrcv(IMtActList& req_list, int timeout);
 
 /******************************************************************************/
-/*  ÄÚ²¿ÊµÏÖ¶¨Òå²¿·Ö                                                          */
+/*  å†…éƒ¨å®ç°å®šä¹‰éƒ¨åˆ†                                                          */
 /******************************************************************************/
 
 /**
- * @brief ¶àÂ·IOµÄ´¦ÀíÓÅ»¯, Òì²½µ÷¶ÈµÈ´ı´¦Àí
- * @param req_list - Á¬½ÓÁĞ±í
+ * @brief å¤šè·¯IOçš„å¤„ç†ä¼˜åŒ–, å¼‚æ­¥è°ƒåº¦ç­‰å¾…å¤„ç†
+ * @param req_list - è¿æ¥åˆ—è¡¨
  * @param how - EPOLLIN  EPOLLOUT
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü -3 ´¦Àí³¬Ê±
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥ -3 å¤„ç†è¶…æ—¶
  */
 int mt_multi_netfd_poll(IMtActList& req_list, int how, int timeout);
 
 /**
- * @brief ÎªÃ¿¸öITEM½¨Á¢ÉÏÏÂÎÄµÄsocket
- * @param req_list - Á¬½ÓÁĞ±í
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief ä¸ºæ¯ä¸ªITEMå»ºç«‹ä¸Šä¸‹æ–‡çš„socket
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int mt_multi_newsock(IMtActList& req_list);
 
 /**
- * @brief ¶àÂ·IOµÄ´¦Àí, ´ò¿ªÁ¬½Ó
- * @param req_list - Á¬½ÓÁĞ±í
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief å¤šè·¯IOçš„å¤„ç†, æ‰“å¼€è¿æ¥
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int mt_multi_open(IMtActList& req_list, int timeout);
 
 /**
- * @brief ¶àÂ·IOµÄ´¦Àí, ·¢ËÍÊı¾İ
- * @param req_list - Á¬½ÓÁĞ±í
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief å¤šè·¯IOçš„å¤„ç†, å‘é€æ•°æ®
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int mt_multi_sendto(IMtActList& req_list, int timeout);
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†
  */
 int mt_multi_recvfrom(IMtActList& req_list, int timeout);
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†
  */
 int mt_multi_sendrcv_ex(IMtActList& req_list, int timeout);
 

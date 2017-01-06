@@ -18,8 +18,8 @@
 
 
 /**
- * @brief һд������߶�дһ���ڴ����
- * @info  [ע��] �Ƕ����д����
+ * @brief 一写多读或者多写一读内存队列
+ * @info  [注意] 非多读多写队列
  */
 
 #include <stdio.h>
@@ -72,7 +72,7 @@ static __inline__ void atomic_dec(volatile int32_t *p)
 
 #define atomic_read(v)		(*v)
 
-/* ���С��64�ֽڶ��� */
+/* 块大小做64字节对其 */
 int32_t calc_block_size(int32_t data_size)
 {
     int32_t real_size;
@@ -82,7 +82,7 @@ int32_t calc_block_size(int32_t data_size)
     return real_size;
 }
 
-/* �������� */
+/* 计算块个数 */
 int32_t calc_block_num(int32_t mem_size, int32_t block_size)
 {
     int32_t block_num;
@@ -94,7 +94,7 @@ int32_t calc_block_num(int32_t mem_size, int32_t block_size)
     return block_num;
 }
 
-/* ������д�С�����д�С�϶����ڿ���� */
+/* 计算队列大小，队列大小肯定大于块个数 */
 int32_t calc_queue_size(int32_t block_num)
 {
     int32_t queue_size;
@@ -400,7 +400,6 @@ int32_t mem_block_writev_data(mem_queue_desc_t *desc, mem_block_t *blocks, struc
 
 int32_t mem_block_read_data(mem_queue_desc_t *desc, mem_block_t *blocks, char *data, int32_t len)
 {
-    mem_queue_header_t *header;
     mem_block_t *       block;
     int32_t index, copy_len;
 
@@ -408,7 +407,6 @@ int32_t mem_block_read_data(mem_queue_desc_t *desc, mem_block_t *blocks, char *d
         return -1;
     }
 
-    header  = desc->header;
     index   = blocks->index;
     do {
         block    = mem_queue_i2b(desc, index);

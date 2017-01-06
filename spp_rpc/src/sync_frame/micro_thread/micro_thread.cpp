@@ -35,27 +35,27 @@ using namespace NS_MICRO_THREAD;
 //#define  ASSERT(statement)   assert(statement)
 
 /**
- *  @brief »ã±àÊµÏÖ±£´æÉÏÏÂÎÄº¯Êı
- *  @param jbf jmpbuffÊı×éÖ¸Õë
+ *  @brief æ±‡ç¼–å®ç°ä¿å­˜ä¸Šä¸‹æ–‡å‡½æ•°
+ *  @param jbf jmpbuffæ•°ç»„æŒ‡é’ˆ
  */
 extern "C"  int save_context(jmp_buf jbf);
 
 /**
- *  @brief »ã±àÊµÏÖ»Ö¸´ÉÏÏÂÎÄº¯Êı
- *  @param jbf jmpbuffÊı×éÖ¸Õë
- *  @param ret ÇĞ»ØµÄ·µ»ØÖµ, Ä¬ÈÏ1
+ *  @brief æ±‡ç¼–å®ç°æ¢å¤ä¸Šä¸‹æ–‡å‡½æ•°
+ *  @param jbf jmpbuffæ•°ç»„æŒ‡é’ˆ
+ *  @param ret åˆ‡å›çš„è¿”å›å€¼, é»˜è®¤1
  */
 extern "C"  void restore_context(jmp_buf jbf, int ret);
 
 /**
- *  @brief »ã±àÊµÏÖÌæ»»µ÷ÓÃÕ»º¯Êı
- *  @param jbf jmpbuffÊı×éÖ¸Õë
- *  @param esp ¶ÑÕ»Ö¸Õë
+ *  @brief æ±‡ç¼–å®ç°æ›¿æ¢è°ƒç”¨æ ˆå‡½æ•°
+ *  @param jbf jmpbuffæ•°ç»„æŒ‡é’ˆ
+ *  @param esp å †æ ˆæŒ‡é’ˆ
  */
 extern "C"  void replace_esp(jmp_buf jbf, void* esp);
 
 /**
- * @brief ¹¹Ôìº¯Êı, Ä¬ÈÏ²ÎÊıÕ»´óĞ¡
+ * @brief æ„é€ å‡½æ•°, é»˜è®¤å‚æ•°æ ˆå¤§å°
  */
 Thread::Thread(int stack_size)
 {
@@ -67,7 +67,7 @@ Thread::Thread(int stack_size)
 
 
 /**
- *  @brief LINUX x86/x86_64ÏÂµÄÕ»ÉêÇë, ÆäËü¼Ü¹¹ÏÂĞèÒª×¢Òâ²îÒì
+ *  @brief LINUX x86/x86_64ä¸‹çš„æ ˆç”³è¯·, å…¶å®ƒæ¶æ„ä¸‹éœ€è¦æ³¨æ„å·®å¼‚
  */
 bool Thread::InitStack()
 {
@@ -75,7 +75,7 @@ bool Thread::InitStack()
         return true;
     }
 
-    ///< Õ»Ë÷ÒıÓëÕ»ÄÚ´æ·ÖÀë, ·ÀÔ½½ç    
+    ///< æ ˆç´¢å¼•ä¸æ ˆå†…å­˜åˆ†ç¦», é˜²è¶Šç•Œ    
     _stack = (MtStack*)calloc(1, sizeof(MtStack));
     if (NULL == _stack)
     {
@@ -114,7 +114,7 @@ bool Thread::InitStack()
 
 
 /**
- * @brief ÊÍ·Å¶ÑÕ»ĞÅÏ¢
+ * @brief é‡Šæ”¾å †æ ˆä¿¡æ¯
  */
 void Thread::FreeStack()
 {
@@ -129,13 +129,13 @@ void Thread::FreeStack()
 }
 
 /**
- * @brief ³õÊ¼»¯ÉÏÏÂÎÄ,ÉèÖÃ¼Ä´æÆ÷,¶ÑÕ»
+ * @brief åˆå§‹åŒ–ä¸Šä¸‹æ–‡,è®¾ç½®å¯„å­˜å™¨,å †æ ˆ
  */
 void Thread::InitContext()
 {
     if (save_context(_jmpbuf) != 0)
     {
-        ScheduleObj::Instance()->ScheduleStartRun(); // Ö±½Óµ÷ÓÃ this->run?
+        ScheduleObj::Instance()->ScheduleStartRun(); // ç›´æ¥è°ƒç”¨ this->run?
     }
     
     if (_stack != NULL)
@@ -145,7 +145,7 @@ void Thread::InitContext()
 }
 
 /**
- * @brief Ö÷¶¯ÇĞ»», ±£´æ×´Ì¬, ´¥·¢µ÷¶È
+ * @brief ä¸»åŠ¨åˆ‡æ¢, ä¿å­˜çŠ¶æ€, è§¦å‘è°ƒåº¦
  */
 void Thread::SwitchContext()
 {
@@ -156,7 +156,7 @@ void Thread::SwitchContext()
 }
 
 /**
- * @brief »Ö¸´ÉÏÏÂÎÄ, ÇĞ»»»Ø¶Ïµã,¼ÌĞøÔËĞĞ
+ * @brief æ¢å¤ä¸Šä¸‹æ–‡, åˆ‡æ¢å›æ–­ç‚¹,ç»§ç»­è¿è¡Œ
  */
 void Thread::RestoreContext()
 {
@@ -164,7 +164,7 @@ void Thread::RestoreContext()
 }
 
 /**
- * @brief ³õÊ¼»¯Ïß³Ì,Èç¶ÑÕ»ÓëÉÏÏÂÎÄ³õÊ¼»¯
+ * @brief åˆå§‹åŒ–çº¿ç¨‹,å¦‚å †æ ˆä¸ä¸Šä¸‹æ–‡åˆå§‹åŒ–
  */
 bool Thread::Initial()
 {
@@ -180,7 +180,7 @@ bool Thread::Initial()
 }
 
 /**
- * @brief ÖÕÖ¹Ïß³Ì,Èç¶ÑÕ»ÓëÉÏÏÂÎÄÊÍ·Å
+ * @brief ç»ˆæ­¢çº¿ç¨‹,å¦‚å †æ ˆä¸ä¸Šä¸‹æ–‡é‡Šæ”¾
  */
 void Thread::Destroy()
 {
@@ -189,7 +189,7 @@ void Thread::Destroy()
 }
 
 /**
- * @brief Ïß³Ì×´Ì¬ÖØÖÃ, ¿É¸´ÓÃ×´Ì¬
+ * @brief çº¿ç¨‹çŠ¶æ€é‡ç½®, å¯å¤ç”¨çŠ¶æ€
  */
 void Thread::Reset()
 {
@@ -201,8 +201,8 @@ void Thread::Reset()
 }
 
 /**
- * @brief Ïß³ÌÖ÷¶¯½øÈëË¯Ãß, µ¥Î»ºÁÃë
- * @param ms Ë¯ÃßºÁÃëÊı
+ * @brief çº¿ç¨‹ä¸»åŠ¨è¿›å…¥ç¡çœ , å•ä½æ¯«ç§’
+ * @param ms ç¡çœ æ¯«ç§’æ•°
  */
 void Thread::sleep(int ms)
 {
@@ -216,7 +216,7 @@ void Thread::sleep(int ms)
 }
 
 /**
- * @brief ½øÈë×èÈû×´Ì¬, µÈ´ıËùÓĞ×ÓÏß³Ì½áÊø
+ * @brief è¿›å…¥é˜»å¡çŠ¶æ€, ç­‰å¾…æ‰€æœ‰å­çº¿ç¨‹ç»“æŸ
  */
 void Thread::Wait()
 {
@@ -227,7 +227,7 @@ void Thread::Wait()
 }
 
 /**
- * @brief ³õÊ¼»¯ÉÏÏÂÎÄ,ÉèÖÃ¼Ä´æÆ÷,¶ÑÕ»
+ * @brief åˆå§‹åŒ–ä¸Šä¸‹æ–‡,è®¾ç½®å¯„å­˜å™¨,å †æ ˆ
  */
 bool Thread::CheckStackHealth(char *esp)
 {
@@ -241,8 +241,8 @@ bool Thread::CheckStackHealth(char *esp)
 }
 
 /**
- * @brief Î¢Ïß³Ì¹¹Ôì, Ä¬ÈÏÊÇÆÕÍ¨Ïß³Ì
- * @param type ÀàĞÍ, Ä¬ÈÏÆÕÍ¨
+ * @brief å¾®çº¿ç¨‹æ„é€ , é»˜è®¤æ˜¯æ™®é€šçº¿ç¨‹
+ * @param type ç±»å‹, é»˜è®¤æ™®é€š
  */
 MicroThread::MicroThread(ThreadType type)
 {
@@ -258,7 +258,7 @@ MicroThread::MicroThread(ThreadType type)
 }
 
 /**
- * @breif Î¢Ïß³Ì¸´ÓÃ×´Ì¬ÇåÀí
+ * @breif å¾®çº¿ç¨‹å¤ç”¨çŠ¶æ€æ¸…ç†
  */    
 void MicroThread::CleanState()
 {
@@ -273,7 +273,7 @@ void MicroThread::CleanState()
 }
 
 /**
- * @brief Ïß³ÌµÄÊµ¼Ê¹¤×÷º¯Êı
+ * @brief çº¿ç¨‹çš„å®é™…å·¥ä½œå‡½æ•°
  */
 void MicroThread::Run()
 {
@@ -281,7 +281,7 @@ void MicroThread::Run()
         _start(_args);
     }
 
-    // ¶ş¼¶Ïß³Ì, ´¥·¢¸¸Ïß³Ì½øÈë¿ÉÔËĞĞÌ¬
+    // äºŒçº§çº¿ç¨‹, è§¦å‘çˆ¶çº¿ç¨‹è¿›å…¥å¯è¿è¡Œæ€
     if (this->IsSubThread()) {
         this->WakeupParent();
     }
@@ -291,7 +291,7 @@ void MicroThread::Run()
 }
 
 /**
- * @brief ¶ş¼¶×ÓÏß³Ì»½ĞÑ¸¸Ïß³Ì´¦Àí
+ * @brief äºŒçº§å­çº¿ç¨‹å”¤é†’çˆ¶çº¿ç¨‹å¤„ç†
  */
 void MicroThread::WakeupParent()
 {
@@ -311,7 +311,7 @@ void MicroThread::WakeupParent()
 }
 
 /**
- * @brief ÊÇ·ñ»¹ÓĞÆäËüµÄ¶ş¼¶×ÓÏß³Ì
+ * @brief æ˜¯å¦è¿˜æœ‰å…¶å®ƒçš„äºŒçº§å­çº¿ç¨‹
  */
 bool MicroThread::HasNoSubThread()
 {
@@ -319,7 +319,7 @@ bool MicroThread::HasNoSubThread()
 }
 
 /**
- * @brief ½«Ö¸¶¨×ÓÏß³Ì¼ÓÈë¶ş¼¶Ïß³ÌÁĞ±í
+ * @brief å°†æŒ‡å®šå­çº¿ç¨‹åŠ å…¥äºŒçº§çº¿ç¨‹åˆ—è¡¨
  */
 void MicroThread::AddSubThread(MicroThread* sub)
 {
@@ -334,7 +334,7 @@ void MicroThread::AddSubThread(MicroThread* sub)
 }
 
 /**
- * @brief ½«Ö¸¶¨Ïß³ÌÒÆ³ö¶ş¼¶Ïß³ÌÁĞ±í
+ * @brief å°†æŒ‡å®šçº¿ç¨‹ç§»å‡ºäºŒçº§çº¿ç¨‹åˆ—è¡¨
  */
 void MicroThread::RemoveSubThread(MicroThread* sub)
 {
@@ -350,9 +350,9 @@ void MicroThread::RemoveSubThread(MicroThread* sub)
 
 
 /**
- * @brief µ¥ÀıÀà·ÃÎÊ¾ä±úÈë¿Ú
+ * @brief å•ä¾‹ç±»è®¿é—®å¥æŸ„å…¥å£
  */
-ScheduleObj *ScheduleObj::_instance = NULL;     ///< ¾²Ì¬¾ä±ú³õÊ¼»¯
+ScheduleObj *ScheduleObj::_instance = NULL;     ///< é™æ€å¥æŸ„åˆå§‹åŒ–
 inline ScheduleObj* ScheduleObj::Instance()
 {
     if (NULL == _instance)
@@ -364,7 +364,7 @@ inline ScheduleObj* ScheduleObj::Instance()
 }
 
 /**
- * @brief µ÷¶ÈÆäËüÎ¢Ïß³ÌÀ´ÔËĞĞ, °ü¹ü½Ó¿Ú
+ * @brief è°ƒåº¦å…¶å®ƒå¾®çº¿ç¨‹æ¥è¿è¡Œ, åŒ…è£¹æ¥å£
  */
 void ScheduleObj::ScheduleThread()
 {
@@ -373,7 +373,7 @@ void ScheduleObj::ScheduleThread()
 }
 
 /**
- * @brief »ñÈ¡È«¾ÖµÄÊ±¼ä´Á, ºÁÃëµ¥Î»
+ * @brief è·å–å…¨å±€çš„æ—¶é—´æˆ³, æ¯«ç§’å•ä½
  */
 utime64_t ScheduleObj::ScheduleGetTime()
 {
@@ -390,7 +390,7 @@ utime64_t ScheduleObj::ScheduleGetTime()
 }
 
 /**
- * @brief Ïß³Ìµ÷¶ÈÖ÷¶¯½øÈësleep×´Ì¬
+ * @brief çº¿ç¨‹è°ƒåº¦ä¸»åŠ¨è¿›å…¥sleepçŠ¶æ€
  */
 void ScheduleObj::ScheduleSleep()
 {
@@ -406,7 +406,7 @@ void ScheduleObj::ScheduleSleep()
 }
 
 /**
- * @brief Ïß³Ìµ÷¶ÈÖ÷¶¯½øÈëpend×´Ì¬
+ * @brief çº¿ç¨‹è°ƒåº¦ä¸»åŠ¨è¿›å…¥pendçŠ¶æ€
  */
 void ScheduleObj::SchedulePend()
 {
@@ -422,7 +422,7 @@ void ScheduleObj::SchedulePend()
 }
 
 /**
- * @brief Ïß³Ìµ÷¶ÈÈ¡Ïûpend×´Ì¬, Íâ²¿µ÷¶ÈÈ¡Ïû
+ * @brief çº¿ç¨‹è°ƒåº¦å–æ¶ˆpendçŠ¶æ€, å¤–éƒ¨è°ƒåº¦å–æ¶ˆ
  */
 void ScheduleObj::ScheduleUnpend(void* pthread)
 {
@@ -440,7 +440,7 @@ void ScheduleObj::ScheduleUnpend(void* pthread)
 
 
 /**
- * @brief Ïß³ÌÖ´ĞĞÍê±Ïºó, »ØÊÕ´¦Àí
+ * @brief çº¿ç¨‹æ‰§è¡Œå®Œæ¯•å, å›æ”¶å¤„ç†
  */
 void ScheduleObj::ScheduleReclaim()
 {
@@ -455,7 +455,7 @@ void ScheduleObj::ScheduleReclaim()
 }
 
 /**
- * @brief µ÷¶ÈÆ÷µ÷¶È³õÊ¼Ö´ĞĞ
+ * @brief è°ƒåº¦å™¨è°ƒåº¦åˆå§‹æ‰§è¡Œ
  */
 void ScheduleObj::ScheduleStartRun()
 {
@@ -471,13 +471,13 @@ void ScheduleObj::ScheduleStartRun()
 
 
 /**
- * @brief Î¢Ïß³Ì³ØÈ«¾Ö²ÎÊı³õÊ¼»¯
+ * @brief å¾®çº¿ç¨‹æ± å…¨å±€å‚æ•°åˆå§‹åŒ–
  */
-unsigned int ThreadPool::default_thread_num = DEFAULT_THREAD_NUM;   ///< Ä¬ÈÏ2000Î¢Ïß³Ì´ıÃü
-unsigned int ThreadPool::default_stack_size = DEFAULT_STACK_SIZE;   ///< Ä¬ÈÏ128KÕ»´óĞ¡ 
+unsigned int ThreadPool::default_thread_num = DEFAULT_THREAD_NUM;   ///< é»˜è®¤2000å¾®çº¿ç¨‹å¾…å‘½
+unsigned int ThreadPool::default_stack_size = DEFAULT_STACK_SIZE;   ///< é»˜è®¤128Kæ ˆå¤§å° 
 
 /**
- * @brief Î¢Ïß³Ì³Ø³õÊ¼»¯
+ * @brief å¾®çº¿ç¨‹æ± åˆå§‹åŒ–
  */
 bool ThreadPool::InitialPool(int max_num)
 {
@@ -509,7 +509,7 @@ bool ThreadPool::InitialPool(int max_num)
 }
 
 /**
- * @brief Î¢Ïß³Ì³Ø·´³õÊ¼»¯
+ * @brief å¾®çº¿ç¨‹æ± ååˆå§‹åŒ–
  */
 void ThreadPool::DestroyPool()
 {
@@ -527,12 +527,12 @@ void ThreadPool::DestroyPool()
 }
 
 /**
- * @brief Î¢Ïß³Ì·ÖÅä½Ó¿Ú
- * @return Î¢Ïß³Ì¶ÔÏó
+ * @brief å¾®çº¿ç¨‹åˆ†é…æ¥å£
+ * @return å¾®çº¿ç¨‹å¯¹è±¡
  */
 MicroThread* ThreadPool::AllocThread()
 {
-    MT_ATTR_API_SET(MONITOR_MT_POOL_SIZE, _total_num); // Î¢Ïß³Ì³Ø´óĞ¡
+    MT_ATTR_API_SET(MONITOR_MT_POOL_SIZE, _total_num); // å¾®çº¿ç¨‹æ± å¤§å°
 
     MicroThread* thread = NULL;
     if (!_freelist.empty())
@@ -569,8 +569,8 @@ MicroThread* ThreadPool::AllocThread()
 }
 
 /**
- * @brief Î¢Ïß³ÌÊÍ·Å½Ó¿Ú
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief å¾®çº¿ç¨‹é‡Šæ”¾æ¥å£
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 void ThreadPool::FreeThread(MicroThread* thread)
 {
@@ -580,7 +580,7 @@ void ThreadPool::FreeThread(MicroThread* thread)
     _freelist.push(thread);
     thread->SetFlag(MicroThread::FREE_LIST);
 
-    ///< ¿ÕÏĞ¶ÓÁĞ > default_thread_num, ÔòÊÍ·Å×îÀÏµÄ, ²»¿ÉÒÔÊÍ·Åµ±Ç°
+    ///< ç©ºé—²é˜Ÿåˆ— > default_thread_num, åˆ™é‡Šæ”¾æœ€è€çš„, ä¸å¯ä»¥é‡Šæ”¾å½“å‰
     unsigned int free_num = _freelist.size();
     if ((free_num > default_thread_num) && (free_num > 1))
     {
@@ -598,7 +598,7 @@ int ThreadPool::GetUsedNum(void)
 }
 
 /**
- * @brief Î¢Ïß³Ì¿ò¼ÜÀà, È«¾ÖÊµÀı»ñÈ¡
+ * @brief å¾®çº¿ç¨‹æ¡†æ¶ç±», å…¨å±€å®ä¾‹è·å–
  */
 MtFrame *MtFrame::_instance = NULL;
 inline MtFrame* MtFrame::Instance ()
@@ -612,7 +612,7 @@ inline MtFrame* MtFrame::Instance ()
 }
 
 /**
- * @brief HOOKÏµÍ³apiµÄÉèÖÃ
+ * @brief HOOKç³»ç»Ÿapiçš„è®¾ç½®
  */
 void MtFrame::SetHookFlag() {
     mt_set_hook_flag();
@@ -620,13 +620,13 @@ void MtFrame::SetHookFlag() {
 
 
 /**
- * @brief ¿ò¼Ü³õÊ¼»¯, Ä¬ÈÏ²»´øÈÕÖ¾ÔËĞĞ
+ * @brief æ¡†æ¶åˆå§‹åŒ–, é»˜è®¤ä¸å¸¦æ—¥å¿—è¿è¡Œ
  */
 bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
 {
     _log_adpt = logadpt;
 
-    // ÉèÖÃ×î´óÔÊĞíµÄÏß³ÌÊıÄ¿, ³¢ÊÔµ÷½Úepoll¼à¿ØµÄfdÊıÄ¿
+    // è®¾ç½®æœ€å¤§å…è®¸çš„çº¿ç¨‹æ•°ç›®, å°è¯•è°ƒèŠ‚epollç›‘æ§çš„fdæ•°ç›®
     if ((this->InitEpoll(max_thread_num) < 0) || !this->InitialPool(max_thread_num))
     {
         MTLOG_ERROR("Init epoll or thread pool failed");
@@ -634,7 +634,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
         return false;
     }
 
-    // °´ĞèÖØÖÃ¶Ñ´óĞ¡, ·Å´ó¶Ñ¸öÊıÎª2±¶
+    // æŒ‰éœ€é‡ç½®å †å¤§å°, æ”¾å¤§å †ä¸ªæ•°ä¸º2å€
     if (_sleeplist.HeapResize(max_thread_num * 2) < 0)
     {
         MTLOG_ERROR("Init heap list failed");
@@ -642,7 +642,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
         return false;
     }
     
-    // ¶¨Ê±Æ÷¹ÜÀí³õÊ¼»¯, ·Å´ó¶Ñ¸öÊıÎª2±¶
+    // å®šæ—¶å™¨ç®¡ç†åˆå§‹åŒ–, æ”¾å¤§å †ä¸ªæ•°ä¸º2å€
     _timer = new CTimerMng(max_thread_num * 2);
     if (NULL == _timer)
     {
@@ -651,7 +651,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
         return false;
     }
 
-    // ÊØ»¤Ïß³Ìµ¥¶À³õÊ¼»¯
+    // å®ˆæŠ¤çº¿ç¨‹å•ç‹¬åˆå§‹åŒ–
     _daemon = AllocThread();
     if (NULL == _daemon)
     {
@@ -663,7 +663,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
     _daemon->SetState(MicroThread::RUNABLE);
     _daemon->SetSartFunc(MtFrame::DaemonRun, this);
 
-    // ÌØÊâÏß³Ì, ÎŞĞèINIT, ²»³õÊ¼»¯Õ», Ò²ÎŞ»Øµ÷×¢²á, µ«ĞèÒªÍ³Ò»µ÷¶È
+    // ç‰¹æ®Šçº¿ç¨‹, æ— éœ€INIT, ä¸åˆå§‹åŒ–æ ˆ, ä¹Ÿæ— å›è°ƒæ³¨å†Œ, ä½†éœ€è¦ç»Ÿä¸€è°ƒåº¦
     _primo = new MicroThread(MicroThread::PRIMORDIAL);
     if (NULL == _primo)
     {
@@ -674,7 +674,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
     _primo->SetState(MicroThread::RUNNING);
     SetActiveThread(_primo);
 
-    // ¸üĞÂ×îĞÂÊ±¼ä´Á
+    // æ›´æ–°æœ€æ–°æ—¶é—´æˆ³
     _last_clock = GetSystemMS();
     TAILQ_INIT(&_iolist);
     TAILQ_INIT(&_pend_list);
@@ -684,7 +684,7 @@ bool MtFrame::InitFrame(LogAdapter* logadpt, int max_thread_num)
 }
 
 /**
- * @brief ¿ò¼Ü·´³õÊ¼»¯
+ * @brief æ¡†æ¶ååˆå§‹åŒ–
  */
 void MtFrame::Destroy(void)
 {
@@ -739,7 +739,7 @@ void MtFrame::Destroy(void)
 }
 
 /**
- * @brief Î¢Ïß³Ì¿ò¼Ü°æ±¾»ñÈ¡
+ * @brief å¾®çº¿ç¨‹æ¡†æ¶ç‰ˆæœ¬è·å–
  */
 char* MtFrame::Version()
 {
@@ -747,10 +747,10 @@ char* MtFrame::Version()
 }
 
 /**
- * @brief Î¢Ïß³Ì´´½¨½Ó¿Ú
- * @param entry Ïß³ÌÈë¿Úº¯Êı
- * @param args  Ïß³ÌÈë¿Ú²ÎÊı
- * @return Î¢Ïß³ÌÖ¸Õë, NULL±íÊ¾Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åˆ›å»ºæ¥å£
+ * @param entry çº¿ç¨‹å…¥å£å‡½æ•°
+ * @param args  çº¿ç¨‹å…¥å£å‚æ•°
+ * @return å¾®çº¿ç¨‹æŒ‡é’ˆ, NULLè¡¨ç¤ºå¤±è´¥
  */
 MicroThread* MtFrame::CreateThread(ThreadStart entry, void *args, bool runable)
 {
@@ -771,8 +771,8 @@ MicroThread* MtFrame::CreateThread(ThreadStart entry, void *args, bool runable)
 }
 
 /**
- * @brief ÊØ»¤Ïß³ÌÈë¿Úº¯Êı, º¯ÊıÖ¸ÕëÒªÇóstaticÀàĞÍ
- * @param args  Ïß³ÌÈë¿Ú²ÎÊı
+ * @brief å®ˆæŠ¤çº¿ç¨‹å…¥å£å‡½æ•°, å‡½æ•°æŒ‡é’ˆè¦æ±‚staticç±»å‹
+ * @param args  çº¿ç¨‹å…¥å£å‚æ•°
  */
 void MtFrame::DaemonRun(void* args)
 {
@@ -790,7 +790,7 @@ void MtFrame::DaemonRun(void* args)
 }
 
 /**
- * @brief »ñÈ¡µ±Ç°Ïß³ÌµÄ¸ùÏß³Ì
+ * @brief è·å–å½“å‰çº¿ç¨‹çš„æ ¹çº¿ç¨‹
  */
 MicroThread *MtFrame::GetRootThread()
 {
@@ -824,7 +824,7 @@ MicroThread *MtFrame::GetRootThread()
 }
 
 /**
- * @brief ¿ò¼Üµ÷¶ÈÏß³ÌÔËĞĞ
+ * @brief æ¡†æ¶è°ƒåº¦çº¿ç¨‹è¿è¡Œ
  */
 void MtFrame::ThreadSchdule()
 {
@@ -847,7 +847,7 @@ void MtFrame::ThreadSchdule()
 }
 
 /**
- * @brief ¿ò¼Ü´¦Àí¶¨Ê±»Øµ÷º¯Êı
+ * @brief æ¡†æ¶å¤„ç†å®šæ—¶å›è°ƒå‡½æ•°
  */
 void MtFrame::CheckExpired()
 {
@@ -875,7 +875,7 @@ void MtFrame::CheckExpired()
 }
 
 /**
- * @brief ¿ò¼Ü¼ì²âµ½³¬Ê±, »½ĞÑËùÓĞµÄ³¬Ê±Ïß³Ì
+ * @brief æ¡†æ¶æ£€æµ‹åˆ°è¶…æ—¶, å”¤é†’æ‰€æœ‰çš„è¶…æ—¶çº¿ç¨‹
  */
 void MtFrame::WakeupTimeout()
 {
@@ -899,7 +899,7 @@ void MtFrame::WakeupTimeout()
 }
 
 /**
- * @brief ¿ò¼Üµ÷ÓÃepoll waitÇ°, ÅĞ¶¨µÈ´ıÊ±¼äĞÅÏ¢
+ * @brief æ¡†æ¶è°ƒç”¨epoll waitå‰, åˆ¤å®šç­‰å¾…æ—¶é—´ä¿¡æ¯
  */
 int MtFrame::EpollGetTimeout()
 {
@@ -907,7 +907,7 @@ int MtFrame::EpollGetTimeout()
     MicroThread* thread = dynamic_cast<MicroThread*>(_sleeplist.HeapTop());
     if (!thread)
     {
-        return 10; //Ä¬ÈÏ10ms epollwait
+        return 10; //é»˜è®¤10ms epollwait
     }
     else if (thread->GetWakeupTime() < now)
     {
@@ -920,8 +920,8 @@ int MtFrame::EpollGetTimeout()
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ²åÈëÅÅĞò¶Ñ
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, æ’å…¥æ’åºå †
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 inline void MtFrame::InsertSleep(MicroThread* thread)
 {
@@ -938,8 +938,8 @@ inline void MtFrame::InsertSleep(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ÒÆ³ıÅÅĞò¶Ñ
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, ç§»é™¤æ’åºå †
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 inline void MtFrame::RemoveSleep(MicroThread* thread)
 {
@@ -955,8 +955,8 @@ inline void MtFrame::RemoveSleep(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, Ö´ĞĞIOµÈ´ı×´Ì¬
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, æ‰§è¡ŒIOç­‰å¾…çŠ¶æ€
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 inline void MtFrame::InsertIoWait(MicroThread* thread)
 {
@@ -967,8 +967,8 @@ inline void MtFrame::InsertIoWait(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ÒÆ³ıIOµÈ´ı×´Ì¬
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, ç§»é™¤IOç­‰å¾…çŠ¶æ€
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 void MtFrame::RemoveIoWait(MicroThread* thread)
 {
@@ -980,8 +980,8 @@ void MtFrame::RemoveIoWait(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ²åÈë¿ÉÔËĞĞ¶ÓÁĞ
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, æ’å…¥å¯è¿è¡Œé˜Ÿåˆ—
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 void MtFrame::InsertRunable(MicroThread* thread)
 {
@@ -994,8 +994,8 @@ void MtFrame::InsertRunable(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ÒÆ³ö¿ÉÔËĞĞ¶ÓÁĞ
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, ç§»å‡ºå¯è¿è¡Œé˜Ÿåˆ—
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 inline void MtFrame::RemoveRunable(MicroThread* thread)
 {
@@ -1009,8 +1009,8 @@ inline void MtFrame::RemoveRunable(MicroThread* thread)
 
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, Ö´ĞĞpendµÈ´ı×´Ì¬
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, æ‰§è¡Œpendç­‰å¾…çŠ¶æ€
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 void MtFrame::InsertPend(MicroThread* thread)
 {
@@ -1021,8 +1021,8 @@ void MtFrame::InsertPend(MicroThread* thread)
 }
 
 /**
- * @brief ¿ò¼Ü¹ÜÀíÏß³Ìµ¥Ôª, ÒÆ³ıPENDµÈ´ı×´Ì¬
- * @param thread Î¢Ïß³Ì¶ÔÏó
+ * @brief æ¡†æ¶ç®¡ç†çº¿ç¨‹å•å…ƒ, ç§»é™¤PENDç­‰å¾…çŠ¶æ€
+ * @param thread å¾®çº¿ç¨‹å¯¹è±¡
  */
 void MtFrame::RemovePend(MicroThread* thread)
 {
@@ -1032,8 +1032,8 @@ void MtFrame::RemovePend(MicroThread* thread)
 }
 
 /**
- * @brief Î¢Ïß³ÌÖ÷¶¯ÇĞ»», µÈ´ıÆäËüÏß³ÌµÄ»½ĞÑ
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
+ * @brief å¾®çº¿ç¨‹ä¸»åŠ¨åˆ‡æ¢, ç­‰å¾…å…¶å®ƒçº¿ç¨‹çš„å”¤é†’
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
  */
 void MtFrame::WaitNotify(utime64_t timeout)
 {
@@ -1045,11 +1045,11 @@ void MtFrame::WaitNotify(utime64_t timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì´¥·¢ÇĞ»»º¯Êı,µ÷ÓÃ³É¹¦ ÔòÈÃ³öcpu
- * @param fdlist ¶àÂ·²¢·¢µÄsocketÁĞ±í
- * @param fd µ¥¸öÇëÇóµÄfdĞÅÏ¢
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return true ³É¹¦, false Ê§°Ü
+ * @brief å¾®çº¿ç¨‹è§¦å‘åˆ‡æ¢å‡½æ•°,è°ƒç”¨æˆåŠŸ åˆ™è®©å‡ºcpu
+ * @param fdlist å¤šè·¯å¹¶å‘çš„socketåˆ—è¡¨
+ * @param fd å•ä¸ªè¯·æ±‚çš„fdä¿¡æ¯
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return true æˆåŠŸ, false å¤±è´¥
  */
 bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
 {
@@ -1060,7 +1060,7 @@ bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
         return false;
     }
 
-    // 1. ÕûºÏ¸ÃÏß³ÌĞèÒª¹ØĞÄµÄepollµ÷¶È¶ÔÏó
+    // 1. æ•´åˆè¯¥çº¿ç¨‹éœ€è¦å…³å¿ƒçš„epollè°ƒåº¦å¯¹è±¡
     thread->ClearAllFd();
     if (fdlist) 
     {
@@ -1071,7 +1071,7 @@ bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
         thread->AddFd(fd);
     }
 
-    // 2. ÉèÖÃepoll¼àÌıÊÂ¼ş, µ÷Õû³¬Ê±Ê±¼ä, ÇĞ»»IOµÈ´ı×´Ì¬, ´¥·¢ÇĞ»»
+    // 2. è®¾ç½®epollç›‘å¬äº‹ä»¶, è°ƒæ•´è¶…æ—¶æ—¶é—´, åˆ‡æ¢IOç­‰å¾…çŠ¶æ€, è§¦å‘åˆ‡æ¢
     thread->SetWakeupTime(timeout + this->GetLastClock());
     if (!this->EpollAdd(thread->GetFdSet()))
     {
@@ -1081,7 +1081,7 @@ bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
     this->InsertIoWait(thread); 
     thread->SwitchContext();
 
-    // 3. µ÷¶ÈOK, ÅĞ¶¨³¬Ê±, epoll ctrl »¹Ô­×´Ì¬
+    // 3. è°ƒåº¦OK, åˆ¤å®šè¶…æ—¶, epoll ctrl è¿˜åŸçŠ¶æ€
     int rcvnum = 0;
     EpObjList& rcvfds = thread->GetFdSet();
     EpollerObj* fdata = NULL;
@@ -1092,9 +1092,9 @@ bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
             rcvnum++;
         }        
     }
-    this->EpollDel(rcvfds);     // ÔÚÒ»¸öº¯ÊıÖĞADD, DEL ±Õ»·¿ØÖÆ
+    this->EpollDel(rcvfds);     // åœ¨ä¸€ä¸ªå‡½æ•°ä¸­ADD, DEL é—­ç¯æ§åˆ¶
 
-    if (rcvnum == 0)    // ³¬Ê±´¦Àí, ·µ»Ø´íÎó
+    if (rcvnum == 0)    // è¶…æ—¶å¤„ç†, è¿”å›é”™è¯¯
     {
         errno = ETIME;
         return false;
@@ -1104,14 +1104,14 @@ bool MtFrame::EpollSchedule(EpObjList* fdlist, EpollerObj* fd, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı recvfrom
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param len ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param from À´Ô´µØÖ·µÄÖ¸Õë
- * @param fromlen À´Ô´µØÖ·µÄ½á¹¹³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° recvfrom
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param len æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param from æ¥æºåœ°å€çš„æŒ‡é’ˆ
+ * @param fromlen æ¥æºåœ°å€çš„ç»“æ„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 int MtFrame::recvfrom(int fd, void *buf, int len, int flags, struct sockaddr *from, socklen_t *fromlen, int timeout)
 {
@@ -1167,14 +1167,14 @@ int MtFrame::recvfrom(int fd, void *buf, int len, int flags, struct sockaddr *fr
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı sendto
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param msg ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param len ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param to Ä¿µÄµØÖ·µÄÖ¸Õë
- * @param tolen Ä¿µÄµØÖ·µÄ½á¹¹³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° sendto
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param msg å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param len å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param to ç›®çš„åœ°å€çš„æŒ‡é’ˆ
+ * @param tolen ç›®çš„åœ°å€çš„ç»“æ„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 int MtFrame::sendto(int fd, const void *msg, int len, int flags, const struct sockaddr *to, int tolen, int timeout)
 {
@@ -1216,12 +1216,12 @@ int MtFrame::sendto(int fd, const void *msg, int len, int flags, const struct so
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı connect
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param addr Ö¸¶¨serverµÄÄ¿µÄµØÖ·
- * @param addrlen µØÖ·µÄ³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° connect
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param addr æŒ‡å®šserverçš„ç›®çš„åœ°å€
+ * @param addrlen åœ°å€çš„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 int MtFrame::connect(int fd, const struct sockaddr *addr, int addrlen, int timeout)
 {
@@ -1241,7 +1241,7 @@ int MtFrame::connect(int fd, const struct sockaddr *addr, int addrlen, int timeo
             return -1;
         }
 
-        if (errno == EISCONN)   // ÒÑÁ¬½Ó, ·µ»Ø³É¹¦
+        if (errno == EISCONN)   // å·²è¿æ¥, è¿”å›æˆåŠŸ
         {
             return 0;
         }
@@ -1268,12 +1268,12 @@ int MtFrame::connect(int fd, const struct sockaddr *addr, int addrlen, int timeo
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı accept
- * @param fd ¼àÌıÌ×½Ó×Ö
- * @param addr ¿Í»§¶ËµØÖ·
- * @param addrlen µØÖ·µÄ³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >=0 acceptµÄsocketÃèÊö·û, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° accept
+ * @param fd ç›‘å¬å¥—æ¥å­—
+ * @param addr å®¢æˆ·ç«¯åœ°å€
+ * @param addrlen åœ°å€çš„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >=0 acceptçš„socketæè¿°ç¬¦, <0 å¤±è´¥
  */
 int MtFrame::accept(int fd, struct sockaddr *addr, socklen_t *addrlen, int timeout)
 {
@@ -1316,12 +1316,12 @@ int MtFrame::accept(int fd, struct sockaddr *addr, socklen_t *addrlen, int timeo
 
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı read
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param nbyte ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° read
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param nbyte æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t MtFrame::read(int fd, void *buf, size_t nbyte, int timeout)
 {
@@ -1332,7 +1332,7 @@ ssize_t MtFrame::read(int fd, void *buf, size_t nbyte, int timeout)
     
     ssize_t n = 0;
     mt_hook_syscall(read);
-    while ((n = mt_real_func(read)(fd, buf, nbyte)) < 0)
+    while (true)
     {
         now = mtframe->GetLastClock();
         if ((int)(now - start) > timeout)
@@ -1340,35 +1340,41 @@ ssize_t MtFrame::read(int fd, void *buf, size_t nbyte, int timeout)
             errno = ETIME;            
             return -1;
         }
-        
-        if (errno == EINTR) {
-            continue;
-        }
 
-        if ((errno != EAGAIN) && (errno != EWOULDBLOCK)) {
-            MTLOG_ERROR("read failed, errno: %d", errno);
-            return -2;
-        }
-        
         EpollerObj epfd;
         epfd.SetOsfd(fd);
         epfd.EnableInput();
         epfd.SetOwnerThread(thread);
         if (!mtframe->EpollSchedule(NULL, &epfd, timeout)) {
-            return -3;
+            return -2;
         }
+
+        n = mt_real_func(read)(fd, buf, nbyte);
+        if (n < 0)
+        {
+            if (errno == EINTR) {
+                continue;
+            }
+
+            if ((errno != EAGAIN) && (errno != EWOULDBLOCK)) {
+                MTLOG_ERROR("read failed, errno: %d", errno);
+                return -3;
+            }
+        }
+
+        break;
     }
     
     return n;
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı write
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param nbyte ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° write
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param nbyte å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t MtFrame::write(int fd, const void *buf, size_t nbyte, int timeout)
 {
@@ -1423,12 +1429,12 @@ ssize_t MtFrame::write(int fd, const void *buf, size_t nbyte, int timeout)
 
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı recv
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param len ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° recv
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param len æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 int MtFrame::recv(int fd, void *buf, int len, int flags, int timeout)
 {
@@ -1484,12 +1490,12 @@ int MtFrame::recv(int fd, void *buf, int len, int flags, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı send
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param nbyte ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° send
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param nbyte å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t MtFrame::send(int fd, const void *buf, size_t nbyte, int flags, int timeout)
 {
@@ -1545,7 +1551,7 @@ ssize_t MtFrame::send(int fd, const void *buf, size_t nbyte, int flags, int time
 
 
 /**
- * @brief Î¢Ïß³ÌÖ÷¶¯sleep½Ó¿Ú, µ¥Î»ms
+ * @brief å¾®çº¿ç¨‹ä¸»åŠ¨sleepæ¥å£, å•ä½ms
  */
 void MtFrame::sleep(int ms)
 {
@@ -1558,11 +1564,11 @@ void MtFrame::sleep(int ms)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı recv
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param events ÊÂ¼şÀàĞÍ  EPOLLIN or EPOLLOUT
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° recv
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param events äº‹ä»¶ç±»å‹  EPOLLIN or EPOLLOUT
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 int MtFrame::WaitEvents(int fd, int events, int timeout)
 {

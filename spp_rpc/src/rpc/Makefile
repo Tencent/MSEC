@@ -28,9 +28,10 @@ INTERNAL=../internal
 DEBUG= -g
 
 INCCOMM= -I$(MICRO_THREAD) -I$(PB_INC) -I$(MICRO_THREAD) -I$(SYNC_FRAME) -I$(INTERNAL)/log/include \
-         -I$(INTERNAL)/monitor/include -I$(INTERNAL)/nlb/include -I$(COMM_DIR) -I$(COMM_DIR)/tbase
-LIB=-L$(INTERNAL)/nlb/lib -lnlbapi -L$(INTERNAL)/monitor/lib -lmonitor -L$(INTERNAL)/log/lib -llogsys_api -L$(PB_INC) -lprotobuf
-BINARY = librpc_svr_comm.so  librpc_clt_comm.so librpc_clt_comm.a 
+         -I$(INTERNAL)/monitor/include -I$(INTERNAL)/nlb/include -I$(COMM_DIR) -I$(COMM_DIR)/tbase \
+         -I$(COMM_DIR)/config -I./http -I../third_party/http-parser
+LIB=-L$(INTERNAL)/nlb/lib -lnlbapi -L$(INTERNAL)/monitor/lib -lmonitor -L$(INTERNAL)/log/lib -llogsys_api -L$(PB_INC) -lprotobuf -lm
+BINARY = librpc_svr_comm.so  librpc_clt_comm.so librpc_clt_comm.a  
 
 ### rules
 ALLPROTOBUF=$(wildcard ./*.proto)
@@ -55,7 +56,12 @@ CC = g++
 #.c.o:
 #	$(CC) -c $*.c
 
-all: proto $(BINARY) install
+all: proto $(BINARY) other_support install
+
+other_support:
+	make -C ./php-ext
+	make -C ./http
+	make -C ./python-ext
 
 ### shell color config
 RED = \\e[1m\\e[31m
@@ -96,17 +102,18 @@ CRESET =  ;echo -ne \\e[m; test -s $@
 
 clean:
 	@rm -f $(BINARY)  *.o 
+	@make clean -C ./http
 
 proto: $(ALLPROTOBUF_H) 
 
 
 CLT_OBJ = srpc.pb.o  srpc_proto.o  srpc_channel.o srpc_comm.o srpc_intf.o
-SVR_OBJ = srpc.pb.o  srpc_proto.o  srpc_network.o srpc_service.o srpc_log.o srpc_comm.o srpc_intf.o
+SVR_OBJ = srpc.pb.o  srpc_proto.o  srpc_network.o srpc_service.o srpc_log.o srpc_comm.o srpc_intf.o srpc_cintf.o
 
 librpc_clt_comm.so: $(CLT_OBJ)
 	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED)
 	@-rm -f $@ 
-	@$(CC) -o $@ $^ -shared -Wl,-z,interpose $(CRESET)
+	@$(CC) -o $@ $^ -lm -shared -Wl,-z,interpose $(CRESET)
 	@chmod +x $@ 
 
 librpc_svr_comm.so: $(SVR_OBJ)
@@ -125,4 +132,26 @@ install:
 	@-cp ./librpc_svr_comm.so ../../bin/lib/
 	@-mkdir -p ../module/include/srpc_incl
 	@-cp *.h ../module/include/srpc_incl
+	@-cp ./http/libhttpsupport.so ../../bin/lib/
+	@-cp ../third_party/jansson/lib/libjansson.so* ../../bin/lib/
+	@-mkdir -p ../module/include/http_support
+	@-cp ../third_party/http-parser/http_parser.h ../module/include/http_support -rf
+	@-cp ./http/http_support.h ../module/include/http_support -rf
+
+3nd_api_pkg:
+	@echo -e  Generate cpp 3nd_api_pkg ...
+	@-mkdir -p ./3nd_API_cpp
+	@-rm ./3nd_API_cpp/* -rf
+	@cp ../sync_frame/micro_thread/libmt.a ./3nd_API_cpp
+	@cp ./librpc_clt_comm.a ./3nd_API_cpp
+	@cp ../third_party/pb/libprotobuf.a ./3nd_API_cpp
+	@cp ../internal/nlb/lib/libnlbapi.a ./3nd_API_cpp
+	@cd ./3nd_API_cpp;  ar -x libmt.a; ar -x librpc_clt_comm.a; ar -x libnlbapi.a; ar -x libprotobuf.a; ar crs libsrpcclient.a *.o; cd - 
+	@rm ./3nd_API_cpp/{libmt.a,libprotobuf.a,librpc_clt_comm.a,libnlbapi.a,*.o} -rf
+	@mkdir -p 3nd_API_cpp/include
+	@cp srpc.pb.h srpc_comm.h srpc_intf.h ../internal/nlb/include/nlbapi.h 3nd_API_cpp/include -rf
+	@-rm 3nd_API_cpp.tgz -f
+	@tar zcf 3nd_API_cpp.tgz 3nd_API_cpp
+	@mv 3nd_API_cpp.tgz ../../dist -f
+
 

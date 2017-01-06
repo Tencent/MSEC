@@ -27,6 +27,13 @@
 using namespace spp::comm;
 using namespace spp::global;
 
+void ShowVer(void)
+{
+    printf("  srpc version: %d.%d.%d\n", SPP_MAJOR_VER, SPP_MINOR_VER, SPP_PATCH_VER);
+    printf("  mt   version: %s\n", MT_VERSION);
+    printf("  Date: %s\n", __DATE__);
+}
+
 unsigned char CServerBase::flag_ = 0;
 
 CServerBase::CServerBase()
@@ -58,7 +65,8 @@ void CServerBase::run(int argc, char* argv[])
 {
     if (argc < 2)
     {
-        printf("\n%s\n%s\n\nDate:%s\n", SPP_VERSION, MT_VERSION, __DATE__);
+        ShowVer();
+		
         printf("usage: %s config_file\n\n", argv[0]);
         return;
     }
@@ -74,17 +82,20 @@ void CServerBase::run(int argc, char* argv[])
 
         if (*p == 'v' && *(p + 1) == '\0')
         {
-            printf("\n%s\n%s\n\nDate:%s\n", SPP_VERSION, MT_VERSION, __DATE__);
+            ShowVer();
         }
         else if (*p == 'h' && *(p + 1) == '\0')
         {
-            printf("\n%s\n%s\n\nDate:%s\n", SPP_VERSION, MT_VERSION, __DATE__);
+            ShowVer();
+
             printf("usage: %s config_file\n\n", argv[0]);
         }
         else
         {
             printf("\ninvalid argument.\n");
-            printf("\n%s\n%s\n\nDate:%s\n", SPP_VERSION, MT_VERSION, __DATE__);
+
+            ShowVer();
+
             printf("usage: %s config_file\n\n", argv[0]);
         }
 

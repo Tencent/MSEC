@@ -1,0 +1,2 @@
+CURDIR=$(dirname $(readlink -f  $0))
+LD_LIBRARY_PATH=$CURDIR/python/lib/:.:./lib   PYTHONHOME=$CURDIR/python  $CURDIR/python/bin/python $@

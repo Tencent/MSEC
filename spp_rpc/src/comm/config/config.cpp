@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <vector>
 #include <string>
 #include <map>
@@ -30,7 +31,30 @@
 using namespace inifile;
 using namespace std;
 
-// ´¦Àí¼àÌıÅäÖÃ
+enum MSEC_LAN_TYPE
+{
+    MSEC_LAN_TYPE_PHP   = 1,
+    MSEC_LAN_TYPE_PY    = 2,
+    MSEC_LAN_TYPE_CPP   = 3,
+};
+
+int GetLanguageType(void)
+{
+    static const char php_tar[] = "./msec.tgz";
+    static const char py_tar[]  = "./msec_py.tgz";
+
+    if (!access(php_tar, R_OK)) {
+        return MSEC_LAN_TYPE_PHP;
+    }
+
+    if (!access(py_tar, R_OK)) {
+        return MSEC_LAN_TYPE_PY;
+    }
+
+    return MSEC_LAN_TYPE_CPP;
+}
+
+// å¤„ç†ç›‘å¬é…ç½®
 // str = eth1:123/udp eth0:234/tcp
 int ParseListens(const string &str, std::vector<Listen> &listens)
 {
@@ -46,7 +70,7 @@ int ParseListens(const string &str, std::vector<Listen> &listens)
 
     while ((pos = str.find(' ', begin)))
     {
-        // ´¦Àí½Ó¿ÚµØÖ·
+        // å¤„ç†æ¥å£åœ°å€
         ss_listen = str.substr(begin, pos-begin);
         pos1 = ss_listen.find(':', 0);
         if (pos1 != string::npos)
@@ -60,7 +84,7 @@ int ParseListens(const string &str, std::vector<Listen> &listens)
             ss_port = ss_listen;
         }
 
-        // ´¦Àí¶Ë¿ÚµØÖ·
+        // å¤„ç†ç«¯å£åœ°å€
         pos1 = ss_port.find('/');
         port = ss_port.substr(0, pos1);
         type = ss_port.substr(pos1+1, string::npos);
@@ -92,7 +116,7 @@ int ParseListens(const string &str, std::vector<Listen> &listens)
     return 0;
 }
 
-// ¼ÓÔØÈÕÖ¾ÅäÖÃ
+// åŠ è½½æ—¥å¿—é…ç½®
 int32_t LoadLogConf(IniFile &ini, Log &log)
 {
     int ret;
@@ -103,7 +127,7 @@ int32_t LoadLogConf(IniFile &ini, Log &log)
         return 0;
     }
 
-    // ÈÕÖ¾µÈ¼¶
+    // æ—¥å¿—ç­‰çº§
     if (ini.hasKey(LOG_GROUP, "Level"))
     {
         ret = ini.getValue(LOG_GROUP, "Level", str);
@@ -140,7 +164,7 @@ int32_t LoadLogConf(IniFile &ini, Log &log)
         }
     }
 
-    // ÈÕÖ¾ÎÄ¼ş¸öÊı
+    // æ—¥å¿—æ–‡ä»¶ä¸ªæ•°
     if (ini.hasKey(LOG_GROUP, "FileMax"))
     {
         ret = ini.getValue(LOG_GROUP, "FileMax", str);
@@ -153,7 +177,7 @@ int32_t LoadLogConf(IniFile &ini, Log &log)
         log.maxfilenum = atoi(str.c_str());
     }
 
-    // ÈÕÖ¾ÎÄ¼ş´óĞ¡
+    // æ—¥å¿—æ–‡ä»¶å¤§å°
     if (ini.hasKey(LOG_GROUP, "FileSize"))
     {
         ret = ini.getValue(LOG_GROUP, "FileSize", str);
@@ -169,8 +193,8 @@ int32_t LoadLogConf(IniFile &ini, Log &log)
     return 0;
 }
 
-// »ñÈ¡ÒµÎñÃû
-// "/msec/s1/s2/bin", Éú³É"s1.s2"
+// è·å–ä¸šåŠ¡å
+// "/msec/s1/s2/bin", ç”Ÿæˆ"s1.s2"
 int GetServiceName(string &name)
 {
     char *name_pos;
@@ -210,9 +234,8 @@ int GetServiceName(string &name)
     return 0;
 }
 
-
 /**
- * @brief »ñÈ¡CPU¸öÊı
+ * @brief è·å–CPUä¸ªæ•°
  */
 int GetCpuNums(void)
 {
@@ -240,7 +263,7 @@ int GetCpuNums(void)
                 continue;
             }
         }
-        else // Ö»¹Ø×¢×îÇ°Ãæ¼¸ĞĞ´øcpuµÄĞÅÏ¢
+        else // åªå…³æ³¨æœ€å‰é¢å‡ è¡Œå¸¦cpuçš„ä¿¡æ¯
         {
             break;
         }
@@ -257,7 +280,7 @@ int GetCpuNums(void)
     return cpu_num;
 }
 
-// ¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+// æ£€æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 bool FileExist(const char* path)
 {
     if (!path) {
@@ -274,7 +297,7 @@ bool FileExist(const char* path)
 
 string ConfigLoader::filename_ = "";
 
-// ÉèÖÃÄ¬ÈÏÅäÖÃ
+// è®¾ç½®é»˜è®¤é…ç½®
 void ConfigLoader::SetDefaultListen(void)
 {
     Listen listen;
@@ -286,7 +309,7 @@ void ConfigLoader::SetDefaultListen(void)
     config_.listens.push_back(listen);
 }
 
-// ÉèÖÃÒµÎñ
+// è®¾ç½®ä¸šåŠ¡
 void ConfigLoader::SetDefaultService(void)
 {
     int32_t ret;
@@ -303,7 +326,44 @@ void ConfigLoader::SetDefaultService(void)
     }
 }
 
-// ÈÕÖ¾¼ÓÔØÆ÷³õÊ¼»¯
+// è®¾ç½®é»˜è®¤è¿›ç¨‹æ•°
+void ConfigLoader::SetDefaultProcnum(void)
+{
+    // è·å–è¯­è¨€ç±»å‹
+    int type = GetLanguageType();
+    int cpunum;
+    
+    // è·å–è¿›ç¨‹æ•°
+    cpunum = GetCpuNums();
+    if (cpunum <= 0)
+    {
+        printf("\nGetCpuNums failed\n");
+        cpunum = 2;
+    }
+    
+    switch (type) {
+        case MSEC_LAN_TYPE_CPP:
+        {
+            config_.procnum = 2*cpunum;
+            break;
+        }
+    
+        case MSEC_LAN_TYPE_PHP:
+        case MSEC_LAN_TYPE_PY:
+        {
+            config_.procnum = 5*cpunum;
+            break;
+        }
+    
+        default:
+        {
+            config_.procnum = 5*cpunum;
+            break;
+        }
+    }        
+}
+
+// æ—¥å¿—åŠ è½½å™¨åˆå§‹åŒ–
 int ConfigLoader::Init(const char *path)
 {
     int32_t ret;
@@ -316,17 +376,18 @@ int ConfigLoader::Init(const char *path)
         return -21;
     }
 
-    // ¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+    // æ£€æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨
     if (!FileExist(path))
     {
         SetDefaultListen();
         SetDefaultService();
+        SetDefaultProcnum();
         return 0;
     }
 
     ConfigLoader::filename_.assign(path);
 
-    // ¼ÓÔØiniÅäÖÃÎÄ¼ş
+    // åŠ è½½inié…ç½®æ–‡ä»¶
     ret = ini.load(path);
     if (ret != RET_OK)
     {
@@ -334,16 +395,17 @@ int ConfigLoader::Init(const char *path)
         return -1;
     }
 
-    // ÊÇ·ñ´æÔÚsppÅäÖÃ
+    // æ˜¯å¦å­˜åœ¨sppé…ç½®
     if (!ini.hasSection(SPP_GROUP))
     {
         SetDefaultListen();
         SetDefaultService();
+        SetDefaultProcnum();
         LoadLogConf(ini, config_.log);
         return 0;
     }
 
-    // ¶ÁÈ¡¼àÌıÅäÖÃ
+    // è¯»å–ç›‘å¬é…ç½®
     if (ini.hasKey(SPP_GROUP, "listen"))
     {
         ret = ini.getValue(SPP_GROUP, "listen", str);
@@ -364,7 +426,7 @@ int ConfigLoader::Init(const char *path)
         SetDefaultListen();
     }
 
-    // ¶ÁÈ¡ÒµÎñsoÏà¹ØÅäÖÃ
+    // è¯»å–ä¸šåŠ¡soç›¸å…³é…ç½®
     if (ini.hasKey(SPP_GROUP, "module"))
     {
         ret = ini.getValue(SPP_GROUP, "module", config_.module);
@@ -374,7 +436,7 @@ int ConfigLoader::Init(const char *path)
             return -4;
         }
 
-        // Èç¹û²»ÊÇ¾ø¶ÔÂ·¾¶£¬ĞèÒª¼ÓÉÏÇ°×º
+        // å¦‚æœä¸æ˜¯ç»å¯¹è·¯å¾„ï¼Œéœ€è¦åŠ ä¸Šå‰ç¼€
         if (config_.module[0] != '/')
         {
             config_.module = "./" + config_.module;
@@ -395,7 +457,7 @@ int ConfigLoader::Init(const char *path)
     }
     #endif
 
-    // ¶ÁÈ¡¹²ÏíÄÚ´æÅäÖÃ
+    // è¯»å–å…±äº«å†…å­˜é…ç½®
     if (ini.hasKey(SPP_GROUP, "shmsize"))
     {
         ret = ini.getValue(SPP_GROUP, "shmsize", str);
@@ -408,7 +470,7 @@ int ConfigLoader::Init(const char *path)
         config_.shmsize = atoi(str.c_str());
     }
 
-    // ¶ÁÈ¡ÒµÎñÅäÖÃÎÄ¼şÂ·¾¶
+    // è¯»å–ä¸šåŠ¡é…ç½®æ–‡ä»¶è·¯å¾„
     if (ini.hasKey(SPP_GROUP, "conf"))
     {
         ret = ini.getValue(SPP_GROUP, "conf", str);
@@ -421,14 +483,14 @@ int ConfigLoader::Init(const char *path)
         config_.conf = str;
     }
 
-    // ¶ÁÈ¡ÈÕÖ¾ÅäÖÃ
+    // è¯»å–æ—¥å¿—é…ç½®
     ret = LoadLogConf(ini, config_.log);
     if (ret < 0)
     {
         return -8;
     }
 
-    // ¶ÁÈ¡ĞÄÌøÅäÖÃ
+    // è¯»å–å¿ƒè·³é…ç½®
     if (ini.hasKey(SPP_GROUP, "heartbeat"))
     {
         ret = ini.getValue(SPP_GROUP, "heartbeat", str);
@@ -441,7 +503,7 @@ int ConfigLoader::Init(const char *path)
         config_.heartbeat = atoi(str.c_str());
     }
 
-    // ¶ÁÈ¡ÈÈÖØÆôÅäÖÃ
+    // è¯»å–çƒ­é‡å¯é…ç½®
     if (ini.hasKey(SPP_GROUP, "reload"))
     {
         ret = ini.getValue(SPP_GROUP, "reload", str);
@@ -454,7 +516,7 @@ int ConfigLoader::Init(const char *path)
         config_.reload = atoi(str.c_str());
     }
 
-    // ¶ÁÈ¡¹ıÔØÅäÖÃ
+    // è¯»å–è¿‡è½½é…ç½®
     if (ini.hasKey(SPP_GROUP, "msg_timeout"))
     {
         ret = ini.getValue(SPP_GROUP, "msg_timeout", str);
@@ -467,7 +529,7 @@ int ConfigLoader::Init(const char *path)
         config_.msg_timeout = atoi(str.c_str());
     }
 
-    // ¶ÁÈ¡½ø³ÌÊıÅäÖÃ
+    // è¯»å–è¿›ç¨‹æ•°é…ç½®
     if (ini.hasKey(SPP_GROUP, "procnum"))
     {
         ret = ini.getValue(SPP_GROUP, "procnum", str);
@@ -481,15 +543,10 @@ int ConfigLoader::Init(const char *path)
     }
     else
     {
-        // »ñÈ¡½ø³ÌÊı
-        ret = GetCpuNums();
-        if (ret > 0)
-        {
-            config_.procnum = 2*ret;
-        }
+        SetDefaultProcnum();
     }
 
-    // »ñÈ¡ÒµÎñÃû
+    // è·å–ä¸šåŠ¡å
     ret = GetServiceName(config_.service);
     if (ret < 0)
     {
@@ -497,7 +554,7 @@ int ConfigLoader::Init(const char *path)
     }
 
 #if 0
-    // ¶ÁÈ¡Ô¤¼ÓÔØnlbÒµÎñÊı¾İ
+    // è¯»å–é¢„åŠ è½½nlbä¸šåŠ¡æ•°æ®
     if (ini.hasKey(NLB_GROUP, "preload"))
     {
         ret = ini.getValue(NLB_GROUP, "preload", str);
@@ -523,21 +580,21 @@ int GetConfig(const string &config_path, const string &session, const string &ke
     int ret;
     IniFile ini;
 
-    // ¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+    // æ£€æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨
     if (!FileExist(config_path.c_str()))
     {
         return CONF_RET_FILE_NONEXIST;
     }
 
-    // ¼ÓÔØiniÅäÖÃÎÄ¼ş
+    // åŠ è½½inié…ç½®æ–‡ä»¶
     ret = ini.load(config_path);
     if (ret != RET_OK)
     {
         return CONF_RET_LOAD_ERR;
     }
 
-    // ÊÇ·ñ´æÔÚsppÅäÖÃ
-    if (ini.hasKey(session, key))
+    // æ˜¯å¦å­˜åœ¨sppé…ç½®
+    if (!ini.hasKey(session, key))
     {
         return CONF_RET_NO_CONFIG;
     }
@@ -554,6 +611,22 @@ int GetConfig(const string &config_path, const string &session, const string &ke
 int GetConfig(const string &session, const string &key, string &val)
 {
     return GetConfig(ConfigLoader::filename_, session, key, val);
+}
+
+extern "C" char *GetConfig(const char *filename, const char *session, const char *key)
+{
+    string filename_str(filename);
+    string session_str(session);
+    string key_str(key);
+    string val_str;
+
+    int ret = GetConfig(filename_str, session_str, key_str, val_str);
+    if (ret != CONF_RET_OK)
+    {
+        return NULL;
+    }
+
+    return strdup(val_str.c_str());
 }
 
 #if 0
@@ -585,7 +658,7 @@ int ParseUnixAddress(const std::string& address, std::string& path, bool& abstra
         return 0;
     }
 
-    // yamlÖĞÓĞÅäÖÃabstract
+    // yamlä¸­æœ‰é…ç½®abstract
     path = address.substr(0, pos);
     if (address.substr(pos + 1) == "abstract")
         abstract = false;

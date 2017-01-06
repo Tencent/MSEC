@@ -27,7 +27,7 @@ MYSQLCLIENT_PATH=../../third_party/srpc/mysqlclient
 HIREDIS_PATH=../../third_party/srpc/hiredis
 CURPWD=$(shell pwd)
 
-all: protobuflib r3c http_parser libunwind libbacktrace 
+all: nlb monitor log protobuflib r3c http_parser libunwind libbacktrace  php jansson json2pb python setuptools
 	-mkdir ../bin/
 	-mkdir ../bin/lib/
 	-mkdir ../moni/
@@ -49,7 +49,10 @@ all: protobuflib r3c http_parser libunwind libbacktrace
 	make -C ./third_party/hiredis
 	sed -i 's/-I$$(HIREDIS)\/include/-I../g' third_party/r3c/Makefile 
 	make libr3c.a -C ./third_party/r3c
+	make -C ./rpc/php
+	make -C ./rpc/python
 	make copy -C ./module/
+	make copy -C ./rpc/python
 	
 clean:
 	make clean -C ./comm/
@@ -66,11 +69,16 @@ clean:
 	make clean -C ./tool/cost_stat_tool/
 	make clean -C ./third_party/hiredis
 	make clean -C ./third_party/r3c
+	make clean -C ./rpc/php
+	make clean -C ./rpc/python
 	-rm -rf ../bin/
 	-rm -rf ../moni/
 	-rm -rf ../stat/
 	-rm -rf ../log/
 	-rm -rf ./publish/spp*
+	-rm -rf ./internal/nlb
+	-rm -rf ./internal/log
+	-rm -rf ./internal/monitor
 
 libunwind:
 	@if [ ! -d "internal/se/libunwind" ]; then \
@@ -101,14 +109,19 @@ libbacktrace:
 	fi	
 
 
-protobuflib:
+protobuflib: python setuptools
 	@if [ ! -f "./third_party/pb/libprotobuf.a" ]; then \
 		tar zxvf ../../third_party/protobuf/protobuf-*tar.gz -C ./third_party; \
 		cd ./third_party/protobuf*; \
 		./configure CFLAGS=-fPIC CPPFLAGS=-fPIC CXXFLAGS=-fPIC --prefix=$(CURPWD)/third_party/tmp;\
 		make; make install; \
 		/bin/sh ./libtool --tag=CXX   --mode=link g++ -pthread -Wall -Wwrite-strings -Woverloaded-virtual -Wno-sign-compare -O2 -g -DNDEBUG -pthread  -o protoc src/main.o -lpthread ./src/.libs/libprotoc.a ./src/.libs/libprotobuf.a -lz; \
-		cd -; \
+		cd ./python; \
+		export LD_LIBRARY_PATH=$(CURPWD)/third_party/python/lib; \
+		export PYTHONHOME=$(CURPWD)/third_party/python; \
+		$(CURPWD)/third_party/python/bin/python setup.py build; \
+		$(CURPWD)/third_party/python/bin/python setup.py install; \
+		cd ../../../; \
 		mkdir -p ./third_party/pb; \
 		cp $(CURPWD)/third_party/protobuf-*/protoc ./third_party/pb; \
 		cp $(CURPWD)/third_party/tmp/include/* ./third_party/pb -rf; \
@@ -131,3 +144,74 @@ http_parser:
 		mv ./third_party/http-parser* ./third_party/http-parser; \
 	fi
 
+php:
+	@if [ ! -d "./third_party/php" ]; then \
+		rm ./third_party/php* -rf; \
+		tar -zxvf ../../third_party/srpc/php/php* -C ./third_party; \
+		cd ./third_party/php* ;\
+		./configure --enable-debug --without-pear --disable-xmlreader --disable-xmlwriter --disable-xml --disable-libxml --disable-dom --disable-simplexml --enable-sockets --enable-maintainer-zts --disable-cgi --enable-json --enable-cli --enable-embed --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --enable-pdo --prefix=$(CURPWD)/third_party/php; \
+		make; make install; \
+	fi
+    
+python:
+	@if [ ! -d "./third_party/python" ]; then \
+		rm ./third_party/python* -rf; \
+		tar -xvf ../../third_party/srpc/python/* -C ./third_party; \
+		cd ./third_party/Python* ;\
+		./configure --enable-shared --prefix=$(CURPWD)/third_party/python; \
+		make; make install; \
+		cd -;\
+	fi; 
+
+setuptools: python
+	@if [ ! -f "./third_party/python/bin/easy_install" ]; then \
+		rm ./third_party/setuptools* -rf; \
+		tar zxvf ../../third_party/srpc/setuptools/setuptools*tar.gz -C ./third_party; \
+		cd ./third_party/setuptools*; \
+		export LD_LIBRARY_PATH=$(CURPWD)/third_party/python/lib; \
+		export PYTHONHOME=$(CURPWD)/third_party/python; \
+		$(CURPWD)/third_party/python/bin/python bootstrap.py; \
+		$(CURPWD)/third_party/python/bin/python setup.py install; \
+	fi
+
+
+
+jansson:
+	@if [ ! -d "./third_party/jansson" ]; then \
+		rm ./third_party/jansson* -rf; \
+		tar -zxvf ../../third_party/srpc/jansson/jansson* -C ./third_party; \
+		cd ./third_party/jansson*; \
+		./configure --prefix=$(CURPWD)/third_party/jansson; \
+		export CFLAGS=-fPIC; export CPPFLAGS=-fPIC; \
+		make; make install; \
+	fi
+
+json2pb:
+	@if [ ! -d "./third_party/json2pb" ]; then \
+		unzip -o ../../third_party/srpc/json2pb/json2pb*.zip -d ./third_party; \
+		mv ./third_party/json2pb* ./third_party/json2pb; \
+	fi
+
+nlb:
+	@if [ ! -d "./internal/nlb/" ]; then \
+		make -C ../../nlb/src; \
+		mkdir -p ./internal/nlb/{lib,include}; \
+		cp ../../nlb/src/api/libnlbapi.a ./internal/nlb/lib; \
+		cp ../../nlb/src/api/nlbapi.h ./internal/nlb/include; \
+	fi
+
+monitor:
+	@if [ ! -d "./internal/monitor/" ]; then \
+		make -C ../../monitor/agent/monitor_api; \
+		mkdir -p ./internal/monitor/{lib,include}; \
+		cp ../../monitor/agent/monitor_api/libmonitor.a ./internal/monitor/lib; \
+		cp ../../monitor/agent/monitor_api/monitor_client.h ./internal/monitor/include; \
+	fi
+
+log:
+	@if [ ! -d "./internal/log/" ]; then \
+		make -C ../../logsys/api/src; \
+		mkdir -p ./internal/log/{lib,include}; \
+		cp ../../logsys/api/src/liblogsys_api.a ./internal/log/lib; \
+		cp ../../logsys/api/src/logsys_api.h ./internal/log/include; \
+	fi

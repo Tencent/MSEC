@@ -29,6 +29,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "mt_api.h"
 #include "srpc_comm.h"
@@ -134,6 +136,12 @@ void CRpcChannel::CallMethod(const MethodDescriptor* method,
     if (m_rsp_head.err_msg().size() != 0)
     {
         ctrl->SetFailed(m_rsp_head.err_msg());
+        goto EXIT_LABEL;
+    }
+
+    if (m_rsp_head.err() != 0)
+    {
+        ctrl->SetFailed(m_rsp_head.err());
         goto EXIT_LABEL;
     }
 

@@ -36,6 +36,7 @@
 #include "../comm/tbase/list.h"
 #include "../comm/tbase/notify.h"
 #include "../comm/tbase/tsockcommu/tsocket.h"
+#include "../comm/tbase/misc.h"
 #include "../comm/monitor.h"
 #include "../comm/timestamp.h"
 #include "../comm/config/config.h"
@@ -68,7 +69,6 @@ USING_SPP_STAT_NS;
 extern CoreCheckPoint g_check_point;
 extern struct sigaction g_sa;
 extern void sigsegv_handler(int sig);
-extern struct timeval __spp_g_now_tv; // session_mgr.cpp
 int g_spp_groupid;
 int g_spp_groups_sum;
 
@@ -102,7 +102,6 @@ void exception_cb(int signo, void *arg)
 
 CDefaultWorker::CDefaultWorker(): ator_(NULL), TOS_(-1), notify_fd_(0)
 {
-    __spp_do_update_tv();
 }
 
 CDefaultWorker::~CDefaultWorker()
@@ -133,11 +132,20 @@ bool CDefaultWorker::get_mt_flag()
 // 框架循环调用
 int CDefaultWorker::loop()
 {
+    static int64_t config_mtime;
     static uint64_t last = 0;
     uint64_t now = (uint64_t)time(NULL);
 
     if (now > (last + 5))
     {
+        int64_t mtime;
+        mtime = CMisc::get_file_mtime(ix_->argv_[1]);
+        if ((mtime < 0) || (mtime == config_mtime))
+        {
+            last = now;
+            return 0;
+        }
+
         // 更新本地日志级别
         ConfigLoader loader;
         if (loader.Init(ix_->argv_[1]) != 0)
@@ -159,6 +167,7 @@ int CDefaultWorker::loop()
         }
 
         last = now;
+        config_mtime = mtime;
     }
 
     return 0;
@@ -193,20 +202,10 @@ void CDefaultWorker::realrun(int argc, char* argv[])
 
     flog_.LOG_P_PID(LOG_FATAL, "worker started!\n");
 
-    ///< start: check sync frame init flag 20130715
-    bool mt_flag = false;
-    if (get_mt_flag())
-    {
-        mt_flag = true;
-    }
-    ///< end: check sync frame init flag 20130715
-
-    __spp_do_update_tv();
-
     while (true)
     {
         ///< start: micro thread handle loop entry add 20130715
-        if (mt_flag && sppdll.spp_handle_loop)
+        if (sppdll.spp_handle_loop)
         {
             sppdll.spp_handle_loop(this);   
         }            
@@ -215,20 +214,16 @@ void CDefaultWorker::realrun(int argc, char* argv[])
         // == 0 时，表示没取到请求，进入较长时间异步等待
         bool isBlock = (ator_->poll(false) == 0);
 
-        if (mt_flag) ///< micro thread run flag 20130715
-        {
-            static CSyncFrame* sync_frame = CSyncFrame::Instance();
-            sync_frame->HandleSwitch(isBlock);
-        }
+        static CSyncFrame* sync_frame = CSyncFrame::Instance();
+        sync_frame->HandleSwitch(isBlock);
 
         // Check and reconnect net proxy, default 10 ms 
-        now_ms = __spp_get_now_ms();
+        now_ms = get_time_ms();
 
         // 检查quit信号
         if (unlikely(CServerBase::quit()) || unlikely(CServerBase::reload()))
         {
-	        __spp_do_update_tv();
-			now_ms = __spp_get_now_ms();
+			now_ms = get_time_ms();
 			
             // 保证剩下的请求都处理完
             if (unlikely(CServerBase::quit()))
@@ -242,18 +237,14 @@ void CDefaultWorker::realrun(int argc, char* argv[])
 			}
 
 			int timeout = 0;
-			if (mt_flag)
+			//微线程
+			while (CSyncFrame::Instance()->GetThreadNum() > 1 && timeout < 1000)
 			{
-				//微线程
-				while (CSyncFrame::Instance()->GetThreadNum() > 1 && timeout < 1000)
-				{
-	                CSyncFrame::Instance()->sleep(10000);
-					timeout += 10;
-				}
+                CSyncFrame::Instance()->sleep(10000);
+				timeout += 10;
 			}
 			
-	        __spp_do_update_tv();
-			now_ms = __spp_get_now_ms();
+			now_ms = get_time_ms();
 			flog_.LOG_P_PID(LOG_FATAL, "exit at %u\n", now_ms);
 			break;
         }
@@ -391,7 +382,7 @@ int CDefaultWorker::initconf(bool reload)
     LOG_SCREEN(LOG_ERROR, "Worker[%5d] [Shm]Worker->Proxy [%dMB]\n", pid, shm.shmsize_producer_/(1<<20));
 
     // check commu type
-    ator_ = new CShmCommu;
+    ator_ = new CTShmCommu;
     ret = ator_->init(&shm);
 
     if (ret != 0)
@@ -495,7 +486,7 @@ int CDefaultWorker::initconf(bool reload)
     }
 
     // 初始化微线程框架
-    ret = CSyncFrame::Instance()->InitFrame(this, 50000);
+    ret = CSyncFrame::Instance()->InitFrame(this, 10000);
     if (ret < 0)
     {
         LOG_SCREEN(LOG_ERROR, "[ERROR] init syncframe failed = %d\n", ret);
@@ -561,7 +552,7 @@ int CDefaultWorker::ator_recvdata_v2(unsigned flow, void* arg1, void* arg2)
         ptr = (TConnExtInfo*)blob->extdata;
 
         int64_t recv_ms = int64_t(ptr->recvtime_) * 1000 + ptr->tv_usec / 1000;
-        int64_t now = __spp_get_now_ms();
+        int64_t now = get_time_ms();
 
         int64_t time_delay = now - recv_ms;
 

@@ -33,18 +33,6 @@ using namespace srpc;
 namespace srpc {
 
 /**
- * @brief 报文格式控制宏
- * @info  报文格式 "(head_len body_len head body)"
- */
-#define PROTO_RPC_STX           0x28
-#define PROTO_RPC_ETX           0x29
-#define PROTO_HEAD_MIN_LEN      10
-#define PROTO_HEAD_OFFSET       (PROTO_HEAD_MIN_LEN-1)
-#define PROTO_BODY_LEN_OFFSET   (1+4)
-#define PROTO_HEAD_LEN_OFFSET   (1)
-
-
-/**
  * @brief  SRPC报文打包函数
  * @info   [注意] 打包后的报文为出参，函数内部分配内存，调用者需要free
  * @param  pkg  [出参]打包完后报文的buffer
@@ -122,6 +110,78 @@ int32_t SrpcPackPkg(char** pkg, int32_t *len, const CRpcHead *head, const Messag
 }
 
 /**
+ * @brief  SRPC报文打包函数
+ * @info   [注意] 打包后的报文为出参，函数内部分配内存，调用者需要free
+ *         [注意] 包体为二进制
+ * @param  pkg  [出参]打包完后报文的buffer
+ *         len  [出参]打包完后，报文的长度
+ *         head [入参]报文头,PB格式
+ *         body [入参]报文体,二进制
+ * @return =SRPC_SUCCESS    打包成功
+ * @       !=SRPC_SUCCESS   打包失败
+ */
+int32_t SrpcPackPkg(char** pkg, int32_t *len, const CRpcHead *head, const string& body)
+{
+    char *buf;
+
+    // 参数检查
+    if (NULL == head || NULL == pkg || NULL == len)
+    {
+        return SRPC_ERR_PARA_ERROR;
+    }
+
+    // 初始化报文长度
+    int32_t head_len = head->ByteSize();
+    int32_t body_len = body.size();
+    int32_t msg_len  = PROTO_HEAD_MIN_LEN + head_len + body_len;
+
+    // 检查包头是否初始化
+    if (!head->IsInitialized() || !head_len)
+    {
+        return SRPC_ERR_HEADER_UNINIT;
+    }
+
+    // 分配内存
+    buf = (char *)malloc(msg_len);
+    if (NULL == buf)
+    {
+        return SRPC_ERR_NO_MEMORY;
+    }
+
+    // 组装报文
+    // 格式 "(head_len body_len head body)"
+    char *pos = buf;
+    *pos++ = PROTO_RPC_STX;
+    *(int32_t *)pos = htonl(head_len);
+    pos += sizeof(int32_t);
+    *(int32_t *)pos = htonl(body_len);
+    pos += sizeof(int32_t);
+
+    // 序列化包头
+    if (!head->SerializeToArray(pos, head_len))
+    {
+        free(buf);
+        return SRPC_ERR_INVALID_PKG_HEAD;
+    }
+    pos += head_len;
+
+    // 序列化包体
+    if (body_len)
+    {
+        memcpy(pos, body.data(), body_len);
+    }
+    pos += body_len;
+    *pos = PROTO_RPC_ETX;
+
+    // 设置出参
+    *pkg = buf;
+    *len = msg_len;
+
+    return SRPC_SUCCESS;
+}
+
+
+/**
  * @brief  SRPC报文打包函数[没有包体]
  * @info   [注意] 打包后的报文为出参，函数内部分配内存，调用者需要free
  * @param  pkg  [出参]打包完后报文的buffer
@@ -178,6 +238,46 @@ int32_t SrpcPackPkgNoBody(char** pkg, int32_t *len, const CRpcHead *head)
     // 设置出参
     *pkg = buf;
     *len = msg_len;
+
+    return SRPC_SUCCESS;
+}
+
+/**
+ * @brief  SRPC报文解包函数
+ * @info   [注意] 必须为完整的一个包才能调用
+ *         [注意] 只获取body的序列化后的二进制
+ * @param  buff 报文buffer
+ *         len  报文长度
+ *         body 消息体
+ * @return !=SRPC_SUCCESS   解包失败
+ * @       =SRPC_SUCCESS    解包成功
+ */
+int32_t SrpcGetPkgBodyString(const char *buff, int32_t len, string &body)
+{
+    if (NULL == buff || len <= 0)
+    {
+        return SRPC_ERR_PARA_ERROR;
+    }
+
+    // 报文合法性检查
+    if ((len <= PROTO_HEAD_MIN_LEN)
+        || (*buff != PROTO_RPC_STX)
+        || (*(buff+len-1) != PROTO_RPC_ETX))
+    {
+        return SRPC_ERR_INVALID_PKG;
+    }
+
+    int32_t head_len = htonl(*(int *)(buff + PROTO_HEAD_LEN_OFFSET));
+    int32_t body_len = htonl(*(int *)(buff + PROTO_BODY_LEN_OFFSET));
+    int32_t msg_len  = head_len + body_len + PROTO_HEAD_MIN_LEN;
+
+    // 报文合法性检查
+    if (body_len < 0 || head_len <= 0 || msg_len != len)
+    {
+        return SRPC_ERR_INVALID_PKG;
+    }
+
+    body.assign(buff + PROTO_HEAD_OFFSET + head_len, body_len);
 
     return SRPC_SUCCESS;
 }

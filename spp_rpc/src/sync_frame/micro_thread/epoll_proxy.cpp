@@ -29,7 +29,7 @@
 using namespace NS_MICRO_THREAD;
 
 /**
- *  @brief ¹¹Ôìº¯Êı
+ *  @brief æ„é€ å‡½æ•°
  */
 EpollProxy::EpollProxy()
 {
@@ -40,12 +40,12 @@ EpollProxy::EpollProxy()
 }
 
 /**
- *  @brief epoll³õÊ¼»¯, ÉêÇë¶¯Ì¬ÄÚ´æµÈ
+ *  @brief epollåˆå§‹åŒ–, ç”³è¯·åŠ¨æ€å†…å­˜ç­‰
  */
 int EpollProxy::InitEpoll(int max_num)
 {
     int rc = 0;
-    if (max_num > _maxfd)   // Èç¹ûÉèÖÃµÄÊıÄ¿½Ï´ó, Ôòµ÷Õû×î´ófdÊıÄ¿
+    if (max_num > _maxfd)   // å¦‚æœè®¾ç½®çš„æ•°ç›®è¾ƒå¤§, åˆ™è°ƒæ•´æœ€å¤§fdæ•°ç›®
     {
         _maxfd = max_num;
     }
@@ -97,7 +97,7 @@ EXIT_LABEL:
 }
 
 /**
- *  @brief epoll·´³õÊ¼»¯
+ *  @brief epollååˆå§‹åŒ–
  */
 void EpollProxy::TermEpoll()
 {
@@ -121,9 +121,9 @@ void EpollProxy::TermEpoll()
 }
 
 /**
- *  @brief ½«Ò»¸öÎ¢Ïß³ÌÕìÌıµÄËùÓĞsocketËÍÈëepoll¹ÜÀí
- *  @param fdset Î¢Ïß³ÌÕìÌıµÄsocket¼¯ºÏ
- *  @return true ³É¹¦, false Ê§°Ü, Ê§°Ü»á¾¡Á¦»Ø¹ö, ¼õÉÙÓ°Ïì
+ *  @brief å°†ä¸€ä¸ªå¾®çº¿ç¨‹ä¾¦å¬çš„æ‰€æœ‰socketé€å…¥epollç®¡ç†
+ *  @param fdset å¾®çº¿ç¨‹ä¾¦å¬çš„socketé›†åˆ
+ *  @return true æˆåŠŸ, false å¤±è´¥, å¤±è´¥ä¼šå°½åŠ›å›æ»š, å‡å°‘å½±å“
  */
 bool EpollProxy::EpollAdd(EpObjList& obj_list)
 {
@@ -161,9 +161,9 @@ EXIT_LABEL:
 
 
 /**
- *  @brief ½«Ò»¸öÎ¢Ïß³ÌÕìÌıµÄËùÓĞsocketÒÆ³ıepoll¹ÜÀí
- *  @param fdset Î¢Ïß³ÌÕìÌıµÄsocket¼¯ºÏ
- *  @return true ³É¹¦, false Ê§°Ü
+ *  @brief å°†ä¸€ä¸ªå¾®çº¿ç¨‹ä¾¦å¬çš„æ‰€æœ‰socketç§»é™¤epollç®¡ç†
+ *  @param fdset å¾®çº¿ç¨‹ä¾¦å¬çš„socketé›†åˆ
+ *  @return true æˆåŠŸ, false å¤±è´¥
  */
 bool EpollProxy::EpollDel(EpObjList& obj_list)
 {
@@ -185,7 +185,7 @@ bool EpollProxy::EpollDel(EpObjList& obj_list)
 
 
 /**
- * @brief µ¥¸öepfd¸üĞÂepctrl, ³É¹¦ĞèÒª¸üĞÂµ±Ç°¼àÌıÊÂ¼şÖµ
+ * @brief å•ä¸ªepfdæ›´æ–°epctrl, æˆåŠŸéœ€è¦æ›´æ–°å½“å‰ç›‘å¬äº‹ä»¶å€¼
  */
 bool EpollProxy::EpollCtrlAdd(int fd, int events)
 {
@@ -198,7 +198,7 @@ bool EpollProxy::EpollCtrlAdd(int fd, int events)
         return false;
     }
 
-    // ¸üĞÂÒıÓÃ¼ÆÊı, ²¿·ÖÁ÷³Ì»áÒÀÀµ¸Ã¼ÆÊı, Ê§°ÜÒª»Ø¹ö
+    // æ›´æ–°å¼•ç”¨è®¡æ•°, éƒ¨åˆ†æµç¨‹ä¼šä¾èµ–è¯¥è®¡æ•°, å¤±è´¥è¦å›æ»š
     item->AttachEvents(events);
     
     int old_events = item->GetListenEvents();
@@ -226,7 +226,7 @@ bool EpollProxy::EpollCtrlAdd(int fd, int events)
 }
 
 /**
- * @brief µ¥¸öepfd¸üĞÂepctrl, ³É¹¦ĞèÒª¸üĞÂµ±Ç°¼àÌıÊÂ¼şÖµ
+ * @brief å•ä¸ªepfdæ›´æ–°epctrl, æˆåŠŸéœ€è¦æ›´æ–°å½“å‰ç›‘å¬äº‹ä»¶å€¼
  */
 bool EpollProxy::EpollCtrlDel(int fd, int events)
 {
@@ -234,7 +234,7 @@ bool EpollProxy::EpollCtrlDel(int fd, int events)
 }
 
 /**
- * @brief µ¥¸öepfd¸üĞÂepctrl, ¼ì²éÒıÓÃ¼ÆÊı, ¿ÉÒÔÔ¤Éè³¤Á¬½Ó, ²»»áÃ¿´Î¶¼epollctl
+ * @brief å•ä¸ªepfdæ›´æ–°epctrl, æ£€æŸ¥å¼•ç”¨è®¡æ•°, å¯ä»¥é¢„è®¾é•¿è¿æ¥, ä¸ä¼šæ¯æ¬¡éƒ½epollctl
  */
 bool EpollProxy::EpollCtrlDelRef(int fd, int events, bool use_ref)
 {
@@ -247,11 +247,11 @@ bool EpollProxy::EpollCtrlDelRef(int fd, int events, bool use_ref)
         return false;
     }
 
-    item->DetachEvents(events);  // delete Ê§°Ü²»»Ø¹ö´¦Àí
+    item->DetachEvents(events);  // delete å¤±è´¥ä¸å›æ»šå¤„ç†
     int old_events = item->GetListenEvents();
-    int new_events = old_events &~ events;  // Ä¬ÈÏÇé¿ö
+    int new_events = old_events &~ events;  // é»˜è®¤æƒ…å†µ
 
-    // Èç¹ûÒª°´ÒıÓÃÉ¾³ı, ĞèÒªºË²éÊÇ·ñÂú×ãÉ¾³ıÌõ¼ş
+    // å¦‚æœè¦æŒ‰å¼•ç”¨åˆ é™¤, éœ€è¦æ ¸æŸ¥æ˜¯å¦æ»¡è¶³åˆ é™¤æ¡ä»¶
     if (use_ref)
     {
         new_events = old_events;
@@ -287,7 +287,7 @@ bool EpollProxy::EpollCtrlDelRef(int fd, int events, bool use_ref)
 
 
 /**
- * @brief µ¥¸öepfd¸üĞÂepctrl, Èç¹ûÊ§°Ü, ÍêÕû»ØÍË
+ * @brief å•ä¸ªepfdæ›´æ–°epctrl, å¦‚æœå¤±è´¥, å®Œæ•´å›é€€
  */
 bool EpollProxy::EpollAddObj(EpollerObj* obj)
 {
@@ -306,7 +306,7 @@ bool EpollProxy::EpollAddObj(EpollerObj* obj)
         return false;
     }
 
-    // ²»Í¬µÄ»Øµ÷×´Ì¬, ²»Í¬µÄ·½Ê½´¦Àí del ÊÂ¼ş, ÆÁ±ÎÁ¬½Ó¸´ÓÃ·½Ê½µÄ´¦Àí¸´ÔÓĞÔ
+    // ä¸åŒçš„å›è°ƒçŠ¶æ€, ä¸åŒçš„æ–¹å¼å¤„ç† del äº‹ä»¶, å±è”½è¿æ¥å¤ç”¨æ–¹å¼çš„å¤„ç†å¤æ‚æ€§
     int ret = obj->EpollCtlAdd(item);
     if (ret < 0)
     {
@@ -320,9 +320,9 @@ bool EpollProxy::EpollAddObj(EpollerObj* obj)
 
 
 /**
- *  @brief ½«Ò»¸öÎ¢Ïß³ÌÕìÌıµÄËùÓĞsocketÒÆ³ıepoll¹ÜÀí
- *  @param fdset Î¢Ïß³ÌÕìÌıµÄsocket¼¯ºÏ
- *  @return true ³É¹¦, false Ê§°Ü
+ *  @brief å°†ä¸€ä¸ªå¾®çº¿ç¨‹ä¾¦å¬çš„æ‰€æœ‰socketç§»é™¤epollç®¡ç†
+ *  @param fdset å¾®çº¿ç¨‹ä¾¦å¬çš„socketé›†åˆ
+ *  @return true æˆåŠŸ, false å¤±è´¥
  */
 bool EpollProxy::EpollDelObj(EpollerObj* obj)
 {
@@ -341,7 +341,7 @@ bool EpollProxy::EpollDelObj(EpollerObj* obj)
         return false;
     }
     
-    // ²»Í¬µÄ»Øµ÷×´Ì¬, ²»Í¬µÄ·½Ê½´¦Àí del ÊÂ¼ş, ÆÁ±ÎÁ¬½Ó¸´ÓÃ·½Ê½µÄ´¦Àí¸´ÔÓĞÔ
+    // ä¸åŒçš„å›è°ƒçŠ¶æ€, ä¸åŒçš„æ–¹å¼å¤„ç† del äº‹ä»¶, å±è”½è¿æ¥å¤ç”¨æ–¹å¼çš„å¤„ç†å¤æ‚æ€§
     int ret = obj->EpollCtlDel(item);
     if (ret < 0)
     {
@@ -355,8 +355,8 @@ bool EpollProxy::EpollDelObj(EpollerObj* obj)
 
 
 /**
- *  @brief ¸üĞÂÃ¿¸ösocketµÄ×îĞÂ½ÓÊÕÊÂ¼şĞÅÏ¢
- *  @param evtfdnum ÊÕµ½ÊÂ¼şµÄfd¼¯ºÏÊıÄ¿
+ *  @brief æ›´æ–°æ¯ä¸ªsocketçš„æœ€æ–°æ¥æ”¶äº‹ä»¶ä¿¡æ¯
+ *  @param evtfdnum æ”¶åˆ°äº‹ä»¶çš„fdé›†åˆæ•°ç›®
  */
 void EpollProxy::EpollRcvEventList(int evtfdnum)
 {
@@ -388,14 +388,14 @@ void EpollProxy::EpollRcvEventList(int evtfdnum)
         }
         obj->SetRcvEvents(revents);
 
-        // 1. ´íÎó´¦Àí, Íê±ÏºóÖ±½ÓÌø³ö
+        // 1. é”™è¯¯å¤„ç†, å®Œæ¯•åç›´æ¥è·³å‡º
         if (revents & (EPOLLERR | EPOLLHUP))
         {
             obj->HangupNotify();
             continue;
         }
 
-        // 2. ¿É¶ÁÊÂ¼ş, ·Ç0·µ»ØÖµ»áÌø³ö
+        // 2. å¯è¯»äº‹ä»¶, é0è¿”å›å€¼ä¼šè·³å‡º
         if (revents & EPOLLIN) {
             ret = obj->InputNotify();
             if (ret != 0) {
@@ -403,7 +403,7 @@ void EpollProxy::EpollRcvEventList(int evtfdnum)
             }
         }
 
-        // 3. ¿ÉĞ´ÊÂ¼ş, ·Ç0·µ»ØÖµ»áÌø³ö
+        // 3. å¯å†™äº‹ä»¶, é0è¿”å›å€¼ä¼šè·³å‡º
         if (revents & EPOLLOUT) {
             ret = obj->OutputNotify();
             if (ret != 0) {
@@ -415,7 +415,7 @@ void EpollProxy::EpollRcvEventList(int evtfdnum)
 
 
 /**
- *  @brief epoll_wait ÒÔ¼°·Ö·¢´¦Àí¹ı³Ì
+ *  @brief epoll_wait ä»¥åŠåˆ†å‘å¤„ç†è¿‡ç¨‹
  */
 void EpollProxy::EpollDispath()
 {
@@ -430,8 +430,8 @@ void EpollProxy::EpollDispath()
 
 
 /**
- *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int EpollerObj::InputNotify()
 {
@@ -443,7 +443,7 @@ int EpollerObj::InputNotify()
         return -1;
     }
 
-    // ¶à¸öÊÂ¼şÍ¬Ê±µ½´ï, ·ÀÖØ¸´²Ù×÷
+    // å¤šä¸ªäº‹ä»¶åŒæ—¶åˆ°è¾¾, é˜²é‡å¤æ“ä½œ
     if (thread->HasFlag(MicroThread::IO_LIST))
     {
         MtFrame* frame = MtFrame::Instance();
@@ -455,8 +455,8 @@ int EpollerObj::InputNotify()
 }
 
 /**
- *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int EpollerObj::OutputNotify()
 {
@@ -468,7 +468,7 @@ int EpollerObj::OutputNotify()
         return -1;
     }
 
-    // ¶à¸öÊÂ¼şÍ¬Ê±µ½´ï, ·ÀÖØ¸´²Ù×÷
+    // å¤šä¸ªäº‹ä»¶åŒæ—¶åˆ°è¾¾, é˜²é‡å¤æ“ä½œ
     if (thread->HasFlag(MicroThread::IO_LIST))
     {
         MtFrame* frame = MtFrame::Instance();
@@ -480,8 +480,8 @@ int EpollerObj::OutputNotify()
 }
 
 /**
- *  @brief Òì³£Í¨Öª½Ó¿Ú, ¹Ø±ÕfdÕìÌı, threadµÈ´ı´¦Àí³¬Ê±
- *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+ *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£, å…³é—­fdä¾¦å¬, threadç­‰å¾…å¤„ç†è¶…æ—¶
+ *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
  */
 int EpollerObj::HangupNotify()
 {
@@ -491,9 +491,9 @@ int EpollerObj::HangupNotify()
 }
 
 /**
- *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
- *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
- *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+ *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+ *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
  */
 int EpollerObj::EpollCtlAdd(void* args)
 {
@@ -504,7 +504,7 @@ int EpollerObj::EpollCtlAdd(void* args)
     int osfd = this->GetOsfd();
     int new_events = this->GetEvents();
 
-    // Í¨Öª¶ÔÏóĞèÒª¸üĞÂ, FDÍ¨Öª¶ÔÏóÀíÂÛÉÏ²»»á¸´ÓÃ, ÕâÀï×ö³åÍ»¼ì²é, Òì³£log¼ÇÂ¼
+    // é€šçŸ¥å¯¹è±¡éœ€è¦æ›´æ–°, FDé€šçŸ¥å¯¹è±¡ç†è®ºä¸Šä¸ä¼šå¤ç”¨, è¿™é‡Œåšå†²çªæ£€æŸ¥, å¼‚å¸¸logè®°å½•
     EpollerObj* old_obj = fd_ref->GetNotifyObj();
     if ((old_obj != NULL) && (old_obj != this))
     {
@@ -513,7 +513,7 @@ int EpollerObj::EpollCtlAdd(void* args)
     }
     fd_ref->SetNotifyObj(this);
 
-    // µ÷ÓÃ¿ò¼ÜµÄepoll ctl½Ó¿Ú, ÆÁ±Îepoll ctrlÏ¸½Ú
+    // è°ƒç”¨æ¡†æ¶çš„epoll ctlæ¥å£, å±è”½epoll ctrlç»†èŠ‚
     if (!frame->EpollCtrlAdd(osfd, new_events))
     {
         MTLOG_ERROR("epfd ref add failed, log");
@@ -525,9 +525,9 @@ int EpollerObj::EpollCtlAdd(void* args)
 }
 
 /**
- *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
- *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
- *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+ *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+ *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
  */
 int EpollerObj::EpollCtlDel(void* args)
 {
@@ -538,7 +538,7 @@ int EpollerObj::EpollCtlDel(void* args)
     int osfd = this->GetOsfd();
     int events = this->GetEvents();
     
-    // Í¨Öª¶ÔÏóĞèÒª¸üĞÂ, FDÍ¨Öª¶ÔÏóÀíÂÛÉÏ²»»á¸´ÓÃ, ÕâÀï×ö³åÍ»¼ì²é, Òì³£log¼ÇÂ¼
+    // é€šçŸ¥å¯¹è±¡éœ€è¦æ›´æ–°, FDé€šçŸ¥å¯¹è±¡ç†è®ºä¸Šä¸ä¼šå¤ç”¨, è¿™é‡Œåšå†²çªæ£€æŸ¥, å¼‚å¸¸logè®°å½•
     EpollerObj* old_obj = fd_ref->GetNotifyObj();
     if (old_obj != this)
     {
@@ -547,8 +547,8 @@ int EpollerObj::EpollCtlDel(void* args)
     }
     fd_ref->SetNotifyObj(NULL);
 
-    // µ÷ÓÃ¿ò¼ÜµÄepoll ctl½Ó¿Ú, ÆÁ±Îepoll ctrlÏ¸½Ú
-    if (!frame->EpollCtrlDelRef(osfd, events, false)) // ÒıÓÃÓĞ·çÏÕ, ±×´óÓÚÀû, ¹Ø±Õµô
+    // è°ƒç”¨æ¡†æ¶çš„epoll ctlæ¥å£, å±è”½epoll ctrlç»†èŠ‚
+    if (!frame->EpollCtrlDelRef(osfd, events, false)) // å¼•ç”¨æœ‰é£é™©, å¼Šå¤§äºåˆ©, å…³é—­æ‰
     {
         MTLOG_ERROR("epfd ref del failed, log");
         fd_ref->SetNotifyObj(old_obj);

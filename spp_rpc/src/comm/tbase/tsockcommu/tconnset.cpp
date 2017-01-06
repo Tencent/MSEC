@@ -27,6 +27,7 @@
 #include <arpa/inet.h>
 #include "../misc.h"
 #include "../tlog.h"
+#include "../../timestamp.h"
 #include "../../global.h"
 #include "../../singleton.h"
 #include "../monitor.h"
@@ -38,8 +39,6 @@ using namespace spp::comm;
 
 static const unsigned C_READ_BUFFER_SIZE = 64 * 1024;
 static char RecvBuffer[C_READ_BUFFER_SIZE];
-
-extern struct timeval __spp_g_now_tv; // defaultproxy.cpp
 
 CConnSet::CConnSet(CMemPool& mp, int maxconn): maxconn_(maxconn)
 {
@@ -77,11 +76,10 @@ int CConnSet::addconn(unsigned& flow, int fd, int type)
 
     //当前flow不可用，寻找下一个可用的flow
     if (cc->_flow > 0) {
-        //unsigned endflow = flow + maxconn_;
 		int i = 0;
         while (++i != maxconn_) {
-			//bug fix 3350521, by aoxu, 2010-03-09
-            flow = (++flow) % MAX_FLOW_NUM;
+		    flow = flow + 1;
+            flow = flow % MAX_FLOW_NUM;
 			if(flow == 0) { //防止flow溢出
 				++flow;
 			}
@@ -102,7 +100,7 @@ int CConnSet::addconn(unsigned& flow, int fd, int type)
     cc->_info.fd_ = fd;
     cc->_type = type;
     cc->_info.type_ = type;
-    cc->_access = __spp_g_now_tv;
+    gettimeofday(&cc->_access, NULL);
     usedflow_ ++;
     MONITOR(MONITOR_CONNSET_NEW_CONN);
     return 0;
@@ -138,11 +136,9 @@ int CConnSet::recv(unsigned flow)
     }
 
     /* 这里保证了接收时间的设置 */
-    gettimeofday(&__spp_g_now_tv, NULL);
-    cc->_info.recvtime_ = __spp_g_now_tv.tv_sec;
-    cc->_info.tv_usec   = __spp_g_now_tv.tv_usec;
-
-    cc->_access = __spp_g_now_tv;
+    gettimeofday(&cc->_access, NULL);
+    cc->_info.recvtime_ = cc->_access.tv_sec;
+    cc->_info.tv_usec   = cc->_access.tv_usec;
 
     //	second, read from socket
     int fd = cc->_fd;
@@ -198,8 +194,6 @@ void CConnSet::dumpinfo(unsigned flow, int log_type, const char* errmsg)
     ConnCache* cc = ccs_[flow%maxconn_];
     if (flow != 0 && cc->_flow == flow)
     {
-        gettimeofday(&__spp_g_now_tv, NULL);
-
         char localIpStr[16] = {0};
         strncpy(localIpStr, inet_ntoa(*(struct in_addr*)&cc->_info.localip_), sizeof(localIpStr) - 1);
         char remoteIpStr[16] = {0};
@@ -210,7 +204,7 @@ void CConnSet::dumpinfo(unsigned flow, int log_type, const char* errmsg)
                 flow,
                 cc->_access.tv_sec,
                 (int64_t)cc->_info.recvtime_ * 1000 + cc->_info.tv_usec / 1000,
-                (int64_t)__spp_g_now_tv.tv_sec * 1000 + __spp_g_now_tv.tv_usec / 1000,
+                get_time_ms(),
                 localIpStr,
                 cc->_info.localport_,
                 remoteIpStr,
@@ -233,14 +227,15 @@ void CConnSet::dumpinfo(unsigned flow, int log_type, const char* errmsg)
 int CConnSet::send(unsigned flow, const char* data, size_t data_len)
 {
     //  first, find the fd
+    struct timeval now;
     ConnCache* cc = ccs_[flow % maxconn_];
 
     if (cc->_flow != flow || flow == 0) {
         MONITOR(MONITOR_SEND_FLOWID_ERR); // rsp msg flowid invalid
-        gettimeofday(&__spp_g_now_tv, NULL);
+        gettimeofday(&now, NULL);
         unsigned flowCostTime =
-            (__spp_g_now_tv.tv_sec - cc->_info.recvtime_) * 1000
-            + (__spp_g_now_tv.tv_usec - cc->_info.tv_usec) / 1000;
+            (now.tv_sec - cc->_info.recvtime_) * 1000
+            + (now.tv_usec - cc->_info.tv_usec) / 1000;
 
         char localIpStr[16] = {0};
         strncpy(localIpStr, inet_ntoa(*(struct in_addr*)&cc->_info.localip_), sizeof(localIpStr) - 1);
@@ -260,7 +255,7 @@ int CConnSet::send(unsigned flow, const char* data, size_t data_len)
         return -E_NOT_FINDFD;
     }
 
-    cc->_access = __spp_g_now_tv;
+    cc->_access = now;
 
     //	second, if data in cache, send it first
     int fd = cc->_fd;
@@ -324,7 +319,7 @@ int CConnSet::sendfromcache(unsigned flow)
         return -E_NOT_FINDFD;
     }
 
-    cc->_access = __spp_g_now_tv;
+    gettimeofday(&cc->_access, NULL);
 
     //no cache data to send, send completely
     if (cc->_w.data_len() == 0) {

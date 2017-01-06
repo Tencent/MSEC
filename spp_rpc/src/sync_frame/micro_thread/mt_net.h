@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_net.h
- *  @info Î¢Ïß³Ì·â×°µÄÍøÂç½Ó¿ÚÀà
+ *  @info å¾®çº¿ç¨‹å°è£…çš„ç½‘ç»œæ¥å£ç±»
  **/
 
 #ifndef __MT_NET_H__
@@ -34,40 +34,40 @@
 namespace NS_MICRO_THREAD {
 
 /**
- * @brief Á¬½ÓÀàĞÍ¶¨Òå
+ * @brief è¿æ¥ç±»å‹å®šä¹‰
  */
 enum MT_CONN_TYPE 
 {
     TYPE_CONN_UNKNOWN   = 0,
-    TYPE_CONN_SHORT     = 0x1,          ///< ¶ÌÁ¬½Ó, Ò»´Î½»»¥ºó¹Ø±Õ
-    TYPE_CONN_POOL      = 0x2,          ///< ³¤Á¬½Ó£¬Ã¿´ÎÊ¹ÓÃºó, ¿É»ØÊÕÖØ¸´Ê¹ÓÃ
-    TYPE_CONN_SESSION   = 0x4,          ///< ³¤Á¬½Ó£¬°´session id ¸´ÓÃ, ·À´®°ü
-    TYPE_CONN_SENDONLY  = 0x8,          ///< Ö»·¢²»ÊÕ
+    TYPE_CONN_SHORT     = 0x1,          ///< çŸ­è¿æ¥, ä¸€æ¬¡äº¤äº’åå…³é—­
+    TYPE_CONN_POOL      = 0x2,          ///< é•¿è¿æ¥ï¼Œæ¯æ¬¡ä½¿ç”¨å, å¯å›æ”¶é‡å¤ä½¿ç”¨
+    TYPE_CONN_SESSION   = 0x4,          ///< é•¿è¿æ¥ï¼ŒæŒ‰session id å¤ç”¨, é˜²ä¸²åŒ…
+    TYPE_CONN_SENDONLY  = 0x8,          ///< åªå‘ä¸æ”¶
 };
 
 
 /******************************************************************************/
-/*  ÄÚ²¿ÊµÏÖ²¿·Ö                                                              */
+/*  å†…éƒ¨å®ç°éƒ¨åˆ†                                                              */
 /******************************************************************************/
 class CSockLink;
 
 /**
- * @brief ¶¨Ê±»ØÊÕµÄ¶ÔÏó³ØÄ£°åÊµÏÖ
- * @info  List±ØĞëÊÇtailq, Type ĞèÒªÓĞresetº¯Êı, releasetime, linkentry×Ö¶Î
+ * @brief å®šæ—¶å›æ”¶çš„å¯¹è±¡æ± æ¨¡æ¿å®ç°
+ * @info  Listå¿…é¡»æ˜¯tailq, Type éœ€è¦æœ‰resetå‡½æ•°, releasetime, linkentryå­—æ®µ
  */
 template <typename List, typename Type>
 class CRecyclePool
 {
 public:
 
-    // ¹¹Ôìº¯Êı, Ä¬ÈÏ60s³¬Ê±
+    // æ„é€ å‡½æ•°, é»˜è®¤60sè¶…æ—¶
     CRecyclePool() {
         _expired = 60 * 1000;
         _count = 0;
         TAILQ_INIT(&_free_list);
     };
 
-    // Îö¹¹º¯Êı, É¾³ı³ØÖĞÔªËØ
+    // ææ„å‡½æ•°, åˆ é™¤æ± ä¸­å…ƒç´ 
     ~CRecyclePool() {
         Type* item = NULL;
         Type* tmp = NULL;
@@ -79,7 +79,7 @@ public:
         _count = 0;
     };
 
-    // ¸´ÓÃ»òĞÂ´´½¨¶ÔÏó
+    // å¤ç”¨æˆ–æ–°åˆ›å»ºå¯¹è±¡
     Type* AllocItem() {
         Type* item = TAILQ_FIRST(&_free_list);
         if (item != NULL)
@@ -98,7 +98,7 @@ public:
         return item;
     };
 
-    // ÊÍ·Å¹ÜÀí¶ÔÏó
+    // é‡Šæ”¾ç®¡ç†å¯¹è±¡
     void FreeItem(Type* obj) {
         //obj->Reset();        
         TAILQ_INSERT_TAIL(&_free_list, obj, _link_entry);
@@ -107,7 +107,7 @@ public:
     };
     
 
-    // »ØÊÕ¾ä±ú
+    // å›æ”¶å¥æŸ„
     void RecycleItem(uint64_t now) {
         Type* item = NULL;
         Type* tmp = NULL;
@@ -123,28 +123,28 @@ public:
         }
     };
 
-    // ÉèÖÃ×Ô¶¨ÒåµÄ³¬Ê±Ê±¼ä
+    // è®¾ç½®è‡ªå®šä¹‰çš„è¶…æ—¶æ—¶é—´
     void SetExpiredTime(uint64_t expired) {
         _expired = expired;
     };
 
 private:
 
-    List            _free_list;      ///< ¿ÕÏĞÁ´±í
-    uint64_t        _expired;        ///< ³¬Ê±Ê±¼ä
-    uint32_t        _count;          ///< ÔªËØ¼ÆÊı
+    List            _free_list;      ///< ç©ºé—²é“¾è¡¨
+    uint64_t        _expired;        ///< è¶…æ—¶æ—¶é—´
+    uint32_t        _count;          ///< å…ƒç´ è®¡æ•°
 };
 
 
 
 /**
- * @brief Ã¿´ÎIO¹ØÁªÒ»¸ö¾ä±ú¶ÔÏó
+ * @brief æ¯æ¬¡IOå…³è”ä¸€ä¸ªå¥æŸ„å¯¹è±¡
  */
 class CNetHandler : public HashKey
 {
 public:
 
-    // ¾ä±ú×´Ì¬ÃèÊö
+    // å¥æŸ„çŠ¶æ€æè¿°
     enum {
         STATE_IN_SESSION    = 0x1,
         STATE_IN_CONNECT    = 0x2,
@@ -154,21 +154,21 @@ public:
     };
     
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue();
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs); 
 
-    // Í¬²½ÊÕ·¢½Ó¿Ú
+    // åŒæ­¥æ”¶å‘æ¥å£
     int32_t SendRecv(void* data, uint32_t len, uint32_t timeout);
 
-    // »ñÈ¡·µ»ØbuffĞÅÏ¢, ÓĞĞ§ÆÚÖ±µ½helperÎö¹¹
+    // è·å–è¿”å›buffä¿¡æ¯, æœ‰æ•ˆæœŸç›´åˆ°helperææ„
     void* GetRspBuff() {
         if (_rsp_buff != NULL) {
             return _rsp_buff->data;
@@ -177,7 +177,7 @@ public:
         }
     };
 
-    // »ñÈ¡·µ»ØbuffĞÅÏ¢, ÓĞĞ§ÆÚÖ±µ½helperÎö¹¹
+    // è·å–è¿”å›buffä¿¡æ¯, æœ‰æ•ˆæœŸç›´åˆ°helperææ„
     uint32_t GetRspLen() {
         if (_rsp_buff != NULL) {
             return _rsp_buff->data_len;
@@ -186,7 +186,7 @@ public:
         }
     };
     
-    // ÉèÖÃrspĞÅÏ¢
+    // è®¾ç½®rspä¿¡æ¯
     void SetRespBuff(TSkBuffer* buff) {
         if (_rsp_buff != NULL) {
             delete_sk_buffer(_rsp_buff);
@@ -196,34 +196,34 @@ public:
         _rsp_buff = buff;
     };
 
-    // ÉèÖÃĞ­ÒéµÄÀàĞÍ, Ä¬ÈÏUDP
+    // è®¾ç½®åè®®çš„ç±»å‹, é»˜è®¤UDP
     void SetProtoType(MT_PROTO_TYPE type) {
         _proto_type = type;    
     };
 
-    // ÉèÖÃÁ¬½ÓÀàĞÍ, Ä¬ÈÏ³¤Á¬½Ó
+    // è®¾ç½®è¿æ¥ç±»å‹, é»˜è®¤é•¿è¿æ¥
     void SetConnType(MT_CONN_TYPE type) {
         _conn_type = type;
     };
 
-    // ÉèÖÃÄ¿µÄIPµØÖ·
+    // è®¾ç½®ç›®çš„IPåœ°å€
 	void SetDestAddress(struct sockaddr_in* dst) {
         if (dst != NULL) {
             memcpy(&_dest_ipv4, dst, sizeof(*dst));
         }
 	};
 
-	// ÉèÖÃsession±¾´Îsession idĞÅÏ¢, ±ØĞë·Ç0
+	// è®¾ç½®sessionæœ¬æ¬¡session idä¿¡æ¯, å¿…é¡»é0
 	void SetSessionId(uint64_t sid) {
         _session_id = sid;
 	};	
 
-    // ÉèÖÃsession½âÎö»Øµ÷º¯Êı
+    // è®¾ç½®sessionè§£æå›è°ƒå‡½æ•°
     void SetSessionCallback(CHECK_SESSION_CALLBACK function) {
         _callback = function;
     };
 
-    // »ñÈ¡»Øµ÷º¯ÊıĞÅÏ¢
+    // è·å–å›è°ƒå‡½æ•°ä¿¡æ¯
     CHECK_SESSION_CALLBACK GetSessionCallback() {
         return _callback;
     };
@@ -231,113 +231,113 @@ public:
 
 public:
 
-    // ¹ØÁªÁ¬½Ó¶ÔÏó
+    // å…³è”è¿æ¥å¯¹è±¡
     void Link(CSockLink* conn);
 
-    // ½âñîÁ¬½Ó¶ÔÏó
+    // è§£è€¦è¿æ¥å¯¹è±¡
     void Unlink();
     
-    // ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+    // æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
     int32_t CheckParams();
 
-    // »ñÈ¡Á´½Ó, Í¬Ê±¹ØÁªµ½µÈ´ıÁ¬½ÓµÄ¶ÓÁĞÖĞ 
+    // è·å–é“¾æ¥, åŒæ—¶å…³è”åˆ°ç­‰å¾…è¿æ¥çš„é˜Ÿåˆ—ä¸­ 
     int32_t GetConnLink();
 
-    // ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+    // æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
     int32_t WaitConnect(uint64_t timeout);
 
-    // ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+    // æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
     int32_t WaitSend(uint64_t timeout);
 
-    // ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+    // æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
     int32_t WaitRecv(uint64_t timeout);
 
-    // ¹ØÁªÔÚµÈ´ıÁ¬½Ó¶ÓÁĞ
+    // å…³è”åœ¨ç­‰å¾…è¿æ¥é˜Ÿåˆ—
     void SwitchToConn();
 
-    // ÇĞ»»µ½·¢ËÍ¶ÓÁĞ
+    // åˆ‡æ¢åˆ°å‘é€é˜Ÿåˆ—
     void SwitchToSend();
 
-    // ÇĞ»»µ½½ÓÊÕ¶ÓÁĞ
+    // åˆ‡æ¢åˆ°æ¥æ”¶é˜Ÿåˆ—
     void SwitchToRecv();
     
-    // ÇĞ»»µ½¿ÕÏĞ×´Ì¬
+    // åˆ‡æ¢åˆ°ç©ºé—²çŠ¶æ€
     void SwitchToIdle();
 
-    // ½âñîÁ¬½Ó¶ÔÏó
+    // è§£è€¦è¿æ¥å¯¹è±¡
     void DetachConn();
     
-    // ×¢²ásession¹ÜÀí
+    // æ³¨å†Œsessionç®¡ç†
     bool RegistSession();
 
-    // È¡Ïû×¢²ásession
+    // å–æ¶ˆæ³¨å†Œsession
     void UnRegistSession();
 
-    // Ìø¹ı·¢ËÍµÄÇëÇó³¤¶È
+    // è·³è¿‡å‘é€çš„è¯·æ±‚é•¿åº¦
     uint32_t SkipSendPos(uint32_t len);
 
-    // ÉèÖÃ·µ»ØÂë
+    // è®¾ç½®è¿”å›ç 
     void SetErrNo(int32_t err) {
         _err_no = err;
     };
 
-    // »ñÈ¡¹ØÁªµÄÏß³ÌĞÅÏ¢
+    // è·å–å…³è”çš„çº¿ç¨‹ä¿¡æ¯
     MicroThread* GetThread() {
         return _thread;
     };
 
-    // »ñÈ¡´ı·¢ËÍµÄÖ¸ÕëÓëÊı¾İ³¤¶È
+    // è·å–å¾…å‘é€çš„æŒ‡é’ˆä¸æ•°æ®é•¿åº¦
     void GetSendData(void*& data, uint32_t& len) {
         data = _req_data;
         len  = _req_len;
     };
  
-    // ¸´ÓÃ½Ó¿Ú
+    // å¤ç”¨æ¥å£
     void Reset();
 
-    // ¹¹ÔìÓëÎö¹¹
+    // æ„é€ ä¸ææ„
     CNetHandler();
     ~CNetHandler();
 
-    // ¶ÓÁĞ¿ì½İ·ÃÎÊµÄºê¶¨Òå
+    // é˜Ÿåˆ—å¿«æ·è®¿é—®çš„å®å®šä¹‰
     TAILQ_ENTRY(CNetHandler)    _link_entry; 
     uint64_t                    _release_time;
 
 protected:
 
-    MicroThread*        _thread;            ///< ¹ØÁªÏß³ÌÖ¸Õë¶ÔÏó
-    MT_PROTO_TYPE       _proto_type;        ///< Ğ­ÒéÀàĞÍ       
-    MT_CONN_TYPE        _conn_type;         ///< Á¬½ÓÀàĞÍ
-    struct sockaddr_in  _dest_ipv4;         ///< ipv4Ä¿µÄµØÖ·
-    uint64_t            _session_id;        ///< »á»°ID
-    CHECK_SESSION_CALLBACK _callback;       ///< »á»°ÌáÈ¡»Øµ÷º¯Êı
-    uint32_t            _state_flags;       ///< ÄÚ²¿×´Ì¬×Ö¶Î
-    int32_t             _err_no;            ///< ·µ»ØÂëĞÅÏ¢
-    void*               _conn_ptr;          ///< socket Á´Â·Ö¸Õë
-    uint32_t            _send_pos;          ///< ÒÑ·¢ËÍµÄposÎ»ÖÃ
-    uint32_t            _req_len;           ///< ÇëÇó°ü³¤¶È
-    void*               _req_data;          ///< ÇëÇó°üÖ¸Õë
-    TSkBuffer*          _rsp_buff;          ///< Ó¦´ğbuffĞÅÏ¢
+    MicroThread*        _thread;            ///< å…³è”çº¿ç¨‹æŒ‡é’ˆå¯¹è±¡
+    MT_PROTO_TYPE       _proto_type;        ///< åè®®ç±»å‹       
+    MT_CONN_TYPE        _conn_type;         ///< è¿æ¥ç±»å‹
+    struct sockaddr_in  _dest_ipv4;         ///< ipv4ç›®çš„åœ°å€
+    uint64_t            _session_id;        ///< ä¼šè¯ID
+    CHECK_SESSION_CALLBACK _callback;       ///< ä¼šè¯æå–å›è°ƒå‡½æ•°
+    uint32_t            _state_flags;       ///< å†…éƒ¨çŠ¶æ€å­—æ®µ
+    int32_t             _err_no;            ///< è¿”å›ç ä¿¡æ¯
+    void*               _conn_ptr;          ///< socket é“¾è·¯æŒ‡é’ˆ
+    uint32_t            _send_pos;          ///< å·²å‘é€çš„posä½ç½®
+    uint32_t            _req_len;           ///< è¯·æ±‚åŒ…é•¿åº¦
+    void*               _req_data;          ///< è¯·æ±‚åŒ…æŒ‡é’ˆ
+    TSkBuffer*          _rsp_buff;          ///< åº”ç­”buffä¿¡æ¯
 
 };
-typedef TAILQ_HEAD(__NetHandlerList, CNetHandler) TNetItemList;  ///< ¸ßĞ§µÄË«Á´¹ÜÀí 
-typedef CRecyclePool<TNetItemList, CNetHandler>   TNetItemPool;   ///< ¶¨Ê±»ØÊÕµÄ¶ÔÏó³Ø
+typedef TAILQ_HEAD(__NetHandlerList, CNetHandler) TNetItemList;  ///< é«˜æ•ˆçš„åŒé“¾ç®¡ç† 
+typedef CRecyclePool<TNetItemList, CNetHandler>   TNetItemPool;   ///< å®šæ—¶å›æ”¶çš„å¯¹è±¡æ± 
 
 
 /**
- * @brief ³¤Á¬½ÓÁ´Â·¶ÔÏó
+ * @brief é•¿è¿æ¥é“¾è·¯å¯¹è±¡
  */
 class CSockLink : public EpollerObj
 {
 public:
 
-    // ¾ä±ú×´Ì¬ÃèÊö
+    // å¥æŸ„çŠ¶æ€æè¿°
     enum {
         LINK_CONNECTING     = 0x1,
         LINK_CONNECTED      = 0x2,
     };
 
-    // ×´Ì¬¶ÓÁĞ¶¨Òå
+    // çŠ¶æ€é˜Ÿåˆ—å®šä¹‰
     enum {
         LINK_IDLE_LIST      = 1,
         LINK_CONN_LIST      = 2,
@@ -345,106 +345,106 @@ public:
         LINK_RECV_LIST      = 4,
     };
 
-    // ¼ì²é»ò´´½¨socket¾ä±ú
+    // æ£€æŸ¥æˆ–åˆ›å»ºsocketå¥æŸ„
     int32_t CreateSock();
 
-    // ¹Ø±ÕÁ´Â·µÄ¾ä±ú
+    // å…³é—­é“¾è·¯çš„å¥æŸ„
     void Close();
 
-    // ·¢ÆğÁ¬½Ó¹ı³Ì
+    // å‘èµ·è¿æ¥è¿‡ç¨‹
     bool Connect();
     bool Connected() {
         return (_state & LINK_CONNECTED);
     }
 
-    // Òì³£ÖÕÖ¹µÄ´¦Àíº¯Êı
+    // å¼‚å¸¸ç»ˆæ­¢çš„å¤„ç†å‡½æ•°
     void Destroy();  
 
-    // »ñÈ¡¹ÜÀíÁ´±í
+    // è·å–ç®¡ç†é“¾è¡¨
     TNetItemList* GetItemList(int32_t type);
 
-    // ¹ÜÀí¾ä±úĞÅÏ¢
+    // ç®¡ç†å¥æŸ„ä¿¡æ¯
     void AppendToList(int32_t type, CNetHandler* item);
 
-    // ¹ÜÀí¾ä±úĞÅÏ¢
+    // ç®¡ç†å¥æŸ„ä¿¡æ¯
     void RemoveFromList(int32_t type, CNetHandler* item);
 
-    // »ñÈ¡Ä¿±êipĞÅÏ¢
+    // è·å–ç›®æ ‡ipä¿¡æ¯
     struct sockaddr_in* GetDestAddr(struct sockaddr_in* addr);
 
-    // ·¢ÆğÁ¬½Ó¹ı³Ì
+    // å‘èµ·è¿æ¥è¿‡ç¨‹
     int32_t SendData(void* data, uint32_t len);
 
-    // udp·¢ËÍÊı¾İ
+    // udpå‘é€æ•°æ®
     int32_t SendCacheUdp(void* data, uint32_t len);
 
-    // tcp·¢ËÍÊı¾İ
+    // tcpå‘é€æ•°æ®
     int32_t SendCacheTcp(void* data, uint32_t len);
 
-    // ³¢ÊÔ½ÓÊÕ¸ü¶àµÄÊı¾İµ½ÁÙÊ±buff
+    // å°è¯•æ¥æ”¶æ›´å¤šçš„æ•°æ®åˆ°ä¸´æ—¶buff
     void ExtendRecvRsp();
 
-    // Êı¾İ·Ö·¢´¦Àí¹ı³Ì
+    // æ•°æ®åˆ†å‘å¤„ç†è¿‡ç¨‹
     int32_t RecvDispath();
 
-    // »òÕß»Øµ÷º¯Êı, ÓÅÏÈ´ÓÅÅ¶ÓµÈ´ıÖĞ»ñÈ¡, ±¸·İ´Ó¸¸½Úµã»ñÈ¡
+    // æˆ–è€…å›è°ƒå‡½æ•°, ä¼˜å…ˆä»æ’é˜Ÿç­‰å¾…ä¸­è·å–, å¤‡ä»½ä»çˆ¶èŠ‚ç‚¹è·å–
     CHECK_SESSION_CALLBACK GetSessionCallback();
 
-    // TCP½ÓÊÕÊı¾İÁ÷´¦ÀíÓë·Ö·¢
+    // TCPæ¥æ”¶æ•°æ®æµå¤„ç†ä¸åˆ†å‘
     int32_t DispathTcp();
 
-    // UDP½ÓÊÕÊı¾İÁ÷´¦ÀíÓë·Ö·¢
+    // UDPæ¥æ”¶æ•°æ®æµå¤„ç†ä¸åˆ†å‘
     int32_t DispathUdp();
 
-    // ²éÑ¯±¾µØsessionid¹ØÁªµÄsessionĞÅÏ¢
+    // æŸ¥è¯¢æœ¬åœ°sessionidå…³è”çš„sessionä¿¡æ¯
     CNetHandler* FindSession(uint64_t sid);
 
     /**
-     *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int InputNotify();
     
     /**
-     *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int OutputNotify();
     
     /**
-     *  @brief Òì³£Í¨Öª½Ó¿Ú
-     *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+     *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+     *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
      */
     virtual int HangupNotify();
 
 
-    // ¹¹ÔìÓëÎö¹¹º¯Êı
+    // æ„é€ ä¸ææ„å‡½æ•°
     CSockLink();
     ~CSockLink();    
     
-    // ÇåÀíÖÃ³õÊ¼»¯Âß¼­
+    // æ¸…ç†ç½®åˆå§‹åŒ–é€»è¾‘
     void Reset();
     
-    // Í¨Öª»½ĞÑÏß³Ì
+    // é€šçŸ¥å”¤é†’çº¿ç¨‹
     void NotifyThread(CNetHandler* item, int32_t result);
 
-    // Í¨Öª»½ĞÑÏß³Ì
+    // é€šçŸ¥å”¤é†’çº¿ç¨‹
     void NotifyAll(int32_t result);
 
-    // ÉèÖÃĞ­ÒéÀàĞÍ, ¾ö¶¨buff³ØµÄÖ¸Õë
+    // è®¾ç½®åè®®ç±»å‹, å†³å®šbuffæ± çš„æŒ‡é’ˆ
     void SetProtoType(MT_PROTO_TYPE type);
 
-    // ÉèÖÃÉÏ¼¶Ö¸ÕëĞÅÏ¢
+    // è®¾ç½®ä¸Šçº§æŒ‡é’ˆä¿¡æ¯
     void SetParentsPtr(void* ptr) {
         _parents = ptr;
     };
 
-    // »ñÈ¡ÉÏ¼¶½ÚµãÖ¸Õë
+    // è·å–ä¸Šçº§èŠ‚ç‚¹æŒ‡é’ˆ
     void* GetParentsPtr() {
         return _parents;
     };
 
-    // »ñÈ¡ÉÏ´ÎµÄ·ÃÎÊÊ±¼ä
+    // è·å–ä¸Šæ¬¡çš„è®¿é—®æ—¶é—´
     uint64_t GetLastAccess() {
         return _last_access;
     };
@@ -453,7 +453,7 @@ public:
 
 public:
 
-    // ¶ÓÁĞ¿ì½İ·ÃÎÊµÄºê¶¨Òå
+    // é˜Ÿåˆ—å¿«æ·è®¿é—®çš„å®å®šä¹‰
     TAILQ_ENTRY(CSockLink) _link_entry; 
     uint64_t               _release_time;
     
@@ -471,44 +471,44 @@ private:
     TSkBuffer*          _rsp_buff;
     void*               _parents;
 };
-typedef TAILQ_HEAD(__SocklinkList, CSockLink) TLinkList;  ///< ¸ßĞ§µÄË«Á´¹ÜÀí 
-typedef CRecyclePool<TLinkList, CSockLink>    TLinkPool;   ///< ¶¨Ê±»ØÊÕµÄ¶ÔÏó³Ø
+typedef TAILQ_HEAD(__SocklinkList, CSockLink) TLinkList;  ///< é«˜æ•ˆçš„åŒé“¾ç®¡ç† 
+typedef CRecyclePool<TLinkList, CSockLink>    TLinkPool;   ///< å®šæ—¶å›æ”¶çš„å¯¹è±¡æ± 
 
 
 class CDestLinks : public CTimerNotify, public HashKey
 {
 public:
 
-    // ¹¹Ôìº¯Êı
+    // æ„é€ å‡½æ•°
     CDestLinks();
 
-    // Îö¹¹º¯Êı
+    // ææ„å‡½æ•°
     ~CDestLinks();
 
-    // ÖØÖÃ¸´ÓÃµÄ½Ó¿Úº¯Êı
+    // é‡ç½®å¤ç”¨çš„æ¥å£å‡½æ•°
     void Reset();
 
-    // Æô¶¯¶¨Ê±Æ÷
+    // å¯åŠ¨å®šæ—¶å™¨
     void StartTimer();
 
-    // »ñÈ¡Ò»¸öÁ¬½Ólink, ÔİÊ±°´ÂÖÑ¯
+    // è·å–ä¸€ä¸ªè¿æ¥link, æš‚æ—¶æŒ‰è½®è¯¢
     CSockLink* GetSockLink();
 
-    // ÊÍ·ÅÒ»¸öÁ¬½Ólink
+    // é‡Šæ”¾ä¸€ä¸ªè¿æ¥link
     void FreeSockLink(CSockLink* sock);
 
-    // »ñÈ¡Ğ­ÒéÀàĞÍ
+    // è·å–åè®®ç±»å‹
     MT_PROTO_TYPE GetProtoType() {
         return _proto_type;
     };
 
-    // »ñÈ¡Á¬½ÓÀàĞÍ
+    // è·å–è¿æ¥ç±»å‹
     MT_CONN_TYPE GetConnType() {
         return _conn_type;
     };
     
 
-    // ÉèÖÃ¹Ø¼üĞÅÏ¢
+    // è®¾ç½®å…³é”®ä¿¡æ¯
     void SetKeyInfo(uint32_t ipv4, uint16_t port, MT_PROTO_TYPE proto, MT_CONN_TYPE conn) {
         _addr_ipv4  = ipv4;
         _net_port   = port;
@@ -516,7 +516,7 @@ public:
         _conn_type  = conn;
     };
 
-    // ¿½±´KEYĞÅÏ¢
+    // æ‹·è´KEYä¿¡æ¯
     void CopyKeyInfo(CDestLinks* key) {
         _addr_ipv4  = key->_addr_ipv4;
         _net_port   = key->_net_port;
@@ -524,28 +524,28 @@ public:
         _conn_type  = key->_conn_type;
     };
     
-    // »ñÈ¡IP portĞÅÏ¢
+    // è·å–IP portä¿¡æ¯
     void GetDestIP(uint32_t& ip, uint16_t& port) {
         ip = _addr_ipv4;
         port = _net_port;
     };
 
     /**
-     * @brief ³¬Ê±Í¨Öªº¯Êı, ¼ì²é¿ÕÏĞÁ´Â·, ¼ì²éÅäÖÃÁ´Â·¸öÊı
+     * @brief è¶…æ—¶é€šçŸ¥å‡½æ•°, æ£€æŸ¥ç©ºé—²é“¾è·¯, æ£€æŸ¥é…ç½®é“¾è·¯ä¸ªæ•°
      */
     virtual void timer_notify();
     
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue() {
         return _addr_ipv4 ^ (((uint32_t)_net_port << 16) | (_proto_type << 8) | _conn_type);
     }; 
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs) {
         CDestLinks* data = (CDestLinks*)(rhs);
@@ -568,120 +568,120 @@ public:
         return 0;
     }; 
 
-    // ÉèÖÃsession½âÎö»Øµ÷º¯Êı
+    // è®¾ç½®sessionè§£æå›è°ƒå‡½æ•°
     void SetDefaultCallback(CHECK_SESSION_CALLBACK function) {
         _dflt_callback = function;
     };
 
-    // »ñÈ¡»Øµ÷º¯ÊıĞÅÏ¢
+    // è·å–å›è°ƒå‡½æ•°ä¿¡æ¯
     CHECK_SESSION_CALLBACK GetDefaultCallback() {
         return _dflt_callback;
     };
 
-    // ¶ÓÁĞ¿ì½İ·ÃÎÊµÄºê¶¨Òå
+    // é˜Ÿåˆ—å¿«æ·è®¿é—®çš„å®å®šä¹‰
     TAILQ_ENTRY(CDestLinks) _link_entry; 
     uint64_t                _release_time;
 
 private:
 
-    uint32_t            _timeout;       ///< idleµÄ³¬Ê±Ê±¼ä
-    uint32_t            _addr_ipv4;     ///< ipµØÖ·
-    uint16_t            _net_port;      ///< port ÍøÂçĞòÁĞ
-    MT_PROTO_TYPE       _proto_type;    ///< Ğ­ÒéÀàĞÍ
-    MT_CONN_TYPE        _conn_type;     ///< Á¬½ÓÀàĞÍ
+    uint32_t            _timeout;       ///< idleçš„è¶…æ—¶æ—¶é—´
+    uint32_t            _addr_ipv4;     ///< ipåœ°å€
+    uint16_t            _net_port;      ///< port ç½‘ç»œåºåˆ—
+    MT_PROTO_TYPE       _proto_type;    ///< åè®®ç±»å‹
+    MT_CONN_TYPE        _conn_type;     ///< è¿æ¥ç±»å‹
 
-    uint32_t            _max_links;     ///< ×î´óÁ¬½ÓÊı
-    uint32_t            _curr_link;     ///< µ±Ç°Á¬½ÓÊı
-    TLinkList           _sock_list;     ///< Á¬½ÓÁ´±í
-    CHECK_SESSION_CALLBACK _dflt_callback; ///< Ä¬ÈÏµÄcheckº¯Êı
+    uint32_t            _max_links;     ///< æœ€å¤§è¿æ¥æ•°
+    uint32_t            _curr_link;     ///< å½“å‰è¿æ¥æ•°
+    TLinkList           _sock_list;     ///< è¿æ¥é“¾è¡¨
+    CHECK_SESSION_CALLBACK _dflt_callback; ///< é»˜è®¤çš„checkå‡½æ•°
         
 };
-typedef TAILQ_HEAD(__DestlinkList, CDestLinks) TDestList;  ///< ¸ßĞ§µÄË«Á´¹ÜÀí 
-typedef CRecyclePool<TDestList, CDestLinks>    TDestPool;   ///< ¶¨Ê±»ØÊÕµÄ¶ÔÏó³Ø
+typedef TAILQ_HEAD(__DestlinkList, CDestLinks) TDestList;  ///< é«˜æ•ˆçš„åŒé“¾ç®¡ç† 
+typedef CRecyclePool<TDestList, CDestLinks>    TDestPool;   ///< å®šæ—¶å›æ”¶çš„å¯¹è±¡æ± 
 
 /**
- * @brief Á¬½Ó¹ÜÀí¹¤³§Ä£ĞÍ
+ * @brief è¿æ¥ç®¡ç†å·¥å‚æ¨¡å‹
  */
 class CNetMgr
 {
 public:
 
     /**
-     * @brief ÏûÏ¢buffµÄÈ«¾Ö¹ÜÀí¾ä±ú½Ó¿Ú
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief æ¶ˆæ¯buffçš„å…¨å±€ç®¡ç†å¥æŸ„æ¥å£
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     static CNetMgr* Instance (void);
 
     /**
-     * @brief ÏûÏ¢ÇåÀí½Ó¿Ú
+     * @brief æ¶ˆæ¯æ¸…ç†æ¥å£
      */
     static void Destroy(void);
 
-    // ²éÑ¯ÊÇ·ñÒÑ¾­´æÔÚÍ¬Ò»¸ösidµÄ¶ÔÏó
+    // æŸ¥è¯¢æ˜¯å¦å·²ç»å­˜åœ¨åŒä¸€ä¸ªsidçš„å¯¹è±¡
     CNetHandler* FindNetItem(CNetHandler* key);
 
-    // ×¢²áÒ»¸öitem, ÏÈ²éÑ¯ºó²åÈë, ±£Ö¤ÎŞ³åÍ»
+    // æ³¨å†Œä¸€ä¸ªitem, å…ˆæŸ¥è¯¢åæ’å…¥, ä¿è¯æ— å†²çª
     void InsertNetItem(CNetHandler* item);
 
-    // ÒÆ³ıÒ»¸öitem¶ÔÏó
+    // ç§»é™¤ä¸€ä¸ªitemå¯¹è±¡
     void RemoveNetItem(CNetHandler* item);
 
-    // ²éÑ¯»ò´´½¨Ò»¸öÄ¿±êipµÄlinks½Úµã
+    // æŸ¥è¯¢æˆ–åˆ›å»ºä¸€ä¸ªç›®æ ‡ipçš„linksèŠ‚ç‚¹
     CDestLinks* FindCreateDest(CDestLinks* key);
 
-    // É¾³ıµôÒÑÓĞµÄÄ¿±êÁ´Â·ĞÅÏ¢
+    // åˆ é™¤æ‰å·²æœ‰çš„ç›®æ ‡é“¾è·¯ä¿¡æ¯
     void DeleteDestLink(CDestLinks* dst);
     
-    // ²éÑ¯ÊÇ·ñÒÑ¾­´æÔÚÍ¬Ò»¸ösidµÄ¶ÔÏó
+    // æŸ¥è¯¢æ˜¯å¦å·²ç»å­˜åœ¨åŒä¸€ä¸ªsidçš„å¯¹è±¡
     CDestLinks* FindDestLink(CDestLinks* key);
 
-    // ×¢²áÒ»¸öitem, ÏÈ²éÑ¯ºó²åÈë, ±£Ö¤ÎŞ³åÍ»
+    // æ³¨å†Œä¸€ä¸ªitem, å…ˆæŸ¥è¯¢åæ’å…¥, ä¿è¯æ— å†²çª
     void InsertDestLink(CDestLinks* item);
     
-    // ÒÆ³ıÒ»¸öitem¶ÔÏó
+    // ç§»é™¤ä¸€ä¸ªitemå¯¹è±¡
     void RemoveDestLink(CDestLinks* item);
 
     /**
-     * @brief ÏûÏ¢buffµÄÎö¹¹º¯Êı
+     * @brief æ¶ˆæ¯buffçš„ææ„å‡½æ•°
      */
     ~CNetMgr();
 
     /**
-     * @brief »ØÊÕ×ÊÔ´ĞÅÏ¢
+     * @brief å›æ”¶èµ„æºä¿¡æ¯
      */
     void RecycleObjs(uint64_t now);
 
-    // ·ÖÅäÒ»¸öÍøÂç¹ÜÀí¾ä±ú
+    // åˆ†é…ä¸€ä¸ªç½‘ç»œç®¡ç†å¥æŸ„
     CNetHandler* AllocNetItem() {
         return _net_item_pool.AllocItem();
     };
 
-    // ÊÍ·ÅÒ»¸öÍøÂç¹ÜÀí¾ä±ú
+    // é‡Šæ”¾ä¸€ä¸ªç½‘ç»œç®¡ç†å¥æŸ„
     void FreeNetItem(CNetHandler* item) {
         return _net_item_pool.FreeItem(item);
     };
 
-    // ·ÖÅäÒ»¸öSOCKÁ¬½ÓÁ´Â·
+    // åˆ†é…ä¸€ä¸ªSOCKè¿æ¥é“¾è·¯
     CSockLink* AllocSockLink() {
         return _sock_link_pool.AllocItem();
     };
 
-    // ÊÍ·ÅÒ»¸öSOCKÁ¬½ÓÁ´Â·
+    // é‡Šæ”¾ä¸€ä¸ªSOCKè¿æ¥é“¾è·¯
     void FreeSockLink(CSockLink* item) {
         return _sock_link_pool.FreeItem(item);
     };
 
-    // ·ÖÅäÒ»¸öSOCKÁ¬½ÓÁ´Â·
+    // åˆ†é…ä¸€ä¸ªSOCKè¿æ¥é“¾è·¯
     CDestLinks* AllocDestLink() {
         return _dest_ip_pool.AllocItem();
     };
 
-    // ÊÍ·ÅÒ»¸öSOCKÁ¬½ÓÁ´Â·
+    // é‡Šæ”¾ä¸€ä¸ªSOCKè¿æ¥é“¾è·¯
     void FreeDestLink(CDestLinks* item) {
         return _dest_ip_pool.FreeItem(item);
     };
 
-    // »ñÈ¡udpµÄbuff³ØĞÅÏ¢
+    // è·å–udpçš„buffæ± ä¿¡æ¯
     TSkBuffMng* GetSkBuffMng(MT_PROTO_TYPE type) {
         if (type == NET_PROTO_TCP) {
             return &_tcp_pool;
@@ -693,16 +693,16 @@ public:
 
 private:
     /**
-     * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+     * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
      */
     CNetMgr();
 
-    static CNetMgr *    _instance;          ///< µ¥ÀıÀà¾ä±ú 
-    HashList*           _ip_hash;           ///< Ä¿µÄµØÖ·hash
-    HashList*           _session_hash;      ///< session idµÄhash
+    static CNetMgr *    _instance;          ///< å•ä¾‹ç±»å¥æŸ„ 
+    HashList*           _ip_hash;           ///< ç›®çš„åœ°å€hash
+    HashList*           _session_hash;      ///< session idçš„hash
     TSkBuffMng          _udp_pool;          ///< udp pool, 64K
     TSkBuffMng          _tcp_pool;          ///< tcp pool, 4K
-    TDestPool           _dest_ip_pool;      ///< Ä¿µÄip¶ÔÏó³Ø
+    TDestPool           _dest_ip_pool;      ///< ç›®çš„ipå¯¹è±¡æ± 
     TLinkPool           _sock_link_pool;    ///< socket pool
     TNetItemPool        _net_item_pool;     ///< net handle pool
 };

@@ -1,0 +1,22 @@
+// 模块名, 建议小写 linux 命令风格: echo
+package echo;
+
+// 请求与应答消息定义
+message EchoRequest
+{
+    optional bytes message = 1;
+}
+
+message EchoResponse
+{
+    optional bytes message = 1;
+}
+
+// 定义服务, 可以定义多个条目 建议首字符大写
+service EchoService
+{
+    // 定义方法, 可以多份
+    rpc EchoTest(EchoRequest) returns (EchoResponse);
+}
+
+option cc_generic_services = true; // 生成RPC，这行必须加上

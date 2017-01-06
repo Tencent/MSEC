@@ -29,6 +29,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include "atomic.h"
 #include <time.h>
@@ -56,7 +57,7 @@ unsigned CMisc::getip(const char* ifstr)
     }
 
     register int fd, intrface;
-    struct ifreq buf[10];
+    struct ifreq buf[256];
     struct ifconf ifc;
     unsigned ip = 0;
 
@@ -99,4 +100,20 @@ int CMisc::check_process_exist(pid_t pid)
 
     // 不存在
     return 0;
+}
+
+
+int64_t CMisc::get_file_mtime(const char *path)
+{
+    struct stat buf;
+
+    if (NULL == path || path[0] == '\0') {
+        return -1;
+    }
+
+    if (lstat(path, &buf) == -1) {
+        return -1;
+    }
+
+    return (int64_t)buf.st_mtime;
 }

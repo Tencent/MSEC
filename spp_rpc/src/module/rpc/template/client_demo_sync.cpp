@@ -27,7 +27,7 @@
 #include "srpcincl.h"
 #include "$(PROTO_FILE).pb.h"
 
-using namespace $(MODULE_REPLACE);
+using namespace $(MODULE_NAMESPACE_REPLACE);
 using namespace srpc;
 using namespace std;
 

@@ -24,35 +24,35 @@
 
 typedef struct _tag_mem_queue_header
 {
-    volatile int32_t    version;            /* ╟Ф╠╬╨е       */
-    volatile int32_t    free_list;          /* ©уопа╢╠М     */
-    volatile int32_t    block_num;          /* ©ИйЩ         */
-    volatile int32_t    unused;             /* ©исц©ИйЩ     */
-    volatile int32_t    block_size;         /* ©И╢Сп║       */
-    volatile int32_t    block_data_size;    /* ©ИйЩ╬щ╢Сп║   */
-    volatile int32_t    write_times;        /* п╢╢нйЩ       */
-    volatile int32_t    read_times;         /* ╤а╢нйЩ       */
-    volatile int32_t    msg_cnt;            /* ╣╠г╟оШо╒йЩ   */
-    volatile int32_t    nomem;              /* ц╩сп©И╢нйЩ   */
+    volatile int32_t    version;            /* Г┴┬Ф°╛Е▐╥       */
+    volatile int32_t    free_list;          /* Г╘╨И≈╡И⌠╬Х║╗     */
+    volatile int32_t    block_num;          /* Е²≈Ф∙╟         */
+    volatile int32_t    unused;             /* Е▐╞Г■╗Е²≈Ф∙╟     */
+    volatile int32_t    block_size;         /* Е²≈Е╓╖Е╟▐       */
+    volatile int32_t    block_data_size;    /* Е²≈Ф∙╟Ф█╝Е╓╖Е╟▐   */
+    volatile int32_t    write_times;        /* Е├≥Ф╛║Ф∙╟       */
+    volatile int32_t    read_times;         /* Х╞╩Ф╛║Ф∙╟       */
+    volatile int32_t    msg_cnt;            /* Е╫⌠Е┴█Ф╤┬Ф│╞Ф∙╟   */
+    volatile int32_t    nomem;              /* Ф╡║Ф°┴Е²≈Ф╛║Ф∙╟   */
 }mem_queue_header_t;
 
 typedef struct _tag_mem_block_queue
 {
-    volatile int32_t    read_pos;           /* ╤сап╤аж╦уК */
-    volatile int32_t    write_pos;          /* ╤сапп╢ж╦уК */
-    volatile int32_t    size;               /* ╤сап╢Сп║   */
+    volatile int32_t    read_pos;           /* И≤÷Е┬≈Х╞╩Ф▄┤И▓┬ */
+    volatile int32_t    write_pos;          /* И≤÷Е┬≈Е├≥Ф▄┤И▓┬ */
+    volatile int32_t    size;               /* И≤÷Е┬≈Е╓╖Е╟▐   */
     volatile int32_t    reserved[13];
-    volatile int32_t    queue[0];           /* ╤сапйЩвИ   */
+    volatile int32_t    queue[0];           /* И≤÷Е┬≈Ф∙╟Г╩└   */
 }mem_block_queue_t;
 
 typedef struct _tag_mem_block
 {
-    volatile int32_t    next;               /* а╢╠Мж╦уК */
-    volatile int32_t    index;              /* ©Иоб╠Й   */
-    volatile int32_t    total_len;          /* ©Иа╢╠МйЩ╬щвэ╢Сп║ */
-    volatile int32_t    data_len;           /* ╣╠г╟©ИйЩ╬щ╢Сп║   */
+    volatile int32_t    next;               /* И⌠╬Х║╗Ф▄┤И▓┬ */
+    volatile int32_t    index;              /* Е²≈Д╦▀Ф═┤   */
+    volatile int32_t    total_len;          /* Е²≈И⌠╬Х║╗Ф∙╟Ф█╝Ф─╩Е╓╖Е╟▐ */
+    volatile int32_t    data_len;           /* Е╫⌠Е┴█Е²≈Ф∙╟Ф█╝Е╓╖Е╟▐   */
     volatile int32_t    reserved[4];
-    char                data[0];            /* йЩ╬щфПй╪н╢ж╙     */
+    char                data[0];            /* Ф∙╟Ф█╝Х╣╥Е╖▀Ф°╙Г÷╔     */
 }mem_block_t;
 
 typedef struct _tag_mem_queue_desc
@@ -63,56 +63,56 @@ typedef struct _tag_mem_queue_desc
 }mem_queue_desc_t;
 
 /**
- * @brief   нчкЬ╤сапЁУй╪╩╞
- * @return  0       Ёи╧╕
- *          фДкЭ    й╖╟э
- * @param   desc        нчкЬ╤сапцХйЖ╥Ш
- *          vaddr       нчкЬ╤сапдз╢Ф╣ьж╥
- *          mem_size    нчкЬ╤сап╢Сп║
- *          data_size   й╧сцуъйЩ╬щ╢Сп║ё╛м╗╧Щ╦цж╣ё╛х╥хо©И╢Сп║
- * @info    ©иртм╛й╠╤Ю╫ЬЁлЁУй╪╩╞
+ * @brief   Ф≈═И■│И≤÷Е┬≈Е┬²Е╖▀Е▄√
+ * @return  0       Ф┬░Е┼÷
+ *          Е┘╤Е╝┐    Е╓╠Х╢╔
+ * @param   desc        Ф≈═И■│И≤÷Е┬≈Ф▐▐Х©╟Г╛╕
+ *          vaddr       Ф≈═И■│И≤÷Е┬≈Е├┘Е╜≤Е°╟Е²─
+ *          mem_size    Ф≈═И■│И≤÷Е┬≈Е╓╖Е╟▐
+ *          data_size   Д╫©Г■╗Х─┘Ф∙╟Ф█╝Е╓╖Е╟▐О╪▄И─ Х©┤Х╞╔Е─╪О╪▄Г║╝Х╝╓Е²≈Е╓╖Е╟▐
+ * @info    Е▐╞Д╩╔Е░▄Ф≈╤Е╓ Х©⌡Г╗▀Е┬²Е╖▀Е▄√
  */
 int32_t mem_queue_init(mem_queue_desc_t *desc, void *vaddr, int32_t mem_size, int32_t data_size);
 
 /**
- * @brief   нчкЬ╤сапхК╤сап╫с©з╨╞йЩ
- * @return  >=0     ╤сап╟Э╦ЖйЩ
- *          <0      й╖╟э
- * @param   desc        нчкЬ╤сапцХйЖ╥Ш
- *          data        йЩ╬щ
- *          len         йЩ╬щЁ╓╤х
+ * @brief   Ф≈═И■│И≤÷Е┬≈Е┘╔И≤÷Е┬≈Ф▌╔Е▐ёЕ┤╫Ф∙╟
+ * @return  >=0     И≤÷Е┬≈Е▄┘Д╦╙Ф∙╟
+ *          <0      Е╓╠Х╢╔
+ * @param   desc        Ф≈═И■│И≤÷Е┬≈Ф▐▐Х©╟Г╛╕
+ *          data        Ф∙╟Ф█╝
+ *          len         Ф∙╟Ф█╝И∙©Е╨╕
  */
 int32_t mem_queue_push(mem_queue_desc_t *desc, char *data, int32_t len);
 
 /**
- * @brief   нчкЬ╤сапхК╤сап╫с©з╨╞йЩ
- * @return  >=0     ╤сап╟Э╦ЖйЩ
- *          <0      й╖╟э
- * @param   desc        нчкЬ╤сапцХйЖ╥Ш
- *          iov         iovec╣ьж╥
- *          iovlen      iov╦ЖйЩ
+ * @brief   Ф≈═И■│И≤÷Е┬≈Е┘╔И≤÷Е┬≈Ф▌╔Е▐ёЕ┤╫Ф∙╟
+ * @return  >=0     И≤÷Е┬≈Е▄┘Д╦╙Ф∙╟
+ *          <0      Е╓╠Х╢╔
+ * @param   desc        Ф≈═И■│И≤÷Е┬≈Ф▐▐Х©╟Г╛╕
+ *          iov         iovecЕ°╟Е²─
+ *          iovlen      iovД╦╙Ф∙╟
  */
 int32_t mem_queue_pushv(mem_queue_desc_t *desc, struct iovec *iov, int32_t iovlen);
 
 /**
- * @brief   нчкЬ╤сапЁЖ╤сап╫с©з╨╞йЩ
- * @return  0       ц╩спйЩ╬щ
- *          >0      ЁЖ╤сап╟ЭЁ╓╤х
- *          <0      й╖╟э
- * @param   desc        нчкЬ╤сапцХйЖ╥Ш
- *          data        йЩ╬щ
- * @info    dataпХр╙╣Всцуъfree
+ * @brief   Ф≈═И■│И≤÷Е┬≈Е┤╨И≤÷Е┬≈Ф▌╔Е▐ёЕ┤╫Ф∙╟
+ * @return  0       Ф╡║Ф°┴Ф∙╟Ф█╝
+ *          >0      Е┤╨И≤÷Е┬≈Е▄┘И∙©Е╨╕
+ *          <0      Е╓╠Х╢╔
+ * @param   desc        Ф≈═И■│И≤÷Е┬≈Ф▐▐Х©╟Г╛╕
+ *          data        Ф∙╟Ф█╝
+ * @info    dataИ°─Х╕│Х╟┐Г■╗Х─┘free
  */
 int32_t mem_queue_pop(mem_queue_desc_t *desc, char **data);
 
 /**
- * @brief   нчкЬ╤сапЁЖ╤сап╫с©з╨╞йЩ
- * @return  0       ц╩спйЩ╬щ
- *          >0      ЁЖ╤сап╟ЭЁ╓╤х
- *          <0      й╖╟э
- * @param   desc        нчкЬ╤сапцХйЖ╥Ш
- *          buff        йЩ╬щ
- *          len         buffЁ╓╤х
+ * @brief   Ф≈═И■│И≤÷Е┬≈Е┤╨И≤÷Е┬≈Ф▌╔Е▐ёЕ┤╫Ф∙╟
+ * @return  0       Ф╡║Ф°┴Ф∙╟Ф█╝
+ *          >0      Е┤╨И≤÷Е┬≈Е▄┘И∙©Е╨╕
+ *          <0      Е╓╠Х╢╔
+ * @param   desc        Ф≈═И■│И≤÷Е┬≈Ф▐▐Х©╟Г╛╕
+ *          buff        Ф∙╟Ф█╝
+ *          len         buffИ∙©Е╨╕
  */
 int32_t mem_queue_pop_nm(mem_queue_desc_t *desc, char *buff, int32_t len);
 

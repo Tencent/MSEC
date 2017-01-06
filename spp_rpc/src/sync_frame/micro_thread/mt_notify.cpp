@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_notify.cpp
- *  @info Î¢Ïß³Ìµ÷¶È×¢²á¶ÔÏó¹ÜÀíÊµÏÖ
+ *  @info å¾®çº¿ç¨‹è°ƒåº¦æ³¨å†Œå¯¹è±¡ç®¡ç†å®ç°
  *  @time 20130924
  **/
 #include <fcntl.h>
@@ -40,8 +40,8 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief Í¨Öª´úÀí½øÈëµÈ´ı×´Ì¬, ¹ÒÈëµÈ´ı¶ÓÁĞÖĞ
- * @param proxy ´úÀíµÄsessionÄ£ĞÍ
+ * @brief é€šçŸ¥ä»£ç†è¿›å…¥ç­‰å¾…çŠ¶æ€, æŒ‚å…¥ç­‰å¾…é˜Ÿåˆ—ä¸­
+ * @param proxy ä»£ç†çš„sessionæ¨¡å‹
  */
 void ISessionNtfy::InsertWriteWait(SessionProxy* proxy) 
 {
@@ -52,8 +52,8 @@ void ISessionNtfy::InsertWriteWait(SessionProxy* proxy)
 }
 
 /**
- * @brief Í¨Öª´úÀíÒÆ³ıµÈ´ı×´Ì¬
- * @param proxy ´úÀíµÄsessionÄ£ĞÍ
+ * @brief é€šçŸ¥ä»£ç†ç§»é™¤ç­‰å¾…çŠ¶æ€
+ * @param proxy ä»£ç†çš„sessionæ¨¡å‹
  */
 void ISessionNtfy::RemoveWriteWait(SessionProxy* proxy) 
 {
@@ -64,8 +64,8 @@ void ISessionNtfy::RemoveWriteWait(SessionProxy* proxy)
 }
 
 /**
- * @brief ¹Û²ìÕßÄ£Ê½, Í¨ÖªĞ´µÈ´ıÏß³Ì
- * @info UDP¿ÉÒÔÍ¨ÖªÃ¿¸öÏß³ÌÖ´ĞĞĞ´²Ù×÷, TCPĞèÒªÅÅ¶ÓĞ´
+ * @brief è§‚å¯Ÿè€…æ¨¡å¼, é€šçŸ¥å†™ç­‰å¾…çº¿ç¨‹
+ * @info UDPå¯ä»¥é€šçŸ¥æ¯ä¸ªçº¿ç¨‹æ‰§è¡Œå†™æ“ä½œ, TCPéœ€è¦æ’é˜Ÿå†™
  */
 void UdpSessionNtfy::NotifyWriteWait()
 {
@@ -86,12 +86,12 @@ void UdpSessionNtfy::NotifyWriteWait()
 }
 
 /**
- *  @brief ´´½¨socket, ¼àÌı¿É¶ÁÊÂ¼ş
- *  @return fdµÄ¾ä±ú, <0 Ê§°Ü
+ *  @brief åˆ›å»ºsocket, ç›‘å¬å¯è¯»äº‹ä»¶
+ *  @return fdçš„å¥æŸ„, <0 å¤±è´¥
  */
 int UdpSessionNtfy::CreateSocket()
 {
-    // 1. UDP¶ÌÁ¬½Ó, Ã¿´ÎĞÂ´´SOCKET
+    // 1. UDPçŸ­è¿æ¥, æ¯æ¬¡æ–°åˆ›SOCKET
     int osfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (osfd < 0)
     {
@@ -99,7 +99,7 @@ int UdpSessionNtfy::CreateSocket()
         return -1;
     }
     
-    // 2. ·Ç×èÈûÉèÖÃ
+    // 2. éé˜»å¡è®¾ç½®
     int flags = 1;
     if (ioctl(osfd, FIONBIO, &flags) < 0)
     {
@@ -109,7 +109,7 @@ int UdpSessionNtfy::CreateSocket()
         return -2;
     }
 
-    // ¿ÉÑ¡bindÖ´ĞĞ, ÉèÖÃ±¾µØportºóÖ´ĞĞ
+    // å¯é€‰bindæ‰§è¡Œ, è®¾ç½®æœ¬åœ°portåæ‰§è¡Œ
     if (_local_addr.sin_port != 0)
     {
         int ret = bind(osfd, (struct sockaddr *)&_local_addr, sizeof(_local_addr));
@@ -123,7 +123,7 @@ int UdpSessionNtfy::CreateSocket()
         }
     }
 
-    // 3. ¸üĞÂ¹ÜÀíĞÅÏ¢, Ä¬ÈÏudp session ÕìÌı epollin
+    // 3. æ›´æ–°ç®¡ç†ä¿¡æ¯, é»˜è®¤udp session ä¾¦å¬ epollin
     this->SetOsfd(osfd);
     this->EnableInput();
     MtFrame* frame = MtFrame::Instance();
@@ -135,7 +135,7 @@ int UdpSessionNtfy::CreateSocket()
 
 
 /**
- *  @brief ¹Ø±Õsocket, Í£Ö¹¼àÌı¿É¶ÁÊÂ¼ş
+ *  @brief å…³é—­socket, åœæ­¢ç›‘å¬å¯è¯»äº‹ä»¶
  */
 void UdpSessionNtfy::CloseSocket()
 {
@@ -153,8 +153,8 @@ void UdpSessionNtfy::CloseSocket()
 
 
 /**
- *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int UdpSessionNtfy::InputNotify()
 {
@@ -163,7 +163,7 @@ int UdpSessionNtfy::InputNotify()
         int ret = 0;
         int have_rcv_len = 0;
 
-        // 1. »ñÈ¡ÊÕ°ü»º³åÇø, ÓÅÏÈÑ¡ÔñÎ´´¦ÀíÍêµÄÁ´½Óbuff
+        // 1. è·å–æ”¶åŒ…ç¼“å†²åŒº, ä¼˜å…ˆé€‰æ‹©æœªå¤„ç†å®Œçš„é“¾æ¥buff
         if (!_msg_buff) {
             _msg_buff = MsgBuffPool::Instance()->GetMsgBuf(this->GetMsgBuffSize());
             if (NULL == _msg_buff) {
@@ -174,7 +174,7 @@ int UdpSessionNtfy::InputNotify()
         }
         char* buff = (char*)_msg_buff->GetMsgBuff();
 
-        // 2. »ñÈ¡socket, ÊÕ°ü´¦Àí
+        // 2. è·å–socket, æ”¶åŒ…å¤„ç†
         int osfd = this->GetOsfd();
         struct sockaddr_in  from;
         socklen_t fromlen = sizeof(from); 
@@ -190,13 +190,13 @@ int UdpSessionNtfy::InputNotify()
             else
             {
                 MTLOG_ERROR("recv error, fd %d", osfd);
-                return 0;  // ÏµÍ³´íÎó, UDP Ôİ²»¹Ø±Õ
+                return 0;  // ç³»ç»Ÿé”™è¯¯, UDP æš‚ä¸å…³é—­
             }
         }
         else if (ret == 0)
         {
             MTLOG_DEBUG("remote close connection, fd %d", osfd);
-            return 0;  // ¶Ô¶Ë¹Ø±Õ, UDP Ôİ²»¹Ø±Õ
+            return 0;  // å¯¹ç«¯å…³é—­, UDP æš‚ä¸å…³é—­
         }
         else
         {
@@ -205,7 +205,7 @@ int UdpSessionNtfy::InputNotify()
             _msg_buff->SetMsgLen(have_rcv_len);
         }
 
-        // 3. ¼ì²éÏûÏ¢µÄÍêÕûĞÔ, ÌáÈ¡sessionid
+        // 3. æ£€æŸ¥æ¶ˆæ¯çš„å®Œæ•´æ€§, æå–sessionid
         int sessionid = 0;
         ret = this->GetSessionId(buff, have_rcv_len, sessionid);
         if (ret <= 0)
@@ -217,18 +217,18 @@ int UdpSessionNtfy::InputNotify()
             return 0;
         }
 
-        // 4. Ó³Éä²éÑ¯thread¾ä±ú, Á¬½Óhandle¾ä±ú, ÉèÖÃ¶ÁÊÂ¼şÀ´ÁÙ, ¹Ò½Ómsgbuff
+        // 4. æ˜ å°„æŸ¥è¯¢threadå¥æŸ„, è¿æ¥handleå¥æŸ„, è®¾ç½®è¯»äº‹ä»¶æ¥ä¸´, æŒ‚æ¥msgbuff
         ISession* session = SessionMgr::Instance()->FindSession(sessionid);
         if (NULL == session) 
         {
-            MT_ATTR_API(MONITOR_MT_SESSION_EXPIRE, 1); // session µ½´ïÒÑ³¬Ê±
+            MT_ATTR_API(MONITOR_MT_SESSION_EXPIRE, 1); // session åˆ°è¾¾å·²è¶…æ—¶
             MTLOG_DEBUG("session %d, not find, maybe timeout, drop pkg", sessionid);
             MsgBuffPool::Instance()->FreeMsgBuf(_msg_buff);
             _msg_buff = NULL;
             return 0;
         }
 
-        // 5. ¹Ò½Órecvbuff, »½ĞÑÏß³Ì
+        // 5. æŒ‚æ¥recvbuff, å”¤é†’çº¿ç¨‹
         IMtConnection* conn = session->GetSessionConn();
         MicroThread* thread = session->GetOwnerThread();
         if (!thread || !conn || !conn->GetNtfyObj()) 
@@ -259,8 +259,8 @@ int UdpSessionNtfy::InputNotify()
 }
 
 /**
- *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int UdpSessionNtfy::OutputNotify()
 {
@@ -269,31 +269,31 @@ int UdpSessionNtfy::OutputNotify()
 }
 
 /**
- *  @brief Òì³£Í¨Öª½Ó¿Ú, ¹Ø±ÕfdÕìÌı, threadµÈ´ı´¦Àí³¬Ê±
- *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+ *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£, å…³é—­fdä¾¦å¬, threadç­‰å¾…å¤„ç†è¶…æ—¶
+ *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
  */
 int UdpSessionNtfy::HangupNotify()
 {
-    // 1. ÇåÀíepoll ctl¼àÌıÊÂ¼ş
+    // 1. æ¸…ç†epoll ctlç›‘å¬äº‹ä»¶
     MtFrame* frame = MtFrame::Instance();
     frame->EpollCtrlDel(this->GetOsfd(), this->GetEvents());
 
     MTLOG_ERROR("sesson obj %p, recv error event. fd %d", this, this->GetOsfd());
     
-    // 2. ÖØĞÂ´ò¿ªsocket
+    // 2. é‡æ–°æ‰“å¼€socket
     CloseSocket();
 
-    // 3. ÖØ¼ÓÈëepoll listen
+    // 3. é‡åŠ å…¥epoll listen
     CreateSocket();
 
     return 0;
 }
 
 /**
- *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
- *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
- *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
- *  @info  Ä¬ÈÏÊÇ¼àÌı¿É¶ÁÊÂ¼şµÄ, ÕâÀïÖ»´¦Àí¿ÉĞ´ÊÂ¼şµÄ¼àÌıÉ¾³ı
+ *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+ *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
+ *  @info  é»˜è®¤æ˜¯ç›‘å¬å¯è¯»äº‹ä»¶çš„, è¿™é‡Œåªå¤„ç†å¯å†™äº‹ä»¶çš„ç›‘å¬åˆ é™¤
  */
 int UdpSessionNtfy::EpollCtlAdd(void* args)
 {
@@ -303,7 +303,7 @@ int UdpSessionNtfy::EpollCtlAdd(void* args)
 
     int osfd = this->GetOsfd();
 
-    // Í¨Öª¶ÔÏóĞèÒª¸üĞÂ, FDÍ¨Öª¶ÔÏóÀíÂÛÉÏ²»»á¸´ÓÃ, ÕâÀï×ö³åÍ»¼ì²é, Òì³£log¼ÇÂ¼
+    // é€šçŸ¥å¯¹è±¡éœ€è¦æ›´æ–°, FDé€šçŸ¥å¯¹è±¡ç†è®ºä¸Šä¸ä¼šå¤ç”¨, è¿™é‡Œåšå†²çªæ£€æŸ¥, å¼‚å¸¸logè®°å½•
     EpollerObj* old_obj = fd_ref->GetNotifyObj();
     if ((old_obj != NULL) && (old_obj != this))
     {
@@ -311,7 +311,7 @@ int UdpSessionNtfy::EpollCtlAdd(void* args)
         return -1;
     }
 
-    // µ÷ÓÃ¿ò¼ÜµÄepoll ctl½Ó¿Ú, ÆÁ±Îepoll ctrlÏ¸½Ú
+    // è°ƒç”¨æ¡†æ¶çš„epoll ctlæ¥å£, å±è”½epoll ctrlç»†èŠ‚
     if (!frame->EpollCtrlAdd(osfd, EPOLLOUT))
     {
         MTLOG_ERROR("epfd ref add failed, log");
@@ -323,9 +323,9 @@ int UdpSessionNtfy::EpollCtlAdd(void* args)
 }
 
 /**
- *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
- *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
- *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+ *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+ *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
  */
 int UdpSessionNtfy::EpollCtlDel(void* args)
 {
@@ -335,7 +335,7 @@ int UdpSessionNtfy::EpollCtlDel(void* args)
 
     int osfd = this->GetOsfd();
     
-    // Í¨Öª¶ÔÏóĞèÒª¸üĞÂ, FDÍ¨Öª¶ÔÏóÀíÂÛÉÏ²»»á¸´ÓÃ, ÕâÀï×ö³åÍ»¼ì²é, Òì³£log¼ÇÂ¼
+    // é€šçŸ¥å¯¹è±¡éœ€è¦æ›´æ–°, FDé€šçŸ¥å¯¹è±¡ç†è®ºä¸Šä¸ä¼šå¤ç”¨, è¿™é‡Œåšå†²çªæ£€æŸ¥, å¼‚å¸¸logè®°å½•
     EpollerObj* old_obj = fd_ref->GetNotifyObj();
     if (old_obj != this)
     {
@@ -343,7 +343,7 @@ int UdpSessionNtfy::EpollCtlDel(void* args)
         return -1;
     }
 
-    // µ÷ÓÃ¿ò¼ÜµÄepoll ctl½Ó¿Ú, ÆÁ±Îepoll ctrlÏ¸½Ú
+    // è°ƒç”¨æ¡†æ¶çš„epoll ctlæ¥å£, å±è”½epoll ctrlç»†èŠ‚
     if (!frame->EpollCtrlDel(osfd, EPOLLOUT))
     {
         MTLOG_ERROR("epfd ref del failed, log");
@@ -357,8 +357,8 @@ int UdpSessionNtfy::EpollCtlDel(void* args)
 
 
 /**
- *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int TcpKeepNtfy::InputNotify()
 {
@@ -367,8 +367,8 @@ int TcpKeepNtfy::InputNotify()
 }
     
 /**
- *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int TcpKeepNtfy::OutputNotify()
 {
@@ -377,8 +377,8 @@ int TcpKeepNtfy::OutputNotify()
 }
     
 /**
- *  @brief Òì³£Í¨Öª½Ó¿Ú
- *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+ *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+ *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
  */
 int TcpKeepNtfy::HangupNotify()
 {
@@ -388,7 +388,7 @@ int TcpKeepNtfy::HangupNotify()
 
     
 /**
- *  @brief ´¥·¢Êµ¼ÊÁ¬½Ó¹Ø±Õ²Ù×÷
+ *  @brief è§¦å‘å®é™…è¿æ¥å…³é—­æ“ä½œ
  */
 void TcpKeepNtfy::KeepaliveClose()
 {
@@ -402,8 +402,8 @@ void TcpKeepNtfy::KeepaliveClose()
     
 
 /**
- * @brief sessionÈ«¾Ö¹ÜÀí¾ä±ú
- * @return È«¾Ö¾ä±úÖ¸Õë
+ * @brief sessionå…¨å±€ç®¡ç†å¥æŸ„
+ * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
  */
 NtfyObjMgr* NtfyObjMgr::_instance = NULL;
 NtfyObjMgr* NtfyObjMgr::Instance (void)
@@ -417,7 +417,7 @@ NtfyObjMgr* NtfyObjMgr::Instance (void)
 }
 
 /**
- * @brief session¹ÜÀíÈ«¾ÖµÄÏú»Ù½Ó¿Ú
+ * @brief sessionç®¡ç†å…¨å±€çš„é”€æ¯æ¥å£
  */
 void NtfyObjMgr::Destroy()
 {
@@ -429,24 +429,24 @@ void NtfyObjMgr::Destroy()
 }
 
 /**
- * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+ * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
  */
 NtfyObjMgr::NtfyObjMgr()
 {
 }
 
 /**
- * @brief Îö¹¹º¯Êı, ²»³ÖÓĞ×ÊÔ´, ²¢²»¸ºÔğÇåÀí
+ * @brief ææ„å‡½æ•°, ä¸æŒæœ‰èµ„æº, å¹¶ä¸è´Ÿè´£æ¸…ç†
  */
 NtfyObjMgr::~NtfyObjMgr()
 {
 }
 
 /**
- * @brief ×¢²á³¤Á¬½ÓsessionĞÅÏ¢
- * @param session_name ³¤Á¬½ÓµÄ±êÊ¶, Ã¿¸öÁ¬½Ó´¦ÀíÒ»Ààsession·â×°¸ñÊ½
- * @param session ³¤Á¬½Ó¶ÔÏóÖ¸Õë, ¶¨ÒåÁ¬½ÓÊôĞÔ
- * @return 0 ³É¹¦, < 0 Ê§°Ü
+ * @brief æ³¨å†Œé•¿è¿æ¥sessionä¿¡æ¯
+ * @param session_name é•¿è¿æ¥çš„æ ‡è¯†, æ¯ä¸ªè¿æ¥å¤„ç†ä¸€ç±»sessionå°è£…æ ¼å¼
+ * @param session é•¿è¿æ¥å¯¹è±¡æŒ‡é’ˆ, å®šä¹‰è¿æ¥å±æ€§
+ * @return 0 æˆåŠŸ, < 0 å¤±è´¥
  */
 int NtfyObjMgr::RegisterSession(int session_name, ISessionNtfy* session)
 {
@@ -468,9 +468,9 @@ int NtfyObjMgr::RegisterSession(int session_name, ISessionNtfy* session)
 }
 
 /**
- * @brief »ñÈ¡×¢²á³¤Á¬½ÓsessionĞÅÏ¢
- * @param session_name ³¤Á¬½ÓµÄ±êÊ¶, Ã¿¸öÁ¬½Ó´¦ÀíÒ»Ààsession·â×°¸ñÊ½
- * @return ³¤Á¬½ÓÖ¸Õë, Ê§°ÜÎªNULL
+ * @brief è·å–æ³¨å†Œé•¿è¿æ¥sessionä¿¡æ¯
+ * @param session_name é•¿è¿æ¥çš„æ ‡è¯†, æ¯ä¸ªè¿æ¥å¤„ç†ä¸€ç±»sessionå°è£…æ ¼å¼
+ * @return é•¿è¿æ¥æŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
  */
 ISessionNtfy* NtfyObjMgr::GetNameSession(int session_name)
 {
@@ -486,10 +486,10 @@ ISessionNtfy* NtfyObjMgr::GetNameSession(int session_name)
 }
 
 /**
- * @brief »ñÈ¡Í¨ÓÃÍ¨Öª¶ÔÏó, ÈçÏß³ÌÍ¨Öª¶ÔÏóÓësessionÍ¨Öª´úÀí¶ÔÏó
- * @param type ÀàĞÍ, Ïß³ÌÍ¨ÖªÀàĞÍ£¬UDP/TCP SESSIONÍ¨ÖªµÈ
- * @param session_name proxyÄ£ĞÍ,Ò»²¢»ñÈ¡session¶ÔÏó
- * @return Í¨Öª¶ÔÏóµÄÖ¸Õë, Ê§°ÜÎªNULL
+ * @brief è·å–é€šç”¨é€šçŸ¥å¯¹è±¡, å¦‚çº¿ç¨‹é€šçŸ¥å¯¹è±¡ä¸sessioné€šçŸ¥ä»£ç†å¯¹è±¡
+ * @param type ç±»å‹, çº¿ç¨‹é€šçŸ¥ç±»å‹ï¼ŒUDP/TCP SESSIONé€šçŸ¥ç­‰
+ * @param session_name proxyæ¨¡å‹,ä¸€å¹¶è·å–sessionå¯¹è±¡
+ * @return é€šçŸ¥å¯¹è±¡çš„æŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
  */
 EpollerObj* NtfyObjMgr::GetNtfyObj(int type, int session_name)
 {
@@ -514,7 +514,7 @@ EpollerObj* NtfyObjMgr::GetNtfyObj(int type, int session_name)
             break;
     }
 
-    // »ñÈ¡µ×²ãµÄ³¤Á¬½Ó¶ÔÏó, ¹ØÁª´úÀíÓëÊµ¼ÊµÄÍ¨Öª¶ÔÏó
+    // è·å–åº•å±‚çš„é•¿è¿æ¥å¯¹è±¡, å…³è”ä»£ç†ä¸å®é™…çš„é€šçŸ¥å¯¹è±¡
     if (proxy) {
         ISessionNtfy* ntfy = this->GetNameSession(session_name);
         if (!ntfy) {
@@ -531,8 +531,8 @@ EpollerObj* NtfyObjMgr::GetNtfyObj(int type, int session_name)
 }
 
 /**
- * @brief ÊÍ·ÅÍ¨Öª¶ÔÏóÖ¸Õë
- * @param obj Í¨Öª¶ÔÏó
+ * @brief é‡Šæ”¾é€šçŸ¥å¯¹è±¡æŒ‡é’ˆ
+ * @param obj é€šçŸ¥å¯¹è±¡
  */
 void NtfyObjMgr::FreeNtfyObj(EpollerObj* obj)
 {

@@ -25,6 +25,7 @@
 #include "../comm/singleton.h"
 #include "../comm/keygen.h"
 #include "../comm/monitor.h"
+#include "../comm/tbase/misc.h"
 #include "../comm/config/config.h"
 #include "srpc_log.h"
 #include <libgen.h>
@@ -198,11 +199,20 @@ void CDefaultCtrl::realrun(int argc, char* argv[])
 // 框架循环调用
 int CDefaultCtrl::loop()
 {
+    static int64_t config_mtime;
     static uint64_t last = 0;
     uint64_t now = (uint64_t)time(NULL);
 
     if (now > (last + 5))
     {
+        int64_t mtime;
+        mtime = CMisc::get_file_mtime(ix_->argv_[1]);
+        if ((mtime < 0) || (mtime == config_mtime))
+        {
+            last = now;
+            return 0;
+        }
+
         // 更新本地日志级别
         ConfigLoader loader;
         if (loader.Init(ix_->argv_[1]) != 0)
@@ -217,6 +227,7 @@ int CDefaultCtrl::loop()
         log_.log_level(config.log.level);
 
         last = now;
+        config_mtime = mtime;
     }
 
     return 0;
@@ -242,6 +253,9 @@ int CDefaultCtrl::initconf(bool reload)
     Log& flog = config.log;
     flog_.LOG_OPEN(flog.level, flog.type, "../log", "srpc_frame_ctrl", flog.maxfilesize, flog.maxfilenum);
 
+    string progname = config.service;
+    progname[progname.find(".")] = '_';
+
     // groupinfo配置: proxy配置
     TGroupInfo      groupinfo;
     memset(&groupinfo, 0, sizeof(groupinfo));
@@ -254,7 +268,7 @@ int CDefaultCtrl::initconf(bool reload)
     groupinfo.affinity_         = -1;
 
     snprintf(groupinfo.basepath_, (sizeof(groupinfo.basepath_) - 1), ".");
-    snprintf(groupinfo.exefile_,  (sizeof(groupinfo.exefile_) - 1),  "srpc_proxy");
+    snprintf(groupinfo.exefile_,  (sizeof(groupinfo.exefile_) - 1),  "srpc_%s_proxy", progname.c_str());
     snprintf(groupinfo.etcfile_,  (sizeof(groupinfo.etcfile_) - 1),  "%s", ix_->argv_[1]);
 
     if (!reload)
@@ -277,7 +291,7 @@ int CDefaultCtrl::initconf(bool reload)
     groupinfo.affinity_         = -1;
 
     snprintf(groupinfo.basepath_, (sizeof(groupinfo.basepath_) - 1), ".");
-    snprintf(groupinfo.exefile_,  (sizeof(groupinfo.exefile_) - 1),  "srpc_worker");
+    snprintf(groupinfo.exefile_,  (sizeof(groupinfo.exefile_) - 1),  "srpc_%s_worker", progname.c_str());
     snprintf(groupinfo.etcfile_,  (sizeof(groupinfo.etcfile_) - 1),  "%s", ix_->argv_[1]);
 
     // 清理共享内存

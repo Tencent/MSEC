@@ -20,8 +20,17 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
+#include <sys/time.h>
+#include <time.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <math.h>
+#include <sys/syscall.h>
+
 
 #include "srpc_comm.h"
+
+#define __GNU_SOURCE
 
 namespace srpc {
 
@@ -72,6 +81,10 @@ const char *errmsg(int32_t err)
             return "service implement failed";
         case SRPC_ERR_BACKEND:
             return "backend process failed, use GetErrText get more information";
+        case SRPC_ERR_PHP_FAILED:
+            return "php error";
+        case SRPC_ERR_PYTHON_FAILED:
+            return "python error";
         default:
             return "unkown error";
     }
@@ -84,25 +97,21 @@ const char *errmsg(int32_t err)
  */
 uint64_t newseq(void)
 {
-    static uint64_t seq;
-    if (!seq) {
-        uint32_t rd;
-        srandom(time(NULL) ^ getpid());
-        rd = (uint32_t)(random() & 0x7fffffff);
-        seq = (uint64_t)(rd ? rd : rd+1);
-    }
-    return ++seq;
+    return my_rand();
 }
 
 /**
  * @brief 染色日志ID生成函数，通过方法名计算生成
  */
-uint64_t gen_colorid(const char *method_name)
+uint64_t gen_colorid(const char *method_name) 
 {
-    uint64_t id = 0;
-    while (*method_name++)
-        id += *method_name * 107;
-    return id;
+    unsigned int hash = 5381;
+    int c;
+    const char* cstr = (const char*)method_name;
+    while ((c = *cstr++))
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
 }
 
 /**
@@ -132,6 +141,49 @@ const char *Cost2TZ(int32_t cost)
         return "500~1s";
 
     return "1s+";
+}
+
+
+// 标准库的随机算法有局限，这里用Wichman-Hill的算法
+static uint32_t __thread init_flag;
+static unsigned long long __thread x; //随机种子
+static unsigned long long __thread y; //随机种子
+static unsigned long long __thread z; //随机种子
+
+static const unsigned long long N_RAND_MAX = 1ULL << 32;
+
+// 初始化随机种子
+static void my_srand(unsigned long long a)
+{
+    x = a % 30268;
+    a /= 30268;
+    y = a % 30306;
+    a /= 30306;
+    z = a % 30322;
+    a /= 30322;
+    ++x;
+    ++y;
+    ++z;
+}
+
+// 得到一个0和1之间的浮点随机数
+static double my_random()
+{
+    if (!init_flag) {
+        init_flag = 1;
+        my_srand(time(NULL) ^ syscall(SYS_gettid));
+    }
+
+    x = x * 171 % 30269;
+    y = y * 172 % 30307;
+    z = z * 170 % 30323;
+    return fmod(x / 30269.0 + y / 30307.0 + z / 30323.0, 1.0);
+}
+
+// 得到一个随机的unsigned int
+unsigned int my_rand()
+{
+    return (unsigned int)(my_random() * N_RAND_MAX);
 }
 
 

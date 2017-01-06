@@ -44,7 +44,7 @@ libse.a:$(OBJ)
 	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED) 
 	@ar crs $@ $^ $(CRESET)	 
 setest:
-	gcc -o setest setest.c -L. -lse -L./libbacktrace -lbacktrace -L./libunwind -lunwind-x86_64 -lunwind
+	gcc -o setest setest.c -L. -lse -L./libbacktrace -lbacktrace -L./libunwind -lunwind-x86_64 -lunwind -llzma
 mltool:
 	gcc -o mltool -g mltool.c
 

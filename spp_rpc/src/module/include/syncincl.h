@@ -19,7 +19,7 @@
 
 /**
  *  @file sync_incl.h
- *  @info ΢�߳�SPP����ͳһͷ�ļ�����, �ⲿ���� sppincl.h
+ *  @info 微线程SPP适配统一头文件包含, 外部依赖 sppincl.h
  *  @time 20130912
  **/
 

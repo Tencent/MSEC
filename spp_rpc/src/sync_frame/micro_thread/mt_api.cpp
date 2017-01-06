@@ -19,7 +19,7 @@
 
 /**
  *  @filename mt_sys_call.cpp
- *  @info  Î¢Ïß³Ì·â×°ÏµÍ³api, Í¬²½µ÷ÓÃÎ¢Ïß³ÌAPI£¬ÊµÏÖÒì²½µ÷¶È
+ *  @info  å¾®çº¿ç¨‹å°è£…ç³»ç»Ÿapi, åŒæ­¥è°ƒç”¨å¾®çº¿ç¨‹APIï¼Œå®ç°å¼‚æ­¥è°ƒåº¦
  */
 
 #include "epoll_proxy.h"
@@ -31,14 +31,14 @@
 namespace NS_MICRO_THREAD {
 
 /**
- * @brief ²ÉÓÃËæ»ú¶Ë¿ÚµÄsocketÊÕ·¢½Ó¿Ú, ÓÉsocketÀ´¾ö¶¨ÉÏÏÂÎÄ, ÒµÎñÀ´±£Ö¤ÉÏÏÂÎÄ
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param rcv_buf -½ÓÊÕÓ¦´ğ°üµÄbuff
- * @param buf_size -modify-½ÓÊÕÓ¦´ğ°üµÄbuff´óĞ¡, ³É¹¦·µ»ØÊ±, ĞŞ¸ÄÎªÓ¦´ğ°ü³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -3 ½ÓÊÕÓ¦´ğÊ§°Ü, ¿É´òÓ¡errno
+ * @brief é‡‡ç”¨éšæœºç«¯å£çš„socketæ”¶å‘æ¥å£, ç”±socketæ¥å†³å®šä¸Šä¸‹æ–‡, ä¸šåŠ¡æ¥ä¿è¯ä¸Šä¸‹æ–‡
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param rcv_buf -æ¥æ”¶åº”ç­”åŒ…çš„buff
+ * @param buf_size -modify-æ¥æ”¶åº”ç­”åŒ…çš„buffå¤§å°, æˆåŠŸè¿”å›æ—¶, ä¿®æ”¹ä¸ºåº”ç­”åŒ…é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -3 æ¥æ”¶åº”ç­”å¤±è´¥, å¯æ‰“å°errno
  */
 int mt_udpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int& buf_size, int timeout)
 {
@@ -51,7 +51,7 @@ int mt_udpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
     int sock = socket(PF_INET, SOCK_DGRAM, 0);
     if ((sock < 0) || (ioctl(sock, FIONBIO, &flags) < 0))
     {
-        MT_ATTR_API(320842, 1); // socketÊ§°Ü
+        MT_ATTR_API(320842, 1); // socketå¤±è´¥
         MTLOG_ERROR("mt_udpsendrcv new sock failed, sock: %d, errno: %d", sock, errno);
         ret = -1;
         goto EXIT_LABEL;
@@ -60,7 +60,7 @@ int mt_udpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
     rc = MtFrame::sendto(sock, pkg, len, 0, (struct sockaddr*)dst, (int)sizeof(*dst), timeout);
     if (rc < 0)
     {
-        MT_ATTR_API(MONITOR_MT_SEND_ERR, 1); // ·¢ËÍÊ§°Ü
+        MT_ATTR_API(MONITOR_MT_SEND_ERR, 1); // å‘é€å¤±è´¥
         MTLOG_ERROR("mt_udpsendrcv send failed, rc: %d, errno: %d", rc, errno);
         ret = -2;
         goto EXIT_LABEL;
@@ -69,7 +69,7 @@ int mt_udpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
     rc = MtFrame::recvfrom(sock, rcv_buf, buf_size, 0, (struct sockaddr*)&from_addr, (socklen_t*)&addr_len, timeout);
     if (rc < 0)
     {
-        MT_ATTR_API(MONITOR_MT_RECV_FAIL, 1); // ½ÓÊÕÎ´ÍêÈ«³É¹¦
+        MT_ATTR_API(MONITOR_MT_RECV_FAIL, 1); // æ¥æ”¶æœªå®Œå…¨æˆåŠŸ
         MTLOG_ERROR("mt_udpsendrcv recv failed, rc: %d, errno: %d", rc, errno);
         ret = -3;
         goto EXIT_LABEL;
@@ -88,15 +88,15 @@ EXIT_LABEL:
 }
 
 /**
- * @brief  ´´½¨TCPÌ×½Ó×Ö£¬²¢ÉèÖÃÎª·Ç×èÈû
- * @return >=0 ³É¹¦, <0 Ê§°Ü
+ * @brief  åˆ›å»ºTCPå¥—æ¥å­—ï¼Œå¹¶è®¾ç½®ä¸ºéé˜»å¡
+ * @return >=0 æˆåŠŸ, <0 å¤±è´¥
  */
 int mt_tcp_create_sock(void)
 {
     int fd;
     int flag;
 
-    // ´´½¨socket
+    // åˆ›å»ºsocket
     fd = ::socket(AF_INET, SOCK_STREAM, 0);
     if (fd < 0)
     {
@@ -104,7 +104,7 @@ int mt_tcp_create_sock(void)
         return -1;
     }
 
-    // ÉèÖÃsocket·Ç×èÈû
+    // è®¾ç½®socketéé˜»å¡
     flag = fcntl(fd, F_GETFL, 0);
     if (flag == -1)
     {
@@ -127,11 +127,11 @@ int mt_tcp_create_sock(void)
 }
 
 /**
- * @brief TCP»ñÈ¡Á¬½ÓÓëÍ¨Öª¶ÔÏóÓësocket
+ * @brief TCPè·å–è¿æ¥ä¸é€šçŸ¥å¯¹è±¡ä¸socket
  */
 static TcpKeepConn* mt_tcp_get_keep_conn(struct sockaddr_in* dst, int& sock)
 {
-    // 1. »ñÈ¡Ïß³ÌÍ¨Öª×¢²á¶ÔÏó
+    // 1. è·å–çº¿ç¨‹é€šçŸ¥æ³¨å†Œå¯¹è±¡
     EpollerObj* ntfy_obj = NtfyObjMgr::Instance()->GetNtfyObj(NTFY_OBJ_THREAD, 0);
     if (NULL == ntfy_obj)
     {
@@ -139,7 +139,7 @@ static TcpKeepConn* mt_tcp_get_keep_conn(struct sockaddr_in* dst, int& sock)
         return NULL;
     }
 
-    // 2. »ñÈ¡Á¬½Ó¶ÔÏó, ¹ØÁªÍ¨ÖªĞÅÏ¢
+    // 2. è·å–è¿æ¥å¯¹è±¡, å…³è”é€šçŸ¥ä¿¡æ¯
     TcpKeepConn* conn = dynamic_cast<TcpKeepConn*>(ConnectionMgr::Instance()->GetConnection(OBJ_TCP_KEEP, dst));
     if (NULL == conn)
     {
@@ -149,7 +149,7 @@ static TcpKeepConn* mt_tcp_get_keep_conn(struct sockaddr_in* dst, int& sock)
     }
     conn->SetNtfyObj(ntfy_obj);
 
-    // 3. ´´½¨»ò¸´ÓÃsocket¾ä±ú
+    // 3. åˆ›å»ºæˆ–å¤ç”¨socketå¥æŸ„
     int osfd = conn->CreateSocket();
     if (osfd < 0)
     {
@@ -158,14 +158,14 @@ static TcpKeepConn* mt_tcp_get_keep_conn(struct sockaddr_in* dst, int& sock)
         return NULL;
     }
 
-    // 4. ³É¹¦·µ»ØÊı¾İ
+    // 4. æˆåŠŸè¿”å›æ•°æ®
     sock = osfd;
     return conn;
 }
 
 /**
- * @brief TCPÑ­»·½ÓÊÕ, Ö±µ½Êı¾İOK»ò³¬Ê±
- *       [×¢Òâ] ¿ª·¢Õß²»ÒªËæÒâĞŞ¸Äº¯Êı·µ»ØÖµ£¬±£Ö¤²»ÒªºÍmt_tcpsendrcvµÈµ÷ÓÃ½Ó¿Ú³åÍ» [ÖØÒª]
+ * @brief TCPå¾ªç¯æ¥æ”¶, ç›´åˆ°æ•°æ®OKæˆ–è¶…æ—¶
+ *       [æ³¨æ„] å¼€å‘è€…ä¸è¦éšæ„ä¿®æ”¹å‡½æ•°è¿”å›å€¼ï¼Œä¿è¯ä¸è¦å’Œmt_tcpsendrcvç­‰è°ƒç”¨æ¥å£å†²çª [é‡è¦]
  */
 static int mt_tcp_check_recv(int sock, char* rcv_buf, int &len, int flags, int timeout, MtFuncTcpMsgLen func)
 {
@@ -195,25 +195,25 @@ static int mt_tcp_check_recv(int sock, char* rcv_buf, int &len, int flags, int t
         }
         recv_len += rc;
 
-        /* ¼ì²é±¨ÎÄÍêÕûĞÔ */
+        /* æ£€æŸ¥æŠ¥æ–‡å®Œæ•´æ€§ */
         rc = func(rcv_buf, recv_len);
         if (rc < 0)
         {
             MTLOG_ERROR("tcp socket[%d] user check pkg error[%d]", sock, rc);
             return -5;
         }
-        else if (rc == 0) // ±¨ÎÄÎ´ÊÕÍêÕû
+        else if (rc == 0) // æŠ¥æ–‡æœªæ”¶å®Œæ•´
         { 
-            if (len == recv_len) // Ã»¿Õ¼äÔÙ½ÓÊÕÁË, ±¨´í
+            if (len == recv_len) // æ²¡ç©ºé—´å†æ¥æ”¶äº†, æŠ¥é”™
             {
                 MTLOG_ERROR("tcp socket[%d] user check pkg not ok, but no more buff", sock);
                 return -6;
             }
             continue;
         }
-        else    // ³É¹¦¼ÆËã±¨ÎÄ³¤¶È
+        else    // æˆåŠŸè®¡ç®—æŠ¥æ–‡é•¿åº¦
         { 
-            if (rc > recv_len) // ±¨ÎÄ»¹Î´ÊÕÈ«
+            if (rc > recv_len) // æŠ¥æ–‡è¿˜æœªæ”¶å…¨
             {
                 continue;
             }
@@ -229,8 +229,8 @@ static int mt_tcp_check_recv(int sock, char* rcv_buf, int &len, int flags, int t
 }
 
 /**
- * @brief TCPÑ­»·½ÓÊÕ, Ö±µ½Êı¾İOK»ò³¬Ê±
- *       [×¢Òâ] ¿ª·¢Õß²»ÒªËæÒâĞŞ¸Äº¯Êı·µ»ØÖµ£¬±£Ö¤²»ÒªºÍmt_tcpsendrcvµÈµ÷ÓÃ½Ó¿Ú³åÍ» [ÖØÒª]
+ * @brief TCPå¾ªç¯æ¥æ”¶, ç›´åˆ°æ•°æ®OKæˆ–è¶…æ—¶
+ *       [æ³¨æ„] å¼€å‘è€…ä¸è¦éšæ„ä¿®æ”¹å‡½æ•°è¿”å›å€¼ï¼Œä¿è¯ä¸è¦å’Œmt_tcpsendrcvç­‰è°ƒç”¨æ¥å£å†²çª [é‡è¦]
  */
 static int mt_tcp_check_recv_v2(int sock, char** rcv_buf, int &len, int flags, int timeout, MtFuncTcpMsgLen func)
 {
@@ -251,8 +251,9 @@ static int mt_tcp_check_recv_v2(int sock, char** rcv_buf, int &len, int flags, i
 
     do {
         utime64_t cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
-        if (cost_time > (utime64_t)timeout)
+        if (cost_time >= (utime64_t)timeout)
         {
+            free(buf);
             errno = ETIME;            
             MTLOG_ERROR("tcp socket[%d] recv not ok, timeout", sock);
             return -3;
@@ -261,27 +262,30 @@ static int mt_tcp_check_recv_v2(int sock, char** rcv_buf, int &len, int flags, i
         int rc = MtFrame::recv(sock, (buf + recv_len), (blen - recv_len), 0, (timeout - (int)cost_time));
         if (rc < 0)
         {
+            free(buf);
             MTLOG_ERROR("tcp socket[%d] recv failed ret[%d][%m]", sock, rc);
             return -3;
         }
         else if (rc == 0)
         {
+            free(buf);
         	blen = recv_len;
             MTLOG_ERROR("tcp socket[%d] remote close", sock);
             return -7;
         }
         recv_len += rc;
 
-        /* ¼ì²é±¨ÎÄÍêÕûĞÔ */
+        /* æ£€æŸ¥æŠ¥æ–‡å®Œæ•´æ€§ */
         rc = func(buf, recv_len);
         if (rc < 0)
         {
+            free(buf);
             MTLOG_ERROR("tcp socket[%d] user check pkg error[%d]", sock, rc);
             return -5;
         }
 
-        /* ±¨ÎÄÃ»ÓĞ½ÓÊÕÍê³É£¬ÇÒbuff²»¹»£¬ĞèÒªreallocÄÚ´æ */
-        if (rc == 0 && blen == recv_len) // Ã»ÓĞ¿Õ¼ä½ÓÊÜ±¨ÎÄÁË
+        /* æŠ¥æ–‡æ²¡æœ‰æ¥æ”¶å®Œæˆï¼Œä¸”buffä¸å¤Ÿï¼Œéœ€è¦reallocå†…å­˜ */
+        if (rc == 0 && blen == recv_len) // æ²¡æœ‰ç©ºé—´æ¥å—æŠ¥æ–‡äº†
         {
             new_size = (rc > blen) ? rc : 2*blen;
             new_buf  = (char *)realloc(buf, new_size);
@@ -298,7 +302,7 @@ static int mt_tcp_check_recv_v2(int sock, char** rcv_buf, int &len, int flags, i
             continue;
         }
 
-        if ((rc > 0) && (rc <= recv_len)) // ±¨ÎÄ½ÓÊÕÍê³É
+        if ((rc > 0) && (rc <= recv_len)) // æŠ¥æ–‡æ¥æ”¶å®Œæˆ
         {
             *rcv_buf = buf;
             len      = recv_len;
@@ -311,18 +315,18 @@ static int mt_tcp_check_recv_v2(int sock, char** rcv_buf, int &len, int flags, i
 
 
 /**
- * @brief TCP»á²ÉÓÃÁ¬½Ó³ØµÄ·½Ê½¸´ÓÃIP/PORTÁ¬½Ó, Á¬½Ó±£³ÖÄ¬ÈÏ10·ÖÖÓ
- *        [×¢Òâ] tcp½ÓÊÕ·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- *        [×¢Òâ] ĞŞ¸Ä½Ó¿Ú£¬Çë×¢Òâ²»ÒªËæ±ãĞŞ¸Ä·µ»ØÖµ£¬²¢±£Ö¤ºÍmt_tcpsendrcv_ex·µ»ØÖµÆ¥Åä [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param rcv_buf -½ÓÊÕÓ¦´ğ°üµÄbuff
- * @param buf_size -modify-½ÓÊÕÓ¦´ğ°üµÄbuff´óĞ¡, ³É¹¦·µ»ØÊ±, ĞŞ¸ÄÎªÓ¦´ğ°ü³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @param check_func -¼ì²â±¨ÎÄÊÇ·ñ³É¹¦µ½´ïº¯Êı
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -3 ½ÓÊÕÓ¦´ğÊ§°Ü, 
- *          -4 Á¬½ÓÊ§°Ü, -5 ¼ì²â±¨ÎÄÊ§°Ü, -6 ½ÓÊÕ¿Õ¼ä²»¹», -7 ºó¶ËÖ÷¶¯¹Ø±ÕÁ¬½Ó£¬-10 ²ÎÊıÎŞĞ§
+ * @brief TCPä¼šé‡‡ç”¨è¿æ¥æ± çš„æ–¹å¼å¤ç”¨IP/PORTè¿æ¥, è¿æ¥ä¿æŒé»˜è®¤10åˆ†é’Ÿ
+ *        [æ³¨æ„] tcpæ¥æ”¶å‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ *        [æ³¨æ„] ä¿®æ”¹æ¥å£ï¼Œè¯·æ³¨æ„ä¸è¦éšä¾¿ä¿®æ”¹è¿”å›å€¼ï¼Œå¹¶ä¿è¯å’Œmt_tcpsendrcv_exè¿”å›å€¼åŒ¹é… [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param rcv_buf -æ¥æ”¶åº”ç­”åŒ…çš„buff
+ * @param buf_size -modify-æ¥æ”¶åº”ç­”åŒ…çš„buffå¤§å°, æˆåŠŸè¿”å›æ—¶, ä¿®æ”¹ä¸ºåº”ç­”åŒ…é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @param check_func -æ£€æµ‹æŠ¥æ–‡æ˜¯å¦æˆåŠŸåˆ°è¾¾å‡½æ•°
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -3 æ¥æ”¶åº”ç­”å¤±è´¥, 
+ *          -4 è¿æ¥å¤±è´¥, -5 æ£€æµ‹æŠ¥æ–‡å¤±è´¥, -6 æ¥æ”¶ç©ºé—´ä¸å¤Ÿ, -7 åç«¯ä¸»åŠ¨å…³é—­è¿æ¥ï¼Œ-10 å‚æ•°æ— æ•ˆ
  */
 int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int& buf_size, int timeout, MtFuncTcpMsgLen func)
 {
@@ -339,7 +343,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
     utime64_t cost_time = 0;
     int time_left = timeout;
 
-    // 1. »ñÈ¡TCPÁ¬½Ó³Ø¶ÔÏó, ¹Ò½ÓÍ¨Öª¶ÔÏó
+    // 1. è·å–TCPè¿æ¥æ± å¯¹è±¡, æŒ‚æ¥é€šçŸ¥å¯¹è±¡
     int sock = -1;
     TcpKeepConn* conn = mt_tcp_get_keep_conn(dst, sock);
     if ((conn == NULL) || (sock < 0))
@@ -349,7 +353,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
         goto EXIT_LABEL;
     }
 
-    // 2. ³¢ÊÔ¼ì²â»òĞÂ½¨Á¬½Ó
+    // 2. å°è¯•æ£€æµ‹æˆ–æ–°å»ºè¿æ¥
     rc = MtFrame::connect(sock, (struct sockaddr *)dst, addr_len, time_left);
     if (rc < 0)
     {
@@ -358,7 +362,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
         goto EXIT_LABEL;
     }
 
-    // 3. ·¢ËÍÊı¾İ´¦Àí
+    // 3. å‘é€æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = MtFrame::send(sock, pkg, len, 0, time_left);
@@ -369,7 +373,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
         goto EXIT_LABEL;
     }
 
-    // 4. ½ÓÊÕÊı¾İ´¦Àí
+    // 4. æ¥æ”¶æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = mt_tcp_check_recv(sock, (char*)rcv_buf, buf_size, 0, time_left, func);
@@ -384,7 +388,7 @@ int mt_tcpsendrcv(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, in
     
 EXIT_LABEL:
 
-    // Ê§°ÜÔòÇ¿ÖÆÊÍ·ÅÁ¬½Ó, ·ñÔò¶¨Ê±±£»î
+    // å¤±è´¥åˆ™å¼ºåˆ¶é‡Šæ”¾è¿æ¥, å¦åˆ™å®šæ—¶ä¿æ´»
     if (conn != NULL)
     {
         ConnectionMgr::Instance()->FreeConnection(conn, (ret < 0));
@@ -394,19 +398,19 @@ EXIT_LABEL:
 }
 
 /**
- * @brief TCP»á²ÉÓÃÁ¬½Ó³ØµÄ·½Ê½¸´ÓÃIP/PORTÁ¬½Ó, Á¬½Ó±£³ÖÄ¬ÈÏ10·ÖÖÓ
- *        [×¢Òâ] tcp½ÓÊÕ·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- *        [×¢Òâ] ĞŞ¸Ä½Ó¿Ú£¬Çë×¢Òâ²»ÒªËæ±ãĞŞ¸Ä·µ»ØÖµ [ÖØÒª]
- *        [×¢Òâ] ±¨ÎÄµÄ½ÓÊÕbufferÎª½Ó¿ÚmallocÉêÇë£¬ĞèÒªµ÷ÓÃÕßÊÍ·Å [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param rcv_buf -½ÓÊÕÓ¦´ğ°üµÄbuff
- * @param buf_size -modify-½ÓÊÕÓ¦´ğ°üµÄbuff´óĞ¡, ³É¹¦·µ»ØÊ±, ĞŞ¸ÄÎªÓ¦´ğ°ü³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @param check_func -¼ì²â±¨ÎÄÊÇ·ñ³É¹¦µ½´ïº¯Êı
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -3 ½ÓÊÕÓ¦´ğÊ§°Ü, 
- *          -4 Á¬½ÓÊ§°Ü, -5 ¼ì²â±¨ÎÄÊ§°Ü, -6 ½ÓÊÕ¿Õ¼ä²»¹», -7 ºó¶ËÖ÷¶¯¹Ø±ÕÁ¬½Ó£¬-10 ²ÎÊıÎŞĞ§, -11ÄÚ´æ·ÖÅäÊ§°Ü
+ * @brief TCPä¼šé‡‡ç”¨è¿æ¥æ± çš„æ–¹å¼å¤ç”¨IP/PORTè¿æ¥, è¿æ¥ä¿æŒé»˜è®¤10åˆ†é’Ÿ
+ *        [æ³¨æ„] tcpæ¥æ”¶å‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ *        [æ³¨æ„] ä¿®æ”¹æ¥å£ï¼Œè¯·æ³¨æ„ä¸è¦éšä¾¿ä¿®æ”¹è¿”å›å€¼ [é‡è¦]
+ *        [æ³¨æ„] æŠ¥æ–‡çš„æ¥æ”¶bufferä¸ºæ¥å£mallocç”³è¯·ï¼Œéœ€è¦è°ƒç”¨è€…é‡Šæ”¾ [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param rcv_buf -æ¥æ”¶åº”ç­”åŒ…çš„buff
+ * @param buf_size -modify-æ¥æ”¶åº”ç­”åŒ…çš„buffå¤§å°, æˆåŠŸè¿”å›æ—¶, ä¿®æ”¹ä¸ºåº”ç­”åŒ…é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @param check_func -æ£€æµ‹æŠ¥æ–‡æ˜¯å¦æˆåŠŸåˆ°è¾¾å‡½æ•°
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -3 æ¥æ”¶åº”ç­”å¤±è´¥, 
+ *          -4 è¿æ¥å¤±è´¥, -5 æ£€æµ‹æŠ¥æ–‡å¤±è´¥, -6 æ¥æ”¶ç©ºé—´ä¸å¤Ÿ, -7 åç«¯ä¸»åŠ¨å…³é—­è¿æ¥ï¼Œ-10 å‚æ•°æ— æ•ˆ, -11å†…å­˜åˆ†é…å¤±è´¥
  */
 int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf, int& buf_size, int timeout, MtFuncTcpMsgLen func)
 {
@@ -423,7 +427,7 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
     utime64_t cost_time = 0;
     int time_left = timeout;
 
-    // 1. »ñÈ¡TCPÁ¬½Ó³Ø¶ÔÏó, ¹Ò½ÓÍ¨Öª¶ÔÏó
+    // 1. è·å–TCPè¿æ¥æ± å¯¹è±¡, æŒ‚æ¥é€šçŸ¥å¯¹è±¡
     int sock = -1;
     TcpKeepConn* conn = mt_tcp_get_keep_conn(dst, sock);
     if ((conn == NULL) || (sock < 0))
@@ -433,7 +437,7 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
         goto EXIT_LABEL;
     }
 
-    // 2. ³¢ÊÔ¼ì²â»òĞÂ½¨Á¬½Ó
+    // 2. å°è¯•æ£€æµ‹æˆ–æ–°å»ºè¿æ¥
     rc = MtFrame::connect(sock, (struct sockaddr *)dst, addr_len, time_left);
     if (rc < 0)
     {
@@ -442,7 +446,7 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
         goto EXIT_LABEL;
     }
 
-    // 3. ·¢ËÍÊı¾İ´¦Àí
+    // 3. å‘é€æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = MtFrame::send(sock, pkg, len, 0, time_left);
@@ -453,7 +457,7 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
         goto EXIT_LABEL;
     }
 
-    // 4. ½ÓÊÕÊı¾İ´¦Àí
+    // 4. æ¥æ”¶æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = mt_tcp_check_recv_v2(sock, (char**)rcv_buf, buf_size, 0, time_left, func);
@@ -468,7 +472,7 @@ int mt_tcpsendrcv_v2(struct sockaddr_in* dst, void* pkg, int len, void** rcv_buf
     
 EXIT_LABEL:
 
-    // Ê§°ÜÔòÇ¿ÖÆÊÍ·ÅÁ¬½Ó, ·ñÔò¶¨Ê±±£»î
+    // å¤±è´¥åˆ™å¼ºåˆ¶é‡Šæ”¾è¿æ¥, å¦åˆ™å®šæ—¶ä¿æ´»
     if (conn != NULL)
     {
         ConnectionMgr::Instance()->FreeConnection(conn, (ret < 0));
@@ -479,18 +483,18 @@ EXIT_LABEL:
 
 
 /**
- * @brief TCP¶ÌÁ¬½ÓÊÕ·¢±¨ÎÄ
- *        [×¢Òâ] tcp½ÓÊÕ·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- *        [×¢Òâ] ĞŞ¸Ä½Ó¿Ú£¬Çë×¢Òâ²»ÒªËæ±ãĞŞ¸Ä·µ»ØÖµ£¬²¢±£Ö¤ºÍmt_tcpsendrcv_ex·µ»ØÖµÆ¥Åä [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param rcv_buf -½ÓÊÕÓ¦´ğ°üµÄbuff
- * @param buf_size -modify-½ÓÊÕÓ¦´ğ°üµÄbuff´óĞ¡, ³É¹¦·µ»ØÊ±, ĞŞ¸ÄÎªÓ¦´ğ°ü³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @param check_func -¼ì²â±¨ÎÄÊÇ·ñ³É¹¦µ½´ïº¯Êı
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -3 ½ÓÊÕÓ¦´ğÊ§°Ü, 
- *          -4 Á¬½ÓÊ§°Ü, -5 ¼ì²â±¨ÎÄÊ§°Ü, -6 ½ÓÊÕ¿Õ¼ä²»¹», -7 ºó¶ËÖ÷¶¯¹Ø±ÕÁ¬½Ó£¬-10 ²ÎÊıÎŞĞ§
+ * @brief TCPçŸ­è¿æ¥æ”¶å‘æŠ¥æ–‡
+ *        [æ³¨æ„] tcpæ¥æ”¶å‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ *        [æ³¨æ„] ä¿®æ”¹æ¥å£ï¼Œè¯·æ³¨æ„ä¸è¦éšä¾¿ä¿®æ”¹è¿”å›å€¼ï¼Œå¹¶ä¿è¯å’Œmt_tcpsendrcv_exè¿”å›å€¼åŒ¹é… [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param rcv_buf -æ¥æ”¶åº”ç­”åŒ…çš„buff
+ * @param buf_size -modify-æ¥æ”¶åº”ç­”åŒ…çš„buffå¤§å°, æˆåŠŸè¿”å›æ—¶, ä¿®æ”¹ä¸ºåº”ç­”åŒ…é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @param check_func -æ£€æµ‹æŠ¥æ–‡æ˜¯å¦æˆåŠŸåˆ°è¾¾å‡½æ•°
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -3 æ¥æ”¶åº”ç­”å¤±è´¥, 
+ *          -4 è¿æ¥å¤±è´¥, -5 æ£€æµ‹æŠ¥æ–‡å¤±è´¥, -6 æ¥æ”¶ç©ºé—´ä¸å¤Ÿ, -7 åç«¯ä¸»åŠ¨å…³é—­è¿æ¥ï¼Œ-10 å‚æ•°æ— æ•ˆ
  */
 int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int& buf_size, int timeout, MtFuncTcpMsgLen func)
 {
@@ -500,7 +504,7 @@ int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_b
     utime64_t cost_time = 0;
     int time_left = timeout;
 
-    // 1. ²ÎÊı¼ì²é
+    // 1. å‚æ•°æ£€æŸ¥
     if (!dst || !pkg || !rcv_buf || !func) 
     {
         MTLOG_ERROR("input params invalid, dst[%p], pkg[%p], rcv_buf[%p], fun[%p]",
@@ -508,7 +512,7 @@ int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_b
         return -10;
     }
 
-    // 2. ´´½¨TCP socket
+    // 2. åˆ›å»ºTCP socket
     int sock;
     sock = mt_tcp_create_sock();
     if (sock < 0)
@@ -517,7 +521,7 @@ int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_b
         return -1;
     }
 
-    // 3. ³¢ÊÔ¼ì²â»òĞÂ½¨Á¬½Ó
+    // 3. å°è¯•æ£€æµ‹æˆ–æ–°å»ºè¿æ¥
     rc = MtFrame::connect(sock, (struct sockaddr *)dst, addr_len, time_left);
     if (rc < 0)
     {
@@ -526,7 +530,7 @@ int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_b
         goto EXIT_LABEL;
     }
 
-    // 4. ·¢ËÍÊı¾İ´¦Àí
+    // 4. å‘é€æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = MtFrame::send(sock, pkg, len, 0, time_left);
@@ -537,7 +541,7 @@ int mt_tcpsendrcv_short(struct sockaddr_in* dst, void* pkg, int len, void* rcv_b
         goto EXIT_LABEL;
     }
 
-    // 5. ½ÓÊÕÊı¾İ´¦Àí
+    // 5. æ¥æ”¶æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = mt_tcp_check_recv(sock, (char*)rcv_buf, buf_size, 0, time_left, func);
@@ -559,18 +563,18 @@ EXIT_LABEL:
 
 
 /**
- * @brief TCP»á²ÉÓÃÁ¬½Ó³ØµÄ·½Ê½¸´ÓÃIP/PORTÁ¬½Ó, Á¬½Ó±£³ÖÄ¬ÈÏ10·ÖÖÓ
- *        [×¢Òâ] tcp·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- *        [×¢Òâ] ĞŞ¸Ä½Ó¿Ú£¬Çë×¢Òâ²»ÒªËæ±ãĞŞ¸Ä·µ»ØÖµ£¬²¢±£Ö¤ºÍmt_tcpsendrcv_ex·µ»ØÖµÆ¥Åä [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -4 Á¬½ÓÊ§°Ü, -10 ²ÎÊıÎŞĞ§
+ * @brief TCPä¼šé‡‡ç”¨è¿æ¥æ± çš„æ–¹å¼å¤ç”¨IP/PORTè¿æ¥, è¿æ¥ä¿æŒé»˜è®¤10åˆ†é’Ÿ
+ *        [æ³¨æ„] tcpå‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ *        [æ³¨æ„] ä¿®æ”¹æ¥å£ï¼Œè¯·æ³¨æ„ä¸è¦éšä¾¿ä¿®æ”¹è¿”å›å€¼ï¼Œå¹¶ä¿è¯å’Œmt_tcpsendrcv_exè¿”å›å€¼åŒ¹é… [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -4 è¿æ¥å¤±è´¥, -10 å‚æ•°æ— æ•ˆ
  */
 int mt_tcpsend(struct sockaddr_in* dst, void* pkg, int len, int timeout)
 {
-    if (!dst || !pkg) 
+    if (!dst || !pkg || len < 1) 
     {
         MTLOG_ERROR("input params invalid, dst[%p], pkg[%p]", dst, pkg);
         return -10;
@@ -582,7 +586,7 @@ int mt_tcpsend(struct sockaddr_in* dst, void* pkg, int len, int timeout)
     utime64_t cost_time = 0;
     int time_left = timeout;
 
-    // 1. »ñÈ¡TCPÁ¬½Ó³Ø¶ÔÏó, ¹Ò½ÓÍ¨Öª¶ÔÏó
+    // 1. è·å–TCPè¿æ¥æ± å¯¹è±¡, æŒ‚æ¥é€šçŸ¥å¯¹è±¡
     int sock = -1;
     TcpKeepConn* conn = mt_tcp_get_keep_conn(dst, sock);
     if ((conn == NULL) || (sock < 0))
@@ -592,7 +596,7 @@ int mt_tcpsend(struct sockaddr_in* dst, void* pkg, int len, int timeout)
         goto EXIT_LABEL;
     }
 
-    // 2. ³¢ÊÔ¼ì²â»òĞÂ½¨Á¬½Ó
+    // 2. å°è¯•æ£€æµ‹æˆ–æ–°å»ºè¿æ¥
     rc = MtFrame::connect(sock, (struct sockaddr *)dst, addr_len, time_left);
     if (rc < 0)
     {
@@ -601,7 +605,7 @@ int mt_tcpsend(struct sockaddr_in* dst, void* pkg, int len, int timeout)
         goto EXIT_LABEL;
     }
 
-    // 3. ·¢ËÍÊı¾İ´¦Àí
+    // 3. å‘é€æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = MtFrame::send(sock, pkg, len, 0, time_left);
@@ -616,7 +620,7 @@ int mt_tcpsend(struct sockaddr_in* dst, void* pkg, int len, int timeout)
     
 EXIT_LABEL:
 
-    // Ê§°ÜÔòÇ¿ÖÆÊÍ·ÅÁ¬½Ó, ·ñÔò¶¨Ê±±£»î
+    // å¤±è´¥åˆ™å¼ºåˆ¶é‡Šæ”¾è¿æ¥, å¦åˆ™å®šæ—¶ä¿æ´»
     if (conn != NULL)
     {
         ConnectionMgr::Instance()->FreeConnection(conn, (ret < 0));
@@ -626,18 +630,18 @@ EXIT_LABEL:
 }
 
 /**
- * @brief TCP¶ÌÁ¬½ÓÖ»·¢²»ÊÕ½Ó¿Ú
- *        [×¢Òâ] tcp·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- *        [×¢Òâ] ĞŞ¸Ä½Ó¿Ú£¬Çë×¢Òâ²»ÒªËæ±ãĞŞ¸Ä·µ»ØÖµ£¬²¢±£Ö¤ºÍmt_tcpsendrcv_ex·µ»ØÖµÆ¥Åä [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -4 Á¬½ÓÊ§°Ü, -10 ²ÎÊıÎŞĞ§
+ * @brief TCPçŸ­è¿æ¥åªå‘ä¸æ”¶æ¥å£
+ *        [æ³¨æ„] tcpå‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ *        [æ³¨æ„] ä¿®æ”¹æ¥å£ï¼Œè¯·æ³¨æ„ä¸è¦éšä¾¿ä¿®æ”¹è¿”å›å€¼ï¼Œå¹¶ä¿è¯å’Œmt_tcpsendrcv_exè¿”å›å€¼åŒ¹é… [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -4 è¿æ¥å¤±è´¥, -10 å‚æ•°æ— æ•ˆ
  */
 int mt_tcpsend_short(struct sockaddr_in* dst, void* pkg, int len, int timeout)
 {
-    // 1. Èë²Î¼ì²é
+    // 1. å…¥å‚æ£€æŸ¥
     if (!dst || !pkg) 
     {
         MTLOG_ERROR("input params invalid, dst[%p], pkg[%p]", dst, pkg);
@@ -650,7 +654,7 @@ int mt_tcpsend_short(struct sockaddr_in* dst, void* pkg, int len, int timeout)
     utime64_t cost_time = 0;
     int time_left = timeout;
 
-    // 2. ´´½¨TCP socket
+    // 2. åˆ›å»ºTCP socket
     int sock = -1;
     sock = mt_tcp_create_sock();
     if (sock < 0)
@@ -660,7 +664,7 @@ int mt_tcpsend_short(struct sockaddr_in* dst, void* pkg, int len, int timeout)
         goto EXIT_LABEL;
     }
 
-    // 2. ³¢ÊÔ¼ì²â»òĞÂ½¨Á¬½Ó
+    // 2. å°è¯•æ£€æµ‹æˆ–æ–°å»ºè¿æ¥
     rc = MtFrame::connect(sock, (struct sockaddr *)dst, addr_len, time_left);
     if (rc < 0)
     {
@@ -669,7 +673,7 @@ int mt_tcpsend_short(struct sockaddr_in* dst, void* pkg, int len, int timeout)
         goto EXIT_LABEL;
     }
 
-    // 3. ·¢ËÍÊı¾İ´¦Àí
+    // 3. å‘é€æ•°æ®å¤„ç†
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (int)cost_time) ? (timeout - (int)cost_time) : 0;
     rc = MtFrame::send(sock, pkg, len, 0, time_left);
@@ -692,46 +696,46 @@ EXIT_LABEL:
 
 
 /**
- * @brief TCPÊÕ·¢½Ó¿Ú£¬¿ÉÒÔÑ¡Ôñºó¶Ë±£³ÖÁ¬½Ó»òÕß¶ÌÁ¬½Ó
- *        [×¢Òâ] tcp½ÓÊÕ·¢ËÍbuff, ²»¿ÉÒÔÊÇstatic±äÁ¿, ·ñÔò»áÉÏÏÂÎÄ´íÂÒ [ÖØÒª]
- * @param dst -ÇëÇó·¢ËÍµÄÄ¿µÄµØÖ·
- * @param pkg -ÇëÇó°ü·â×°µÄ°üÌå
- * @param len -ÇëÇó°ü·â×°µÄ°üÌå³¤¶È
- * @param rcv_buf -½ÓÊÕÓ¦´ğ°üµÄbuff£¬Ö»·¢²»ÊÕ¿ÉÒÔÉèÖÃÎªNULL
- * @param buf_size -modify-½ÓÊÕÓ¦´ğ°üµÄbuff´óĞ¡, ³É¹¦·µ»ØÊ±, ĞŞ¸ÄÎªÓ¦´ğ°ü³¤¶È£¬Ö»·¢²»ÊÕ£¬ÉèÖÃÎªNULL
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @param check_func -¼ì²â±¨ÎÄÊÇ·ñ³É¹¦µ½´ïº¯Êı
- * @param type - Á¬½ÓÀàĞÍ
- *               MT_TCP_SHORT: Ò»ÊÕÒ»·¢¶ÌÁ¬½Ó£»
- *               MT_TCP_LONG : Ò»·¢Ò»ÊÕ³¤Á¬½Ó£»
- *               MT_TCP_LONG_SNDONLY : Ö»·¢²»ÊÕ³¤Á¬½Ó£» 
- *               MT_TCP_SHORT_SNDONLY: Ö»·¢²»ÊÕ¶ÌÁ¬½Ó£»
- * @return  0 ³É¹¦, -1 ´ò¿ªsocketÊ§°Ü, -2 ·¢ËÍÇëÇóÊ§°Ü, -3 ½ÓÊÕÓ¦´ğÊ§°Ü, 
- *          -4 Á¬½ÓÊ§°Ü, -5 ¼ì²â±¨ÎÄÊ§°Ü, -6 ½ÓÊÕ¿Õ¼ä²»¹», -7 ºó¶ËÖ÷¶¯¹Ø±ÕÁ¬½Ó, -10 ²ÎÊıÎŞĞ§
+ * @brief TCPæ”¶å‘æ¥å£ï¼Œå¯ä»¥é€‰æ‹©åç«¯ä¿æŒè¿æ¥æˆ–è€…çŸ­è¿æ¥
+ *        [æ³¨æ„] tcpæ¥æ”¶å‘é€buff, ä¸å¯ä»¥æ˜¯staticå˜é‡, å¦åˆ™ä¼šä¸Šä¸‹æ–‡é”™ä¹± [é‡è¦]
+ * @param dst -è¯·æ±‚å‘é€çš„ç›®çš„åœ°å€
+ * @param pkg -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“
+ * @param len -è¯·æ±‚åŒ…å°è£…çš„åŒ…ä½“é•¿åº¦
+ * @param rcv_buf -æ¥æ”¶åº”ç­”åŒ…çš„buffï¼Œåªå‘ä¸æ”¶å¯ä»¥è®¾ç½®ä¸ºNULL
+ * @param buf_size -modify-æ¥æ”¶åº”ç­”åŒ…çš„buffå¤§å°, æˆåŠŸè¿”å›æ—¶, ä¿®æ”¹ä¸ºåº”ç­”åŒ…é•¿åº¦ï¼Œåªå‘ä¸æ”¶ï¼Œè®¾ç½®ä¸ºNULL
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @param check_func -æ£€æµ‹æŠ¥æ–‡æ˜¯å¦æˆåŠŸåˆ°è¾¾å‡½æ•°
+ * @param type - è¿æ¥ç±»å‹
+ *               MT_TCP_SHORT: ä¸€æ”¶ä¸€å‘çŸ­è¿æ¥ï¼›
+ *               MT_TCP_LONG : ä¸€å‘ä¸€æ”¶é•¿è¿æ¥ï¼›
+ *               MT_TCP_LONG_SNDONLY : åªå‘ä¸æ”¶é•¿è¿æ¥ï¼› 
+ *               MT_TCP_SHORT_SNDONLY: åªå‘ä¸æ”¶çŸ­è¿æ¥ï¼›
+ * @return  0 æˆåŠŸ, -1 æ‰“å¼€socketå¤±è´¥, -2 å‘é€è¯·æ±‚å¤±è´¥, -3 æ¥æ”¶åº”ç­”å¤±è´¥, 
+ *          -4 è¿æ¥å¤±è´¥, -5 æ£€æµ‹æŠ¥æ–‡å¤±è´¥, -6 æ¥æ”¶ç©ºé—´ä¸å¤Ÿ, -7 åç«¯ä¸»åŠ¨å…³é—­è¿æ¥, -10 å‚æ•°æ— æ•ˆ
  */
 int mt_tcpsendrcv_ex(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf, int* buf_size, int timeout, MtFuncTcpMsgLen func, MT_TCP_CONN_TYPE type)
 {
     switch (type)
     {
-        // TCP³¤Á¬½Óµ¥·¢µ¥ÊÕ
+        // TCPé•¿è¿æ¥å•å‘å•æ”¶
         case MT_TCP_LONG:
         {
             return mt_tcpsendrcv(dst, pkg, len, rcv_buf, *buf_size, timeout, func);
         }
 
-        // TCP³¤Á¬½ÓÖ»·¢²»ÊÕ
+        // TCPé•¿è¿æ¥åªå‘ä¸æ”¶
         case MT_TCP_LONG_SNDONLY:
         {
             return mt_tcpsend(dst, pkg, len, timeout);
         }
 
-        // TCP¶ÌÁ¬½Óµ¥·¢µ¥ÊÕ
+        // TCPçŸ­è¿æ¥å•å‘å•æ”¶
         case MT_TCP_SHORT:
         {
             return mt_tcpsendrcv_short(dst, pkg, len, rcv_buf, *buf_size, timeout, func);
         }
 
-        // TCP¶ÌÁ¬½ÓÖ»·¢²»ÊÕ
+        // TCPçŸ­è¿æ¥åªå‘ä¸æ”¶
         case MT_TCP_SHORT_SNDONLY:
         {
             return mt_tcpsend_short(dst, pkg, len, timeout);
@@ -751,7 +755,7 @@ int mt_tcpsendrcv_ex(struct sockaddr_in* dst, void* pkg, int len, void* rcv_buf,
 
 
 /**
- * @brief ×ÓÈÎÎñ»Øµ÷º¯Êı¶¨Òå
+ * @brief å­ä»»åŠ¡å›è°ƒå‡½æ•°å®šä¹‰
  */
 static void mt_task_process(void* arg)
 {
@@ -775,9 +779,9 @@ static void mt_task_process(void* arg)
 };
 
 /**
- * @brief ¶àÂ·IOµÄ´¦Àí, ¿ªÆô¶à¸öÏß³Ì¹ÜÀí
- * @param req_list - ÈÎÎñÁĞ±í
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief å¤šè·¯IOçš„å¤„ç†, å¼€å¯å¤šä¸ªçº¿ç¨‹ç®¡ç†
+ * @param req_list - ä»»åŠ¡åˆ—è¡¨
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int mt_exec_all_task(IMtTaskList& req_list)
 {
@@ -791,14 +795,14 @@ int mt_exec_all_task(IMtTaskList& req_list)
     MicroThread::SubThreadList list;
     TAILQ_INIT(&list);
 
-    // ·ÀÖ¹Ã»ÓĞtask£¬µ¼ÖÂÎ¢Ïß³ÌÒ»Ö±±»¹Ò×¡
+    // é˜²æ­¢æ²¡æœ‰taskï¼Œå¯¼è‡´å¾®çº¿ç¨‹ä¸€ç›´è¢«æŒ‚ä½
     if (0 == req_list.size())
     {
         MTLOG_DEBUG("no task for execult");
         return 0;
     }
 
-    // 1. ´´½¨Ïß³Ì¶ÔÏó
+    // 1. åˆ›å»ºçº¿ç¨‹å¯¹è±¡
     for (IMtTaskList::iterator it = req_list.begin(); it != req_list.end(); ++it)
     {
         task = *it;
@@ -813,7 +817,7 @@ int mt_exec_all_task(IMtTaskList& req_list)
         TAILQ_INSERT_TAIL(&list, sub, _sub_entry);
     }
 
-    // 2. ²¢·¢Ö´ĞĞÈÎÎñ
+    // 2. å¹¶å‘æ‰§è¡Œä»»åŠ¡
     TAILQ_FOREACH_SAFE(sub, &list, _sub_entry, tmp)
     {
         TAILQ_REMOVE(&list, sub, _sub_entry);
@@ -821,7 +825,7 @@ int mt_exec_all_task(IMtTaskList& req_list)
         mtframe->InsertRunable(sub);
     }
 
-    // 3. µÈ´ı×ÓÏß³ÌÖ´ĞĞ½áÊø
+    // 3. ç­‰å¾…å­çº¿ç¨‹æ‰§è¡Œç»“æŸ
     thread->Wait();
     rc = 0;
     
@@ -838,8 +842,8 @@ EXIT_LABEL:
 }
 
 /**
- * @brief ÉèÖÃµ±Ç°IMtMsgµÄË½ÓĞ±äÁ¿
- * @info  Ö»±£´æÖ¸Õë£¬ÄÚ´æĞèÒªÒµÎñ·ÖÅä
+ * @brief è®¾ç½®å½“å‰IMtMsgçš„ç§æœ‰å˜é‡
+ * @info  åªä¿å­˜æŒ‡é’ˆï¼Œå†…å­˜éœ€è¦ä¸šåŠ¡åˆ†é…
  */
 void mt_set_msg_private(void *data)
 {
@@ -849,8 +853,8 @@ void mt_set_msg_private(void *data)
 }
 
 /**
- * @brief  »ñÈ¡µ±Ç°IMtMsgµÄË½ÓĞ±äÁ¿
- * @return Ë½ÓĞ±äÁ¿Ö¸Õë
+ * @brief  è·å–å½“å‰IMtMsgçš„ç§æœ‰å˜é‡
+ * @return ç§æœ‰å˜é‡æŒ‡é’ˆ
  */
 void* mt_get_msg_private()
 {
@@ -864,9 +868,9 @@ void* mt_get_msg_private()
 }
 
 /**
- * @brief  Î¢Ïß³Ì¿ò¼Ü³õÊ¼»¯
- * @info   ÒµÎñ²»Ê¹ÓÃspp£¬ÂãÓÃÎ¢Ïß³Ì£¬ĞèÒªµ÷ÓÃ¸Ã³õÊ¼»¯º¯Êı
- * @return false:³õÊ¼»¯Ê§°Ü  true:³õÊ¼»¯³É¹¦
+ * @brief  å¾®çº¿ç¨‹æ¡†æ¶åˆå§‹åŒ–
+ * @info   ä¸šåŠ¡ä¸ä½¿ç”¨sppï¼Œè£¸ç”¨å¾®çº¿ç¨‹ï¼Œéœ€è¦è°ƒç”¨è¯¥åˆå§‹åŒ–å‡½æ•°
+ * @return false:åˆå§‹åŒ–å¤±è´¥  true:åˆå§‹åŒ–æˆåŠŸ
  */
 bool mt_init_frame(void)
 {
@@ -874,8 +878,8 @@ bool mt_init_frame(void)
 }
 
 /**
- * @brief ÉèÖÃÎ¢Ïß³Ì¶ÀÁ¢Õ»¿Õ¼ä´óĞ¡
- * @info  ·Ç±ØĞëÉèÖÃ£¬Ä¬ÈÏ´óĞ¡Îª128K
+ * @brief è®¾ç½®å¾®çº¿ç¨‹ç‹¬ç«‹æ ˆç©ºé—´å¤§å°
+ * @info  éå¿…é¡»è®¾ç½®ï¼Œé»˜è®¤å¤§å°ä¸º128K
  */
 void mt_set_stack_size(unsigned int bytes)
 {
@@ -883,14 +887,14 @@ void mt_set_stack_size(unsigned int bytes)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı recvfrom
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param len ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param from À´Ô´µØÖ·µÄÖ¸Õë
- * @param fromlen À´Ô´µØÖ·µÄ½á¹¹³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° recvfrom
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param len æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param from æ¥æºåœ°å€çš„æŒ‡é’ˆ
+ * @param fromlen æ¥æºåœ°å€çš„ç»“æ„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 int mt_recvfrom(int fd, void *buf, int len, int flags, struct sockaddr *from, socklen_t *fromlen, int timeout)
 {
@@ -898,14 +902,14 @@ int mt_recvfrom(int fd, void *buf, int len, int flags, struct sockaddr *from, so
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı sendto
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param msg ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param len ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param to Ä¿µÄµØÖ·µÄÖ¸Õë
- * @param tolen Ä¿µÄµØÖ·µÄ½á¹¹³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° sendto
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param msg å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param len å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param to ç›®çš„åœ°å€çš„æŒ‡é’ˆ
+ * @param tolen ç›®çš„åœ°å€çš„ç»“æ„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 int mt_sendto(int fd, const void *msg, int len, int flags, const struct sockaddr *to, int tolen, int timeout)
 {
@@ -913,12 +917,12 @@ int mt_sendto(int fd, const void *msg, int len, int flags, const struct sockaddr
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı connect
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param addr Ö¸¶¨serverµÄÄ¿µÄµØÖ·
- * @param addrlen µØÖ·µÄ³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° connect
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param addr æŒ‡å®šserverçš„ç›®çš„åœ°å€
+ * @param addrlen åœ°å€çš„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 int mt_connect(int fd, const struct sockaddr *addr, int addrlen, int timeout)
 {
@@ -926,12 +930,12 @@ int mt_connect(int fd, const struct sockaddr *addr, int addrlen, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı accept
- * @param fd ¼àÌıÌ×½Ó×Ö
- * @param addr ¿Í»§¶ËµØÖ·
- * @param addrlen µØÖ·µÄ³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >=0 acceptµÄsocketÃèÊö·û, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° accept
+ * @param fd ç›‘å¬å¥—æ¥å­—
+ * @param addr å®¢æˆ·ç«¯åœ°å€
+ * @param addrlen åœ°å€çš„é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >=0 acceptçš„socketæè¿°ç¬¦, <0 å¤±è´¥
  */
 int mt_accept(int fd, struct sockaddr *addr, socklen_t *addrlen, int timeout)
 {
@@ -940,12 +944,12 @@ int mt_accept(int fd, struct sockaddr *addr, socklen_t *addrlen, int timeout)
 
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı read
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param nbyte ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° read
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param nbyte æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t mt_read(int fd, void *buf, size_t nbyte, int timeout)
 {
@@ -953,12 +957,12 @@ ssize_t mt_read(int fd, void *buf, size_t nbyte, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı write
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param nbyte ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° write
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param nbyte å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t mt_write(int fd, const void *buf, size_t nbyte, int timeout)
 {
@@ -966,12 +970,12 @@ ssize_t mt_write(int fd, const void *buf, size_t nbyte, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı recv
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ½ÓÊÕÏûÏ¢»º³åÇøÖ¸Õë
- * @param len ½ÓÊÕÏûÏ¢»º³åÇø³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦½ÓÊÕ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° recv
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºæŒ‡é’ˆ
+ * @param len æ¥æ”¶æ¶ˆæ¯ç¼“å†²åŒºé•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸæ¥æ”¶é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t mt_recv(int fd, void *buf, int len, int flags, int timeout)
 {
@@ -979,12 +983,12 @@ ssize_t mt_recv(int fd, void *buf, int len, int flags, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³Ì°ü¹üµÄÏµÍ³IOº¯Êı send
- * @param fd ÏµÍ³socketĞÅÏ¢
- * @param buf ´ı·¢ËÍµÄÏûÏ¢Ö¸Õë
- * @param nbyte ´ı·¢ËÍµÄÏûÏ¢³¤¶È
- * @param timeout ×î³¤µÈ´ıÊ±¼ä, ºÁÃë
- * @return >0 ³É¹¦·¢ËÍ³¤¶È, <0 Ê§°Ü
+ * @brief å¾®çº¿ç¨‹åŒ…è£¹çš„ç³»ç»ŸIOå‡½æ•° send
+ * @param fd ç³»ç»Ÿsocketä¿¡æ¯
+ * @param buf å¾…å‘é€çš„æ¶ˆæ¯æŒ‡é’ˆ
+ * @param nbyte å¾…å‘é€çš„æ¶ˆæ¯é•¿åº¦
+ * @param timeout æœ€é•¿ç­‰å¾…æ—¶é—´, æ¯«ç§’
+ * @return >0 æˆåŠŸå‘é€é•¿åº¦, <0 å¤±è´¥
  */
 ssize_t mt_send(int fd, const void *buf, size_t nbyte, int flags, int timeout)
 {
@@ -992,7 +996,7 @@ ssize_t mt_send(int fd, const void *buf, size_t nbyte, int flags, int timeout)
 }
 
 /**
- * @brief Î¢Ïß³ÌÖ÷¶¯sleep½Ó¿Ú, µ¥Î»ms
+ * @brief å¾®çº¿ç¨‹ä¸»åŠ¨sleepæ¥å£, å•ä½ms
  */
 void mt_sleep(int ms)
 {
@@ -1000,7 +1004,7 @@ void mt_sleep(int ms)
 }
 
 /**
- * @brief Î¢Ïß³Ì»ñÈ¡ÏµÍ³Ê±¼ä£¬µ¥Î»ms
+ * @brief å¾®çº¿ç¨‹è·å–ç³»ç»Ÿæ—¶é—´ï¼Œå•ä½ms
  */
 unsigned long long mt_time_ms(void)
 {
@@ -1008,7 +1012,7 @@ unsigned long long mt_time_ms(void)
 }
 
 /**
- * @brief Î¢Ïß³ÌµÈ´ıepollÊÂ¼şµÄ°ü¹üº¯Êı
+ * @brief å¾®çº¿ç¨‹ç­‰å¾…epolläº‹ä»¶çš„åŒ…è£¹å‡½æ•°
  */
 int mt_wait_events(int fd, int events, int timeout)
 {
@@ -1021,7 +1025,7 @@ void* mt_start_thread(void* entry, void* args)
 }
 
 /**
- * @brief ´ÓTCPÁ¬½Ó³ØÖĞ»ñÈ¡Á¬½Ó£¬Èç¹ûÃ»ÓĞ£¬ÔòĞÂ´´½¨
+ * @brief ä»TCPè¿æ¥æ± ä¸­è·å–è¿æ¥ï¼Œå¦‚æœæ²¡æœ‰ï¼Œåˆ™æ–°åˆ›å»º
  */
 void *mt_get_keep_conn(struct sockaddr_in* dst, int *sock)
 {
@@ -1033,10 +1037,10 @@ void *mt_get_keep_conn(struct sockaddr_in* dst, int *sock)
 }
 
 /**
- * @brief  ÊÍ·ÅTCPÁ¬½Óµ½Á¬½Ó³Ø
- * @param  conn   mt_get_keep_conn·µ»ØµÄÁ¬½Ó¶ÔÏóÖ¸Õë
- * @param  force  true  -> Ç¿ÖÆÊÍ·ÅÁ¬½Ó£¬²»»á·ÅÈëÁ¬½Ó³Ø
- * @param         false -> ÊÍ·Åµ½Á¬½Ó³Ø£¬Á¬½Ó³ØÂúÁË£¬¹Ø±ÕÁ¬½Ó
+ * @brief  é‡Šæ”¾TCPè¿æ¥åˆ°è¿æ¥æ± 
+ * @param  conn   mt_get_keep_connè¿”å›çš„è¿æ¥å¯¹è±¡æŒ‡é’ˆ
+ * @param  force  true  -> å¼ºåˆ¶é‡Šæ”¾è¿æ¥ï¼Œä¸ä¼šæ”¾å…¥è¿æ¥æ± 
+ * @param         false -> é‡Šæ”¾åˆ°è¿æ¥æ± ï¼Œè¿æ¥æ± æ»¡äº†ï¼Œå…³é—­è¿æ¥
  */
 void mt_free_keep_conn(void *conn, bool force)
 {

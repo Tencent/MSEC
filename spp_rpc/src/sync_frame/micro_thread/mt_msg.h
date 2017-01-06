@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_msg.h
- *  @info Î¢Ïß³ÌÍ¬²½ÏûÏ¢µÄ»ùÀà
+ *  @info å¾®çº¿ç¨‹åŒæ­¥æ¶ˆæ¯çš„åŸºç±»
  **/
 
 #ifndef __MT_MSG_H__
@@ -28,20 +28,20 @@
 namespace NS_MICRO_THREAD {
 
 /**
- * @brief  Î¢Ïß³ÌÏûÏ¢´¦Àí»ùÀà
+ * @brief  å¾®çº¿ç¨‹æ¶ˆæ¯å¤„ç†åŸºç±»
  */
 class IMtMsg
 {
 public:
 
     /**
-     * @brief  Î¢Ïß³ÌÏûÏ¢ÀàµÄ´¦ÀíÁ÷³ÌÈë¿Úº¯Êı
-     * @return 0 -³É¹¦, < 0 Ê§°Ü 
+     * @brief  å¾®çº¿ç¨‹æ¶ˆæ¯ç±»çš„å¤„ç†æµç¨‹å…¥å£å‡½æ•°
+     * @return 0 -æˆåŠŸ, < 0 å¤±è´¥ 
      */
     virtual int HandleProcess() { return -1; };
  
     /**
-     * @brief  Î¢Ïß³ÌÏûÏ¢»ùÀà¹¹ÔìÓëÎö¹¹
+     * @brief  å¾®çº¿ç¨‹æ¶ˆæ¯åŸºç±»æ„é€ ä¸ææ„
      */
     IMtMsg() {};
     virtual ~IMtMsg() {};

@@ -241,6 +241,7 @@ int CShmMQ::enqueue(const void* data, unsigned data_len, unsigned flow)
     unsigned tail_len = blocksize_ - tail;
 
     char sHead[C_HEAD_SIZE + C_SAFE_AREA_LEN] = {0};
+    char *psHead = sHead;
     unsigned total_len = data_len + C_HEAD_SIZE + 2 * C_SAFE_AREA_LEN;
 
     //as to 4 possible queue free_len,enqueue data in 4 ways
@@ -254,9 +255,9 @@ int CShmMQ::enqueue(const void* data, unsigned data_len, unsigned flow)
         return COMMU_ERR_MQFULL;
     }
 
-    *(unsigned*)sHead = C_SAFE_AREA_VAL;//set magic number "SPPX"
-    memcpy(sHead + C_SAFE_AREA_LEN, &total_len, sizeof(unsigned));
-    memcpy(sHead + C_SAFE_AREA_LEN + sizeof(unsigned), &flow, sizeof(unsigned));
+    *(unsigned *)psHead = C_SAFE_AREA_VAL;//set magic number "SPPX"
+    memcpy(psHead + C_SAFE_AREA_LEN, &total_len, sizeof(unsigned));
+    memcpy(psHead + C_SAFE_AREA_LEN + sizeof(unsigned), &flow, sizeof(unsigned));
 
 
     //  second, if tail space > 4+8+len+4
@@ -264,7 +265,7 @@ int CShmMQ::enqueue(const void* data, unsigned data_len, unsigned flow)
     if (tail_len >= total_len)
     {
         //append head
-        memcpy(block_ + tail, sHead, C_SAFE_AREA_LEN + C_HEAD_SIZE);
+        memcpy(block_ + tail, psHead, C_SAFE_AREA_LEN + C_HEAD_SIZE);
         //append data
         memcpy(block_ + tail + C_SAFE_AREA_LEN + C_HEAD_SIZE , data, data_len);
         //append C_SAFE_AREA_VAL
@@ -276,7 +277,7 @@ int CShmMQ::enqueue(const void* data, unsigned data_len, unsigned flow)
     else if (tail_len >= C_HEAD_SIZE + C_SAFE_AREA_LEN && tail_len < C_HEAD_SIZE + 2 * C_SAFE_AREA_LEN + data_len)
     {
         //append head, 4+8 byte
-        memcpy(block_ + tail, sHead, C_SAFE_AREA_LEN + C_HEAD_SIZE);
+        memcpy(block_ + tail, psHead, C_SAFE_AREA_LEN + C_HEAD_SIZE);
 
         //separate data into two parts
         unsigned first_len = tail_len - C_SAFE_AREA_LEN - C_HEAD_SIZE;
@@ -333,11 +334,11 @@ int CShmMQ::enqueue(const void* data, unsigned data_len, unsigned flow)
     else
     {
         //append first part of head, copy tail byte
-        memcpy(block_ + tail, sHead, tail_len);
+        memcpy(block_ + tail, psHead, tail_len);
 
         //append second part of head, copy 8-tail byte
         unsigned second_len = C_SAFE_AREA_LEN + C_HEAD_SIZE - tail_len;
-        memcpy(block_, sHead + tail_len, second_len);
+        memcpy(block_, psHead + tail_len, second_len);
 
         //append data
         memcpy(block_ + second_len, data, data_len);
@@ -375,6 +376,7 @@ int CShmMQ::dequeue(void* buf, unsigned buf_size, unsigned& data_len, unsigned& 
 
     unsigned used_len = tail > head ? tail - head : tail + blocksize_ - head;
     char sHead[C_SAFE_AREA_LEN + C_HEAD_SIZE];
+    char *psHead = sHead;
 
     // get head
     // if head + 8 > block_size
@@ -382,24 +384,24 @@ int CShmMQ::dequeue(void* buf, unsigned buf_size, unsigned& data_len, unsigned& 
     {
         unsigned first_size = blocksize_ - head;
         unsigned second_size = C_SAFE_AREA_LEN + C_HEAD_SIZE - first_size;
-        memcpy(sHead, block_ + head, first_size);
-        memcpy(sHead + first_size, block_, second_size);
+        memcpy(psHead, block_ + head, first_size);
+        memcpy(psHead + first_size, block_, second_size);
         head = second_size;
     }
     else
     {
-        memcpy(sHead, block_ + head, C_SAFE_AREA_LEN + C_HEAD_SIZE);
+        memcpy(psHead, block_ + head, C_SAFE_AREA_LEN + C_HEAD_SIZE);
         head += (C_HEAD_SIZE + C_SAFE_AREA_LEN);
     }
 
     //get meta data
-    unsigned total_len = *(unsigned*)(&sHead[C_SAFE_AREA_LEN]);
-    flow = *(unsigned*)(sHead + C_SAFE_AREA_LEN + sizeof(unsigned));
+    unsigned total_len = *(unsigned*)(&psHead[C_SAFE_AREA_LEN]);
+    flow = *(unsigned*)(psHead + C_SAFE_AREA_LEN + sizeof(unsigned));
 
     //check safe area
-    if (*(unsigned*)(sHead) != C_SAFE_AREA_VAL)
+    if (*(unsigned*)(psHead) != C_SAFE_AREA_VAL)
     {
-        INTERNAL_LOG->LOG_P_FILE(LOG_ERROR, "safe head:%u check failed\n", *(unsigned*)(sHead));
+        INTERNAL_LOG->LOG_P_FILE(LOG_ERROR, "safe head:%u check failed\n", *(unsigned*)(psHead));
 
         if ( do_check(*head_, *tail_) )
         {

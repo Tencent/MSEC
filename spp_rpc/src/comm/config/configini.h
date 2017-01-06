@@ -21,23 +21,27 @@
 #ifndef __CONFIGINI_H__
 #define __CONFIGINI_H__
 
-#define CONF_RET_OK               0 // »ñÈ¡ÅäÖÃ³É¹¦
-#define CONF_RET_FILE_NONEXIST   -1 // ÅäÖÃÎÄ¼ş²»´æÔÚ
-#define CONF_RET_NO_CONFIG       -2 // ¸ÃÅäÖÃ²»´æÔÚ
-#define CONF_RET_LOAD_ERR        -3 // ÅäÖÃ¼ÓÔØÊ§°Ü
+#include <string>
+
+using namespace std;
+
+#define CONF_RET_OK               0 // è·å–é…ç½®æˆåŠŸ
+#define CONF_RET_FILE_NONEXIST   -1 // é…ç½®æ–‡ä»¶ä¸å­˜åœ¨
+#define CONF_RET_NO_CONFIG       -2 // è¯¥é…ç½®ä¸å­˜åœ¨
+#define CONF_RET_LOAD_ERR        -3 // é…ç½®åŠ è½½å¤±è´¥
 
 /**
- * @brief »ñÈ¡INI¸ñÊ½ÅäÖÃ
+ * @brief è·å–INIæ ¼å¼é…ç½®
  * @info  [USER]        -- session USER
  *        user=bison    -- key:user val:bison
- * @param config_path   [IN]   ÅäÖÃÎÄ¼şÂ·¾¶£»²»´ø¸Ã²ÎÊı£¬Ê¹ÓÃÏµÍ³µÄÅäÖÃÎÄ¼ş
+ * @param config_path   [IN]   é…ç½®æ–‡ä»¶è·¯å¾„ï¼›ä¸å¸¦è¯¥å‚æ•°ï¼Œä½¿ç”¨ç³»ç»Ÿçš„é…ç½®æ–‡ä»¶
  *        session       [IN]   session
  *        key           [IN]   key
- *        val           [OUT]  Öµ
- * @return  CONF_RET_OK              ³É¹¦
- *          CONF_RET_FILE_NONEXIST   ÅäÖÃÎÄ¼ş²»´æÔÚ
- *          CONF_RET_NO_CONFIG       ¸ÃÅäÖÃ²»´æÔÚ
- *          CONF_RET_LOAD_ERR        ÅäÖÃ¼ÓÔØÊ§°Ü
+ *        val           [OUT]  å€¼
+ * @return  CONF_RET_OK              æˆåŠŸ
+ *          CONF_RET_FILE_NONEXIST   é…ç½®æ–‡ä»¶ä¸å­˜åœ¨
+ *          CONF_RET_NO_CONFIG       è¯¥é…ç½®ä¸å­˜åœ¨
+ *          CONF_RET_LOAD_ERR        é…ç½®åŠ è½½å¤±è´¥
  */
 int GetConfig(const string &config_path, const string &session, const string &key, string &val);
 int GetConfig(const string &session, const string &key, string &val);

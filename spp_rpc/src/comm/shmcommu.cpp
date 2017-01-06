@@ -144,8 +144,8 @@ int CShmCommu::init(const void* config)
         return -4;
     }
 
-    //³õÊ¼»¯ÆäËû±äÁ¿
-    buff_size_ = conf->shmsize_comsumer_;	//×î´ó²»»á³¬¹ıcomsumerÊ¹ÓÃµÄ¹²ÏíÄÚ´æ´óĞ¡
+    //åˆå§‹åŒ–å…¶ä»–å˜é‡
+    buff_size_ = conf->shmsize_comsumer_;	//æœ€å¤§ä¸ä¼šè¶…è¿‡comsumerä½¿ç”¨çš„å…±äº«å†…å­˜å¤§å°
     buff_blob_.len = buff_size_;
     buff_blob_.data = (char *)malloc(sizeof(char) * buff_size_) + 4;
     buff_blob_.owner = this;
@@ -208,7 +208,7 @@ int CShmCommu::sendto(unsigned flow, void* arg1, void* arg2)
         {
             func_list_[CB_SENDDATA](flow, blob, func_args_[CB_SENDDATA]);
         }
-        ret = 0; // ¼æÈİĞÔ
+        ret = 0; // å…¼å®¹æ€§
     }
     else
     {

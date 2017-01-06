@@ -36,7 +36,7 @@ else
 	CFLAGS +=  -m64 -DSUS_LINUX -pthread
 endif
 
-CFLAGS += -O2 -fno-inline -g -ggdb -Wall -D_GNU_SOURCE -D_MP_MODE -Wno-write-strings -Werror 
+CFLAGS += -O2 -fno-inline -g -ggdb -Wall -D_GNU_SOURCE -D_MP_MODE -Wno-write-strings -Werror
 CFLAGS += -pipe -fno-ident -fPIC -shared -z defs
 
 INC += -I./ -I$(COMM) -I$(TBASE) -I$(TSOCKCOMMU) -I$(CONFIG) -I$(INTERNAL)/monitor/include

@@ -19,7 +19,7 @@
 
 /**
  *  @file SyncMsg.h
- *  @info ¼Ì³Ğ×ÔmsgbaseµÄÍ·ÎÄ¼ş¶¨Òå, Ö÷ÒªÀ©Õ¹ÁËblobĞÅÏ¢
+ *  @info ç»§æ‰¿è‡ªmsgbaseçš„å¤´æ–‡ä»¶å®šä¹‰, ä¸»è¦æ‰©å±•äº†blobä¿¡æ¯
  *  @time 20130515
  **/
 
@@ -43,13 +43,13 @@ using namespace tbase::tcommu;
 namespace SPP_SYNCFRAME {
 
 /**
- * @brief Î¢Ïß³ÌÍ¬²½ÏûÏ¢½Ó¿Ú
+ * @brief å¾®çº¿ç¨‹åŒæ­¥æ¶ˆæ¯æ¥å£
  */
 class CSyncMsg : public IMtMsg
 {
     public:
         /**
-         * ¹¹ÔìÎö¹¹º¯Êı
+         * æ„é€ ææ„å‡½æ•°
          */
         CSyncMsg() {
             _srvbase        = NULL;
@@ -65,16 +65,16 @@ class CSyncMsg : public IMtMsg
 
 
         /**
-         * Í¬²½ÏûÏ¢´¦Àíº¯Êı
-         * @return 0, ³É¹¦-ÓÃ»§×Ô¼º»Ø°üµ½Ç°¶Ë,¿ò¼Ü²»¸ºÔğ»Ø°ü´¦Àí
-         *         ÆäËü, Ê§°Ü-¿ò¼Ü¹Ø±ÕÓëproxyÁ¬½Ó, µ«²»¸ºÔğ»ØÒµÎñ±¨ÎÄ
+         * åŒæ­¥æ¶ˆæ¯å¤„ç†å‡½æ•°
+         * @return 0, æˆåŠŸ-ç”¨æˆ·è‡ªå·±å›åŒ…åˆ°å‰ç«¯,æ¡†æ¶ä¸è´Ÿè´£å›åŒ…å¤„ç†
+         *         å…¶å®ƒ, å¤±è´¥-æ¡†æ¶å…³é—­ä¸proxyè¿æ¥, ä½†ä¸è´Ÿè´£å›ä¸šåŠ¡æŠ¥æ–‡
          */
         virtual int HandleProcess(){ 
             return -1;
         };
 
         /**
-         * ÉèÖÃCServerBase¶ÔÏóÖ¸Õë£¬ÓÉ²å¼şÔÚ´´½¨CMsgBaseÅÉÉúÀà¶ÔÏóÖ®ºóÉèÖÃ
+         * è®¾ç½®CServerBaseå¯¹è±¡æŒ‡é’ˆï¼Œç”±æ’ä»¶åœ¨åˆ›å»ºCMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡ä¹‹åè®¾ç½®
          */
         void SetServerBase(CServerBase* srvbase)
         {
@@ -82,7 +82,7 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * »ñÈ¡CServerBase¶ÔÏóÖ¸Õë
+         * è·å–CServerBaseå¯¹è±¡æŒ‡é’ˆ
          */
         CServerBase* GetServerBase()
         {
@@ -90,8 +90,8 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ÉèÖÃCTCommu¶ÔÏóÖ¸Õë£¬ÓÉ²å¼şÔÚ´´½¨CMsgBaseÅÉÉúÀà¶ÔÏóÖ®ºóÉèÖÃ
-         * CTCommu¶ÔÏóÔÚ»Ø°üÊ±ºòÊ¹ÓÃ
+         * è®¾ç½®CTCommuå¯¹è±¡æŒ‡é’ˆï¼Œç”±æ’ä»¶åœ¨åˆ›å»ºCMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡ä¹‹åè®¾ç½®
+         * CTCommuå¯¹è±¡åœ¨å›åŒ…æ—¶å€™ä½¿ç”¨
          */
         void SetTCommu(CTCommu* commu)
         {
@@ -99,7 +99,7 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * »ñÈ¡CTCommu¶ÔÏóÖ¸Õë
+         * è·å–CTCommuå¯¹è±¡æŒ‡é’ˆ
          */
         CTCommu* GetTCommu()
         {
@@ -107,7 +107,7 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ÉèÖÃÇëÇó°üµÄflowÖµ£¬ÓÉ²å¼şÔÚ´´½¨CMsgBaseÅÉÉúÀà¶ÔÏóÖ®ºóÉèÖÃ
+         * è®¾ç½®è¯·æ±‚åŒ…çš„flowå€¼ï¼Œç”±æ’ä»¶åœ¨åˆ›å»ºCMsgBaseæ´¾ç”Ÿç±»å¯¹è±¡ä¹‹åè®¾ç½®
          */
         void SetFlow(unsigned flow)
         {
@@ -115,7 +115,7 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * »ñÈ¡ÇëÇó°üµÄflowÖµ
+         * è·å–è¯·æ±‚åŒ…çš„flowå€¼
          */
         unsigned GetFlow()
         {
@@ -123,9 +123,9 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ¸ø¿Í»§¶Ë»Ø°ü
+         * ç»™å®¢æˆ·ç«¯å›åŒ…
          *
-         * @param blob »Ø±¨ÄÚÈİ
+         * @param blob å›æŠ¥å†…å®¹
          */
         int SendToClient(blob_type &blob) {
             if (NULL == _commu) {
@@ -138,11 +138,11 @@ class CSyncMsg : public IMtMsg
        
 
         /**
-         * ÉèÖÃÇëÇó´¦Àí×ÜÌå³¬Ê±
+         * è®¾ç½®è¯·æ±‚å¤„ç†æ€»ä½“è¶…æ—¶
          *
-         * Action´¦ÀíÖ®Ç°£¬¼ì²éÊÇ·ñ³¬Ê±£¬Èç¹û³¬Ê±£¬²»»á½øÈëActionµÄÊµ¼Ê´¦ÀíÁ÷³Ì£¬»Øµ÷IAction::HandleError(EMsgTimeout)
+         * Actionå¤„ç†ä¹‹å‰ï¼Œæ£€æŸ¥æ˜¯å¦è¶…æ—¶ï¼Œå¦‚æœè¶…æ—¶ï¼Œä¸ä¼šè¿›å…¥Actionçš„å®é™…å¤„ç†æµç¨‹ï¼Œå›è°ƒIAction::HandleError(EMsgTimeout)
          *
-         * @param timeout ÇëÇó´¦Àí³¬Ê±ÅäÖÃ£¬µ¥Î»£ºms£¬Ä¬ÈÏÎª0, 0£ºÎŞĞè¼ì²éÇëÇó×ÜÌå´¦Àí³¬Ê±
+         * @param timeout è¯·æ±‚å¤„ç†è¶…æ—¶é…ç½®ï¼Œå•ä½ï¼šmsï¼Œé»˜è®¤ä¸º0, 0ï¼šæ— éœ€æ£€æŸ¥è¯·æ±‚æ€»ä½“å¤„ç†è¶…æ—¶
          *
          */
         void SetMsgTimeout(int timeout) {
@@ -150,9 +150,9 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * »ñÈ¡ÇëÇó´¦Àí×ÜÌå³¬Ê±
+         * è·å–è¯·æ±‚å¤„ç†æ€»ä½“è¶…æ—¶
          *
-         * @return ÇëÇó´¦Àí³¬Ê±ÅäÖÃ
+         * @return è¯·æ±‚å¤„ç†è¶…æ—¶é…ç½®
          *
          */
         int GetMsgTimeout() {
@@ -160,29 +160,29 @@ class CSyncMsg : public IMtMsg
         };
         
         /**
-         * »ñÈ¡ÇëÇó´¦ÀíÊ±¼ä¿ªÏú
+         * è·å–è¯·æ±‚å¤„ç†æ—¶é—´å¼€é”€
          *
-         * @return ÇëÇó´¦ÀíÊ±¼ä¿ªÏú£¬µ¥Î»: ms
+         * @return è¯·æ±‚å¤„ç†æ—¶é—´å¼€é”€ï¼Œå•ä½: ms
          */
         int GetMsgCost() {
             return (int)(mt_time_ms() - _start_time);
         };
 
         /**
-         * ¼ì²éÇëÇó´¦ÀíÊÇ·ñ³¬Ê±£¿
+         * æ£€æŸ¥è¯·æ±‚å¤„ç†æ˜¯å¦è¶…æ—¶ï¼Ÿ
          *
-         * ÇëÇó´¦ÀíµÄ¿ªÊ¼Ê±¼ä£ºCMsgBase¶ÔÏó´´½¨Ê±¿Ì
+         * è¯·æ±‚å¤„ç†çš„å¼€å§‹æ—¶é—´ï¼šCMsgBaseå¯¹è±¡åˆ›å»ºæ—¶åˆ»
          *
-         * @return true: ³¬Ê±£¬false: »¹Ã»ÓĞ³¬Ê±
+         * @return true: è¶…æ—¶ï¼Œfalse: è¿˜æ²¡æœ‰è¶…æ—¶
          *
          */
         bool CheckMsgTimeout() {
-            if (_msg_timeout <= 0) {// ÎŞĞè¼ì²éÇëÇó´¦Àí³¬Ê±
+            if (_msg_timeout <= 0) {// æ— éœ€æ£€æŸ¥è¯·æ±‚å¤„ç†è¶…æ—¶
                 return false;
             }
             
             int cost = GetMsgCost();
-            if (cost < _msg_timeout) {// Î´³¬Ê±
+            if (cost < _msg_timeout) {// æœªè¶…æ—¶
                 return false;
             }
             
@@ -190,9 +190,9 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ±¨ÎÄÄ¿µÄµØÖ·ÉèÖÃÓë¶ÁÈ¡½Ó¿Ú
+         * æŠ¥æ–‡ç›®çš„åœ°å€è®¾ç½®ä¸è¯»å–æ¥å£
          *
-         * @param addr ÊäÈëµØÖ·ĞÅÏ¢
+         * @param addr è¾“å…¥åœ°å€ä¿¡æ¯
          */ 
         void SetLocalAddr(const struct sockaddr_in& local_addr) {
             memcpy(&_local_addr, &local_addr, sizeof(_local_addr));
@@ -202,9 +202,9 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ±¨ÎÄÀ´Ô´µØÖ·ÉèÖÃÓë¶ÁÈ¡½Ó¿Ú
+         * æŠ¥æ–‡æ¥æºåœ°å€è®¾ç½®ä¸è¯»å–æ¥å£
          *
-         * @param addr ÊäÈëµØÖ·ĞÅÏ¢
+         * @param addr è¾“å…¥åœ°å€ä¿¡æ¯
          */ 
         void SetFromAddr(const struct sockaddr_in& from_addr) {
             memcpy(&_from_addr, &from_addr, sizeof(_from_addr));
@@ -214,9 +214,9 @@ class CSyncMsg : public IMtMsg
         };
 
         /**
-         * ±¨ÎÄÀ´Ô´Ê±¼ä´ÁĞÅÏ¢
+         * æŠ¥æ–‡æ¥æºæ—¶é—´æˆ³ä¿¡æ¯
          *
-         * @param time_rcv ÊäÈëÊä³öÊ±¼ä´Á
+         * @param time_rcv è¾“å…¥è¾“å‡ºæ—¶é—´æˆ³
          */ 
         void SetRcvTimestamp(const struct timeval& time_rcv) {
             memcpy(&_time_rcv, &time_rcv, sizeof(time_rcv));
@@ -226,10 +226,10 @@ class CSyncMsg : public IMtMsg
         };  
 
         /**
-         * ±¨ÎÄÄÚÈİĞÅÏ¢´æ´¢, ¿ÉÑ¡µ÷ÓÃ
+         * æŠ¥æ–‡å†…å®¹ä¿¡æ¯å­˜å‚¨, å¯é€‰è°ƒç”¨
          *
-         * @param pkg ±¨ÎÄÆğÊ¼Ö¸Õë
-         * @param len ±¨ÎÄ³¤¶È
+         * @param pkg æŠ¥æ–‡èµ·å§‹æŒ‡é’ˆ
+         * @param len æŠ¥æ–‡é•¿åº¦
          */ 
         void SetReqPkg(const void* pkg, int pkg_len) {
             _msg_buff.assign((char*)pkg, pkg_len);
@@ -240,16 +240,16 @@ class CSyncMsg : public IMtMsg
         };
 
     protected:
-        CServerBase* _srvbase;              // ÊÊÅä¿ò¼Übase
-        CTCommu*     _commu;                // ÊÊÅäÍ¨Ñ¶Æ÷
-        unsigned     _flow;                 // ÊÊÅäÁ÷ID
-        int          _msg_timeout;          // ÇëÇó´¦Àí³¬Ê±ÅäÖÃ
-        unsigned long long _start_time;     // ÏûÏ¢´¦ÀíÊ±ÑÓ¼ÇÂ¼
+        CServerBase* _srvbase;              // é€‚é…æ¡†æ¶base
+        CTCommu*     _commu;                // é€‚é…é€šè®¯å™¨
+        unsigned     _flow;                 // é€‚é…æµID
+        int          _msg_timeout;          // è¯·æ±‚å¤„ç†è¶…æ—¶é…ç½®
+        unsigned long long _start_time;     // æ¶ˆæ¯å¤„ç†æ—¶å»¶è®°å½•
     
-        struct sockaddr_in _from_addr;      // ±¨ÎÄÀ´Ô´IP
-        struct sockaddr_in _local_addr;     // ±¨ÎÄ½ÓÊÕµÄ±¾µØIP
-        struct timeval _time_rcv;           // ÊÕ°üµÄÊ±¼ä´Á
-        string _msg_buff;                   // ±¨ÎÄ¿½±´Ò»·İ, ¶àÏß³Ì´¦ÀíĞèÒª
+        struct sockaddr_in _from_addr;      // æŠ¥æ–‡æ¥æºIP
+        struct sockaddr_in _local_addr;     // æŠ¥æ–‡æ¥æ”¶çš„æœ¬åœ°IP
+        struct timeval _time_rcv;           // æ”¶åŒ…çš„æ—¶é—´æˆ³
+        string _msg_buff;                   // æŠ¥æ–‡æ‹·è´ä¸€ä»½, å¤šçº¿ç¨‹å¤„ç†éœ€è¦
 
 };
 

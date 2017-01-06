@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_net_api.h
- *  @info Î¢Ïß³Ì·â×°µÄÍøÂç½Ó¿ÚÀà
+ *  @info å¾®çº¿ç¨‹å°è£…çš„ç½‘ç»œæŽ¥å£ç±»
  **/
 
 #ifndef __MT_NET_API_H__
@@ -30,89 +30,89 @@
 namespace NS_MICRO_THREAD {
 
 /**
- * @brief Ð­ÒéÀàÐÍ¶¨Òå
+ * @brief åè®®ç±»åž‹å®šä¹‰
  */
 enum MT_PROTO_TYPE 
 {
     NET_PROTO_UNDEF      = 0,
-    NET_PROTO_UDP        = 0x1,                ///< Á¬½ÓÀàÐÍ UDP
-    NET_PROTO_TCP        = 0x2                 ///< Á¬½ÓÀàÐÍ TCP
+    NET_PROTO_UDP        = 0x1,                ///< è¿žæŽ¥ç±»åž‹ UDP
+    NET_PROTO_TCP        = 0x2                 ///< è¿žæŽ¥ç±»åž‹ TCP
 };
 
 /**
- * @brief ·µ»ØÀàÐÍ¶¨Òå
+ * @brief è¿”å›žç±»åž‹å®šä¹‰
  */
 enum MT_RC_TYPE 
 {
     RC_SUCCESS          = 0,
-    RC_ERR_SOCKET       = -1,           ///< ´´½¨socketÊ§°Ü
-    RC_SEND_FAIL        = -2,           ///< ·¢ËÍÊ§°Ü
-    RC_RECV_FAIL        = -3,           ///< ½ÓÊÕÊ§°Ü
-    RC_CONNECT_FAIL     = -4,           ///< Á¬½ÓÊ§°Ü
-    RC_CHECK_PKG_FAIL   = -5,           ///< ±¨ÎÄ¼ì²âÊ§°Ü
-    RC_NO_MORE_BUFF     = -6,           ///< ¿Õ¼ä³¬¹ýÏÞÖÆ
-    RC_REMOTE_CLOSED    = -7,           ///< ºó¶Ë¹Ø±ÕÁ¬½Ó
+    RC_ERR_SOCKET       = -1,           ///< åˆ›å»ºsocketå¤±è´¥
+    RC_SEND_FAIL        = -2,           ///< å‘é€å¤±è´¥
+    RC_RECV_FAIL        = -3,           ///< æŽ¥æ”¶å¤±è´¥
+    RC_CONNECT_FAIL     = -4,           ///< è¿žæŽ¥å¤±è´¥
+    RC_CHECK_PKG_FAIL   = -5,           ///< æŠ¥æ–‡æ£€æµ‹å¤±è´¥
+    RC_NO_MORE_BUFF     = -6,           ///< ç©ºé—´è¶…è¿‡é™åˆ¶
+    RC_REMOTE_CLOSED    = -7,           ///< åŽç«¯å…³é—­è¿žæŽ¥
 
-    RC_INVALID_PARAM    = -10,          ///< ÎÞÐ§²ÎÊý
-    RC_INVALID_HANDLER  = -11,          ///< ÎÞÐ§µÄ¾ä±ú
-    RC_MEM_ERROR        = -12,          ///< ÄÚ´æÒì³£
-    RC_CONFLICT_SID     = -13,          ///< SESSION ID³åÍ»
-    RC_EPOLL_ERROR      = -14,          ///< rstÐÅºÅµÈ
+    RC_INVALID_PARAM    = -10,          ///< æ— æ•ˆå‚æ•°
+    RC_INVALID_HANDLER  = -11,          ///< æ— æ•ˆçš„å¥æŸ„
+    RC_MEM_ERROR        = -12,          ///< å†…å­˜å¼‚å¸¸
+    RC_CONFLICT_SID     = -13,          ///< SESSION IDå†²çª
+    RC_EPOLL_ERROR      = -14,          ///< rstä¿¡å·ç­‰
 };
 
 
 /**
- * @brief ¼ì²é±¨ÎÄÊÇ·ñÍêÕû, ²¢»ñÈ¡sessionµÄ»Øµ÷º¯Êý
- * @info  Ìá¹©need_len²ÎÊýµÄÔ­Òò, ¶ÔÓÚÎÞ·¨È·ÈÏ±¨ÎÄ³¤¶ÈÊ±, ¿ÉÒÔÃ¿´ÎÀ©Õ¹Ï£Íû³¤¶È
- *        Èç¹ûÒÀÀµ·µ»ØÖµµÄÒþº¬¹æÔò, ½«ÎÞ·¨´¦ÀíÕâÖÖÇé¿ö
- * @param data  -Êµ¼Ê½ÓÊÕµÄÊý¾ÝÖ¸Õë
- * @param len   -ÒÑ¾­½ÓÊÕ»ò×¼±¸µÄ³¤¶È
- * @param session_id -³É¹¦½âÎöµÄsessionidÐÅÏ¢
- * @param need_len   -Ï£ÍûÀ©Õ¹Ò»ÏÂbuff, Ä¿Ç°×î´ó100M
- * @return >0 ³É¹¦½âÎö·µ»ØÊµ¼ÊµÄ°ü³¤¶È; =0 ±¨ÎÄ²»ÍêÕû, ÆÚÍû½ÓÊÕ¸ü¶àÊý¾Ý; <0 ½âÎöÊ§°Ü
+ * @brief æ£€æŸ¥æŠ¥æ–‡æ˜¯å¦å®Œæ•´, å¹¶èŽ·å–sessionçš„å›žè°ƒå‡½æ•°
+ * @info  æä¾›need_lenå‚æ•°çš„åŽŸå› , å¯¹äºŽæ— æ³•ç¡®è®¤æŠ¥æ–‡é•¿åº¦æ—¶, å¯ä»¥æ¯æ¬¡æ‰©å±•å¸Œæœ›é•¿åº¦
+ *        å¦‚æžœä¾èµ–è¿”å›žå€¼çš„éšå«è§„åˆ™, å°†æ— æ³•å¤„ç†è¿™ç§æƒ…å†µ
+ * @param data  -å®žé™…æŽ¥æ”¶çš„æ•°æ®æŒ‡é’ˆ
+ * @param len   -å·²ç»æŽ¥æ”¶æˆ–å‡†å¤‡çš„é•¿åº¦
+ * @param session_id -æˆåŠŸè§£æžçš„sessionidä¿¡æ¯
+ * @param need_len   -å¸Œæœ›æ‰©å±•ä¸€ä¸‹buff, ç›®å‰æœ€å¤§100M
+ * @return >0 æˆåŠŸè§£æžè¿”å›žå®žé™…çš„åŒ…é•¿åº¦; =0 æŠ¥æ–‡ä¸å®Œæ•´, æœŸæœ›æŽ¥æ”¶æ›´å¤šæ•°æ®; <0 è§£æžå¤±è´¥
  */
 typedef int32_t (*CHECK_SESSION_CALLBACK)(const void* data, uint32_t len,
                                         uint64_t* session_id, uint32_t* need_len);
 
 
 /**
- * @brief ÍøÂç½Ó¿ÚÀà¶¨Òå
+ * @brief ç½‘ç»œæŽ¥å£ç±»å®šä¹‰
  */
 class CNetHelper
 {
 public:
 
-    // ×ª·¢·µ»ØÂëÐÅÏ¢, °´Ðè»ñÈ¡
+    // è½¬å‘è¿”å›žç ä¿¡æ¯, æŒ‰éœ€èŽ·å–
     static char* GetErrMsg(int32_t result);
 
-    // Í¬²½ÊÕ·¢½Ó¿Ú
+    // åŒæ­¥æ”¶å‘æŽ¥å£
     int32_t SendRecv(void* data, uint32_t len, uint32_t timeout);
 
-    // »ñÈ¡·µ»ØbuffÐÅÏ¢, ÓÐÐ§ÆÚÖ±µ½helperÎö¹¹
+    // èŽ·å–è¿”å›žbuffä¿¡æ¯, æœ‰æ•ˆæœŸç›´åˆ°helperæžæž„
     void* GetRspBuff();
 
-    // »ñÈ¡·µ»Ø°üµÄ³¤¶È
+    // èŽ·å–è¿”å›žåŒ…çš„é•¿åº¦
     uint32_t GetRspLen();    
 
-    // ÉèÖÃÐ­ÒéµÄÀàÐÍ, Ä¬ÈÏUDP
+    // è®¾ç½®åè®®çš„ç±»åž‹, é»˜è®¤UDP
     void SetProtoType(MT_PROTO_TYPE type);
 
-    // ÉèÖÃÄ¿µÄIPµØÖ·
+    // è®¾ç½®ç›®çš„IPåœ°å€
 	void SetDestAddress(struct sockaddr_in* dst);
 
-	// ÉèÖÃsession±¾´Îsession idÐÅÏ¢, ±ØÐë·Ç0
+	// è®¾ç½®sessionæœ¬æ¬¡session idä¿¡æ¯, å¿…é¡»éž0
 	void SetSessionId(uint64_t sid);	
 
-    // ÉèÖÃsession½âÎö»Øµ÷º¯Êý
+    // è®¾ç½®sessionè§£æžå›žè°ƒå‡½æ•°
     void SetSessionCallback(CHECK_SESSION_CALLBACK function);
 
-    // ¹¹ÔìÓëÐé¹¹
+    // æž„é€ ä¸Žè™šæž„
     CNetHelper();
     ~CNetHelper();
 
 private:
 
-    void*    handler;               // Ë½ÓÐ¾ä±ú, ÀûÓÚÀ©Õ¹
+    void*    handler;               // ç§æœ‰å¥æŸ„, åˆ©äºŽæ‰©å±•
 };
 
 

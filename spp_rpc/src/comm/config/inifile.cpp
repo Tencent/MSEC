@@ -47,7 +47,9 @@ bool IniFile::parse(const string &content, string &key, string &value, char c/*=
 
     if (i >= 0 && i < len) {
         key = string(content.c_str(), i);
+        trim(key);
         value = string(content.c_str() + i + 1, len - i - 1);
+        trim(value);
         return true;
     }
 
@@ -301,6 +303,7 @@ int IniFile::getValue(const string &section, const string &key, string &value, s
         for (IniSection::iterator it = sect->begin(); it != sect->end(); ++it) {
             if (it->key == key) {
                 value = it->value;
+                trim(value);
                 comment = it->comment;
                 return RET_OK;
             }

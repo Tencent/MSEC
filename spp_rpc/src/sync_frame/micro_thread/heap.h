@@ -19,7 +19,7 @@
 
 /**
   *   @filename  heap.h
-  *   @info Áé»î²åÈëÉ¾³ıµÄ¶Ñ,  Èç¹ûÊÇÃ»ÓĞËæ»úÉ¾³ıĞèÇó, ¿ÉÒÔÓÃstd::make_heap
+  *   @info çµæ´»æ’å…¥åˆ é™¤çš„å †,  å¦‚æœæ˜¯æ²¡æœ‰éšæœºåˆ é™¤éœ€æ±‚, å¯ä»¥ç”¨std::make_heap
   *   @time  2013-06-11
   */
 
@@ -36,58 +36,58 @@
 
 namespace NS_MICRO_THREAD {
 
-class HeapEntry;            //  ¶ÑÔªËØÀà, ¼Ì³ĞÊµÏÖÀ©Õ¹
-class HeapList;             //  ¶Ñ¹ÜÀíÀà, Í¨ÓÃ
+class HeapEntry;            //  å †å…ƒç´ ç±», ç»§æ‰¿å®ç°æ‰©å±•
+class HeapList;             //  å †ç®¡ç†ç±», é€šç”¨
 
 /**
- *  @brief ×îĞ¡¶ÑµÄ¶ÑÔªËØ¶¨Òå, ÓÃÓÚ¹¹½¨Í¨ÓÃµÄ¶Ñ, ¼Ì³Ğ¸ÃÔªËØ¼´¿ÉÀ©Õ¹
+ *  @brief æœ€å°å †çš„å †å…ƒç´ å®šä¹‰, ç”¨äºæ„å»ºé€šç”¨çš„å †, ç»§æ‰¿è¯¥å…ƒç´ å³å¯æ‰©å±•
  */
 class HeapEntry
 {    
 private:    
-    int  _index;          ///<  ¶ÑÔªËØÏÂ±ê, ÀûÓÚ¿ìËÙË÷ÒıÉ¾³ı²Ù×÷
+    int  _index;          ///<  å †å…ƒç´ ä¸‹æ ‡, åˆ©äºå¿«é€Ÿç´¢å¼•åˆ é™¤æ“ä½œ
     
 public:
 	friend class HeapList;
 
     /**
-     *  @brief ¹¹ÔìÓëĞéÎö¹¹º¯Êı
+     *  @brief æ„é€ ä¸è™šææ„å‡½æ•°
      */
 	HeapEntry():_index(0){};
 	virtual ~HeapEntry(){};
 
     /**
-     *  @brief ¶ÑÔªËØÈ¡Öµº¯Êı, ÓÃÓÚ·µ»ØÖµ±È½Ï, Ğè×Óº¯ÊıÊµÏÖ, ·ñÔòÄ¬ÈÏÎŞĞò
-     *  @return ¶ÑÔªËØÓ³ÉäµÄÖµ
+     *  @brief å †å…ƒç´ å–å€¼å‡½æ•°, ç”¨äºè¿”å›å€¼æ¯”è¾ƒ, éœ€å­å‡½æ•°å®ç°, å¦åˆ™é»˜è®¤æ— åº
+     *  @return å †å…ƒç´ æ˜ å°„çš„å€¼
      */
     virtual unsigned long long HeapValue() = 0; 
 
     
     /**
-     *  @brief ¶Ñ±éÀú½Ó¿Ú, ÓÃÓÚµ÷ÊÔ, ÔÚ±éÀúÃ¿¸öÔªËØÊ±±»µ÷ÓÃ, ¿ÉÑ¡ÊµÏÖ
+     *  @brief å †éå†æ¥å£, ç”¨äºè°ƒè¯•, åœ¨éå†æ¯ä¸ªå…ƒç´ æ—¶è¢«è°ƒç”¨, å¯é€‰å®ç°
      */
     virtual void HeapIterate() {  
         return;
     };
 
     /**
-     *  @brief ¶ÑÔªËØ²åÈë¶ÑÖĞ
-     *  @param list ¶ÑÖ¸Õë
-     *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶ÑÂú; -2 ÖØ¸´²åÈë
+     *  @brief å †å…ƒç´ æ’å…¥å †ä¸­
+     *  @param list å †æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †æ»¡; -2 é‡å¤æ’å…¥
      */
     inline int InsertIntoHeap(HeapList* list); 
 
     /**
-     *  @brief ¶ÑÔªËØ´Ó¶ÑÖĞÉ¾³ı
-     *  @param list ¶ÑÖ¸Õë
-     *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶Ñ¿Õ; -2 ÖØ¸´É¾³ı»òÔàÊı¾İ
+     *  @brief å †å…ƒç´ ä»å †ä¸­åˆ é™¤
+     *  @param list å †æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †ç©º; -2 é‡å¤åˆ é™¤æˆ–è„æ•°æ®
      */
     inline int DeleteFromHeap(HeapList* list); 
 
     
     /**
-     *  @brief ¶ÑÔªËØÏÂ±êĞÅÏ¢»ñÈ¡, ÄÚ²¿¹ÜÀíÊ¹ÓÃ
-     *  @return ¶ÑÔªËØÔÚ¶ÑÖĞÏÂ±êĞÅÏ¢
+     *  @brief å †å…ƒç´ ä¸‹æ ‡ä¿¡æ¯è·å–, å†…éƒ¨ç®¡ç†ä½¿ç”¨
+     *  @return å †å…ƒç´ åœ¨å †ä¸­ä¸‹æ ‡ä¿¡æ¯
      */
 	inline int GetIndex() {
 		return _index;
@@ -114,19 +114,19 @@ private:
 
 
 /**
- *  @brief ×îĞ¡¶Ñ¶ÓÁĞÀà, Í¨ÓÃÀà
+ *  @brief æœ€å°å †é˜Ÿåˆ—ç±», é€šç”¨ç±»
  */
 class HeapList 
 {
 private:
-	HeapEntry**  _list;         // ¶ÑÔªËØµÄÖ¸ÕëÊı×é, Ä¿Ç°¶¨³¤
-	int          _max;          // ¶Ñ¿É¹ÜÀí×î´óÔªËØ¸öÊı
-	int          _count;        // ¶ÑÒÑ¾­¹ÜÀíµÄÔªËØ¸öÊı    
+	HeapEntry**  _list;         // å †å…ƒç´ çš„æŒ‡é’ˆæ•°ç»„, ç›®å‰å®šé•¿
+	int          _max;          // å †å¯ç®¡ç†æœ€å¤§å…ƒç´ ä¸ªæ•°
+	int          _count;        // å †å·²ç»ç®¡ç†çš„å…ƒç´ ä¸ªæ•°    
     
 public:
     
     /**
-     *  @brief ¹¹Ôìº¯ÊıÓëÎö¹¹º¯Êı
+     *  @brief æ„é€ å‡½æ•°ä¸ææ„å‡½æ•°
      */
 	explicit HeapList(int max = 100000) {
         _max = (max > 0) ? max : 100000;
@@ -145,9 +145,9 @@ public:
 	};
 
     /**
-     *  @brief À©Õ¹heapµÄ´óĞ¡, ËõĞ¡ÔòºöÂÔ
-     *  @param size ĞÂµÄ¶ÑÔªËØ¸öÊı
-     *  @return 0 ³É¹¦; -1 Ê§°Ü
+     *  @brief æ‰©å±•heapçš„å¤§å°, ç¼©å°åˆ™å¿½ç•¥
+     *  @param size æ–°çš„å †å…ƒç´ ä¸ªæ•°
+     *  @return 0 æˆåŠŸ; -1 å¤±è´¥
      */
     int HeapResize(int size) {
         if (_max >= size) {
@@ -169,41 +169,41 @@ public:
 	
 
     /**
-     *  @brief ²åÈë¶ÑÔªËØ
-     *  @param entry ¶ÑÔªËØÖ¸Õë
-     *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶ÑÂú; -2 ÖØ¸´²åÈë
+     *  @brief æ’å…¥å †å…ƒç´ 
+     *  @param entry å †å…ƒç´ æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †æ»¡; -2 é‡å¤æ’å…¥
      */
 	int HeapPush(HeapEntry* entry);
 
     /**
-     *  @brief È¡¶Ñ¶¥ÔªËØ, ²¢ÒÆ³ı¸ÃÔªËØ
-     *  @return ¶Ñ¶¥ÔªËØÖ¸Õë, NULL ±íÊ¾¶ÑÎª¿Õ
+     *  @brief å–å †é¡¶å…ƒç´ , å¹¶ç§»é™¤è¯¥å…ƒç´ 
+     *  @return å †é¡¶å…ƒç´ æŒ‡é’ˆ, NULL è¡¨ç¤ºå †ä¸ºç©º
      */
 	HeapEntry* HeapPop();
 
     /**
-     *  @brief ÒÆ³ıÈÎÒâ¶ÑÔªËØ
-     *  @param entry ¶ÑÔªËØÖ¸Õë
-     *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶Ñ¿Õ; -2 ÖØ¸´É¾³ı»òÔàÊı¾İ
+     *  @brief ç§»é™¤ä»»æ„å †å…ƒç´ 
+     *  @param entry å †å…ƒç´ æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †ç©º; -2 é‡å¤åˆ é™¤æˆ–è„æ•°æ®
      */
 	int HeapDelete(HeapEntry* entry);
 
     /**
-     *  @brief µ÷ÊÔ½Ó¿Ú, °´2²æ¶Ñ·½Ê½´òÓ¡ÔªËØ, Í¬Ê±µ÷ÓÃÃ¿ÔªËØµÄµü´ú½Ó¿Ú
+     *  @brief è°ƒè¯•æ¥å£, æŒ‰2å‰å †æ–¹å¼æ‰“å°å…ƒç´ , åŒæ—¶è°ƒç”¨æ¯å…ƒç´ çš„è¿­ä»£æ¥å£
      */
 	void HeapForeach();
 
     /**
-     *  @brief »ñÈ¡¶ÑµÄÔªËØ¸öÊı
-     *  @return ¶ÑÔªËØÊµ¼ÊÊıÄ¿
+     *  @brief è·å–å †çš„å…ƒç´ ä¸ªæ•°
+     *  @return å †å…ƒç´ å®é™…æ•°ç›®
      */
     int HeapSize() {
         return _count;
     };
 
     /**
-     *  @brief È¡¶Ñ¶¥ÔªËØ, ²»ÒÆ³ı¸ÃÔªËØ
-     *  @return ¶Ñ¶¥ÔªËØÖ¸Õë, NULL ±íÊ¾¶ÑÎª¿Õ
+     *  @brief å–å †é¡¶å…ƒç´ , ä¸ç§»é™¤è¯¥å…ƒç´ 
+     *  @return å †é¡¶å…ƒç´ æŒ‡é’ˆ, NULL è¡¨ç¤ºå †ä¸ºç©º
      */
     HeapEntry* HeapTop() {
         return (_count > 0) ? _list[1] : NULL;
@@ -212,41 +212,41 @@ public:
 private:
 
     /**
-     *  @brief ÅĞ¶¨¶ÑÊÇ·ñÂú
-     *  @return true Âú
+     *  @brief åˆ¤å®šå †æ˜¯å¦æ»¡
+     *  @return true æ»¡
      */
 	bool HeapFull() {
 		return (_count >= _max);
 	};
 
     /**
-     *  @brief ÅĞ¶¨¶ÑÊÇ·ñ¿Õ
-     *  @return true ¿Õ
+     *  @brief åˆ¤å®šå †æ˜¯å¦ç©º
+     *  @return true ç©º
      */
 	bool HeapEmpty() {
 		return (_count == 0);
 	};
 
     /**
-     *  @brief °´±È½Ïº¯Êı, ÏòÉÏÖØÅÅ¶ÑÔªËØ
+     *  @brief æŒ‰æ¯”è¾ƒå‡½æ•°, å‘ä¸Šé‡æ’å †å…ƒç´ 
      */
 	void HeapUp();
 
     /**
-     *  @brief °´±È½Ïº¯Êı, ÏòÏÂÖØÅÅ¶ÑÔªËØ
+     *  @brief æŒ‰æ¯”è¾ƒå‡½æ•°, å‘ä¸‹é‡æ’å †å…ƒç´ 
      */    
 	void HeapDown(int index);
 
 };
 
 /**
- *  @brief °´±È½Ïº¯Êı, ÏòÉÏÖØÅÅ¶ÑÔªËØ
+ *  @brief æŒ‰æ¯”è¾ƒå‡½æ•°, å‘ä¸Šé‡æ’å †å…ƒç´ 
  */
 inline void HeapList::HeapUp()
 {
 	for (int pos = _count; pos > 0; pos = pos/2)  
 	{
-		if (pos/2 < 1)   // pos == 1 ÒÑ¾­µ½¶¥, 0 ÊôÓÚ±£Áô
+		if (pos/2 < 1)   // pos == 1 å·²ç»åˆ°é¡¶, 0 å±äºä¿ç•™
 		{
 			break;
 		}
@@ -269,15 +269,15 @@ inline void HeapList::HeapUp()
 
 
 /**
- *  @brief °´±È½Ïº¯Êı, ÏòÏÂÖØÅÅ¶ÑÔªËØ
- *  @param index ´Ó¸ÃÎ»ÖÃ¿ªÊ¼ÖØÅÅ
+ *  @brief æŒ‰æ¯”è¾ƒå‡½æ•°, å‘ä¸‹é‡æ’å †å…ƒç´ 
+ *  @param index ä»è¯¥ä½ç½®å¼€å§‹é‡æ’
  */   
 inline void HeapList::HeapDown(int index)
 {
 	int  min_son;	
 	for (int pos = index; pos <= _count;  pos = min_son)
 	{
-		if  (pos*2 > _count)  // posÊÇÒ¶×Ó½ÚµãÁË
+		if  (pos*2 > _count)  // posæ˜¯å¶å­èŠ‚ç‚¹äº†
 		{
 			break;
 		}
@@ -315,19 +315,19 @@ inline void HeapList::HeapDown(int index)
 
 
 /**
- *  @brief ²åÈë¶ÑÔªËØ
- *  @param entry ¶ÑÔªËØÖ¸Õë
- *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶ÑÂú; -2 ÖØ¸´²åÈë
+ *  @brief æ’å…¥å †å…ƒç´ 
+ *  @param entry å †å…ƒç´ æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †æ»¡; -2 é‡å¤æ’å…¥
  */
 inline int HeapList::HeapPush(HeapEntry*  item)
 {
 	if (HeapFull()) {
-        heap_assert(0); // Âú, ÀíÂÛÉÏÊÇ¿ÉÄÜµÄ, Êµ¼ÊÔËĞĞ²»Ì«¿ÉÄÜ¹ı10W
+        heap_assert(0); // æ»¡, ç†è®ºä¸Šæ˜¯å¯èƒ½çš„, å®é™…è¿è¡Œä¸å¤ªå¯èƒ½è¿‡10W
 		return -1;
 	}
     
     if (item->GetIndex() != 0) {
-        heap_assert(0); // ÖØ¸´²åÈë
+        heap_assert(0); // é‡å¤æ’å…¥
         return -2;
     }     
     
@@ -342,8 +342,8 @@ inline int HeapList::HeapPush(HeapEntry*  item)
 
 
 /**
- *  @brief È¡¶Ñ¶¥ÔªËØ, ²¢ÒÆ³ı¸ÃÔªËØ
- *  @return ¶Ñ¶¥ÔªËØÖ¸Õë, NULL ±íÊ¾¶ÑÎª¿Õ
+ *  @brief å–å †é¡¶å…ƒç´ , å¹¶ç§»é™¤è¯¥å…ƒç´ 
+ *  @return å †é¡¶å…ƒç´ æŒ‡é’ˆ, NULL è¡¨ç¤ºå †ä¸ºç©º
  */
 inline HeapEntry* HeapList::HeapPop()
 {
@@ -351,7 +351,7 @@ inline HeapEntry* HeapList::HeapPop()
 		return NULL;
 	}
 
-	HeapEntry* top = _list[1];	// 0 ±£Áô
+	HeapEntry* top = _list[1];	// 0 ä¿ç•™
 
 	_list[1] = _list[_count];
     _list[1]->SetIndex(1);
@@ -366,9 +366,9 @@ inline HeapEntry* HeapList::HeapPop()
 }
 
 /**
- *  @brief ÒÆ³ıÈÎÒâ¶ÑÔªËØ
- *  @param entry ¶ÑÔªËØÖ¸Õë
- *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶Ñ¿Õ; -2 ÖØ¸´É¾³ı»òÔàÊı¾İ
+ *  @brief ç§»é™¤ä»»æ„å †å…ƒç´ 
+ *  @param entry å †å…ƒç´ æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †ç©º; -2 é‡å¤åˆ é™¤æˆ–è„æ•°æ®
  */
 inline int  HeapList::HeapDelete(HeapEntry* item)
 {
@@ -379,7 +379,7 @@ inline int  HeapList::HeapDelete(HeapEntry* item)
 	int pos = item->GetIndex() ;
 	if  ((pos > _count)  ||(pos <= 0))
 	{
-        heap_assert(0); // ·Ç·¨Êı¾İ»òÖØ¸´É¾³ı
+        heap_assert(0); // éæ³•æ•°æ®æˆ–é‡å¤åˆ é™¤
 		return -2;
 	}
 
@@ -398,7 +398,7 @@ inline int  HeapList::HeapDelete(HeapEntry* item)
 
 
 /**
- *  @brief µ÷ÊÔ½Ó¿Ú, °´2²æ¶Ñ·½Ê½´òÓ¡ÔªËØ, Í¬Ê±µ÷ÓÃÃ¿ÔªËØµÄµü´ú½Ó¿Ú
+ *  @brief è°ƒè¯•æ¥å£, æŒ‰2å‰å †æ–¹å¼æ‰“å°å…ƒç´ , åŒæ—¶è°ƒç”¨æ¯å…ƒç´ çš„è¿­ä»£æ¥å£
  */
 inline void HeapList::HeapForeach()
 {
@@ -417,18 +417,18 @@ inline void HeapList::HeapForeach()
 }
 
 /**
- *  @brief ¶ÑÔªËØ²åÈë¶ÑÖĞ
- *  @param list ¶ÑÖ¸Õë
- *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶ÑÂú; -2 ÖØ¸´²åÈë
+ *  @brief å †å…ƒç´ æ’å…¥å †ä¸­
+ *  @param list å †æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †æ»¡; -2 é‡å¤æ’å…¥
  */
 inline int HeapEntry::InsertIntoHeap(HeapList* list) {
     return list->HeapPush(this);
 };
 
 /**
- *  @brief ¶ÑÔªËØ´Ó¶ÑÖĞÉ¾³ı
- *  @param list ¶ÑÖ¸Õë
- *  @return 0 ³É¹¦; ÆäËüÊ§°Ü  -1 ¶Ñ¿Õ; -2 ÖØ¸´É¾³ı»òÔàÊı¾İ
+ *  @brief å †å…ƒç´ ä»å †ä¸­åˆ é™¤
+ *  @param list å †æŒ‡é’ˆ
+ *  @return 0 æˆåŠŸ; å…¶å®ƒå¤±è´¥  -1 å †ç©º; -2 é‡å¤åˆ é™¤æˆ–è„æ•°æ®
  */
 inline int HeapEntry::DeleteFromHeap(HeapList* list) {
     return list->HeapDelete(this);

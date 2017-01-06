@@ -1,0 +1,14 @@
+客户端测试示例使用方法
+1. 修改客户端程序，有TODO标识
+2. 确保能够加载当前目录的库
+   可以通过简单设置环境变量完成:
+   export LD_LIBRARY_PATH=$(path)
+
+   库介绍：
+   nlb_php.so              nlb的php扩展，用于寻址
+   srpc_comm_php.so        srpc通用扩展，包含网络操作等
+   libsrpc_proto_php_c.so  srpc协议库，包含打解包等
+   
+3. 执行
+   ./php -f $(service)_client.php
+

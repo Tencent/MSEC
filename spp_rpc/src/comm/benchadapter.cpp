@@ -34,6 +34,8 @@
 #include "singleton.h"
 #include "benchadapter.h"
 #include "benchapiplus.h"
+#include "spp_version.h"
+
 using namespace spp::global;
 using namespace spp::singleton;
 using namespace tbase::tlog;
@@ -45,6 +47,38 @@ using namespace tbase::tlog;
 #define PROCTECT_AREA_SIZE (512*1024)
 
 spp_dll_func_t sppdll = {NULL};
+
+bool CheckCompatible(void *handle)
+{
+    void *ver_addr[3];
+
+    ver_addr[0] = dlsym(handle, "SPP_MAJOR_VER");
+    ver_addr[1] = dlsym(handle, "SPP_MINOR_VER");
+    ver_addr[2] = dlsym(handle, "SPP_PATCH_VER");
+
+    if ((NULL == ver_addr[0])
+        || (NULL == ver_addr[1])
+        || (NULL == ver_addr[2])) {
+        return false;
+    }
+
+    for (unsigned i = 0; i < sizeof(SPP_COMPATIBLE_VERSION)/sizeof(SPP_COMPATIBLE_VERSION[0]); i++)
+    {
+        int j;
+
+        for (j = 0; j < 3; j++) {
+            if (*((int *)ver_addr[j]) != SPP_COMPATIBLE_VERSION[i][j]) {
+                break;
+            }
+        }
+
+        if (j == 3) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 int load_bench_adapter(const char* file, bool isGlobal)
 {
@@ -65,6 +99,11 @@ int load_bench_adapter(const char* file, bool isGlobal)
     if (!handle)
     {
         printf("[ERROR]dlopen %s failed, errmsg:%s\n", file, dlerror());
+        exit(-1);
+    }
+
+    if (!CheckCompatible(handle)) {
+        printf("[ERROR]incompatible version, [%d.%d.%d]\n", SPP_MAJOR_VER, SPP_MINOR_VER, SPP_PATCH_VER);
         exit(-1);
     }
 

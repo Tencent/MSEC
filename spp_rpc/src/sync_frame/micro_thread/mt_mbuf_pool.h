@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_mbuf_pool.h
- *  @info Î¢Ïß³ÌÍ¬²½ÏûÏ¢buf³Ø
+ *  @info å¾®çº¿ç¨‹åŒæ­¥æ¶ˆæ¯bufæ± 
  **/
 
 #ifndef __MT_MBUF_POOL_H__
@@ -35,32 +35,32 @@ using std::queue;
 
 enum BUFF_TYPE
 {
-    BUFF_UNDEF          =  0,           ///< Î´¶¨ÒåÀàĞÍ
-    BUFF_RECV           =  1,           ///< ½ÓÊÕbuff
-    BUFF_SEND           =  2,           ///< ·¢ËÍbuff
+    BUFF_UNDEF          =  0,           ///< æœªå®šä¹‰ç±»å‹
+    BUFF_RECV           =  1,           ///< æ¥æ”¶buff
+    BUFF_SEND           =  2,           ///< å‘é€buff
 };
 
 /**
- * @brief ÏûÏ¢Í¶µİµÄbufferÀà
+ * @brief æ¶ˆæ¯æŠ•é€’çš„bufferç±»
  */
 typedef TAILQ_ENTRY(MtMsgBuf) MsgBufLink;
 typedef TAILQ_HEAD(__MtbuffTailq, MtMsgBuf) MsgBufQueue;
 class MtMsgBuf
 {
 private:
-    int   _max_len;         // ×î´óµÄ¿Õ¼ä³¤¶È
-    int   _msg_len;         // Êµ¼ÊµÄÏûÏ¢³¤¶È
-    int   _buf_type;        // buffÊÇ·¢ËÍ»¹ÊÇ½ÓÊÕ
-    int   _recv_len;        // ÒÑ½ÓÊÕµÄÏûÏ¢³¤¶È
-    int   _send_len;        // ÒÑ·¢ËÍµÄÏûÏ¢³¤¶È
-    void* _msg_buff;        // buffer Êµ¼ÊÍ·Ö¸Õë
+    int   _max_len;         // æœ€å¤§çš„ç©ºé—´é•¿åº¦
+    int   _msg_len;         // å®é™…çš„æ¶ˆæ¯é•¿åº¦
+    int   _buf_type;        // buffæ˜¯å‘é€è¿˜æ˜¯æ¥æ”¶
+    int   _recv_len;        // å·²æ¥æ”¶çš„æ¶ˆæ¯é•¿åº¦
+    int   _send_len;        // å·²å‘é€çš„æ¶ˆæ¯é•¿åº¦
+    void* _msg_buff;        // buffer å®é™…å¤´æŒ‡é’ˆ
 
 public:
 
     MsgBufLink _entry;
 
     /**
-     * @brief ¹¹Ôìº¯Êı, Ö¸¶¨×î´óbuff³¤¶È
+     * @brief æ„é€ å‡½æ•°, æŒ‡å®šæœ€å¤§buffé•¿åº¦
      */
     MtMsgBuf(int max_len) {
         _max_len  = max_len;
@@ -79,7 +79,7 @@ public:
     };
 
     /**
-     * @brief ÏûÏ¢ÀàĞÍµÄÉèÖÃÓë¶ÁÈ¡
+     * @brief æ¶ˆæ¯ç±»å‹çš„è®¾ç½®ä¸è¯»å–
      */
     void SetBuffType(BUFF_TYPE type) {
         _buf_type = (int)type;
@@ -89,7 +89,7 @@ public:
     };
 
     /**
-     * @brief ¸´ÓÃ½Ó¿Ú, »Ö¸´³õÊ¼×´Ì¬
+     * @brief å¤ç”¨æ¥å£, æ¢å¤åˆå§‹çŠ¶æ€
      */
     void Reset() {
         _msg_len  = 0;
@@ -99,7 +99,7 @@ public:
     };
 
     /**
-     * @brief ÏûÏ¢³¤¶ÈµÄÉèÖÃÓë¶ÁÈ¡
+     * @brief æ¶ˆæ¯é•¿åº¦çš„è®¾ç½®ä¸è¯»å–
      */
     void SetMsgLen(int msg_len) {
         _msg_len = msg_len;
@@ -109,7 +109,7 @@ public:
     };
 
     /**
-     * @brief ×î´ó³¤¶ÈÓëbufferÖ¸Õë»ñÈ¡
+     * @brief æœ€å¤§é•¿åº¦ä¸bufferæŒ‡é’ˆè·å–
      */
     int GetMaxLen() {
         return _max_len;
@@ -119,7 +119,7 @@ public:
     };
 
     /**
-     * @brief ÖĞ¼ä×´Ì¬»ñÈ¡Óë¸üĞÂ
+     * @brief ä¸­é—´çŠ¶æ€è·å–ä¸æ›´æ–°
      */
     int GetHaveSndLen() {
         return _send_len;
@@ -129,7 +129,7 @@ public:
     };
 
     /**
-     * @brief ÖĞ¼ä×´Ì¬»ñÈ¡Óë¸üĞÂ
+     * @brief ä¸­é—´çŠ¶æ€è·å–ä¸æ›´æ–°
      */
     int GetHaveRcvLen() {
         return _recv_len;
@@ -140,16 +140,16 @@ public:
 };
 
 /**
- * @brief Ö¸¶¨´óĞ¡µÄbuffer, °´×î´ó³¤¶ÈÓ³Éä³É¿ÕÏĞ¶ÓÁĞ
+ * @brief æŒ‡å®šå¤§å°çš„buffer, æŒ‰æœ€å¤§é•¿åº¦æ˜ å°„æˆç©ºé—²é˜Ÿåˆ—
  */
 class MsgBufMap : public HashKey
 {
 public:
 
     /**
-     *  @brief ÏûÏ¢buff¹ÜÀíµÄ¹¹Ôì
-     *  @param buff_size ¸ÃmapÔªËØÉÏµÄËùÓĞbuff, Æä×î´óbuff¿Õ¼ä´óĞ¡Öµ
-     *  @param max_free ¸Ã¶ÓÁĞ¹ÜÀíÔªËØ, ×î´ó±£³ÖµÄfreeÊıÄ¿
+     *  @brief æ¶ˆæ¯buffç®¡ç†çš„æ„é€ 
+     *  @param buff_size è¯¥mapå…ƒç´ ä¸Šçš„æ‰€æœ‰buff, å…¶æœ€å¤§buffç©ºé—´å¤§å°å€¼
+     *  @param max_free è¯¥é˜Ÿåˆ—ç®¡ç†å…ƒç´ , æœ€å¤§ä¿æŒçš„freeæ•°ç›®
      */
     MsgBufMap(int buff_size, int max_free) {
         _max_buf_size = buff_size;
@@ -160,8 +160,8 @@ public:
     };
 
     /**
-     *  @brief ÏûÏ¢buff¹ÜÀíµÄ¹¹Ôì, ¼òµ¥¹¹Ôì, ½öÉèÖÃkeyĞÅÏ¢
-     *  @param buff_size ¸ÃmapÔªËØÉÏµÄËùÓĞbuff, Æä×î´óbuff¿Õ¼ä´óĞ¡Öµ
+     *  @brief æ¶ˆæ¯buffç®¡ç†çš„æ„é€ , ç®€å•æ„é€ , ä»…è®¾ç½®keyä¿¡æ¯
+     *  @param buff_size è¯¥mapå…ƒç´ ä¸Šçš„æ‰€æœ‰buff, å…¶æœ€å¤§buffç©ºé—´å¤§å°å€¼
      */
     explicit MsgBufMap(int buff_size) {
         _max_buf_size = buff_size;
@@ -169,7 +169,7 @@ public:
     };
 
     /**
-     *  @brief ÏûÏ¢buff¹ÜÀíµÄÎö¹¹ÇåÀí
+     *  @brief æ¶ˆæ¯buffç®¡ç†çš„ææ„æ¸…ç†
      */
     ~MsgBufMap() {
         MtMsgBuf* ptr = NULL;
@@ -185,8 +185,8 @@ public:
     };
     
     /**
-     *  @brief »ñÈ¡ÏûÏ¢buffÔªËØ
-     *  @return msgbufÖ¸Õë, Ê§°ÜÎªNULL
+     *  @brief è·å–æ¶ˆæ¯buffå…ƒç´ 
+     *  @return msgbufæŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
      */
     MtMsgBuf* GetMsgBuf(){
         MtMsgBuf* ptr = NULL;        
@@ -202,8 +202,8 @@ public:
     };
 
     /**
-     *  @brief ÊÍ·ÅÏûÏ¢buffÔªËØ
-     *  @param msgbufÖ¸Õë
+     *  @brief é‡Šæ”¾æ¶ˆæ¯buffå…ƒç´ 
+     *  @param msgbufæŒ‡é’ˆ
      */
     void FreeMsgBuf(MtMsgBuf* ptr){
         if (_queue_num >= _max_free) {
@@ -216,82 +216,82 @@ public:
     };
 
     /**
-     *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual uint32_t HashValue(){
         return _max_buf_size;
     }; 
 
     /**
-     *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
-     *  @return ½ÚµãÔªËØµÄhashÖµ
+     *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+     *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
      */
     virtual int HashCmp(HashKey* rhs){
         return this->_max_buf_size - (int)rhs->HashValue();
     }; 
 
 private:
-    int _max_free;              ///< ×î´ó¿ÕÏĞ±£Áô¸öÊı
-    int _max_buf_size;          ///< ±¾¶ÓÁĞ×î´óµÄbuffsize
-    int _queue_num;             ///< ¿ÕÏĞ¶ÓÁĞ¸öÊı
-    MsgBufQueue _msg_queue;     ///< Êµ¼ÊµÄ¿ÕÏĞ¶ÓÁĞ
+    int _max_free;              ///< æœ€å¤§ç©ºé—²ä¿ç•™ä¸ªæ•°
+    int _max_buf_size;          ///< æœ¬é˜Ÿåˆ—æœ€å¤§çš„buffsize
+    int _queue_num;             ///< ç©ºé—²é˜Ÿåˆ—ä¸ªæ•°
+    MsgBufQueue _msg_queue;     ///< å®é™…çš„ç©ºé—²é˜Ÿåˆ—
 };
 
 
 /**
- * @brief È«¾ÖµÄbuffer³Ø¶ÔÏó, Í³Ò»·ÖÅäÓë»ØÊÕbuffer
+ * @brief å…¨å±€çš„bufferæ± å¯¹è±¡, ç»Ÿä¸€åˆ†é…ä¸å›æ”¶buffer
  */
 class MsgBuffPool
 {
 public:
 
     /**
-     * @brief ÏûÏ¢buffµÄÈ«¾Ö¹ÜÀí¾ä±ú½Ó¿Ú
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief æ¶ˆæ¯buffçš„å…¨å±€ç®¡ç†å¥æŸ„æ¥å£
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     static MsgBuffPool* Instance (void);
 
     /**
-     * @brief ÏûÏ¢ÇåÀí½Ó¿Ú
+     * @brief æ¶ˆæ¯æ¸…ç†æ¥å£
      */
     static void Destroy(void);
 
     /**
-     * @brief ÏûÏ¢buffµÄÈ«¾Ö¹ÜÀíÉèÖÃÄ¬ÈÏ×î´óµÄ¿ÕÏĞ¸öÊı
-     * @param max_free ×î´ó¿ÕÏĞ±£ÁôÊıÄ¿, ĞèÒªÔÚ·ÖÅäÔªËØÇ°ÉèÖÃ
+     * @brief æ¶ˆæ¯buffçš„å…¨å±€ç®¡ç†è®¾ç½®é»˜è®¤æœ€å¤§çš„ç©ºé—²ä¸ªæ•°
+     * @param max_free æœ€å¤§ç©ºé—²ä¿ç•™æ•°ç›®, éœ€è¦åœ¨åˆ†é…å…ƒç´ å‰è®¾ç½®
      */
     void SetMaxFreeNum(int max_free) {
         _max_free = max_free;
     };
 
     /**
-     *  @brief »ñÈ¡ÏûÏ¢buffÔªËØ
-     *  @return msgbufÖ¸Õë, Ê§°ÜÎªNULL
+     *  @brief è·å–æ¶ˆæ¯buffå…ƒç´ 
+     *  @return msgbufæŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
      */
     MtMsgBuf* GetMsgBuf(int max_size);
 
     /**
-     *  @brief ÊÍ·ÅÏûÏ¢buffÔªËØ
-     *  @param msgbufÖ¸Õë
+     *  @brief é‡Šæ”¾æ¶ˆæ¯buffå…ƒç´ 
+     *  @param msgbufæŒ‡é’ˆ
      */
     void FreeMsgBuf(MtMsgBuf* msg_buf);
 
     /**
-     * @brief ÏûÏ¢buffµÄÈ«¾ÖÀàÎö¹¹º¯Êı
+     * @brief æ¶ˆæ¯buffçš„å…¨å±€ç±»ææ„å‡½æ•°
      */
     ~MsgBuffPool();
 
 private:
 
     /**
-     * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+     * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
      */
     explicit MsgBuffPool(int max_free = 300);
 
-    static MsgBuffPool * _instance;         ///<  µ¥ÀıÀà¾ä±ú    
-    int  _max_free;                         ///<  ×î´ó±£Áô¿ÕÏĞÊıÄ¿
-    HashList* _hash_map;                    ///<  °´size hashmap ±£´æ¿ÕÏĞ¶ÓÁĞ
+    static MsgBuffPool * _instance;         ///<  å•ä¾‹ç±»å¥æŸ„    
+    int  _max_free;                         ///<  æœ€å¤§ä¿ç•™ç©ºé—²æ•°ç›®
+    HashList* _hash_map;                    ///<  æŒ‰size hashmap ä¿å­˜ç©ºé—²é˜Ÿåˆ—
 
 };
 

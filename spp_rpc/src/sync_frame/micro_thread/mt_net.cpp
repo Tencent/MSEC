@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_mbuf_pool.cpp
- *  @info Î¢Ïß³ÌÏûÏ¢buf³Ø¹ÜÀíÊµÏÖ
+ *  @info å¾®çº¿ç¨‹æ¶ˆæ¯bufæ± ç®¡ç†å®ç°
  *  @time 20130924
  **/
 
@@ -33,7 +33,7 @@
 using namespace std;
 using namespace NS_MICRO_THREAD;
 
-// ¹¹ÔìÓëĞé¹¹
+// æ„é€ ä¸è™šæ„
 CNetHelper::CNetHelper()
 {
     handler = (void*)CNetMgr::Instance()->AllocNetItem();
@@ -50,7 +50,7 @@ CNetHelper::~CNetHelper()
     }
 }
 
-// Í¬²½ÊÕ·¢½Ó¿Ú
+// åŒæ­¥æ”¶å‘æ¥å£
 int32_t CNetHelper::SendRecv(void* data, uint32_t len, uint32_t timeout)
 {
     if (handler != NULL) {
@@ -61,7 +61,7 @@ int32_t CNetHelper::SendRecv(void* data, uint32_t len, uint32_t timeout)
     }
 }
 
-// »ñÈ¡·µ»ØbuffĞÅÏ¢, ÓĞĞ§ÆÚÖ±µ½helperÎö¹¹
+// è·å–è¿”å›buffä¿¡æ¯, æœ‰æ•ˆæœŸç›´åˆ°helperææ„
 void* CNetHelper::GetRspBuff()
 {
     if (handler != NULL) {
@@ -72,7 +72,7 @@ void* CNetHelper::GetRspBuff()
     }
 }
 
-// »ñÈ¡·µ»ØbuffĞÅÏ¢, ÓĞĞ§ÆÚÖ±µ½helperÎö¹¹
+// è·å–è¿”å›buffä¿¡æ¯, æœ‰æ•ˆæœŸç›´åˆ°helperææ„
 uint32_t CNetHelper::GetRspLen()
 {
     if (handler != NULL) {
@@ -84,7 +84,7 @@ uint32_t CNetHelper::GetRspLen()
 }
 
 
-// ×ª·¢·µ»ØÂëĞÅÏ¢, °´Ğè»ñÈ¡
+// è½¬å‘è¿”å›ç ä¿¡æ¯, æŒ‰éœ€è·å–
 char* CNetHelper::GetErrMsg(int32_t result)
 {
     static const char* errmsg = "unknown error type";
@@ -150,7 +150,7 @@ char* CNetHelper::GetErrMsg(int32_t result)
     return (char*)errmsg;
 }
 
-// ÉèÖÃĞ­ÒéµÄÀàĞÍ, Ä¬ÈÏUDP
+// è®¾ç½®åè®®çš„ç±»å‹, é»˜è®¤UDP
 void CNetHelper::SetProtoType(MT_PROTO_TYPE type)
 {
     if (handler != NULL) {
@@ -159,7 +159,7 @@ void CNetHelper::SetProtoType(MT_PROTO_TYPE type)
     } 
 }
 
-// ÉèÖÃÄ¿µÄIPµØÖ·
+// è®¾ç½®ç›®çš„IPåœ°å€
 void CNetHelper::SetDestAddress(struct sockaddr_in* dst)
 {
     if (handler != NULL) {
@@ -168,7 +168,7 @@ void CNetHelper::SetDestAddress(struct sockaddr_in* dst)
     } 
 }
 
-// ÉèÖÃsession±¾´Îsession idĞÅÏ¢, ±ØĞë·Ç0
+// è®¾ç½®sessionæœ¬æ¬¡session idä¿¡æ¯, å¿…é¡»é0
 void CNetHelper::SetSessionId(uint64_t sid)
 {
     if (handler != NULL) {
@@ -177,7 +177,7 @@ void CNetHelper::SetSessionId(uint64_t sid)
     }
 }
 
-// ÉèÖÃsession½âÎö»Øµ÷º¯Êı
+// è®¾ç½®sessionè§£æå›è°ƒå‡½æ•°
 void CNetHelper::SetSessionCallback(CHECK_SESSION_CALLBACK function)
 {
     if (handler != NULL) {
@@ -188,20 +188,20 @@ void CNetHelper::SetSessionCallback(CHECK_SESSION_CALLBACK function)
 
 
 
-// »ØÊÕÒ»¸önet handler, ÓÃÓÚ¸´ÓÃ
+// å›æ”¶ä¸€ä¸ªnet handler, ç”¨äºå¤ç”¨
 void CNetHandler::Reset()
 {
-    // È¥³ısessionÓëconnection¶ÔÏó¹ØÁª
+    // å»é™¤sessionä¸connectionå¯¹è±¡å…³è”
     this->Unlink();
     this->UnRegistSession();
 
-    // ¶¯Ì¬ÄÚ´æÏú»Ù
+    // åŠ¨æ€å†…å­˜é”€æ¯
     if (_rsp_buff != NULL) {
         delete_sk_buffer(_rsp_buff);
         _rsp_buff               = NULL;
     }
 
-    // ×Ö¶Î³õÊ¼»¯´¦Àí
+    // å­—æ®µåˆå§‹åŒ–å¤„ç†
     _thread                     = NULL;    
     _proto_type                 = NET_PROTO_TCP;
     _conn_type                  = TYPE_CONN_SESSION;
@@ -218,7 +218,7 @@ void CNetHandler::Reset()
   
 }
 
-// ¹¹Ôìº¯Êı
+// æ„é€ å‡½æ•°
 CNetHandler::CNetHandler()
 {
     _state_flags = 0;
@@ -227,23 +227,23 @@ CNetHandler::CNetHandler()
     this->Reset();
 }
 
-// Îö¹¹º¯Êı
+// ææ„å‡½æ•°
 CNetHandler::~CNetHandler()
 {
     this->Reset();
 }
 
-// ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+// æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
 int32_t CNetHandler::CheckParams()
 {
-    // 1. ÇëÇó±¨ÎÄÎŞĞ§¼ì²é
+    // 1. è¯·æ±‚æŠ¥æ–‡æ— æ•ˆæ£€æŸ¥
     if ((NULL == _req_data) || (_req_len == 0))
     {
         MTLOG_ERROR("param invalid, data[%p], len[%u]", _req_data, _req_len);
         return RC_INVALID_PARAM;
     }
 
-    // 2. Ä¿µÄµØÖ·ÎŞĞ§¼ì²é
+    // 2. ç›®çš„åœ°å€æ— æ•ˆæ£€æŸ¥
     if ((_dest_ipv4.sin_addr.s_addr == 0) || (_dest_ipv4.sin_port == 0))
     {
         MTLOG_ERROR("param invalid, ip[%u], port[%u]", _dest_ipv4.sin_addr.s_addr,
@@ -251,7 +251,7 @@ int32_t CNetHandler::CheckParams()
         return RC_INVALID_PARAM;
     }
 
-    // 3. session ÀàĞÍ¼ì²éÓëÈ·ÈÏ
+    // 3. session ç±»å‹æ£€æŸ¥ä¸ç¡®è®¤
     if (_conn_type == TYPE_CONN_SESSION)
     {
         if ((_callback == NULL) || (_session_id == 0))
@@ -260,7 +260,7 @@ int32_t CNetHandler::CheckParams()
             return RC_INVALID_PARAM;
         }
 
-        // ×îºó³¢ÊÔ×¢²ásessionĞÅÏ¢
+        // æœ€åå°è¯•æ³¨å†Œsessionä¿¡æ¯
         if (!this->RegistSession())
         {
             MTLOG_ERROR("param invalid, session_id[%llu] regist failed", _session_id);
@@ -268,11 +268,11 @@ int32_t CNetHandler::CheckParams()
         }
     }
 
-    // 4. ¿ÉÒÔÖ´ĞĞ
+    // 4. å¯ä»¥æ‰§è¡Œ
     return 0;
 }
 
-// »ñÈ¡Á´½Ó, Í¬Ê±¹ØÁªµ½µÈ´ıÁ¬½ÓµÄ¶ÓÁĞÖĞ 
+// è·å–é“¾æ¥, åŒæ—¶å…³è”åˆ°ç­‰å¾…è¿æ¥çš„é˜Ÿåˆ—ä¸­ 
 int32_t CNetHandler::GetConnLink()
 {
     CDestLinks key;
@@ -298,7 +298,7 @@ int32_t CNetHandler::GetConnLink()
 }
 
 
-// ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+// æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
 int32_t CNetHandler::WaitConnect(uint64_t timeout)
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -321,14 +321,14 @@ int32_t CNetHandler::WaitConnect(uint64_t timeout)
         return RC_SUCCESS;
     }
 
-    // ¼ÓÈëµÈ´ıconnect¶ÓÁĞ
+    // åŠ å…¥ç­‰å¾…connecté˜Ÿåˆ—
     this->SwitchToConn();
 
-    // µÈ´ı±»»½ĞÑ
+    // ç­‰å¾…è¢«å”¤é†’
     MtFrame* mtframe = MtFrame::Instance();
     mtframe->WaitNotify(timeout);
 
-    // É¾³ıµôconnect¶ÓÁĞ, ³¬Ê±ĞèÒª½âñî´¦Àí, Õı³£ÈßÓà
+    // åˆ é™¤æ‰connecté˜Ÿåˆ—, è¶…æ—¶éœ€è¦è§£è€¦å¤„ç†, æ­£å¸¸å†—ä½™
     this->SwitchToIdle();
 
     if (_err_no != 0)
@@ -337,7 +337,7 @@ int32_t CNetHandler::WaitConnect(uint64_t timeout)
         return _err_no;
     }
 
-    // ³¬Ê±»òÒÑÁ¬½ÓÈ·ÈÏ
+    // è¶…æ—¶æˆ–å·²è¿æ¥ç¡®è®¤
     if (conn->Connected())
     {
         MTLOG_DEBUG("connect ok");
@@ -351,7 +351,7 @@ int32_t CNetHandler::WaitConnect(uint64_t timeout)
 }
 
 
-// ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+// æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
 int32_t CNetHandler::WaitSend(uint64_t timeout)
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -375,24 +375,24 @@ int32_t CNetHandler::WaitSend(uint64_t timeout)
         return RC_SUCCESS;
     }
 
-    // µÈ´ı¼ÌĞø·¢ËÍ, ÇĞ»»ÒÑ·¢ËÍµÄĞÅÏ¢
+    // ç­‰å¾…ç»§ç»­å‘é€, åˆ‡æ¢å·²å‘é€çš„ä¿¡æ¯
     this->SwitchToSend();
 
-    // µÈ´ı±»»½ĞÑ
+    // ç­‰å¾…è¢«å”¤é†’
     MtFrame* mtframe = MtFrame::Instance();
     mtframe->WaitNotify(timeout);
 
-    // É¾³ıµôconnect¶ÓÁĞ
+    // åˆ é™¤æ‰connecté˜Ÿåˆ—
     this->SwitchToIdle();
 
-    // Òì³£¼ì²é
+    // å¼‚å¸¸æ£€æŸ¥
     if (_err_no != 0)
     {
         MTLOG_ERROR("send get out errno %d", _err_no);
         return _err_no;
     }
 
-    // ³¬Ê±¼ì²é
+    // è¶…æ—¶æ£€æŸ¥
     if (_req_len == 0)
     {
         MTLOG_DEBUG("send req ok, len %u", _send_pos);
@@ -405,7 +405,7 @@ int32_t CNetHandler::WaitSend(uint64_t timeout)
     }
 }
 
-// ¼ì²é±ØÒªµÄ²ÎÊıĞÅÏ¢ 
+// æ£€æŸ¥å¿…è¦çš„å‚æ•°ä¿¡æ¯ 
 int32_t CNetHandler::WaitRecv(uint64_t timeout)
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -421,17 +421,17 @@ int32_t CNetHandler::WaitRecv(uint64_t timeout)
         return 0;
     }
 
-    // ÇĞ»»µ½µÈ´ı½ÓÊÕ
+    // åˆ‡æ¢åˆ°ç­‰å¾…æ¥æ”¶
     this->SwitchToRecv();
 
-    // µÈ´ı±»»½ĞÑ
+    // ç­‰å¾…è¢«å”¤é†’
     MtFrame* mtframe = MtFrame::Instance();
     mtframe->WaitNotify(timeout);
 
-    // É¾³ıµôconnect¶ÓÁĞ
+    // åˆ é™¤æ‰connecté˜Ÿåˆ—
     this->SwitchToIdle();
 
-    // ³¬Ê±¼ì²é
+    // è¶…æ—¶æ£€æŸ¥
     if ((_rsp_buff != NULL) && (_rsp_buff->data_len > 0))
     {
         MTLOG_DEBUG("recv get rsp, len %d", _rsp_buff->data_len);
@@ -445,7 +445,7 @@ int32_t CNetHandler::WaitRecv(uint64_t timeout)
 }
 
 
-// Í¬²½ÊÕ·¢½Ó¿Ú, ĞŞ¸ÄÎªsession×¨ÓÃ
+// åŒæ­¥æ”¶å‘æ¥å£, ä¿®æ”¹ä¸ºsessionä¸“ç”¨
 int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
 {
     utime64_t start_ms = MtFrame::Instance()->GetLastClock();
@@ -454,7 +454,7 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
     this->_req_data = data;
     this->_req_len  = len;
 
-    // 0. ¼ì²é±ØÒªµÄÊäÈëĞÅÏ¢
+    // 0. æ£€æŸ¥å¿…è¦çš„è¾“å…¥ä¿¡æ¯
     int32_t ret = this->CheckParams();
     if (ret < 0)
     {
@@ -462,7 +462,7 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
         goto EXIT_LABEL;
     }
 
-    // 1. »ñÈ¡Á¬½ÓÁ´Â·Ö¸Õë
+    // 1. è·å–è¿æ¥é“¾è·¯æŒ‡é’ˆ
     ret = this->GetConnLink();
     if (ret < 0)
     {
@@ -470,7 +470,7 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
         goto EXIT_LABEL;
     }
 
-    // 2. µÈ´ıÁ¬½Ó³É¹¦
+    // 2. ç­‰å¾…è¿æ¥æˆåŠŸ
     ret = this->WaitConnect(time_left);
     if (ret < 0)
     {
@@ -478,7 +478,7 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
         goto EXIT_LABEL;
     }
 
-    // 3. µÈ´ı·¢ËÍ³É¹¦
+    // 3. ç­‰å¾…å‘é€æˆåŠŸ
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (uint32_t)cost_time) ? (timeout - (uint32_t)cost_time) : 0;
     ret = this->WaitSend(time_left);
@@ -488,7 +488,7 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
         goto EXIT_LABEL;
     }
     
-    // 4. µÈ´ı½ÓÊÕ³É¹¦
+    // 4. ç­‰å¾…æ¥æ”¶æˆåŠŸ
     cost_time = MtFrame::Instance()->GetLastClock() - start_ms;
     time_left = (timeout > (uint32_t)cost_time) ? (timeout - (uint32_t)cost_time) : 0;
     ret = this->WaitRecv(time_left);
@@ -498,22 +498,22 @@ int32_t CNetHandler::SendRecv(void* data, uint32_t len, uint32_t timeout)
         goto EXIT_LABEL;
     }
 
-    // 5. ³É¹¦·µ»Ø
+    // 5. æˆåŠŸè¿”å›
     ret = 0;
 
 EXIT_LABEL:
 
-    // µ¥´Î·¢ËÍÍê±Ï, ĞèÒªUNLINK, ¸´ÓÃNETHANDLERÖ§³Ö
+    // å•æ¬¡å‘é€å®Œæ¯•, éœ€è¦UNLINK, å¤ç”¨NETHANDLERæ”¯æŒ
     this->Unlink();
     
-    // ³É¹¦Ê§°Ü, ¶¼ÒªÈ¥³ısession×¢²á
+    // æˆåŠŸå¤±è´¥, éƒ½è¦å»é™¤sessionæ³¨å†Œ
     this->UnRegistSession();
 
     return ret;
 }
 
 
-// Ìø¹ı·¢ËÍµÄÇëÇó³¤¶È
+// è·³è¿‡å‘é€çš„è¯·æ±‚é•¿åº¦
 uint32_t CNetHandler::SkipSendPos(uint32_t len)
 {
     uint32_t skip_len = (len >= _req_len) ? _req_len : len;
@@ -524,7 +524,7 @@ uint32_t CNetHandler::SkipSendPos(uint32_t len)
     return skip_len;
 }
 
-// ¹ØÁªÁ¬½Ó¶ÔÏó
+// å…³è”è¿æ¥å¯¹è±¡
 void CNetHandler::Link(CSockLink* conn)
 {
     this->_conn_ptr = conn;
@@ -532,7 +532,7 @@ void CNetHandler::Link(CSockLink* conn)
 }
 
 
-// ½âñîÁ¬½Ó¶ÔÏó
+// è§£è€¦è¿æ¥å¯¹è±¡
 void CNetHandler::Unlink()
 {
     if (this->_state_flags != 0)
@@ -542,7 +542,7 @@ void CNetHandler::Unlink()
     this->_conn_ptr = NULL;
 }
 
-// ¹ØÁªÔÚµÈ´ıÁ¬½Ó¶ÓÁĞ
+// å…³è”åœ¨ç­‰å¾…è¿æ¥é˜Ÿåˆ—
 void CNetHandler::SwitchToConn()
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -558,7 +558,7 @@ void CNetHandler::SwitchToConn()
     conn->AppendToList(CSockLink::LINK_CONN_LIST, this);
 }
 
-// ÇĞ»»µ½·¢ËÍ¶ÓÁĞ
+// åˆ‡æ¢åˆ°å‘é€é˜Ÿåˆ—
 void CNetHandler::SwitchToSend()
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -575,7 +575,7 @@ void CNetHandler::SwitchToSend()
 }
 
 
-// ÇĞ»»µ½½ÓÊÕ¶ÓÁĞ
+// åˆ‡æ¢åˆ°æ¥æ”¶é˜Ÿåˆ—
 void CNetHandler::SwitchToRecv()
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -591,7 +591,7 @@ void CNetHandler::SwitchToRecv()
     conn->AppendToList(CSockLink::LINK_RECV_LIST, this);
 }
 
-// ÇĞ»»µ½¿ÕÏĞ×´Ì¬
+// åˆ‡æ¢åˆ°ç©ºé—²çŠ¶æ€
 void CNetHandler::SwitchToIdle()
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -608,7 +608,7 @@ void CNetHandler::SwitchToIdle()
 }
 
 
-// ÍÑÀëÁ´±í×´Ì¬¹ÜÀí
+// è„±ç¦»é“¾è¡¨çŠ¶æ€ç®¡ç†
 void CNetHandler::DetachConn()
 {
     CSockLink* conn = (CSockLink*)this->_conn_ptr;
@@ -618,7 +618,7 @@ void CNetHandler::DetachConn()
         return; 
     }
 
-    if (_state_flags == 0)  // ³¬Ê±ÓëÊÂ¼ş»½ĞÑ, 2¸ö·ÖÖ§, ¶¼ĞèÒª½âÁ¬½Ó
+    if (_state_flags == 0)  // è¶…æ—¶ä¸äº‹ä»¶å”¤é†’, 2ä¸ªåˆ†æ”¯, éƒ½éœ€è¦è§£è¿æ¥
     {
         return;
     }
@@ -652,8 +652,8 @@ void CNetHandler::DetachConn()
 
 
 /**
- *  @brief ½ÚµãÔªËØµÄhashËã·¨, »ñÈ¡keyµÄhashÖµ
- *  @return ½ÚµãÔªËØµÄhashÖµ
+ *  @brief èŠ‚ç‚¹å…ƒç´ çš„hashç®—æ³•, è·å–keyçš„hashå€¼
+ *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
  */
 uint32_t CNetHandler::HashValue()
 {
@@ -668,8 +668,8 @@ uint32_t CNetHandler::HashValue()
 }
 
 /**
- *  @brief ½ÚµãÔªËØµÄcmp·½·¨, Í¬Ò»Í°IDÏÂ, °´key±È½Ï
- *  @return ½ÚµãÔªËØµÄhashÖµ
+ *  @brief èŠ‚ç‚¹å…ƒç´ çš„cmpæ–¹æ³•, åŒä¸€æ¡¶IDä¸‹, æŒ‰keyæ¯”è¾ƒ
+ *  @return èŠ‚ç‚¹å…ƒç´ çš„hashå€¼
  */
 int32_t CNetHandler::HashCmp(HashKey* rhs) 
 {
@@ -699,7 +699,7 @@ int32_t CNetHandler::HashCmp(HashKey* rhs)
 }; 
 
     
-// ×¢²ásession¹ÜÀí
+// æ³¨å†Œsessionç®¡ç†
 bool CNetHandler::RegistSession()
 {
     if (CNetMgr::Instance()->FindNetItem(this) != NULL)
@@ -715,7 +715,7 @@ bool CNetHandler::RegistSession()
     return true;    
 }
 
-// È¡Ïû×¢²ásession
+// å–æ¶ˆæ³¨å†Œsession
 void CNetHandler::UnRegistSession()
 {
     if (this->_state_flags & STATE_IN_SESSION)
@@ -726,7 +726,7 @@ void CNetHandler::UnRegistSession()
 }
 
 
-// »ñÈ¡¹ÜÀíÁ´±í
+// è·å–ç®¡ç†é“¾è¡¨
 TNetItemList* CSockLink::GetItemList(int32_t type)
 {
     TNetItemList* list = NULL;
@@ -756,7 +756,7 @@ TNetItemList* CSockLink::GetItemList(int32_t type)
 }
 
 
-// ¹ÜÀí¾ä±úĞÅÏ¢
+// ç®¡ç†å¥æŸ„ä¿¡æ¯
 void CSockLink::AppendToList(int32_t type, CNetHandler* item)
 {
     TNetItemList* list = this->GetItemList(type);
@@ -769,7 +769,7 @@ void CSockLink::AppendToList(int32_t type, CNetHandler* item)
     TAILQ_INSERT_TAIL(list, item, _link_entry);
 }
 
-// ¹ÜÀí¾ä±úĞÅÏ¢
+// ç®¡ç†å¥æŸ„ä¿¡æ¯
 void CSockLink::RemoveFromList(int32_t type, CNetHandler* item)
 {
     TNetItemList* list = this->GetItemList(type);
@@ -783,7 +783,7 @@ void CSockLink::RemoveFromList(int32_t type, CNetHandler* item)
 }
 
 
-// Í¨Öª»½ĞÑÏß³Ì
+// é€šçŸ¥å”¤é†’çº¿ç¨‹
 void CSockLink::NotifyThread(CNetHandler* item, int32_t result)
 {
     static MtFrame* frame = NULL;
@@ -791,13 +791,13 @@ void CSockLink::NotifyThread(CNetHandler* item, int32_t result)
         frame = MtFrame::Instance();
     }
     
-    // ÉèÖÃ·µ»ØÂëĞÅÏ¢ 
+    // è®¾ç½®è¿”å›ç ä¿¡æ¯ 
     if (result != RC_SUCCESS)
     {
         item->SetErrNo(result);
     }
 
-    // ÉèÖÃ¿ÉÔËĞĞ
+    // è®¾ç½®å¯è¿è¡Œ
     MicroThread* thread = item->GetThread();
     if ((thread != NULL) && (thread->HasFlag(MicroThread::IO_LIST)))
     {
@@ -807,7 +807,7 @@ void CSockLink::NotifyThread(CNetHandler* item, int32_t result)
 }
 
 
-// Í¨Öª»½ĞÑÏß³Ì
+// é€šçŸ¥å”¤é†’çº¿ç¨‹
 void CSockLink::NotifyAll(int32_t result)
 {
     CNetHandler* item = NULL;
@@ -839,14 +839,14 @@ void CSockLink::NotifyAll(int32_t result)
 }
 
 
-// ÇåÀíÖÃ³õÊ¼»¯Âß¼­
+// æ¸…ç†ç½®åˆå§‹åŒ–é€»è¾‘
 void CSockLink::Reset()
 {
-    // ¹Ø±Õfd, Í¨Öª¹ØÁªµÄÏß³Ì 
+    // å…³é—­fd, é€šçŸ¥å…³è”çš„çº¿ç¨‹ 
     this->Close();
     this->NotifyAll(_errno);
 
-    // ÇåÀícacheÊı¾İ
+    // æ¸…ç†cacheæ•°æ®
     rw_cache_destroy(&_recv_cache);
     if (_rsp_buff != NULL)
     {
@@ -854,7 +854,7 @@ void CSockLink::Reset()
         _rsp_buff = NULL;
     }
 
-    // ÇåÀíµÈ´ı¶ÓÁĞ, »½ĞÑµÈ´ıÏß³Ì
+    // æ¸…ç†ç­‰å¾…é˜Ÿåˆ—, å”¤é†’ç­‰å¾…çº¿ç¨‹
     TAILQ_INIT(&_wait_connect);
     TAILQ_INIT(&_wait_send);
     TAILQ_INIT(&_wait_recv);
@@ -866,11 +866,11 @@ void CSockLink::Reset()
     _last_access    = mt_time_ms();
     _parents        = NULL;
 
-    // ¸¸¶ÔÏóµÄÇåÀí
+    // çˆ¶å¯¹è±¡çš„æ¸…ç†
     this->EpollerObj::Reset();   
 }
 
-// ¹¹ÔìÓëÎö¹¹º¯Êı
+// æ„é€ ä¸ææ„å‡½æ•°
 CSockLink::CSockLink()
 {
     rw_cache_init(&_recv_cache, NULL);
@@ -888,39 +888,39 @@ CSockLink::CSockLink()
     _parents        = NULL;
 }
 
-// ¹¹ÔìÓëÎö¹¹º¯Êı
+// æ„é€ ä¸ææ„å‡½æ•°
 CSockLink::~CSockLink()
 {
     this->Reset();    
 }
 
 
-// ÉèÖÃĞ­ÒéÀàĞÍ, ¾ö¶¨buff³ØµÄÖ¸Õë
+// è®¾ç½®åè®®ç±»å‹, å†³å®šbuffæ± çš„æŒ‡é’ˆ
 void CSockLink::SetProtoType(MT_PROTO_TYPE type)
 {
     _proto_type = type;
     _recv_cache.pool = CNetMgr::Instance()->GetSkBuffMng(type);
 }
 
-// ¹Ø±ÕÁ´Â·µÄ¾ä±ú
+// å…³é—­é“¾è·¯çš„å¥æŸ„
 void CSockLink::Close()
 {
-    // 1. ¾ä±úÎ´³õÊ¼»¯, Ö±½Ó·µ»Ø
+    // 1. å¥æŸ„æœªåˆå§‹åŒ–, ç›´æ¥è¿”å›
     if (_fd < 0)
     {
         return;
     }
 
-    // 2. ¿ò¼ÜÕìÌıÊÍ·Å
+    // 2. æ¡†æ¶ä¾¦å¬é‡Šæ”¾
     MtFrame::Instance()->EpollDelObj(this);
 
-    // 3. ¹Ø±Õ¾ä±ú
+    // 3. å…³é—­å¥æŸ„
     close(_fd);
     _fd = -1;
 }
 
 
-// Òì³£ÖÕÖ¹µÄ´¦Àíº¯Êı
+// å¼‚å¸¸ç»ˆæ­¢çš„å¤„ç†å‡½æ•°
 void CSockLink::Destroy()
 {
     CDestLinks* dstlink = (CDestLinks*)_parents;
@@ -937,15 +937,15 @@ void CSockLink::Destroy()
 }
 
 
-// ¼ì²é»ò´´½¨socket¾ä±ú
+// æ£€æŸ¥æˆ–åˆ›å»ºsocketå¥æŸ„
 int32_t CSockLink::CreateSock()
 {
-    if (_fd > 0)        // ¸´ÓÃÁ¬½ÓÊ±, ¿ÉÌø¹ı´´½¨´¦Àí;
+    if (_fd > 0)        // å¤ç”¨è¿æ¥æ—¶, å¯è·³è¿‡åˆ›å»ºå¤„ç†;
     {
         return _fd;
     }
 
-    // ·ÖÀà±ğ´´½¨
+    // åˆ†ç±»åˆ«åˆ›å»º
     if (NET_PROTO_TCP == _proto_type)
     {
         _fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -961,7 +961,7 @@ int32_t CSockLink::CreateSock()
         return -1;
     }
 
-    // ÉèÖÃ·Ç×èÈû
+    // è®¾ç½®éé˜»å¡
     int flags = 1;
     if (ioctl(_fd, FIONBIO, &flags) < 0)
     {
@@ -971,14 +971,14 @@ int32_t CSockLink::CreateSock()
         return -2;
     }
 
-    // Ñ¡ÏîÉèÖÃ, NODELAY
+    // é€‰é¡¹è®¾ç½®, NODELAY
     if (NET_PROTO_TCP == _proto_type)
     {
         setsockopt(_fd, IPPROTO_TCP, TCP_NODELAY, &flags, sizeof(flags));
-        this->EnableOutput(); // TCP µÈ´ıconnectÊÊÓÃ, Ê¡Ò»´Îepollctrl
+        this->EnableOutput(); // TCP ç­‰å¾…connecté€‚ç”¨, çœä¸€æ¬¡epollctrl
     }
 
-    // ¼ÓÈëepoll¼à¿Ø
+    // åŠ å…¥epollç›‘æ§
     this->EnableInput();
     if (!MtFrame::Instance()->EpollAddObj(this))
     {
@@ -991,7 +991,7 @@ int32_t CSockLink::CreateSock()
     return _fd;
 }
 
-// »ñÈ¡Ä¿±êipĞÅÏ¢
+// è·å–ç›®æ ‡ipä¿¡æ¯
 struct sockaddr_in* CSockLink::GetDestAddr(struct sockaddr_in* addr)
 {
     CDestLinks* dstlink = (CDestLinks*)_parents;
@@ -1011,30 +1011,30 @@ struct sockaddr_in* CSockLink::GetDestAddr(struct sockaddr_in* addr)
 }
 
 
-// ·¢ÆğÁ¬½Ó¹ı³Ì
+// å‘èµ·è¿æ¥è¿‡ç¨‹
 bool CSockLink::Connect()
 {
     this->_last_access = mt_time_ms();
 
-    // 1. UDPÃâÁ¬½Ó¹ı³Ì
+    // 1. UDPå…è¿æ¥è¿‡ç¨‹
     if (_proto_type == NET_PROTO_UDP)
     {
         _state |= LINK_CONNECTED;
     }
 
-    // 2. ÒÑÁ¬½Ó×´Ì¬, ³É¹¦·µ»Ø
+    // 2. å·²è¿æ¥çŠ¶æ€, æˆåŠŸè¿”å›
     if (_state & LINK_CONNECTED)
     {
         return true;
     }
 
-    // 3. ³¢ÊÔÁ¬½ÓÖĞ, ÍË³öµÈ´ı
+    // 3. å°è¯•è¿æ¥ä¸­, é€€å‡ºç­‰å¾…
     if (_state & LINK_CONNECTING)
     {
         return false;
     }
 
-    // 4. ÎŞÁ¬½Ó, Ê×´ÎÁ¬½Ó³¢ÊÔ
+    // 4. æ— è¿æ¥, é¦–æ¬¡è¿æ¥å°è¯•
     struct sockaddr_in addr = {0};
     
     mt_hook_syscall(connect);
@@ -1069,7 +1069,7 @@ bool CSockLink::Connect()
     }
 }
 
-// °´UDPµÄ·½Ê½·¢ËÍµÈ´ıµÄÊı¾İ, Ò»°ãÖ±½Ó¾Í·¢ËÍOK
+// æŒ‰UDPçš„æ–¹å¼å‘é€ç­‰å¾…çš„æ•°æ®, ä¸€èˆ¬ç›´æ¥å°±å‘é€OK
 int32_t CSockLink::SendCacheUdp(void* data, uint32_t len)
 {
     mt_hook_syscall(sendto);
@@ -1080,7 +1080,7 @@ int32_t CSockLink::SendCacheUdp(void* data, uint32_t len)
     CNetHandler* tmp = NULL;
     struct sockaddr_in dst = {0};
 
-    // 1. ³¢ÊÔ·¢ËÍµÈ´ı¶ÓÁĞ, »½ĞÑÖ¸¶¨µÄÏß³Ì
+    // 1. å°è¯•å‘é€ç­‰å¾…é˜Ÿåˆ—, å”¤é†’æŒ‡å®šçš„çº¿ç¨‹
     TAILQ_FOREACH_SAFE(item, &_wait_send, _link_entry, tmp)
     {
         item->GetSendData(buff, buff_len);
@@ -1112,7 +1112,7 @@ int32_t CSockLink::SendCacheUdp(void* data, uint32_t len)
         item->SwitchToIdle();
     }
 
-    // 2. ¶¼·¢ËÍOKÁË, ÔÙ·¢ËÍ±¾´ÎÊı¾İ, Ã»ÓĞ´ı·¢ËÍÊı¾İÔòÌø¹ı
+    // 2. éƒ½å‘é€OKäº†, å†å‘é€æœ¬æ¬¡æ•°æ®, æ²¡æœ‰å¾…å‘é€æ•°æ®åˆ™è·³è¿‡
     if ((data == NULL) || (len == 0))
     {
         return 0;
@@ -1140,7 +1140,7 @@ int32_t CSockLink::SendCacheUdp(void* data, uint32_t len)
 }
 
 
-// TCPµÄ»º³å·¢ËÍ´¦Àí
+// TCPçš„ç¼“å†²å‘é€å¤„ç†
 int32_t CSockLink::SendCacheTcp(void* data, uint32_t len)
 {
     void* buff = NULL;
@@ -1150,7 +1150,7 @@ int32_t CSockLink::SendCacheTcp(void* data, uint32_t len)
     CNetHandler* item = NULL;
     CNetHandler* tmp = NULL;
 
-    // 1. ³¢ÊÔ·¢ËÍµÈ´ı¶ÓÁĞ, »½ĞÑÖ¸¶¨µÄÏß³Ì
+    // 1. å°è¯•å‘é€ç­‰å¾…é˜Ÿåˆ—, å”¤é†’æŒ‡å®šçš„çº¿ç¨‹
     TAILQ_FOREACH_SAFE(item, &_wait_send, _link_entry, tmp)
     {
         item->GetSendData(buff, buff_len); 
@@ -1184,7 +1184,7 @@ int32_t CSockLink::SendCacheTcp(void* data, uint32_t len)
         }
     }
 
-    // 2. ³¢ÊÔ·¢ËÍµÈ´ı¶ÓÁĞ, »½ĞÑÖ¸¶¨µÄÏß³Ì
+    // 2. å°è¯•å‘é€ç­‰å¾…é˜Ÿåˆ—, å”¤é†’æŒ‡å®šçš„çº¿ç¨‹
     uint32_t send_left = (uint32_t)bytes;
     TAILQ_FOREACH_SAFE(item, &_wait_send, _link_entry, tmp)
     {
@@ -1206,7 +1206,7 @@ int32_t CSockLink::SendCacheTcp(void* data, uint32_t len)
 }
 
 
-// ·¢ÆğÁ¬½Ó¹ı³Ì
+// å‘èµ·è¿æ¥è¿‡ç¨‹
 int32_t CSockLink::SendData(void* data, uint32_t len)
 {
     int32_t ret = 0;
@@ -1214,7 +1214,7 @@ int32_t CSockLink::SendData(void* data, uint32_t len)
 
     this->_last_access = mt_time_ms();
 
-    // 1. ³¢ÊÔ·¢ËÍÊı¾İ, ÏÈ·¢ËÍÅÅ¶ÓµÄÊı¾İ
+    // 1. å°è¯•å‘é€æ•°æ®, å…ˆå‘é€æ’é˜Ÿçš„æ•°æ®
     if (_proto_type == NET_PROTO_UDP)
     {
         ret = SendCacheUdp(data, len);
@@ -1224,7 +1224,7 @@ int32_t CSockLink::SendData(void* data, uint32_t len)
         ret = SendCacheTcp(data, len);
     }
 
-    // 2. µ±Ç°Êı¾İÊÇ·ñ·¢ËÍÍê±Ï, ÒÑÍê±Ï, ¿ÉÒÔ²»ÔÚÕìÌıOUT
+    // 2. å½“å‰æ•°æ®æ˜¯å¦å‘é€å®Œæ¯•, å·²å®Œæ¯•, å¯ä»¥ä¸åœ¨ä¾¦å¬OUT
     if (ret < (int32_t)len)
     {
         this->EnableOutput();
@@ -1236,7 +1236,7 @@ int32_t CSockLink::SendData(void* data, uint32_t len)
         rc = MtFrame::Instance()->EpollCtrlDel(_fd, EPOLLOUT); 
     }
 
-    // 3. ³¢ÊÔË¢ĞÂ¾ä±úepoll×¢²á
+    // 3. å°è¯•åˆ·æ–°å¥æŸ„epollæ³¨å†Œ
     if (!rc)
     {
         MTLOG_ERROR("socket epoll mng failed[%m], wait timeout");
@@ -1245,7 +1245,7 @@ int32_t CSockLink::SendData(void* data, uint32_t len)
     return ret;
 }
 
-// Êı¾İ·Ö·¢´¦Àí¹ı³Ì
+// æ•°æ®åˆ†å‘å¤„ç†è¿‡ç¨‹
 int32_t CSockLink::RecvDispath()
 {
     if (_proto_type == NET_PROTO_UDP)
@@ -1258,14 +1258,14 @@ int32_t CSockLink::RecvDispath()
     }
 }
 
-// ³¢ÊÔ½ÓÊÕ¸ü¶àµÄÊı¾İµ½ÁÙÊ±buff
+// å°è¯•æ¥æ”¶æ›´å¤šçš„æ•°æ®åˆ°ä¸´æ—¶buff
 void CSockLink::ExtendRecvRsp()
 {
     if (NULL == _rsp_buff)
     {
-        // buff³õ´Î·ÖÅä, Èç¹ûÌ«´ó, »áµ¼ÖÂÖØ¸´µÄ¿½±´; Èç¹ûÌ«Ğ¡, »áµ¼ÖÂ2´Îcheck¼ì²é
-        // È¨ºâÒ»ÏÂ, Ôİ¶¨500×Ö½Ú×óÓÒ, ´ó²¿·Ö³¡¾°, ¿ÉÒÔÊÕÈ«, ÀË·Ñ²»¶à, Ğ¡²¿·Ö³¡¾°
-        // ĞèÒªrealloc, µ«500×Ö½Ú¿½±´¸ºµ£Ò²²»´ó
+        // buffåˆæ¬¡åˆ†é…, å¦‚æœå¤ªå¤§, ä¼šå¯¼è‡´é‡å¤çš„æ‹·è´; å¦‚æœå¤ªå°, ä¼šå¯¼è‡´2æ¬¡checkæ£€æŸ¥
+        // æƒè¡¡ä¸€ä¸‹, æš‚å®š500å­—èŠ‚å·¦å³, å¤§éƒ¨åˆ†åœºæ™¯, å¯ä»¥æ”¶å…¨, æµªè´¹ä¸å¤š, å°éƒ¨åˆ†åœºæ™¯
+        // éœ€è¦realloc, ä½†500å­—èŠ‚æ‹·è´è´Ÿæ‹…ä¹Ÿä¸å¤§
         _rsp_buff = new_sk_buffer(512);
         if (NULL == _rsp_buff) 
         {
@@ -1278,12 +1278,12 @@ void CSockLink::ExtendRecvRsp()
         _rsp_buff->data + _rsp_buff->data_len , _rsp_buff->size - _rsp_buff->data_len);
 }
 
-// »òÕß»Øµ÷º¯Êı, ÓÅÏÈ´ÓÅÅ¶ÓµÈ´ıÖĞ»ñÈ¡, ±¸·İ´Ó¸¸½Úµã»ñÈ¡
+// æˆ–è€…å›è°ƒå‡½æ•°, ä¼˜å…ˆä»æ’é˜Ÿç­‰å¾…ä¸­è·å–, å¤‡ä»½ä»çˆ¶èŠ‚ç‚¹è·å–
 CHECK_SESSION_CALLBACK CSockLink::GetSessionCallback()
 {
     CHECK_SESSION_CALLBACK check_session = NULL;
     
-    // 1. ÅÅ¶Ó»ñÈ¡»Øµ÷º¯Êı
+    // 1. æ’é˜Ÿè·å–å›è°ƒå‡½æ•°
     CNetHandler* item = TAILQ_FIRST(&_wait_recv);
     if (NULL == item)
     {
@@ -1300,14 +1300,14 @@ CHECK_SESSION_CALLBACK CSockLink::GetSessionCallback()
 
 EXIT_LABEL:
 
-    // 2. Èç¹û¸¸½ÚµãÎªNULL, Ö±½Ó·µ»Ø¶ÓÁĞ½á¹û
+    // 2. å¦‚æœçˆ¶èŠ‚ç‚¹ä¸ºNULL, ç›´æ¥è¿”å›é˜Ÿåˆ—ç»“æœ
     CDestLinks* dstlink = (CDestLinks*)_parents;
     if (NULL == dstlink)
     {
         return check_session;
     }
 
-    // 3. Èç¹û¶ÓÁĞ½á¹ûÎª¿Õ, °´Á´Â·Ä¬ÈÏ»º´æµÄfunc; ²»Îª¿Õ, Ôò±£´æËü
+    // 3. å¦‚æœé˜Ÿåˆ—ç»“æœä¸ºç©º, æŒ‰é“¾è·¯é»˜è®¤ç¼“å­˜çš„func; ä¸ä¸ºç©º, åˆ™ä¿å­˜å®ƒ
     if (check_session != NULL)
     {
         dstlink->SetDefaultCallback(check_session);
@@ -1321,10 +1321,10 @@ EXIT_LABEL:
 }
 
 
-// TCP½ÓÊÕÊı¾İÁ÷´¦ÀíÓë·Ö·¢
+// TCPæ¥æ”¶æ•°æ®æµå¤„ç†ä¸åˆ†å‘
 int32_t CSockLink::DispathTcp()
 {
-    // 1. TCPÎŞµÈ´ıÀ´°ü, ²»Ã÷¸ñÊ½, ²»Çå³ş½áÎ², Ö»ÄÜ¹Ø±Õ
+    // 1. TCPæ— ç­‰å¾…æ¥åŒ…, ä¸æ˜æ ¼å¼, ä¸æ¸…æ¥šç»“å°¾, åªèƒ½å…³é—­
     CHECK_SESSION_CALLBACK check_session = this->GetSessionCallback();
     if (NULL == check_session)
     {
@@ -1332,7 +1332,7 @@ int32_t CSockLink::DispathTcp()
         return -1;
     }
 
-    // 2. ¼ÙÉèÍ¬Ò»IP/PORTµÄĞ­Òé, ½âÎöº¯Êı¶¼¿ÉÒÔÍ¨ÓÃ
+    // 2. å‡è®¾åŒä¸€IP/PORTçš„åè®®, è§£æå‡½æ•°éƒ½å¯ä»¥é€šç”¨
     uint32_t need_len = 0;
     uint64_t sid = 0;
     int32_t ret = 0;
@@ -1358,21 +1358,21 @@ int32_t CSockLink::DispathTcp()
 
         if (ret == 0)
         {
-            // 1. ÓÃ»§Èç¹û²»Ö¸¶¨³¤¶È, Ä¬ÈÏ2±¶À©Õ¹, ĞÔÄÜ»áÊÜÓ°Ïì
+            // 1. ç”¨æˆ·å¦‚æœä¸æŒ‡å®šé•¿åº¦, é»˜è®¤2å€æ‰©å±•, æ€§èƒ½ä¼šå—å½±å“
             if ((need_len == 0) && (_rsp_buff->data_len == _rsp_buff->size))
             {
                 MTLOG_DEBUG("recv default buff full[%u], but user no set need length", _rsp_buff->size);
                 need_len = _rsp_buff->size * 2;
             }
         
-            // 2. Èô»¹Ê£Óà¿Õ¼ä, Ôò¼ÌĞøµÈ´ı½ÓÊÕ; ÆÚÍû¿Õ¼ä³¬³¤, ²»Óè½ÓÊÕ
+            // 2. è‹¥è¿˜å‰©ä½™ç©ºé—´, åˆ™ç»§ç»­ç­‰å¾…æ¥æ”¶; æœŸæœ›ç©ºé—´è¶…é•¿, ä¸äºˆæ¥æ”¶
             if ((need_len <= _rsp_buff->size) || (need_len > 100*1024*1024))
             {
                 MTLOG_DEBUG("maybe need wait more data: %u", need_len);
                 return 0;
             }
 
-            // 3. À©Õ¹buff³¤¶È, ×¼±¸ÔÙ³¢ÊÔÒ»´Î
+            // 3. æ‰©å±•buffé•¿åº¦, å‡†å¤‡å†å°è¯•ä¸€æ¬¡
             _rsp_buff = reserve_sk_buffer(_rsp_buff, need_len);
             if (NULL == _rsp_buff)
             {
@@ -1381,25 +1381,25 @@ int32_t CSockLink::DispathTcp()
                 return -3;
             }
 
-            // 4. ÒÑ¾­ÎŞ¶àÓàµÄÊı¾İĞÅÏ¢, µÈ´ı¼ÌĞøÊÕ°ü
+            // 4. å·²ç»æ— å¤šä½™çš„æ•°æ®ä¿¡æ¯, ç­‰å¾…ç»§ç»­æ”¶åŒ…
             if (_rsp_buff->data_len >= _recv_cache.len)
             {
                 MTLOG_DEBUG("maybe need wait more data, now %u", _recv_cache.len);
                 return 0;
             }
 
-            // 5. ¼ÌĞø¿½±´Êı¾İ, ³¢ÊÔ½âÎö
+            // 5. ç»§ç»­æ‹·è´æ•°æ®, å°è¯•è§£æ
             continue;
         }
 
-        // ±£»¤Òì³£³¡¾°, ±¨ÎÄÊµ¼ÊÎ´ÊÕÍêÕû, ¼ÌĞøµÈ´ı
+        // ä¿æŠ¤å¼‚å¸¸åœºæ™¯, æŠ¥æ–‡å®é™…æœªæ”¶å®Œæ•´, ç»§ç»­ç­‰å¾…
         if (ret > (int32_t)_recv_cache.len)
         {
             MTLOG_DEBUG("maybe pkg not all ok, wait more");
             return 0;
         }
 
-        // ²éÑ¯¸ÃsessionµÄ¶ÔÏó
+        // æŸ¥è¯¢è¯¥sessionçš„å¯¹è±¡
         CNetHandler* session = this->FindSession(sid);
         if (NULL == session)
         {
@@ -1414,7 +1414,7 @@ int32_t CSockLink::DispathTcp()
             cache_skip_data(&_recv_cache, ret);
             this->NotifyThread(session, 0);
             session->SwitchToIdle();
-            _rsp_buff->data_len = ret;  //TCPÊµ¼ÊÓĞĞ§µÄ±¨ÎÄ³¤¶È±ä¸ü
+            _rsp_buff->data_len = ret;  //TCPå®é™…æœ‰æ•ˆçš„æŠ¥æ–‡é•¿åº¦å˜æ›´
             session->SetRespBuff(_rsp_buff);
             _rsp_buff = NULL;
         }
@@ -1425,16 +1425,16 @@ int32_t CSockLink::DispathTcp()
 }
 
 
-// UDP½ÓÊÕÊı¾İÁ÷´¦ÀíÓë·Ö·¢
+// UDPæ¥æ”¶æ•°æ®æµå¤„ç†ä¸åˆ†å‘
 int32_t CSockLink::DispathUdp()
 {
-    // 1. UDP¿ÉÈİ´í´¦Àí, ÎŞÕìÌıÒ²¿ÉÒÔ¶ªÆúµôËùÓĞµÄ±¨ÎÄ
+    // 1. UDPå¯å®¹é”™å¤„ç†, æ— ä¾¦å¬ä¹Ÿå¯ä»¥ä¸¢å¼ƒæ‰æ‰€æœ‰çš„æŠ¥æ–‡
     CHECK_SESSION_CALLBACK check_session = NULL;
     CNetHandler* item = TAILQ_FIRST(&_wait_recv);
     if (NULL == item)
     {
         MTLOG_DEBUG("recv data with no wait item, maybe wrong pkg recv");
-        // ´Ë´¦²»ÍË³ö, ÒòÎª¿ÉÒÔ¶ªÆúUDPÓ¦´ğ(³¬Ê±°ü\´®°üµÈ)
+        // æ­¤å¤„ä¸é€€å‡º, å› ä¸ºå¯ä»¥ä¸¢å¼ƒUDPåº”ç­”(è¶…æ—¶åŒ…\ä¸²åŒ…ç­‰)
     }
     else
     {
@@ -1445,7 +1445,7 @@ int32_t CSockLink::DispathUdp()
         }
     }
 
-    // 2. ±éÀúÃ¿¸ö¿é, ÕÒµ½session¾Í´¦Àí, ·ñÔò¶ªÆú
+    // 2. éå†æ¯ä¸ªå—, æ‰¾åˆ°sessionå°±å¤„ç†, å¦åˆ™ä¸¢å¼ƒ
     uint64_t sid = 0;
     uint32_t need_len = 0;
     int32_t ret = 0;
@@ -1468,7 +1468,7 @@ int32_t CSockLink::DispathUdp()
             continue;
         }
     
-        // ²éÑ¯¸ÃsessionµÄ¶ÔÏó
+        // æŸ¥è¯¢è¯¥sessionçš„å¯¹è±¡
         CNetHandler* session = this->FindSession(sid);
         if (NULL == session)
         {
@@ -1489,7 +1489,7 @@ int32_t CSockLink::DispathUdp()
 }
 
 
-// ²éÑ¯±¾µØsessionid¹ØÁªµÄsessionĞÅÏ¢
+// æŸ¥è¯¢æœ¬åœ°sessionidå…³è”çš„sessionä¿¡æ¯
 CNetHandler* CSockLink::FindSession(uint64_t sid)
 {
     CNetHandler key;
@@ -1511,8 +1511,8 @@ CNetHandler* CSockLink::FindSession(uint64_t sid)
 
 
 /**
- *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int CSockLink::InputNotify()
 {
@@ -1520,7 +1520,7 @@ int CSockLink::InputNotify()
     
     this->_last_access = mt_time_ms();
 
-    // 1. ½ÓÊÕÊı¾İ, ¼ì²é´íÎóÂë
+    // 1. æ¥æ”¶æ•°æ®, æ£€æŸ¥é”™è¯¯ç 
     if (_proto_type == NET_PROTO_UDP)
     {
         ret = cache_udp_recv(&_recv_cache, _fd, NULL);
@@ -1530,7 +1530,7 @@ int CSockLink::InputNotify()
         ret = cache_tcp_recv(&_recv_cache, _fd);
     }
     
-    // 2. ½ÓÊÕÊ§°ÜÔòÇåÀíÁ¬½Ó
+    // 2. æ¥æ”¶å¤±è´¥åˆ™æ¸…ç†è¿æ¥
     if (ret < 0)
     {
         if (ret == -SK_ERR_NEED_CLOSE)
@@ -1548,7 +1548,7 @@ int CSockLink::InputNotify()
         return -1;
     }
 
-    // 3. ·Ö·¢´¦Àí, ¼ÙÉèÊÇTCP
+    // 3. åˆ†å‘å¤„ç†, å‡è®¾æ˜¯TCP
     ret = this->RecvDispath();
     if (ret < 0)
     {
@@ -1557,14 +1557,14 @@ int CSockLink::InputNotify()
         return -2;
     }
 
-    // 4. ³É¹¦·µ»Ø
+    // 4. æˆåŠŸè¿”å›
     return 0;
     
 }
 
 /**
- *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
- *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+ *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+ *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
  */
 int CSockLink::OutputNotify()
 {
@@ -1572,7 +1572,7 @@ int CSockLink::OutputNotify()
     
     this->_last_access = mt_time_ms();
 
-    // 1. Á¬½ÓµÈ´ıµ½Á¬½ÓÍê³ÉÇĞ»»
+    // 1. è¿æ¥ç­‰å¾…åˆ°è¿æ¥å®Œæˆåˆ‡æ¢
     if (_state & LINK_CONNECTING)
     {
         _state &= ~LINK_CONNECTING;
@@ -1587,7 +1587,7 @@ int CSockLink::OutputNotify()
         }
     }
 
-    // 2. ³¢ÊÔ·¢ËÍÊı¾İ
+    // 2. å°è¯•å‘é€æ•°æ®
     if (_proto_type == NET_PROTO_UDP)
     {
         ret = SendCacheUdp(NULL, 0);
@@ -1597,7 +1597,7 @@ int CSockLink::OutputNotify()
         ret = SendCacheTcp(NULL, 0);
     }
 
-    // 3. ·¢ËÍÊ§°ÜÔòÇåÀíÁ¬½Ó
+    // 3. å‘é€å¤±è´¥åˆ™æ¸…ç†è¿æ¥
     if (ret < 0)
     {
         MTLOG_ERROR("Send on link failed, close it, ret %d[%m]", ret);
@@ -1606,7 +1606,7 @@ int CSockLink::OutputNotify()
         return ret;
     }
 
-    // 4. Õı³£·¢ËÍ, ¼ì²éÖØĞÂÉèÖÃepoll
+    // 4. æ­£å¸¸å‘é€, æ£€æŸ¥é‡æ–°è®¾ç½®epoll
     if (TAILQ_EMPTY(&_wait_send))
     {
         this->DisableOutput();
@@ -1621,8 +1621,8 @@ int CSockLink::OutputNotify()
 
 
 /**
- *  @brief Òì³£Í¨Öª½Ó¿Ú
- *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+ *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+ *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
  */
 int CSockLink::HangupNotify()
 {
@@ -1634,16 +1634,16 @@ int CSockLink::HangupNotify()
 }
 
 
-// ¹¹Ôìº¯Êı
+// æ„é€ å‡½æ•°
 CDestLinks::CDestLinks()
 {
-    _timeout        = 5*60*1000; // Ä¬ÈÏ5·ÖÖÓ
+    _timeout        = 5*60*1000; // é»˜è®¤5åˆ†é’Ÿ
     _addr_ipv4      = 0;
     _net_port       = 0;
     _proto_type     = NET_PROTO_UNDEF;
     _conn_type      = TYPE_CONN_SESSION;
     
-    _max_links      = 3; // Ä¬ÈÏ3¸ö
+    _max_links      = 3; // é»˜è®¤3ä¸ª
     _curr_link      = 0;
     _dflt_callback  = NULL;
 
@@ -1651,10 +1651,10 @@ CDestLinks::CDestLinks()
 }
 
 
-// ÖØÖÃ¸´ÓÃµÄ½Ó¿Úº¯Êı
+// é‡ç½®å¤ç”¨çš„æ¥å£å‡½æ•°
 void CDestLinks::Reset()
 {
-    // ÇåÀíÁ¬½Ó¶ÔÏó
+    // æ¸…ç†è¿æ¥å¯¹è±¡
     CSockLink* item = NULL;
     CSockLink* temp = NULL;
     TAILQ_FOREACH_SAFE(item, &_sock_list, _link_entry, temp)
@@ -1663,31 +1663,31 @@ void CDestLinks::Reset()
     }
     TAILQ_INIT(&_sock_list);
 
-    // ¶¨Ê±Æ÷É¾³ı
+    // å®šæ—¶å™¨åˆ é™¤
     CTimerMng* timer = MtFrame::Instance()->GetTimerMng();
     if (NULL != timer) 
     {
         timer->stop_timer(this);
     }
 
-    // ÇåÀíÄ¬ÈÏ×Ö¶ÎĞÅÏ¢
-    _timeout        = 5*60*1000; // Ä¬ÈÏ5·ÖÖÓ
+    // æ¸…ç†é»˜è®¤å­—æ®µä¿¡æ¯
+    _timeout        = 5*60*1000; // é»˜è®¤5åˆ†é’Ÿ
     _addr_ipv4      = 0;
     _net_port       = 0;
     _proto_type     = NET_PROTO_UNDEF;
     _conn_type      = TYPE_CONN_SESSION;
     
-    _max_links      = 3; // Ä¬ÈÏ3¸ö
+    _max_links      = 3; // é»˜è®¤3ä¸ª
     _curr_link      = 0;
 }
 
-// ¹¹Ôìº¯Êı
+// æ„é€ å‡½æ•°
 CDestLinks::~CDestLinks()
 {
     this->Reset();
 }
 
-// Æô¶¯¶¨Ê±Æ÷
+// å¯åŠ¨å®šæ—¶å™¨
 void CDestLinks::StartTimer()
 {
     CTimerMng* timer = MtFrame::Instance()->GetTimerMng();
@@ -1698,7 +1698,7 @@ void CDestLinks::StartTimer()
 }
 
 
-// ÊÍ·ÅÒ»¸öÁ¬½Ólink
+// é‡Šæ”¾ä¸€ä¸ªè¿æ¥link
 void CDestLinks::FreeSockLink(CSockLink* sock)
 {
     if ((sock == NULL) || (sock->GetParentsPtr() != (void*)this))
@@ -1717,7 +1717,7 @@ void CDestLinks::FreeSockLink(CSockLink* sock)
 }
 
 
-// »ñÈ¡Ò»¸öÁ¬½Ólink, Ä¿Ç°ÎªÂÖÑ¯
+// è·å–ä¸€ä¸ªè¿æ¥link, ç›®å‰ä¸ºè½®è¯¢
 CSockLink* CDestLinks::GetSockLink()
 {
     CSockLink* link = NULL;
@@ -1745,11 +1745,11 @@ CSockLink* CDestLinks::GetSockLink()
 }
 
 /**
- * @brief ³¬Ê±Í¨Öªº¯Êı, ¼ì²é¿ÕÏĞÁ´Â·, ¼ì²éÅäÖÃÁ´Â·¸öÊı
+ * @brief è¶…æ—¶é€šçŸ¥å‡½æ•°, æ£€æŸ¥ç©ºé—²é“¾è·¯, æ£€æŸ¥é…ç½®é“¾è·¯ä¸ªæ•°
  */
 void CDestLinks::timer_notify()
 {
-    // 1. ¼ì²âÊÇ·ñÓĞ¿ÕÏĞµÄÁ´Â·, É¾³ıµô
+    // 1. æ£€æµ‹æ˜¯å¦æœ‰ç©ºé—²çš„é“¾è·¯, åˆ é™¤æ‰
     uint64_t now = mt_time_ms();
     CSockLink* item = NULL;
     CSockLink* temp = NULL;
@@ -1762,7 +1762,7 @@ void CDestLinks::timer_notify()
         }
     }
 
-    // 2. ¼ì²âÊÇ·ñ»¹ÓĞÓĞĞ§µÄÁ´Â·, Ã»ÓĞÔò×¢ÏúÄ¿±ê¾ä±ú
+    // 2. æ£€æµ‹æ˜¯å¦è¿˜æœ‰æœ‰æ•ˆçš„é“¾è·¯, æ²¡æœ‰åˆ™æ³¨é”€ç›®æ ‡å¥æŸ„
     item = TAILQ_FIRST(&_sock_list);
     if (NULL == item)
     {
@@ -1771,7 +1771,7 @@ void CDestLinks::timer_notify()
         return;
     }
 
-    // 3. ÖØĞÂ¼ÓÈë¶¨Ê±Æ÷¶ÓÁĞ
+    // 3. é‡æ–°åŠ å…¥å®šæ—¶å™¨é˜Ÿåˆ—
     this->StartTimer();
     
     return;
@@ -1779,8 +1779,8 @@ void CDestLinks::timer_notify()
 
 
 /**
- * @brief sessionÈ«¾Ö¹ÜÀí¾ä±ú
- * @return È«¾Ö¾ä±úÖ¸Õë
+ * @brief sessionå…¨å±€ç®¡ç†å¥æŸ„
+ * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
  */
 CNetMgr* CNetMgr::_instance = NULL;
 CNetMgr* CNetMgr::Instance (void)
@@ -1794,7 +1794,7 @@ CNetMgr* CNetMgr::Instance (void)
 }
 
 /**
- * @brief session¹ÜÀíÈ«¾ÖµÄÏú»Ù½Ó¿Ú
+ * @brief sessionç®¡ç†å…¨å±€çš„é”€æ¯æ¥å£
  */
 void CNetMgr::Destroy()
 {
@@ -1805,7 +1805,7 @@ void CNetMgr::Destroy()
     }
 }
 
-// ²éÑ¯ÊÇ·ñÒÑ¾­´æÔÚÍ¬Ò»¸ösidµÄ¶ÔÏó
+// æŸ¥è¯¢æ˜¯å¦å·²ç»å­˜åœ¨åŒä¸€ä¸ªsidçš„å¯¹è±¡
 CNetHandler* CNetMgr::FindNetItem(CNetHandler* key)
 {
     if (NULL == this->_session_hash)
@@ -1816,7 +1816,7 @@ CNetHandler* CNetMgr::FindNetItem(CNetHandler* key)
     return (CNetHandler*)_session_hash->HashFind(key);
 }
 
-// ×¢²áÒ»¸öitem, ÏÈ²éÑ¯ºó²åÈë, ±£Ö¤ÎŞ³åÍ»
+// æ³¨å†Œä¸€ä¸ªitem, å…ˆæŸ¥è¯¢åæ’å…¥, ä¿è¯æ— å†²çª
 void CNetMgr::InsertNetItem(CNetHandler* item)
 {
     if (NULL == this->_session_hash)
@@ -1833,7 +1833,7 @@ void CNetMgr::InsertNetItem(CNetHandler* item)
     return;
 }
 
-// ÒÆ³ıÒ»¸öitem¶ÔÏó
+// ç§»é™¤ä¸€ä¸ªitemå¯¹è±¡
 void CNetMgr::RemoveNetItem(CNetHandler* item)
 {
     CNetHandler* handler =  this->FindNetItem(item);
@@ -1845,7 +1845,7 @@ void CNetMgr::RemoveNetItem(CNetHandler* item)
     _session_hash->HashRemove(handler);
 }
 
-// ²éÑ¯ÊÇ·ñÒÑ¾­´æÔÚÍ¬Ò»¸ösidµÄ¶ÔÏó
+// æŸ¥è¯¢æ˜¯å¦å·²ç»å­˜åœ¨åŒä¸€ä¸ªsidçš„å¯¹è±¡
 CDestLinks* CNetMgr::FindDestLink(CDestLinks* key)
 {
     if (NULL == this->_ip_hash)
@@ -1856,7 +1856,7 @@ CDestLinks* CNetMgr::FindDestLink(CDestLinks* key)
     return (CDestLinks*)_ip_hash->HashFind(key);
 }
 
-// ×¢²áÒ»¸öitem, ÏÈ²éÑ¯ºó²åÈë, ±£Ö¤ÎŞ³åÍ»
+// æ³¨å†Œä¸€ä¸ªitem, å…ˆæŸ¥è¯¢åæ’å…¥, ä¿è¯æ— å†²çª
 void CNetMgr::InsertDestLink(CDestLinks* item)
 {
     if (NULL == this->_ip_hash)
@@ -1873,7 +1873,7 @@ void CNetMgr::InsertDestLink(CDestLinks* item)
     return;
 }
 
-// ÒÆ³ıÒ»¸öitem¶ÔÏó
+// ç§»é™¤ä¸€ä¸ªitemå¯¹è±¡
 void CNetMgr::RemoveDestLink(CDestLinks* item)
 {
     CDestLinks* handler =  this->FindDestLink(item);
@@ -1886,7 +1886,7 @@ void CNetMgr::RemoveDestLink(CDestLinks* item)
 }
 
 
-// ²éÑ¯»ò´´½¨Ò»¸öÄ¿±êipµÄlinks½Úµã
+// æŸ¥è¯¢æˆ–åˆ›å»ºä¸€ä¸ªç›®æ ‡ipçš„linksèŠ‚ç‚¹
 CDestLinks* CNetMgr::FindCreateDest(CDestLinks* key)
 {
     CDestLinks* dest = this->FindDestLink(key);
@@ -1911,16 +1911,16 @@ CDestLinks* CNetMgr::FindCreateDest(CDestLinks* key)
 }
 
 
-// ²éÑ¯»ò´´½¨Ò»¸öÄ¿±êipµÄlinks½Úµã
+// æŸ¥è¯¢æˆ–åˆ›å»ºä¸€ä¸ªç›®æ ‡ipçš„linksèŠ‚ç‚¹
 void CNetMgr::DeleteDestLink(CDestLinks* dst)
 {
     this->RemoveDestLink(dst);
-    dst->Reset();  // Ö±½ÓfreeÇ°µ÷ÓÃ reset
+    dst->Reset();  // ç›´æ¥freeå‰è°ƒç”¨ reset
     this->FreeDestLink(dst);   
 }
 
 
-// ¹¹Ôìº¯ÊıÊµÏÖ
+// æ„é€ å‡½æ•°å®ç°
 CNetMgr::CNetMgr()
 {
     sk_buffer_mng_init(&_tcp_pool, 60, 4096);
@@ -1931,10 +1931,10 @@ CNetMgr::CNetMgr()
 }
 
 
-// Îö¹¹º¯ÊıÊµÏÖ
+// ææ„å‡½æ•°å®ç°
 CNetMgr::~CNetMgr()
 {
-    // »ØÊÕËùÓĞµÄdest×ÊÔ´
+    // å›æ”¶æ‰€æœ‰çš„destèµ„æº
     if (_ip_hash != NULL) 
     {
         HashKey* hash_item = _ip_hash->HashGetFirst();
@@ -1948,7 +1948,7 @@ CNetMgr::~CNetMgr()
         _ip_hash = NULL;
     }
 
-    // »ØÊÕËùÓĞµÄ netitem ×ÊÔ´
+    // å›æ”¶æ‰€æœ‰çš„ netitem èµ„æº
     if (_session_hash != NULL) 
     {
         HashKey* hash_item = _session_hash->HashGetFirst();
@@ -1962,14 +1962,14 @@ CNetMgr::~CNetMgr()
         _session_hash = NULL;
     }
 
-    // »ØÊÕbuff³Ø×ÊÔ´
+    // å›æ”¶buffæ± èµ„æº
     sk_buffer_mng_destroy(&_tcp_pool);
     sk_buffer_mng_destroy(&_udp_pool);
 }
 
 
 /**
- * @brief »ØÊÕ×ÊÔ´ĞÅÏ¢
+ * @brief å›æ”¶èµ„æºä¿¡æ¯
  */
 void CNetMgr::RecycleObjs(uint64_t now)
 {

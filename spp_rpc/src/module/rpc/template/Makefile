@@ -27,7 +27,7 @@ DEBUG= -g
 INCCOMM=-I$(FRAME_INC_PATH) -I$(PB_INC)  -I$(FRAME_INC_PATH)/spp_incl/ -I$(FRAME_INC_PATH)/sync_incl -I$(FRAME_INC_PATH)/internal -I$(FRAME_INC_PATH)/r3c -I$(FRAME_INC_PATH)/hiredis -I$(FRAME_INC_PATH)/mysqlclient
 #LIBCOMM= -L../lib $(shell ls ../lib | egrep "^lib" | egrep -v "libmt.a|libnlbapi.a|libprotobuf.a|librpc_clt_comm.a" | cut -b 4- | cut -d . -f 1 | awk '{print "-l"$$0}')
 LIBCOMM= -L../lib $(shell ls ../lib | egrep "^lib" | egrep -v "libmt.a|libnlbapi.a|libprotobuf.a|librpc_clt_comm.a|libhiredis.a|libmysqlclient.a|libr3c.a" | cut -b 4- | cut -d . -f 1 | awk '{print "-l"$$0}') -lmysqlclient -lr3c -lhiredis
-BINARY = service_$(MODULE_REPLACE).so
+BINARY = service_$(MODULE_FILENAME_REPLACE).so
 
 ### rules
 ALLPROTOBUF=$(wildcard ./*.proto)
@@ -100,7 +100,7 @@ proto: $(ALLPROTOBUF_H)
 LIB_OBJ = $(patsubst %.cpp,%.o,$(wildcard *.cpp)) $(patsubst %.c,%.o,$(wildcard *.c)) \
           $(patsubst %.cc,%.o,$(wildcard *.cc)) $(patsubst %.cxx,%.o,$(wildcard *.cxx)) $(ALLPROTOBUF_OBJ)
 
-service_$(MODULE_REPLACE).so: $(LIB_OBJ)
+service_$(MODULE_FILENAME_REPLACE).so: $(LIB_OBJ)
 	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED)
 	@-rm -f $@ 
 	@$(CC) -o $@ $^ -shared -ldl $(C_ARGS) $(LIBCOMM) -Wl,-z,interpose -Wl,-rpath,../bin/lib $(CRESET)

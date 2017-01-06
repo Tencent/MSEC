@@ -19,8 +19,8 @@
 
 /**
  *  @filename mt_sys_hook.cpp
- *  @info  Î¢Ïß³ÌhookÏµÍ³api, ÒÔ²»ÓÃ¶îÍâ±àÒëµÄÓÅÊÆ, ×ªÍ¬²½ÎªÒì²½¿â
- *         Ö»hook socketÏà¹ØµÄAPI, HOOK ²¿·Ö, ²Î¿¼pthÓëlibcoÊµÏÖ
+ *  @info  å¾®çº¿ç¨‹hookç³»ç»Ÿapi, ä»¥ä¸ç”¨é¢å¤–ç¼–è¯‘çš„ä¼˜åŠ¿, è½¬åŒæ­¥ä¸ºå¼‚æ­¥åº“
+ *         åªhook socketç›¸å…³çš„API, HOOK éƒ¨åˆ†, å‚è€ƒpthä¸libcoå®ç°
  */
 
 #include <stdio.h>
@@ -49,22 +49,22 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief Ã¿sockt·ÖÅäÒ»¸ö¹ÜÀí½á¹¹, ±ê¼ÇÊÇ·ñĞèÒªHOOK, ³¬Ê±Ê±¼äµÈ
+ * @brief æ¯socktåˆ†é…ä¸€ä¸ªç®¡ç†ç»“æ„, æ ‡è®°æ˜¯å¦éœ€è¦HOOK, è¶…æ—¶æ—¶é—´ç­‰
  */
 typedef struct socket_hook_info
 {
-    int     sock_flag;      // ÊÇ·ñÊ¹ÓÃHOOK, ÊÇ·ñÓÃ»§ÉèÖÃUNBLOCK
-    int     read_timeout;   // socket¶ÁÈ¡³¬Ê±Ê±¼ä, msµ¥Î»
-    int     write_timeout;  // socketĞ´Èë³¬Ê±Ê±¼ä, msµ¥Î»
+    int     sock_flag;      // æ˜¯å¦ä½¿ç”¨HOOK, æ˜¯å¦ç”¨æˆ·è®¾ç½®UNBLOCK
+    int     read_timeout;   // socketè¯»å–è¶…æ—¶æ—¶é—´, mså•ä½
+    int     write_timeout;  // socketå†™å…¥è¶…æ—¶æ—¶é—´, mså•ä½
 }MtHookFd;
 
-MtSyscallFuncTab       g_mt_syscall_tab;            // È«¾Ö·ûºÅ±í
-int                    g_mt_hook_flag;              // È«¾Ö¿ØÖÆ±ê¼Ç
-static MtHookFd        g_mt_hook_fd_tab[MT_HOOK_MAX_FD];   // È«¾Öfd¹ÜÀí
+MtSyscallFuncTab       g_mt_syscall_tab;            // å…¨å±€ç¬¦å·è¡¨
+int                    g_mt_hook_flag;              // å…¨å±€æ§åˆ¶æ ‡è®°
+static MtHookFd        g_mt_hook_fd_tab[MT_HOOK_MAX_FD];   // å…¨å±€fdç®¡ç†
 
 
 /**
- * @brief ÄÚ²¿½Ó¿Ú, »ñÈ¡hook fdÏà¹ØµÄĞÅÏ¢, socket Ä¬ÈÏhook, open Ä¬ÈÏno hook
+ * @brief å†…éƒ¨æ¥å£, è·å–hook fdç›¸å…³çš„ä¿¡æ¯, socket é»˜è®¤hook, open é»˜è®¤no hook
  */
 MtHookFd* mt_hook_find_fd(int fd) 
 {
@@ -81,7 +81,7 @@ MtHookFd* mt_hook_find_fd(int fd)
 }
 
 /**
- * @brief ÄÚ²¿½Ó¿Ú, ´´½¨socketÉèÖÃhook, Ö»´¦Àísocket, ²»´¦ÀíÎÄ¼şIO
+ * @brief å†…éƒ¨æ¥å£, åˆ›å»ºsocketè®¾ç½®hook, åªå¤„ç†socket, ä¸å¤„ç†æ–‡ä»¶IO
  */
 void mt_hook_new_fd(int fd)
 {
@@ -96,7 +96,7 @@ void mt_hook_new_fd(int fd)
 }
 
 /**
- * @brief ÄÚ²¿½Ó¿Ú, ¹Ø±Õhook socket
+ * @brief å†…éƒ¨æ¥å£, å…³é—­hook socket
  */
 void mt_hook_free_fd(int fd)
 {
@@ -112,7 +112,7 @@ void mt_hook_free_fd(int fd)
 
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, Ä¬ÈÏÉèÖÃunblock
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, é»˜è®¤è®¾ç½®unblock
  */
 int socket(int domain, int type, int protocol)
 {
@@ -140,7 +140,7 @@ int socket(int domain, int type, int protocol)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi
  */
 int close(int fd)
 {
@@ -156,7 +156,7 @@ int close(int fd)
 
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi
  */
 int connect(int fd, const struct sockaddr *address, socklen_t address_len)
 {
@@ -176,7 +176,7 @@ int connect(int fd, const struct sockaddr *address, socklen_t address_len)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t read(int fd, void *buf, size_t nbyte)
 {
@@ -196,7 +196,7 @@ ssize_t read(int fd, void *buf, size_t nbyte)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t write(int fd, const void *buf, size_t nbyte)
 {
@@ -216,7 +216,7 @@ ssize_t write(int fd, const void *buf, size_t nbyte)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t sendto(int fd, const void *message, size_t length, int flags, 
                const struct sockaddr *dest_addr, socklen_t dest_len)
@@ -238,7 +238,7 @@ ssize_t sendto(int fd, const void *message, size_t length, int flags,
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t recvfrom(int fd, void *buffer, size_t length, int flags, 
                   struct sockaddr *address, socklen_t *address_len)
@@ -260,7 +260,7 @@ ssize_t recvfrom(int fd, void *buffer, size_t length, int flags,
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t recv(int fd, void *buffer, size_t length, int flags)
 {
@@ -280,7 +280,7 @@ ssize_t recv(int fd, void *buffer, size_t length, int flags)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ÓÃ»§ÒÑ¾­ÉèÖÃunblock, Ìø¹ı
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, ç”¨æˆ·å·²ç»è®¾ç½®unblock, è·³è¿‡
  */
 ssize_t send(int fd, const void *buf, size_t nbyte, int flags)
 {
@@ -301,7 +301,7 @@ ssize_t send(int fd, const void *buf, size_t nbyte, int flags)
 
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ½Ø»ñÓÃ»§ÉèÖÃµÄ³¬Ê±Ê±¼äĞÅÏ¢
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, æˆªè·ç”¨æˆ·è®¾ç½®çš„è¶…æ—¶æ—¶é—´ä¿¡æ¯
  */
 int setsockopt(int fd, int level, int option_name, const void *option_value, socklen_t option_len)
 {
@@ -330,7 +330,7 @@ int setsockopt(int fd, int level, int option_name, const void *option_value, soc
 
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ½Ø»ñÓÃ»§ÉèÖÃµÄ·Ç×èÈû±ê¼Ç
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, æˆªè·ç”¨æˆ·è®¾ç½®çš„éé˜»å¡æ ‡è®°
  */
 int fcntl(int fd, int cmd, ...)
 {
@@ -362,7 +362,7 @@ int fcntl(int fd, int cmd, ...)
 }
 
 /**
- * @brief HOOK½Ó¿Ú, ³õÊ¼»¯mt¿âºó, ½Ó¹ÜÏµÍ³api, ½Ø»ñÓÃ»§ÉèÖÃµÄ·Ç×èÈû±ê¼Ç
+ * @brief HOOKæ¥å£, åˆå§‹åŒ–mtåº“å, æ¥ç®¡ç³»ç»Ÿapi, æˆªè·ç”¨æˆ·è®¾ç½®çš„éé˜»å¡æ ‡è®°
  */
 int ioctl(int fd, int cmd, ...)
 {

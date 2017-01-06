@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_session.cpp
- *  @info Î¢Ïß³Ìºó¶ËÁ¬½Ó»á»°¹ÜÀíÊµÏÖ²¿·Ö
+ *  @info å¾®çº¿ç¨‹åç«¯è¿æ¥ä¼šè¯ç®¡ç†å®ç°éƒ¨åˆ†
  *  @time 20130924
  **/
 
@@ -30,21 +30,21 @@ using namespace std;
 using namespace NS_MICRO_THREAD;
 
 /**
- * @brief session½Ó¿Ú×ÊÔ´×Ô»ØÊÕ´¦Àí
+ * @brief sessionæ¥å£èµ„æºè‡ªå›æ”¶å¤„ç†
  */
 ISession::~ISession()
 {
     if (_session_flg) {
         SessionMgr* sessionmgr = SessionMgr::Instance();
         sessionmgr->RemoveSession(_session_id);
-        _session_flg = (int)SESSION_IDLE;   // ¶îÍâ´¦Àí, ÔÚremoveº¯ÊıÄÚ´¦Àí»á¼Ó´ó¿ªÏú
+        _session_flg = (int)SESSION_IDLE;   // é¢å¤–å¤„ç†, åœ¨removeå‡½æ•°å†…å¤„ç†ä¼šåŠ å¤§å¼€é”€
     }
 }
 
 
 /**
- * @brief sessionÈ«¾Ö¹ÜÀí¾ä±ú
- * @return È«¾Ö¾ä±úÖ¸Õë
+ * @brief sessionå…¨å±€ç®¡ç†å¥æŸ„
+ * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
  */
 SessionMgr* SessionMgr::_instance = NULL;
 SessionMgr* SessionMgr::Instance (void)
@@ -58,7 +58,7 @@ SessionMgr* SessionMgr::Instance (void)
 }
 
 /**
- * @brief session¹ÜÀíÈ«¾ÖµÄÏú»Ù½Ó¿Ú
+ * @brief sessionç®¡ç†å…¨å±€çš„é”€æ¯æ¥å£
  */
 void SessionMgr::Destroy()
 {
@@ -70,7 +70,7 @@ void SessionMgr::Destroy()
 }
 
 /**
- * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+ * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
  */
 SessionMgr::SessionMgr()
 {
@@ -79,7 +79,7 @@ SessionMgr::SessionMgr()
 }
 
 /**
- * @brief Îö¹¹º¯Êı, ²»³ÖÓĞ×ÊÔ´, ²¢²»¸ºÔğÇåÀí
+ * @brief ææ„å‡½æ•°, ä¸æŒæœ‰èµ„æº, å¹¶ä¸è´Ÿè´£æ¸…ç†
  */
 SessionMgr::~SessionMgr()
 {
@@ -90,7 +90,7 @@ SessionMgr::~SessionMgr()
 }
 
 /**
- * @brief SessionÊı¾İ´æ´¢
+ * @brief Sessionæ•°æ®å­˜å‚¨
  */
 int SessionMgr::InsertSession(ISession* session)
 {
@@ -110,7 +110,7 @@ int SessionMgr::InsertSession(ISession* session)
 }
 
 /**
- * @brief ²éÑ¯sessionÊı¾İ
+ * @brief æŸ¥è¯¢sessionæ•°æ®
  */
 ISession* SessionMgr::FindSession(int session_id)
 {
@@ -125,7 +125,7 @@ ISession* SessionMgr::FindSession(int session_id)
 }
 
 /**
- * @brief É¾³ısessionÊı¾İ
+ * @brief åˆ é™¤sessionæ•°æ®
  */
 void SessionMgr::RemoveSession(int session_id)
 {

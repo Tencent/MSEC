@@ -22,7 +22,22 @@ clean:
 	@echo
 	@echo "Cleaning..." 
 
-copy: 
+copy: cppcopy phpcopy pycopy
+
+phpcopy:
+	@cp ../third_party/php/bin/php ./rpc/php_template -rf
+	@cp ../rpc/php-ext/libsrpc_proto_php_c.so ./rpc/php_template -rf
+	@cp ../rpc/php-ext/nlb_php/.libs/nlb_php.so ./rpc/php_template -rf
+	@cp ../rpc/php-ext/srpc_comm_php/.libs/srpc_comm_php.so ./rpc/php_template -rf
+	@cp ../rpc/php/call_service.php ./rpc/php_template -rf
+
+pycopy:
+	@cp ../rpc/python-ext/libs/nlb_py.so ./rpc/py_template -rf
+	@cp ../rpc/python-ext/libs/monitor_py.so ./rpc/py_template -rf
+	@cp ../rpc/python-ext/libs/srpc_comm_py_c.so ./rpc/py_template/srpc_comm_py.so -rf
+	@cp ../rpc/python-ext/libsrpc_proto_py_c.so ./rpc/py_template -rf
+
+cppcopy: 
 	@rm ./include/spp_incl -rf
 	@-mkdir ./include/spp_incl
 	@cp ../comm/spp_version.h ./include/spp_incl/.
@@ -72,16 +87,6 @@ copy:
 	@-cp ../rpc/librpc_clt_comm.a ./lib -rf
 	@-cp ../internal/nlb/lib/libnlbapi.a ./lib -rf
 	@chmod a+x ./lib/*
-	@-rm ./client -rf
-	@-mkdir -p ./client/{lib,include,tmp}
-	@-cp ./include/pb ./client/include -rf
-	@-cp ./include/srpc_incl/srpc_intf.h ./client/include
-	@-cp ./include/srpc_incl/srpc.pb.h ./client/include
-	@-cp ./include/srpc_incl/srpc_comm.h ./client/include
-	@-cp ./lib/{libprotobuf.a,libmt.a,libnlbapi.a,librpc_clt_comm.a} ./client/tmp
-	@cd ./client/tmp;ls | awk '{print "ar -x "$$0}' | sh; ar crs libsrpcclient.a *.o; cd -
-	@-cp ./client/tmp/libsrpcclient.a ./client/lib/
-	@rm ./client/tmp -rf
 
 dev_pkg: 
 	@echo -e "generate srpc dev package..."
@@ -91,6 +96,9 @@ dev_pkg:
 	@-cp ./lib ./srpc_dev/ -rf
 	@-cp ./client ./srpc_dev/ -rf
 	@-cp ./rpc/template ./srpc_dev/rpc/ -rf
+	@-cp ./rpc/php_template ./srpc_dev/rpc/ -rf
+	@-cp ./rpc/py_template ./srpc_dev/rpc/ -rf
+	@-cp ../third_party/python ./srpc_dev/rpc/py_template -rf
 	@tar --exclude=.svn -zcvf srpc_dev_pkg.tar.gz ./srpc_dev
 	@-rm ./srpc_dev -rf
 

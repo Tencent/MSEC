@@ -179,8 +179,8 @@ redisContext *redisConnectUnixNonBlock(const char *path);
 redisContext *redisConnectFd(int fd);
 
 /**
- * @brief ¼ì²éÎ¢Ïß³ÌÁ¬½ÓÊÇ·ñÎªĞÂÁ¬½Ó
- * @return 1 ĞÂÁ¬½Ó 0 ÀÏÁ¬½Ó
+ * @brief æ£€æŸ¥å¾®çº¿ç¨‹è¿æ¥æ˜¯å¦ä¸ºæ–°è¿æ¥
+ * @return 1 æ–°è¿æ¥ 0 è€è¿æ¥
  */
 int redisIsNewConnectMt(redisContext *c);
 

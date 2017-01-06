@@ -35,6 +35,18 @@ using namespace google::protobuf;
 namespace srpc {
 
 /**
+ * @brief 报文格式控制宏
+ * @info  报文格式 "(head_len body_len head body)"
+ */
+#define PROTO_RPC_STX           0x28
+#define PROTO_RPC_ETX           0x29
+#define PROTO_HEAD_MIN_LEN      10
+#define PROTO_HEAD_OFFSET       (PROTO_HEAD_MIN_LEN-1)
+#define PROTO_BODY_LEN_OFFSET   (1+4)
+#define PROTO_HEAD_LEN_OFFSET   (1)
+
+
+/**
  * @brief  SRPC报文打包函数
  * @info   [注意] 打包后的报文为出参，函数内部分配内存，调用者需要free
  * @param  pkg  [出参]打包完后报文的buffer
@@ -56,6 +68,32 @@ int32_t SrpcPackPkg(char** pkg, int32_t *len, const CRpcHead *head, const Messag
  * @       <0   打包失败
  */
 int32_t SrpcPackPkgNoBody(char** pkg, int32_t *len, const CRpcHead *head);
+
+/**
+ * @brief  SRPC报文打包函数
+ * @info   [注意] 打包后的报文为出参，函数内部分配内存，调用者需要free
+ *         [注意] 包体为二进制
+ * @param  pkg  [出参]打包完后报文的buffer
+ *         len  [出参]打包完后，报文的长度
+ *         head [入参]报文头,PB格式
+ *         body [入参]报文体,二进制
+ * @return =SRPC_SUCCESS    打包成功
+ * @       !=SRPC_SUCCESS   打包失败
+ */
+int32_t SrpcPackPkg(char** pkg, int32_t *len, const CRpcHead *head, const string& body);
+
+
+/**
+ * @brief  SRPC报文解包函数
+ * @info   [注意] 必须为完整的一个包才能调用
+ *         [注意] 只获取body的序列化后的二进制
+ * @param  buff 报文buffer
+ *         len  报文长度
+ *         body 消息体
+ * @return !=SRPC_SUCCESS   解包失败
+ * @       =SRPC_SUCCESS    解包成功
+ */
+int32_t SrpcGetPkgBodyString(const char *buff, int32_t len, string &body);
 
 /**
  * @brief  SRPC报文解包函数

@@ -169,7 +169,7 @@ int32_t CRpcNetAdpt::SendRecv(void)
     {
         result = SRPC_ERR_SEND_RECV_FAILED;
         UpdateRoute(m_service_name.c_str(), m_addr, 1, 0);
-        NGLOG_ERROR("sendrecv failed, ret [%d] [%m]", ret);
+        NGLOG_ERROR("sendrecv (%s:%u) failed, ret [%d] [%m]", inet_ntoa(m_addr.sin_addr), ntohs(m_addr.sin_port), ret);
         goto EXIT_LABEL;
     }
 
@@ -199,6 +199,13 @@ int32_t CRpcNetAdpt::SendRecv(void)
         NGLOG_DEBUG("invalid reponse sequence [%s]", m_rep_head.ShortDebugString().c_str());
         NGLOG_ERROR("invalid reponse sequence");
         result = SRPC_ERR_INVALID_SEQUENCE;
+        goto EXIT_LABEL;
+    }
+
+    if (m_rep_head.err() != SRPC_SUCCESS)
+    {
+        NGLOG_ERROR("error form back-end: %s", errmsg(m_rep_head.err()));
+        result = (int32_t)m_rep_head.err();
         goto EXIT_LABEL;
     }
 

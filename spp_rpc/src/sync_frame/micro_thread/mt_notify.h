@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_notify.h
- *  @info Î¢Ïß³Ì×¢²áµÄÍ¨Öª¶ÔÏó¶¨ÒåÓë¹ÜÀí
+ *  @info å¾®çº¿ç¨‹æ³¨å†Œçš„é€šçŸ¥å¯¹è±¡å®šä¹‰ä¸ç®¡ç†
  *  @time 20130926
  **/
 
@@ -40,28 +40,28 @@ class SessionProxy;
 class TcpKeepConn;
 
 /**
- * @brief Í¨Öª¶ÔÏóÀàĞÍ
+ * @brief é€šçŸ¥å¯¹è±¡ç±»å‹
  */
 enum NTFY_OBJ_TYPE
 {
-    NTFY_OBJ_UNDEF     = 0,     ///< Î´¶¨ÒåµÄÁ¬½Ó¶ÔÏó
-    NTFY_OBJ_THREAD    = 1,     ///< ¶ÌÁ¬½Ó¶ÔÏó, Ò»¸öfd¶ÔÓ¦Ò»¸öthread
-    NTFY_OBJ_KEEPALIVE = 2,     ///< TCPĞÄÌø±£³ÖµÄnotify¶ÔÏó, ²»¹ØÁª thread
-    NTFY_OBJ_SESSION   = 3,     ///< UDPµÄsessionÄ£ĞÍ, ´úÀíµÄ³¤Á¬½Ó¶ÔÏó
+    NTFY_OBJ_UNDEF     = 0,     ///< æœªå®šä¹‰çš„è¿æ¥å¯¹è±¡
+    NTFY_OBJ_THREAD    = 1,     ///< çŸ­è¿æ¥å¯¹è±¡, ä¸€ä¸ªfdå¯¹åº”ä¸€ä¸ªthread
+    NTFY_OBJ_KEEPALIVE = 2,     ///< TCPå¿ƒè·³ä¿æŒçš„notifyå¯¹è±¡, ä¸å…³è” thread
+    NTFY_OBJ_SESSION   = 3,     ///< UDPçš„sessionæ¨¡å‹, ä»£ç†çš„é•¿è¿æ¥å¯¹è±¡
 };
 
 /**
- * @brief Ğ­ÒéÀàĞÍ¶¨Òå
+ * @brief åè®®ç±»å‹å®šä¹‰
  */
 enum MULTI_PROTO 
 {
     MT_UNKNOWN = 0,
-    MT_UDP     = 0x1,                ///< Á¬½ÓÀàĞÍ UDP
-    MT_TCP     = 0x2                 ///< Á¬½ÓÀàĞÍ TCP
+    MT_UDP     = 0x1,                ///< è¿æ¥ç±»å‹ UDP
+    MT_TCP     = 0x2                 ///< è¿æ¥ç±»å‹ TCP
 };
 
 /**
- * @brief ³¤Á¬½ÓsessionÄ£ĞÍ, ÅúÁ¿ÊÕ·¢µ÷¶È¹ÜÀí½Ó¿Ú
+ * @brief é•¿è¿æ¥sessionæ¨¡å‹, æ‰¹é‡æ”¶å‘è°ƒåº¦ç®¡ç†æ¥å£
  */
 typedef TAILQ_ENTRY(SessionProxy) NtfyEntry;
 typedef TAILQ_HEAD(__NtfyList, SessionProxy) NtfyList;
@@ -70,59 +70,59 @@ class ISessionNtfy : public EpollerObj
 public:
 
     /**
-     *  @brief ¼ì²é±¨ÎÄÍêÕûĞÔ, Í¬Ê±ÌáÈ¡sessionidĞÅÏ¢
-     *  @param pkg ±¨ÎÄÖ¸Õë
-     *  @param len ±¨ÎÄÒÑ½ÓÊÕ³¤¶È
-     *  @param session ½âÎöµÄsessionid, Êä³ö²ÎÊı
-     *  @return <=0 Ê§°Ü, >0 Êµ¼Ê±¨ÎÄ³¤¶È
+     *  @brief æ£€æŸ¥æŠ¥æ–‡å®Œæ•´æ€§, åŒæ—¶æå–sessionidä¿¡æ¯
+     *  @param pkg æŠ¥æ–‡æŒ‡é’ˆ
+     *  @param len æŠ¥æ–‡å·²æ¥æ”¶é•¿åº¦
+     *  @param session è§£æçš„sessionid, è¾“å‡ºå‚æ•°
+     *  @return <=0 å¤±è´¥, >0 å®é™…æŠ¥æ–‡é•¿åº¦
      */
     virtual int GetSessionId(void* pkg, int len,  int& session) { return 0;};
 
     /**
-     *  @brief ´´½¨socket, ¼àÌı¿É¶ÁÊÂ¼ş
-     *  @return fdµÄ¾ä±ú, <0 Ê§°Ü
+     *  @brief åˆ›å»ºsocket, ç›‘å¬å¯è¯»äº‹ä»¶
+     *  @return fdçš„å¥æŸ„, <0 å¤±è´¥
      */
     virtual int CreateSocket(){return -1;};
 
     /**
-     *  @brief ¹Ø±Õsocket, Í£Ö¹¼àÌı¿É¶ÁÊÂ¼ş
+     *  @brief å…³é—­socket, åœæ­¢ç›‘å¬å¯è¯»äº‹ä»¶
      */
     virtual void CloseSocket(){};
 
     /**
-     *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int InputNotify(){return 0;};
     
     /**
-     *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int OutputNotify(){return 0;};
     
     /**
-     *  @brief Òì³£Í¨Öª½Ó¿Ú
-     *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+     *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+     *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
      */
     virtual int HangupNotify(){return 0;};
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlAdd(void* args){return 0;};
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlDel(void* args){return 0;};
 
     /**
-     * @brief ¹¹Ôìº¯ÊıÎö¹¹º¯Êı
+     * @brief æ„é€ å‡½æ•°ææ„å‡½æ•°
      */
     ISessionNtfy(): EpollerObj(0) {
         _proto = MT_UDP;
@@ -133,14 +133,14 @@ public:
     virtual ~ISessionNtfy() {   };
 
     /**
-     * @brief ÉèÖÃ±¾´Î´¦ÀíµÄprotoĞÅÏ¢
+     * @brief è®¾ç½®æœ¬æ¬¡å¤„ç†çš„protoä¿¡æ¯
      */
     void SetProtoType(MULTI_PROTO proto) {
         _proto = proto;
     };
 
     /**
-     * @brief »ñÈ¡±¾´Î´¦ÀíµÄprotoĞÅÏ¢
+     * @brief è·å–æœ¬æ¬¡å¤„ç†çš„protoä¿¡æ¯
      * @return proto type
      */
     MULTI_PROTO GetProtoType() {
@@ -148,60 +148,60 @@ public:
     };
     
     /**
-     * @brief ÉèÖÃbuff´óĞ¡, ¾ö¶¨Êµ¼ÊÊ¹ÓÃµÄmsgbuff¶ÓÁĞ
-     * @return  0³É¹¦
+     * @brief è®¾ç½®buffå¤§å°, å†³å®šå®é™…ä½¿ç”¨çš„msgbuffé˜Ÿåˆ—
+     * @return  0æˆåŠŸ
      */
     void SetMsgBuffSize(int buff_size) {
         _buff_size = buff_size;
     };
 
     /**
-     * @brief »ñÈ¡Ô¤ÖÃµÄbuff´óĞ¡, ÈçÎŞÉèÖÃ, ·µ»Ø65535
-     * @return  ¿ò¼ÜÉêÇëµÄÏûÏ¢buff×î´ó³¤¶È
+     * @brief è·å–é¢„ç½®çš„buffå¤§å°, å¦‚æ— è®¾ç½®, è¿”å›65535
+     * @return  æ¡†æ¶ç”³è¯·çš„æ¶ˆæ¯buffæœ€å¤§é•¿åº¦
      */
     int GetMsgBuffSize()     {
         return (_buff_size > 0) ? _buff_size : 65535;
     }
 
     /**
-     * @brief Í¨Öª´úÀí½øÈëµÈ´ı×´Ì¬
+     * @brief é€šçŸ¥ä»£ç†è¿›å…¥ç­‰å¾…çŠ¶æ€
      */
     void InsertWriteWait(SessionProxy* proxy);
 
     /**
-     * @brief Í¨Öª´úÀíÈ¡ÏûµÈ´ı×´Ì¬
+     * @brief é€šçŸ¥ä»£ç†å–æ¶ˆç­‰å¾…çŠ¶æ€
      */
     void RemoveWriteWait(SessionProxy* proxy);
 
     /**
-     * @brief ¹Û²ìÕßÄ£Ê½, Í¨ÖªĞ´µÈ´ıÏß³Ì
-     * @info UDP¿ÉÒÔÍ¨ÖªÃ¿¸öÏß³ÌÖ´ĞĞĞ´²Ù×÷, TCPĞèÒªÅÅ¶ÓĞ´
+     * @brief è§‚å¯Ÿè€…æ¨¡å¼, é€šçŸ¥å†™ç­‰å¾…çº¿ç¨‹
+     * @info UDPå¯ä»¥é€šçŸ¥æ¯ä¸ªçº¿ç¨‹æ‰§è¡Œå†™æ“ä½œ, TCPéœ€è¦æ’é˜Ÿå†™
      */
     virtual void NotifyWriteWait(){};
     
 protected:
-    MULTI_PROTO         _proto;         // Ğ­ÒéÀàĞÍ UDP/TCP
-    int                 _buff_size;     // ×î´óÏûÏ¢³¤¶È
-    NtfyList            _write_list;    // ¿ÉĞ´µÈ´ı¶ÓÁĞ
-    MtMsgBuf*           _msg_buff;      // ÁÙÊ±ÊÕ°ü´æ·Å»º³åÇø
+    MULTI_PROTO         _proto;         // åè®®ç±»å‹ UDP/TCP
+    int                 _buff_size;     // æœ€å¤§æ¶ˆæ¯é•¿åº¦
+    NtfyList            _write_list;    // å¯å†™ç­‰å¾…é˜Ÿåˆ—
+    MtMsgBuf*           _msg_buff;      // ä¸´æ—¶æ”¶åŒ…å­˜æ”¾ç¼“å†²åŒº
 };
 
 
 /**
- * @brief UDP³¤Á¬½ÓsessionÄ£ĞÍµÄ»ùÀà½Ó¿Ú
- * @info  ÒµÎñsessionĞèÒª¼Ì³Ğ¸Ã½Ó¿Ú, ÉèÖÃÊôĞÔ, ÊµÏÖ»ñÈ¡GetSessionIdº¯Êı
- * @info  ±£ÁôÀ©Õ¹, ÈçÖ¸¶¨±¾µØ¶Ë¿ÚµÈ
+ * @brief UDPé•¿è¿æ¥sessionæ¨¡å‹çš„åŸºç±»æ¥å£
+ * @info  ä¸šåŠ¡sessionéœ€è¦ç»§æ‰¿è¯¥æ¥å£, è®¾ç½®å±æ€§, å®ç°è·å–GetSessionIdå‡½æ•°
+ * @info  ä¿ç•™æ‰©å±•, å¦‚æŒ‡å®šæœ¬åœ°ç«¯å£ç­‰
  */
 class UdpSessionNtfy : public ISessionNtfy
 {
 public:
     
     /**
-     *  @brief ¼ì²é±¨ÎÄÍêÕûĞÔ, Í¬Ê±ÌáÈ¡sessionidĞÅÏ¢, ÓÉ¼Ì³ĞÀàÊµÏÖËü
-     *  @param pkg ±¨ÎÄÖ¸Õë
-     *  @param len ±¨ÎÄÒÑ½ÓÊÕ³¤¶È
-     *  @param session ½âÎöµÄsessionid, Êä³ö²ÎÊı
-     *  @return <=0 Ê§°Ü, >0 Êµ¼Ê±¨ÎÄ³¤¶È
+     *  @brief æ£€æŸ¥æŠ¥æ–‡å®Œæ•´æ€§, åŒæ—¶æå–sessionidä¿¡æ¯, ç”±ç»§æ‰¿ç±»å®ç°å®ƒ
+     *  @param pkg æŠ¥æ–‡æŒ‡é’ˆ
+     *  @param len æŠ¥æ–‡å·²æ¥æ”¶é•¿åº¦
+     *  @param session è§£æçš„sessionid, è¾“å‡ºå‚æ•°
+     *  @return <=0 å¤±è´¥, >0 å®é™…æŠ¥æ–‡é•¿åº¦
      */
     virtual int GetSessionId(void* pkg, int len,  int& session) { return 0;};
 
@@ -209,7 +209,7 @@ public:
 public:
 
     /**
-     * @brief ¹¹ÔìÓëÎö¹¹º¯Êı
+     * @brief æ„é€ ä¸ææ„å‡½æ•°
      */
     UdpSessionNtfy() : ISessionNtfy(){
         ISessionNtfy::SetProtoType(MT_UDP); 
@@ -221,59 +221,59 @@ public:
     virtual ~UdpSessionNtfy() {    };
 
     /**
-     * @brief ¹Û²ìÕßÄ£Ê½, Í¨ÖªĞ´µÈ´ıÏß³Ì
-     * @info UDP¿ÉÒÔÍ¨ÖªÃ¿¸öÏß³ÌÖ´ĞĞĞ´²Ù×÷, TCPĞèÒªÅÅ¶ÓĞ´
+     * @brief è§‚å¯Ÿè€…æ¨¡å¼, é€šçŸ¥å†™ç­‰å¾…çº¿ç¨‹
+     * @info UDPå¯ä»¥é€šçŸ¥æ¯ä¸ªçº¿ç¨‹æ‰§è¡Œå†™æ“ä½œ, TCPéœ€è¦æ’é˜Ÿå†™
      */
     virtual void NotifyWriteWait();
 
     /**
-     *  @brief ´´½¨socket, ¼àÌı¿É¶ÁÊÂ¼ş
-     *  @return fdµÄ¾ä±ú, <0 Ê§°Ü
+     *  @brief åˆ›å»ºsocket, ç›‘å¬å¯è¯»äº‹ä»¶
+     *  @return fdçš„å¥æŸ„, <0 å¤±è´¥
      */
     virtual int CreateSocket();
 
     /**
-     *  @brief ¹Ø±Õsocket, Í£Ö¹¼àÌı¿É¶ÁÊÂ¼ş
+     *  @brief å…³é—­socket, åœæ­¢ç›‘å¬å¯è¯»äº‹ä»¶
      */
     virtual void CloseSocket();
 
     /**
-     *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int InputNotify();
     
     /**
-     *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int OutputNotify();
     
     /**
-     *  @brief Òì³£Í¨Öª½Ó¿Ú
-     *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+     *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+     *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
      */
     virtual int HangupNotify();
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlAdd(void* args);
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlDel(void* args);
 
 public:
 
     /**
-     * @brief ÉèÖÃudp±¾µØµÄ±¾µØbindµØÖ·, ¶à½ø³Ìbind»á³åÍ», ÔİÊ±Í£ÓÃ
-     *      ºóĞø¿ª·Å, ÄÜ±£Ö¤Ã¿½ø³ÌÎ¨Ò»port¿ÉÊ¹ÓÃ
+     * @brief è®¾ç½®udpæœ¬åœ°çš„æœ¬åœ°bindåœ°å€, å¤šè¿›ç¨‹bindä¼šå†²çª, æš‚æ—¶åœç”¨
+     *      åç»­å¼€æ”¾, èƒ½ä¿è¯æ¯è¿›ç¨‹å”¯ä¸€portå¯ä½¿ç”¨
      */
     void SetLocalAddr(struct sockaddr_in* local_addr) {
         memcpy(&_local_addr, local_addr, sizeof(_local_addr));
@@ -287,17 +287,17 @@ protected:
 
 
 /**
- * @brief UDPÄ£Ê½sessionÄ£ĞÍµÄ´úÀíÍ¨Öª¶ÔÏó, ¶à¸ö´úÀíÓ³Éäµ½Ä³Ò»¸ösession notify
- * @info  session proxy ±¾Éí²»ÔÚepoll×¢²á, ²»»áÓĞÊÂ¼şÍ¨Öª, µ«ĞèÒª¹ØĞÄ³¬Ê±µÈ
+ * @brief UDPæ¨¡å¼sessionæ¨¡å‹çš„ä»£ç†é€šçŸ¥å¯¹è±¡, å¤šä¸ªä»£ç†æ˜ å°„åˆ°æŸä¸€ä¸ªsession notify
+ * @info  session proxy æœ¬èº«ä¸åœ¨epollæ³¨å†Œ, ä¸ä¼šæœ‰äº‹ä»¶é€šçŸ¥, ä½†éœ€è¦å…³å¿ƒè¶…æ—¶ç­‰
  */
 class SessionProxy  : public EpollerObj
 {
 public:
-    int         _flag;                ///< 0-²»ÔÚ¶ÓÁĞÖĞ, 1-ÔÚµÈ´ı¶ÓÁĞ
-    NtfyEntry   _write_entry;         ///< ¹ØÁª¿ÉĞ´µÈ´ı¶ÓÁĞµÄ¹ÜÀíÈë¿Ú
+    int         _flag;                ///< 0-ä¸åœ¨é˜Ÿåˆ—ä¸­, 1-åœ¨ç­‰å¾…é˜Ÿåˆ—
+    NtfyEntry   _write_entry;         ///< å…³è”å¯å†™ç­‰å¾…é˜Ÿåˆ—çš„ç®¡ç†å…¥å£
 
     /**
-     *  @brief ÉèÖÃ´úÀí¶ÔÏó, ¹ØÁª´úÀíµÄfd¾ä±ú
+     *  @brief è®¾ç½®ä»£ç†å¯¹è±¡, å…³è”ä»£ç†çš„fdå¥æŸ„
      */
     void SetRealNtfyObj(ISessionNtfy* obj) {
         _real_ntfy = obj;
@@ -305,7 +305,7 @@ public:
     };
     
     /**
-     *  @brief »ñÈ¡´úÀí¶ÔÏóÖ¸Õë
+     *  @brief è·å–ä»£ç†å¯¹è±¡æŒ‡é’ˆ
      */
     ISessionNtfy* GetRealNtfyObj() {
         return _real_ntfy;
@@ -314,7 +314,7 @@ public:
 public:
 
     /**
-     * @brief »ØÊÕ´¦Àí, ÉèÖÃÇåÀí¶¯×÷
+     * @brief å›æ”¶å¤„ç†, è®¾ç½®æ¸…ç†åŠ¨ä½œ
      */
     virtual void Reset() {
         _real_ntfy = NULL;
@@ -322,9 +322,9 @@ public:
     };
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlAdd(void* args) {
         if (!_real_ntfy) {
@@ -345,9 +345,9 @@ public:
     };
 
     /**
-     *  @brief µ÷ÕûepollÕìÌıÊÂ¼şµÄ»Øµ÷½Ó¿Ú, ³¤Á¬½ÓÊ¼ÖÕEPOLLIN, Å¼¶ûEPOLLOUT
-     *  @param args fdÒıÓÃ¶ÔÏóµÄÖ¸Õë
-     *  @return 0 ³É¹¦, < 0 Ê§°Ü, ÒªÇóÊÂÎñ»Ø¹öµ½²Ù×÷Ç°×´Ì¬
+     *  @brief è°ƒæ•´epollä¾¦å¬äº‹ä»¶çš„å›è°ƒæ¥å£, é•¿è¿æ¥å§‹ç»ˆEPOLLIN, å¶å°”EPOLLOUT
+     *  @param args fdå¼•ç”¨å¯¹è±¡çš„æŒ‡é’ˆ
+     *  @return 0 æˆåŠŸ, < 0 å¤±è´¥, è¦æ±‚äº‹åŠ¡å›æ»šåˆ°æ“ä½œå‰çŠ¶æ€
      */
     virtual int EpollCtlDel(void* args) {
         if (!_real_ntfy) {
@@ -364,85 +364,85 @@ public:
     };
 
 private:
-    ISessionNtfy*   _real_ntfy;         // Êµ¼ÊµÄÖ´ĞĞÕß
+    ISessionNtfy*   _real_ntfy;         // å®é™…çš„æ‰§è¡Œè€…
 
 };
 
 /**
- * @brief TCPÄ£Ê½µÄkeepaliveÍ¨Öª¶ÔÏó, ½ö½ö¹ØĞÄ¿É¶ÁÊÂ¼ş, È·ÈÏÊÇ·ñ¶Ô¶Ë¹Ø±Õ
+ * @brief TCPæ¨¡å¼çš„keepaliveé€šçŸ¥å¯¹è±¡, ä»…ä»…å…³å¿ƒå¯è¯»äº‹ä»¶, ç¡®è®¤æ˜¯å¦å¯¹ç«¯å…³é—­
  */
 class TcpKeepNtfy: public EpollerObj
 {
 public:
 
     /**
-     * @brief ¹¹Ôìº¯Êı
+     * @brief æ„é€ å‡½æ•°
      */
     TcpKeepNtfy() :     _keep_conn(NULL){};    
 
     /**
-     *  @brief ¿É¶ÁÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯è¯»äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int InputNotify();
     
     /**
-     *  @brief ¿ÉĞ´ÊÂ¼şÍ¨Öª½Ó¿Ú, ¿¼ÂÇÍ¨Öª´¦Àí¿ÉÄÜ»áÆÆ»µ»·¾³, ¿ÉÓÃ·µ»ØÖµÇø·Ö
-     *  @return 0 ¸Ãfd¿É¼ÌĞø´¦ÀíÆäËüÊÂ¼ş; !=0 ¸ÃfdĞèÌø³ö»Øµ÷´¦Àí
+     *  @brief å¯å†™äº‹ä»¶é€šçŸ¥æ¥å£, è€ƒè™‘é€šçŸ¥å¤„ç†å¯èƒ½ä¼šç ´åç¯å¢ƒ, å¯ç”¨è¿”å›å€¼åŒºåˆ†
+     *  @return 0 è¯¥fdå¯ç»§ç»­å¤„ç†å…¶å®ƒäº‹ä»¶; !=0 è¯¥fdéœ€è·³å‡ºå›è°ƒå¤„ç†
      */
     virtual int OutputNotify();
     
     /**
-     *  @brief Òì³£Í¨Öª½Ó¿Ú
-     *  @return ºöÂÔ·µ»ØÖµ, Ìø¹ıÆäËüÊÂ¼ş´¦Àí
+     *  @brief å¼‚å¸¸é€šçŸ¥æ¥å£
+     *  @return å¿½ç•¥è¿”å›å€¼, è·³è¿‡å…¶å®ƒäº‹ä»¶å¤„ç†
      */
     virtual int HangupNotify();
 
     /**
-     *  @brief ÉèÖÃ´úÀí¶ÔÏó
+     *  @brief è®¾ç½®ä»£ç†å¯¹è±¡
      */
     void SetKeepNtfyObj(TcpKeepConn* obj) {
         _keep_conn = obj;
     };
 
     /**
-     *  @brief »ñÈ¡´úÀí¶ÔÏóÖ¸Õë
+     *  @brief è·å–ä»£ç†å¯¹è±¡æŒ‡é’ˆ
      */
     TcpKeepConn* GetKeepNtfyObj() {
         return _keep_conn;
     };
     
     /**
-     *  @brief ´¥·¢Êµ¼ÊÁ¬½Ó¹Ø±Õ²Ù×÷
+     *  @brief è§¦å‘å®é™…è¿æ¥å…³é—­æ“ä½œ
      */
     void KeepaliveClose();
     
 
 private:
-    TcpKeepConn*   _keep_conn;         // Êµ¼ÊµÄÁ¬½ÓÆ÷¶ÔÏó
+    TcpKeepConn*   _keep_conn;         // å®é™…çš„è¿æ¥å™¨å¯¹è±¡
 
 };
 
 
 /**
- * @brief ¶¯Ì¬ÄÚ´æ³ØÄ£°åÀà, ¶ÔÓÚ·´¸´new/deleteµÄ¶ÔÏó²Ù×÷, ¿ÉÒ»¶¨³Ì¶ÈÉÏÌá¸ßĞÔÄÜ
+ * @brief åŠ¨æ€å†…å­˜æ± æ¨¡æ¿ç±», å¯¹äºåå¤new/deleteçš„å¯¹è±¡æ“ä½œ, å¯ä¸€å®šç¨‹åº¦ä¸Šæé«˜æ€§èƒ½
  */
 template<typename ValueType>
 class CPtrPool
 {
 public:
-    typedef typename std::queue<ValueType*>  PtrQueue; ///< ÄÚ´æÖ¸Õë¶ÓÁĞ
+    typedef typename std::queue<ValueType*>  PtrQueue; ///< å†…å­˜æŒ‡é’ˆé˜Ÿåˆ—
     
 public:
 
     /**
-     * @brief ¶¯Ì¬ÄÚ´æ³Ø¹¹Ôìº¯Êı
-     * @param max ×î´ó¿ÕÏĞ¶ÓÁĞ±£´æµÄÖ¸ÕëÔªËØ, Ä¬ÈÏ500
+     * @brief åŠ¨æ€å†…å­˜æ± æ„é€ å‡½æ•°
+     * @param max æœ€å¤§ç©ºé—²é˜Ÿåˆ—ä¿å­˜çš„æŒ‡é’ˆå…ƒç´ , é»˜è®¤500
      */
     explicit CPtrPool(int max = 500) : _max_free(max), _total(0){};
     
     /**
-     * @brief ¶¯Ì¬ÄÚ´æ³ØÎö¹¹º¯Êı, ½ö½öÇåÀíµôfreelist
+     * @brief åŠ¨æ€å†…å­˜æ± ææ„å‡½æ•°, ä»…ä»…æ¸…ç†æ‰freelist
      */
     ~CPtrPool()    {
         ValueType* ptr = NULL;
@@ -454,8 +454,8 @@ public:
     };
 
     /**
-     * @brief ·ÖÅäÄÚ´æÖ¸Õë, ÓÅÏÈ´Ó»º´æ»ñÈ¡, ÎŞ¿ÕÏĞ¿ÉÓÃÔò¶¯Ì¬ new ÉêÇë
-     * @return Ä£°åÀàĞÍµÄÖ¸ÕëÔªËØ, ¿Õ±íÊ¾ÄÚ´æÉêÇëÊ§°Ü
+     * @brief åˆ†é…å†…å­˜æŒ‡é’ˆ, ä¼˜å…ˆä»ç¼“å­˜è·å–, æ— ç©ºé—²å¯ç”¨åˆ™åŠ¨æ€ new ç”³è¯·
+     * @return æ¨¡æ¿ç±»å‹çš„æŒ‡é’ˆå…ƒç´ , ç©ºè¡¨ç¤ºå†…å­˜ç”³è¯·å¤±è´¥
      */
     ValueType* AllocPtr() {
         ValueType* ptr = NULL;
@@ -471,7 +471,7 @@ public:
     };
 
     /**
-     * @brief ÊÍ·ÅÄÚ´æÖ¸Õë, Èô¿ÕÏĞ¶ÓÁĞ³¬¹ıÅä¶î, ÔòÖ±½ÓÊÍ·Å, ·ñÔò¶ÓÁĞ»º´æ
+     * @brief é‡Šæ”¾å†…å­˜æŒ‡é’ˆ, è‹¥ç©ºé—²é˜Ÿåˆ—è¶…è¿‡é…é¢, åˆ™ç›´æ¥é‡Šæ”¾, å¦åˆ™é˜Ÿåˆ—ç¼“å­˜
      */
     void FreePtr(ValueType* ptr) {
         if ((int)_ptr_list.size() >= _max_free) {
@@ -483,14 +483,14 @@ public:
     };    
     
 protected:
-    PtrQueue  _ptr_list;           ///<  ¿ÕÏĞ¶ÓÁĞ
-    int       _max_free;           ///<  ×î´ó¿ÕÏĞÔªËØ 
-    int       _total;              ///<  ËùÓĞnewµÄ¶ÔÏó¸öÊıÍ³¼Æ
+    PtrQueue  _ptr_list;           ///<  ç©ºé—²é˜Ÿåˆ—
+    int       _max_free;           ///<  æœ€å¤§ç©ºé—²å…ƒç´  
+    int       _total;              ///<  æ‰€æœ‰newçš„å¯¹è±¡ä¸ªæ•°ç»Ÿè®¡
 };
 
 
 /**
- * @brief Í¨Öª¶ÔÏóÈ«¾Ö¹ÜÀíÆ÷
+ * @brief é€šçŸ¥å¯¹è±¡å…¨å±€ç®¡ç†å™¨
  */
 class NtfyObjMgr
 {
@@ -501,62 +501,62 @@ public:
     typedef CPtrPool<SessionProxy>  NtfySessionQueue;
     
     /**
-     * @brief »á»°ÉÏÏÂÎÄµÄÈ«¾Ö¹ÜÀí¾ä±ú½Ó¿Ú
-     * @return È«¾Ö¾ä±úÖ¸Õë
+     * @brief ä¼šè¯ä¸Šä¸‹æ–‡çš„å…¨å±€ç®¡ç†å¥æŸ„æ¥å£
+     * @return å…¨å±€å¥æŸ„æŒ‡é’ˆ
      */
     static NtfyObjMgr* Instance (void);
 
     /**
-     * @brief ÇåÀí½Ó¿Ú
+     * @brief æ¸…ç†æ¥å£
      */
     static void Destroy(void);
 
     /**
-     * @brief ×¢²á³¤Á¬½ÓsessionĞÅÏ¢
-     * @param session_name ³¤Á¬½ÓµÄ±êÊ¶, Ã¿¸öÁ¬½Ó´¦ÀíÒ»Ààsession·â×°¸ñÊ½
-     * @param session ³¤Á¬½Ó¶ÔÏóÖ¸Õë, ¶¨ÒåÁ¬½ÓÊôĞÔ
-     * @return 0 ³É¹¦, < 0 Ê§°Ü
+     * @brief æ³¨å†Œé•¿è¿æ¥sessionä¿¡æ¯
+     * @param session_name é•¿è¿æ¥çš„æ ‡è¯†, æ¯ä¸ªè¿æ¥å¤„ç†ä¸€ç±»sessionå°è£…æ ¼å¼
+     * @param session é•¿è¿æ¥å¯¹è±¡æŒ‡é’ˆ, å®šä¹‰è¿æ¥å±æ€§
+     * @return 0 æˆåŠŸ, < 0 å¤±è´¥
      */
     int RegisterSession(int session_name, ISessionNtfy* session);
 
     /**
-     * @brief »ñÈ¡×¢²á³¤Á¬½ÓsessionĞÅÏ¢
-     * @param session_name ³¤Á¬½ÓµÄ±êÊ¶, Ã¿¸öÁ¬½Ó´¦ÀíÒ»Ààsession·â×°¸ñÊ½
-     * @return ³¤Á¬½ÓÖ¸Õë, Ê§°ÜÎªNULL
+     * @brief è·å–æ³¨å†Œé•¿è¿æ¥sessionä¿¡æ¯
+     * @param session_name é•¿è¿æ¥çš„æ ‡è¯†, æ¯ä¸ªè¿æ¥å¤„ç†ä¸€ç±»sessionå°è£…æ ¼å¼
+     * @return é•¿è¿æ¥æŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
      */
     ISessionNtfy* GetNameSession(int session_name);
 
     /**
-     * @brief »ñÈ¡Í¨ÓÃÍ¨Öª¶ÔÏó, ÈçÏß³ÌÍ¨Öª¶ÔÏóÓësessionÍ¨Öª´úÀí¶ÔÏó
-     * @param type ÀàĞÍ, Ïß³ÌÍ¨ÖªÀàĞÍ£¬UDP/TCP SESSIONÍ¨ÖªµÈ
-     * @param session_name proxyÄ£ĞÍ,Ò»²¢»ñÈ¡session¶ÔÏó
-     * @return Í¨Öª¶ÔÏóµÄÖ¸Õë, Ê§°ÜÎªNULL
+     * @brief è·å–é€šç”¨é€šçŸ¥å¯¹è±¡, å¦‚çº¿ç¨‹é€šçŸ¥å¯¹è±¡ä¸sessioné€šçŸ¥ä»£ç†å¯¹è±¡
+     * @param type ç±»å‹, çº¿ç¨‹é€šçŸ¥ç±»å‹ï¼ŒUDP/TCP SESSIONé€šçŸ¥ç­‰
+     * @param session_name proxyæ¨¡å‹,ä¸€å¹¶è·å–sessionå¯¹è±¡
+     * @return é€šçŸ¥å¯¹è±¡çš„æŒ‡é’ˆ, å¤±è´¥ä¸ºNULL
      */
     EpollerObj* GetNtfyObj(int type, int session_name = 0);
 
     
     /**
-     * @brief ÊÍ·ÅÍ¨Öª¶ÔÏóÖ¸Õë
-     * @param obj Í¨Öª¶ÔÏó
+     * @brief é‡Šæ”¾é€šçŸ¥å¯¹è±¡æŒ‡é’ˆ
+     * @param obj é€šçŸ¥å¯¹è±¡
      */
     void FreeNtfyObj(EpollerObj* obj);
 
     /**
-     * @brief Îö¹¹º¯Êı
+     * @brief ææ„å‡½æ•°
      */
     ~NtfyObjMgr();
     
 private:
 
     /**
-     * @brief ÏûÏ¢buffµÄ¹¹Ôìº¯Êı
+     * @brief æ¶ˆæ¯buffçš„æ„é€ å‡½æ•°
      */
     NtfyObjMgr();
 
-    static NtfyObjMgr * _instance;         ///<  µ¥ÀıÀà¾ä±ú
-    SessionMap _session_map;               ///<  È«¾ÖµÄ×¢²ásession¹ÜÀí
-    NtfyThreadQueue  _fd_ntfy_pool;        ///<  fdÍ¨Öª¶ÔÏó
-    NtfySessionQueue _udp_proxy_pool;      ///<  fdÍ¨Öª¶ÔÏó
+    static NtfyObjMgr * _instance;         ///<  å•ä¾‹ç±»å¥æŸ„
+    SessionMap _session_map;               ///<  å…¨å±€çš„æ³¨å†Œsessionç®¡ç†
+    NtfyThreadQueue  _fd_ntfy_pool;        ///<  fdé€šçŸ¥å¯¹è±¡
+    NtfySessionQueue _udp_proxy_pool;      ///<  fdé€šçŸ¥å¯¹è±¡
 };
 
 

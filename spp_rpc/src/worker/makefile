@@ -29,19 +29,17 @@ STATMGR=../comm/stat_mgr
 MT=../sync_frame/micro_thread
 SYNCFRAME=../sync_frame/spp_plugin
 LIB_PATH=../bin/lib/
+LIB_INSTALL_PATH=../../bin/lib/
 SYNC=../sync
 INTERNAL=../internal
-
-ifeq ($(ARCH),32)
-	CFLAGS += -m32 -march=pentium4
-endif  
+PHPLIB=../third_party/php/lib
 
 CFLAGS += -g -Wall -D_GNU_SOURCE -D_SPP_WORKER -D_MP_MODE -Wno-write-strings -DTIXML_USE_STL -Werror #-DOPEN_PRINT #定义_MP_MODE使得多进程写日志安全
 INC += -I$(COMM) -I$(TBASE) -I$(TBASE)/tsockcommu -I$(ASYNC) -I$(SYNCFRAME) -I$(STATMGR) -I$(RPC) -I$(INTERNAL)/se
 LIB += -lpthread -ldl -rdynamic -L$(RPC) -lrpc_svr_comm  -L$(COMM) -L$(ASYNC) -L$(ASYNCFRAME) -L$(SYNC)\
-	-L$(SYNCFRAME) -L$(MT) -lmtspp -lmt -lcommon -L$(INTERNAL)/monitor/lib -lmonitor \
+	-L$(SYNCFRAME) -L$(MT) -lmtspp -lmt -lcommon -L$(INTERNAL)/monitor/lib -lmonitor -L$(PHPLIB) -lphp5\
 	-L$(INTERNAL)/se -lse -L$(INTERNAL)/se/libunwind -lunwind-x86_64 -lunwind -L$(INTERNAL)/se/libbacktrace -lbacktrace \
-        -Wl,-rpath,$(LIB_PATH)
+        -Wl,-rpath,$(LIB_PATH) -L$(LIB_INSTALL_PATH) -ljansson -lhttpsupport -llzma
 
 TARGET=srpc_worker 
 all : $(TARGET)

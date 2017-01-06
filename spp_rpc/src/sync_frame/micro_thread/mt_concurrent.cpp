@@ -19,7 +19,7 @@
 
 /**
  *  @file mt_concurrent.c
- *  @info ¶àÂ·²¢´¦ÀíÄ£ĞÍÀ©Õ¹
+ *  @info å¤šè·¯å¹¶å¤„ç†æ¨¡å‹æ‰©å±•
  *  @time 20130924
  **/
 
@@ -35,11 +35,11 @@ using namespace NS_MICRO_THREAD;
 
 
 /**
- * @brief ¶àÂ·IOµÄ´¦ÀíÓÅ»¯, Òì²½µ÷¶ÈµÈ´ı´¦Àí
- * @param req_list - Á¬½ÓÁĞ±í
+ * @brief å¤šè·¯IOçš„å¤„ç†ä¼˜åŒ–, å¼‚æ­¥è°ƒåº¦ç­‰å¾…å¤„ç†
+ * @param req_list - è¿æ¥åˆ—è¡¨
  * @param how - EPOLLIN  EPOLLOUT
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü -3 ´¦Àí³¬Ê±
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥ -3 å¤„ç†è¶…æ—¶
  */
 int NS_MICRO_THREAD::mt_multi_netfd_poll(IMtActList& req_list, int how, int timeout)
 {
@@ -101,9 +101,9 @@ int NS_MICRO_THREAD::mt_multi_netfd_poll(IMtActList& req_list, int how, int time
 }
 
 /**
- * @brief ÎªÃ¿¸öITEM½¨Á¢ÉÏÏÂÎÄµÄsocket
- * @param req_list - Á¬½ÓÁĞ±í
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief ä¸ºæ¯ä¸ªITEMå»ºç«‹ä¸Šä¸‹æ–‡çš„socket
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int NS_MICRO_THREAD::mt_multi_newsock(IMtActList& req_list)
 {
@@ -164,10 +164,10 @@ int NS_MICRO_THREAD::mt_multi_newsock(IMtActList& req_list)
 
 
 /**
- * @brief ¶àÂ·IOµÄ´¦Àí, ´ò¿ªÁ¬½Ó
- * @param req_list - Á¬½ÓÁĞ±í
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief å¤šè·¯IOçš„å¤„ç†, æ‰“å¼€è¿æ¥
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int NS_MICRO_THREAD::mt_multi_open(IMtActList& req_list, int timeout)
 {
@@ -247,10 +247,10 @@ int NS_MICRO_THREAD::mt_multi_open(IMtActList& req_list, int timeout)
 
 
 /**
- * @brief ¶àÂ·IOµÄ´¦Àí, ·¢ËÍÊı¾İ
- * @param req_list - Á¬½ÓÁĞ±í
- * @param timeout - ³¬Ê±Ê±³¤ ºÁÃëµ¥Î»
- * @return 0 ³É¹¦, <0Ê§°Ü
+ * @brief å¤šè·¯IOçš„å¤„ç†, å‘é€æ•°æ®
+ * @param req_list - è¿æ¥åˆ—è¡¨
+ * @param timeout - è¶…æ—¶æ—¶é•¿ æ¯«ç§’å•ä½
+ * @return 0 æˆåŠŸ, <0å¤±è´¥
  */
 int NS_MICRO_THREAD::mt_multi_sendto(IMtActList& req_list, int timeout)
 {
@@ -285,7 +285,7 @@ int NS_MICRO_THREAD::mt_multi_sendto(IMtActList& req_list, int timeout)
                 return -2;
             }
 
-            // 0 -»¹Òª¼ÌĞø·¢ËÍ; -1 Í£Ö¹·¢ËÍ; > 0 ·¢ËÍOK
+            // 0 -è¿˜è¦ç»§ç»­å‘é€; -1 åœæ­¢å‘é€; > 0 å‘é€OK
             ret = net_handler->SendData();
             if (ret == -1)
             {
@@ -339,7 +339,7 @@ int NS_MICRO_THREAD::mt_multi_sendto(IMtActList& req_list, int timeout)
 
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†
  */
 int NS_MICRO_THREAD::mt_multi_recvfrom(IMtActList& req_list, int timeout)
 {
@@ -361,7 +361,7 @@ int NS_MICRO_THREAD::mt_multi_recvfrom(IMtActList& req_list, int timeout)
                 continue;
             }  
             
-            if (MULTI_FLAG_FIN == action->GetMsgFlag()) ///< ÒÑ´¦ÀíÍê±Ï
+            if (MULTI_FLAG_FIN == action->GetMsgFlag()) ///< å·²å¤„ç†å®Œæ¯•
             {
                 continue;
             }
@@ -374,7 +374,7 @@ int NS_MICRO_THREAD::mt_multi_recvfrom(IMtActList& req_list, int timeout)
                 return -2;
             }
 
-            // <0 Ê§°Ü, 0 ¼ÌĞøÊÕ, >0 ³É¹¦
+            // <0 å¤±è´¥, 0 ç»§ç»­æ”¶, >0 æˆåŠŸ
             ret = net_handler->RecvData();
             if (ret < 0)
             {
@@ -417,17 +417,17 @@ int NS_MICRO_THREAD::mt_multi_recvfrom(IMtActList& req_list, int timeout)
 }
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†
  */
 int NS_MICRO_THREAD::mt_multi_sendrcv_ex(IMtActList& req_list, int timeout)
 {
     utime64_t start_ms = MtFrame::Instance()->GetLastClock();
     utime64_t curr_ms = 0;
     
-    int rc = mt_multi_newsock(req_list); // TODO, ¿ÉÌáÈ¡connect³¬Ê±Ê±¼äµÈ
+    int rc = mt_multi_newsock(req_list); // TODO, å¯æå–connectè¶…æ—¶æ—¶é—´ç­‰
     if (rc < 0)
     {
-        MT_ATTR_API(320842, 1); // socketÊ§°Ü
+        MT_ATTR_API(320842, 1); // socketå¤±è´¥
         MTLOG_ERROR("mt_multi_sendrcv new sock failed, ret: %d", rc);
         return -1;
     }
@@ -435,7 +435,7 @@ int NS_MICRO_THREAD::mt_multi_sendrcv_ex(IMtActList& req_list, int timeout)
     rc = mt_multi_open(req_list, timeout);
     if (rc < 0)
     {
-        MT_ATTR_API(MONITOR_MT_CONNECT_FAIL, 1); // connectÊ§°Ü
+        MT_ATTR_API(MONITOR_MT_CONNECT_FAIL, 1); // connectå¤±è´¥
         MTLOG_ERROR("mt_multi_sendrcv open failed, ret: %d", rc);
         return -2;
     }
@@ -444,7 +444,7 @@ int NS_MICRO_THREAD::mt_multi_sendrcv_ex(IMtActList& req_list, int timeout)
     rc = mt_multi_sendto(req_list, timeout - (curr_ms - start_ms));
     if (rc < 0)
     {
-        MT_ATTR_API(MONITOR_MT_SEND_ERR, 1); // ·¢ËÍÊ§°Ü
+        MT_ATTR_API(MONITOR_MT_SEND_ERR, 1); // å‘é€å¤±è´¥
         MTLOG_ERROR("mt_multi_sendrcv send failed, ret: %d", rc);
         return -3;
     }
@@ -453,7 +453,7 @@ int NS_MICRO_THREAD::mt_multi_sendrcv_ex(IMtActList& req_list, int timeout)
     rc = mt_multi_recvfrom(req_list, timeout - (curr_ms - start_ms));
     if (rc < 0)
     {
-        MT_ATTR_API(MONITOR_MT_RECV_FAIL, 1); // ½ÓÊÕÎ´ÍêÈ«³É¹¦
+        MT_ATTR_API(MONITOR_MT_RECV_FAIL, 1); // æ¥æ”¶æœªå®Œå…¨æˆåŠŸ
         MTLOG_ERROR("mt_multi_sendrcv recv failed, ret: %d", rc);
         return -4;
     }
@@ -463,16 +463,16 @@ int NS_MICRO_THREAD::mt_multi_sendrcv_ex(IMtActList& req_list, int timeout)
 
 
 /**
- * @brief ¶àÂ·IO²¢·¢½ÓÊÕ´¦Àí½Ó¿Ú, ·â×°ACTON½Ó¿ÚÄ£ĞÍ, ÄÚ²¿¹ØÁªmsg
- * @param req_list -action list ÊµÏÖ·â×°º¯Êı½Ó¿Ú
- * @param timeout -³¬Ê±Ê±¼ä, µ¥Î»ms
- * @return  0 ³É¹¦, -1 ³õÊ¼»¯»·¾³Ê§°Ü, ÆäËü³É¹¦»ò²¿·Ö³É¹¦
+ * @brief å¤šè·¯IOå¹¶å‘æ¥æ”¶å¤„ç†æ¥å£, å°è£…ACTONæ¥å£æ¨¡å‹, å†…éƒ¨å…³è”msg
+ * @param req_list -action list å®ç°å°è£…å‡½æ•°æ¥å£
+ * @param timeout -è¶…æ—¶æ—¶é—´, å•ä½ms
+ * @return  0 æˆåŠŸ, -1 åˆå§‹åŒ–ç¯å¢ƒå¤±è´¥, å…¶å®ƒæˆåŠŸæˆ–éƒ¨åˆ†æˆåŠŸ
  */
 int NS_MICRO_THREAD::mt_msg_sendrcv(IMtActList& req_list, int timeout)
 {
     int iRet = 0;
     
-    // µÚÒ»²½, ³õÊ¼»¯action»·¾³, ·â×°ÇëÇó±¨ÎÄ
+    // ç¬¬ä¸€æ­¥, åˆå§‹åŒ–actionç¯å¢ƒ, å°è£…è¯·æ±‚æŠ¥æ–‡
     for (IMtActList::iterator it = req_list.begin(); it != req_list.end(); ++it)
     {
         IMtAction* pAction = *it;
@@ -492,10 +492,10 @@ int NS_MICRO_THREAD::mt_msg_sendrcv(IMtActList& req_list, int timeout)
         
     }
 
-    // µÚ¶ş²½, Í¬²½ÊÕ·¢ÏûÏ¢, Ê§°ÜÒ²ĞèÒªÍ¨Öª´¦Àí
+    // ç¬¬äºŒæ­¥, åŒæ­¥æ”¶å‘æ¶ˆæ¯, å¤±è´¥ä¹Ÿéœ€è¦é€šçŸ¥å¤„ç†
     mt_multi_sendrcv_ex(req_list, timeout);
 
-    // µÚÈı²½, Í¬²½Í¨Öª½â°ü´¦Àí
+    // ç¬¬ä¸‰æ­¥, åŒæ­¥é€šçŸ¥è§£åŒ…å¤„ç†
     for (IMtActList::iterator it = req_list.begin(); it != req_list.end(); ++it)
     {
         IMtAction* pAction = *it;
@@ -515,7 +515,7 @@ int NS_MICRO_THREAD::mt_msg_sendrcv(IMtActList& req_list, int timeout)
         } 
     }
 
-    // µÚËÄ²½, ÇåÀí¿ò¼ÜÄÚ²¿×ÊÔ´, ¼æÈİ¸÷ÀàÓÃ·¨
+    // ç¬¬å››æ­¥, æ¸…ç†æ¡†æ¶å†…éƒ¨èµ„æº, å…¼å®¹å„ç±»ç”¨æ³•
     for (IMtActList::iterator it = req_list.begin(); it != req_list.end(); ++it)
     {
         IMtAction* pAction = *it;

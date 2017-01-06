@@ -1,0 +1,9 @@
+1.请使用如下命令生成php demo代码:
+./create_rpc_php.py ./service.proto ../../ ./
+
+2.pb4php-纯php写的，根据pb生成php定义文件
+需要安装php，才能执行
+
+3.build.sh用来打包代码
+打包好后放到运营机bin/php目录下解压出来即可
+自己的文件请不要叫php.tgz

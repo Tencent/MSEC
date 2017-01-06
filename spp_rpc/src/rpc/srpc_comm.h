@@ -48,6 +48,8 @@ enum SRPC_RETCODE
     SRPC_ERR_NO_BODY                = -17,
     SRPC_ERR_SERVICE_IMPL_FAILED    = -18,
     SRPC_ERR_BACKEND                = -19,
+    SRPC_ERR_PHP_FAILED             = -20,
+    SRPC_ERR_PYTHON_FAILED          = -21,
 };
 
 /**
@@ -69,6 +71,11 @@ uint64_t gen_colorid(const char *method_name);
  * @brief 时延到字符串转换函数
  */
 const char *Cost2TZ(int32_t cost);
+
+/**
+ * @brief 得到一个随机的unsigned int
+ */
+unsigned int my_rand();
 
 }
 
