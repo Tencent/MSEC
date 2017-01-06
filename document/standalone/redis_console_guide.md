@@ -229,19 +229,9 @@ redis数据层的开放端口从10000开始，开放端口=10000+服务组ID。
 
 将下载包解压，使用`/msec/agent/start.sh ip`启动agent，其中ip参数为redis console的内网IP。
 
-## 4.2 remote shell身份认证
+## 4.2 remote shell身份认证【重要！】
 
-部署在业务运营机上的remote_shell_agent接受Redis console服务器上的remote_shell server.jar程序的管理，server.jar可以向agent发送文件、从agent获取文件、让agent执行一个脚本。
+部署在业务运营机上的remote_shell_agent接受Redis console服务器上的remote\_shell\_server.jar程序的管理，可以传输文件、远程执行命令。
 
-如果坏人恶意冒充server.jar，就可以对装有remote_shell_agent的机器为所欲为。
-
-为了安全起见，server.jar和remote_shell_agent之间通过公钥密码算法对server.jar进行身份认证，即要求server.jar使用一个事先约定的保密的私钥对欲执行的命令脚本进行数字签名。Server.jar所在目录下的priv.txt就是私钥文件，而业务运营机的/msec/agent/remote_shell目录下的pub.txt文件就是公钥文件。
-
-remote_shell环境搭建好以后，为了安全起见，可以重新生成priv.txt和pub.txt文件并分发到正确的目录下：
-
-1. 执行`java -jar server.jar newRSAKey`，生成两个文件priv.txt和pub.txt，是新的密钥文件
-2. 将 pub.txt分发到所有业务运营机的/msec/agent/remote_shell目录下，并重新启动remote_shell_agent。因如果更新了pub.txt，请同步更新页面客户端agent下载包，因为是使用docker，建议将这个改动commit到centos:redis_console镜像。
-3. 重新启动Redis console上的remote_shell
-
-注意：后续部署新的业务运营机的agent，都需要使用新生成的pub.txt文件
+这里的安全性考虑和加强请务必阅读 [msec console使用说明文档的第3部分](https://github.com/Tencent/MSEC/blob/master/document/msec/msec_console_guide.md)
 
