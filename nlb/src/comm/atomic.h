@@ -69,7 +69,7 @@ static inline int32_t compare_and_swap_l(long *ptr, long o, long n)
     return __sync_bool_compare_and_swap(ptr, o, n);
 }
 
-
+#define mb() __asm__ __volatile__("mfence": : :"memory")
 
 #endif
 

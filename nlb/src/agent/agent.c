@@ -222,8 +222,6 @@ void swap_server_info(struct server_info *server1, struct server_info *server2)
  */
 void calc_servers_weight(struct shm_servers *servers)
 {
-    static double weight_fail_rate = 0.01;  // 失败率基准
-    static double retry_times_rate = 0.001; // 重试基准
     uint32_t i;
     uint32_t weight, base = 0;
     uint32_t dead_retrys;
@@ -247,11 +245,119 @@ void calc_servers_weight(struct shm_servers *servers)
 
     /* 计算死机服务器可以分配的权重，死机机器统一一个权重，随机选择一个 */
     if (servers->dead_num != 0) {
-        weight      = (uint32_t)(servers->weight_total * weight_fail_rate);
-        dead_retrys = (uint32_t)((servers->success_total + servers->fail_total)*retry_times_rate);
+        weight      = (uint32_t)(servers->weight_total * servers->dead_retry_ratio + 1);
+        dead_retrys = (uint32_t)((servers->success_total + servers->fail_total)*servers->dead_retry_ratio);
         servers->weight_total      += max(weight, (uint32_t)1);
         servers->dead_retry_times   = max(dead_retrys, (uint32_t)1);
     }
+}
+
+void _shaping_servers(struct shm_servers *servers, double success_ratio_base, bool weight_dec)
+{
+    int32_t  begin, end;
+    uint16_t weight;
+    uint32_t svr_num = servers->server_num;
+    uint64_t single_req_total;
+    double   single_success_ratio, ratio;
+
+    struct server_info *server;
+
+    /* 计算每一个服务器权重和死机状态 */
+    end   = (int32_t)svr_num - 1;
+    begin = 0;
+    while ((begin <= end) && (end >= 0)) {
+        server              = &servers->svrs[begin];
+        single_req_total    = server->failed + server->success;
+
+        /* 如果没有处理过请求，权重信息保持不变 */
+        if (!single_req_total) {
+            if (server->dead_time) {
+                server->weight_dynamic = 0;
+                swap_server_info(server, &servers->svrs[end]);
+                end--;
+            } else {
+                begin++;
+            }
+            continue;
+        }
+
+        single_success_ratio = ((double)server->success)/single_req_total;
+
+        /* 单机成功率大于基准成功率 */
+        if (single_success_ratio >= success_ratio_base) {
+            /* 死机机器，重新修改权重 */
+            if (server->dead_time) {
+                server->dead_time = 0;
+                weight            = (uint16_t)(server->weight_static * servers->resume_weight_ratio);
+                server->weight_dynamic  = max(weight, (uint16_t)1);
+                begin++;
+                continue;
+            }
+
+            /* 如果大于基准成功率，增加权重 */
+            if (server->weight_static != server->weight_dynamic) {
+                weight = (uint16_t)(server->weight_static * servers->weight_incr_ratio);
+                weight = max(weight, (uint16_t)1);
+                server->weight_dynamic += weight;
+                server->weight_dynamic  = min(server->weight_static, server->weight_dynamic);
+            }
+            
+            begin++;
+
+            continue;
+        }
+
+        /* 单机成功率为0 */
+        if (single_success_ratio <= 0.00001) {
+            if (server->dead_time == 0) {
+                server->dead_time = get_time_ms();
+            }
+
+            server->weight_dynamic  = 0;
+            swap_server_info(server, &servers->svrs[end]);
+            end--;
+            continue;
+        }
+
+        if (!weight_dec) {
+            begin++;
+            continue;
+        }
+
+        /* 单机成功率低于平均成功率,减小权重 */
+        ratio = single_success_ratio;
+        ratio = ratio * ratio;
+        server->weight_dynamic = (uint16_t)(server->weight_dynamic * ratio);
+
+        /* 降低权重后，权重为零 */
+        if (0 == server->weight_dynamic) {
+            if (0 == server->dead_time) {
+                server->dead_time = get_time_ms();
+            }
+
+            swap_server_info(server, &servers->svrs[end]);
+            end--;
+            continue;
+        }
+
+        begin++;
+    }
+}
+
+uint32_t calc_weight_low_num(struct shm_servers *servers)
+{
+    struct server_info *info;
+    float water_mark = servers->weight_low_watermark;
+    uint32_t idx, cnt = 0;
+
+    for (idx = 0; idx < servers->server_num; idx ++) {
+        info = servers->svrs + idx;
+        if (((float)info->weight_dynamic)/info->weight_static < water_mark) {
+            cnt++;
+        }
+    }
+
+    return cnt;
 }
 
 /**
@@ -260,9 +366,35 @@ void calc_servers_weight(struct shm_servers *servers)
  */
 void shaping_servers(struct shm_servers *servers)
 {
-    static   double   success_rate_base = 0.98;// 基准成功率
-    static   double   success_rate_min  = 0.1; // 低于此值，认为死机
-    static   double   weight_incr_step  = 0.05;// 一次权重增加5%
+    uint32_t svr_num = servers->server_num;
+    uint64_t req_total;
+    double   success_rate;
+    float    weight_low_real_ratio;
+
+    /* 没有服务器，不用计算 */
+    if (!svr_num) {
+        return;
+    }
+
+    weight_low_real_ratio = ((float)servers->weight_low_num)/svr_num;
+    if (weight_low_real_ratio <= servers->weight_low_ratio) {
+        _shaping_servers(servers, servers->success_ratio_base, true);
+    } else {
+        /* 计算平均成功率，用平均成功率计算权重 */
+        req_total = servers->fail_total + servers->success_total;
+        if (req_total == 0) {
+            success_rate = 100.0;
+        } else {
+            success_rate = ((double)servers->success_total)/req_total;
+        }
+
+        success_rate = min(success_rate, (double)servers->success_ratio_base);
+        _shaping_servers(servers, success_rate, false);
+    }
+
+    servers->weight_low_num = calc_weight_low_num(servers);
+
+    #if 0
     int32_t  begin, end;
     uint16_t weight;
     uint32_t svr_num = servers->server_num;
@@ -270,26 +402,20 @@ void shaping_servers(struct shm_servers *servers)
     double   success_rate, single_success_rate, rate;
     double   cost_avg; //, single_cost_avg;
 
-    struct server_info *server;
-
-    /* 没有服务器，不用计算 */
-    if (!svr_num) {
-        return;
-    }
 
     /* 计算总成功率 */
     req_total = servers->fail_total + servers->success_total;
     if (req_total == 0) {
-        success_rate = (double)100;
+        success_rate = 100.0;
     } else {
-        success_rate = (servers->success_total * 1.0)/req_total;
+        success_rate = ((double)servers->success_total)/req_total;
     }
 
     /* 计算总时延 */
     if (servers->success_total == 0) {
         cost_avg = (double)0;
     } else {
-        cost_avg = (servers->cost_total * 1.0)/servers->success_total;
+        cost_avg = ((double)servers->cost_total)/servers->success_total;
     }
 
     /* 计算每一个服务器权重和死机状态 */
@@ -368,6 +494,8 @@ void shaping_servers(struct shm_servers *servers)
 
         begin++;
     }
+
+    #endif
 }
 
 /**
@@ -384,8 +512,38 @@ void copy_servers(struct shm_servers *dst_svrs, struct shm_servers *src_svrs, ui
     dst_svrs->cost_total    = 0;
     dst_svrs->fail_total    = 0;
     dst_svrs->success_total = 0;
-    dst_svrs->server_num    = svr_num;
-    dst_svrs->policy        = src_svrs->policy;
+
+    if (src_svrs->version == NLB_SHM_VERSION1) {
+        dst_svrs->server_num            = svr_num;
+        dst_svrs->policy                = src_svrs->policy;
+        dst_svrs->weight_total          = src_svrs->weight_total;
+        dst_svrs->weight_static_total   = src_svrs->weight_static_total;
+        dst_svrs->shaping_request_min   = src_svrs->shaping_request_min;
+        dst_svrs->success_ratio_base    = src_svrs->success_ratio_base;
+        dst_svrs->success_ratio_min     = src_svrs->success_ratio_min;
+        dst_svrs->resume_weight_ratio   = src_svrs->resume_weight_ratio;
+        dst_svrs->dead_retry_ratio      = src_svrs->dead_retry_ratio;
+        dst_svrs->weight_low_watermark  = src_svrs->weight_low_watermark;
+        dst_svrs->weight_low_ratio      = src_svrs->weight_low_ratio;
+        dst_svrs->weight_incr_ratio     = src_svrs->weight_incr_ratio;
+        dst_svrs->version               = NLB_SHM_VERSION1;        
+        dst_svrs->weight_low_num        = src_svrs->weight_low_num;
+    } else {
+        dst_svrs->server_num            = svr_num;
+        dst_svrs->policy                = src_svrs->policy;
+        dst_svrs->weight_total          = src_svrs->weight_total;
+        dst_svrs->weight_static_total   = 0;
+        dst_svrs->shaping_request_min   = NLB_SHAPING_REQUEST_MIN;
+        dst_svrs->success_ratio_base    = NLB_SUCCESS_RATIO_BASE;
+        dst_svrs->success_ratio_min     = NLB_SUCCESS_RATIO_MIN;
+        dst_svrs->resume_weight_ratio   = NLB_RESUME_WEIGHT_RATIO;
+        dst_svrs->dead_retry_ratio      = NLB_DEAD_RETRY_RATIO;
+        dst_svrs->weight_low_watermark  = NLB_WEIGHT_LOW_WATERMARK;
+        dst_svrs->weight_low_ratio      = NLB_WEIGHT_LOW_RATIO;
+        dst_svrs->weight_incr_ratio     = NLB_WEIGHT_INCR_RATIO;
+        dst_svrs->version               = NLB_SHM_VERSION1;
+        dst_svrs->weight_low_num        = src_svrs->weight_low_num;
+    }
 
     for (i = 0; i < svr_num; i++) {
         dst_svr = &dst_svrs->svrs[i];
@@ -433,6 +591,7 @@ void copy_specified_servers(struct shm_servers *dst_svrs, struct shm_servers *sr
     dst_svrs->cost_total    = 0;
     dst_svrs->fail_total    = 0;
     dst_svrs->success_total = 0;
+    dst_svrs->weight_low_num= 0;
 
     for (i = 0; i < svr_num; i++) {
         dst_svr = &dst_svrs->svrs[i];
@@ -524,6 +683,24 @@ void merge_servers_stat(struct shm_servers *dst_svrs, struct shm_servers *src_sv
 }
 
 /**
+ * @brief 检查服务器是否真死了
+ */
+bool check_server_real_dead(struct server_info *server, float success_ratio)
+{
+    uint32_t total = server->success + server->failed;
+
+    if (total == 0) {
+        return true;
+    }
+
+    if ((server->success*1.0)/total < success_ratio) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * @brief 处理节点事件
  * @info  如果节点死机，清除统计信息并设置死机标记(死机时间戳)
  * @      如果节点恢复，清除统计信息和死机标记，并将统计信息清零，权重设置为10%
@@ -553,14 +730,17 @@ void handle_node_events(struct shm_servers *shm_servers, struct list_head *event
 
         /* 设置死机标记和动态权重 */
         if (event->type == NLB_EVENT_TYPE_NODE_DEAD) {
-            server->dead_time      = get_time_ms();
-            server->weight_dynamic = 0;
-            NLOG_DEBUG("process node dead event, [%s]", inet_ntoa(*(struct in_addr *)&ip));
+            if (check_server_real_dead(server, shm_servers->success_ratio_min)) {
+                server->dead_time      = get_time_ms();
+                server->weight_dynamic = 0;
+            }
+            NLOG_DEBUG("process node dead event, [%s] new weight [%u]",
+                       inet_ntoa(*(struct in_addr *)&ip), server->weight_dynamic);
         }else if (event->type == NLB_EVENT_TYPE_NODE_RESUME) {
             NLOG_DEBUG("process node resume event, [%s]", inet_ntoa(*(struct in_addr *)&ip));
             if (server->dead_time) {
                 server->dead_time = 0;
-                server->weight_dynamic = max((uint16_t)1, (uint16_t)(server->weight_static*0.1));
+                server->weight_dynamic = max((uint16_t)1, (uint16_t)(server->weight_static*shm_servers->resume_weight_ratio));
             } else { /* 可能有连续两次事件导致不一致，可以忽略 */
                 delete_event(event, false);
                 continue;
@@ -636,7 +816,6 @@ int32_t update_config(struct agent_local_rdata *rdata, struct shm_servers *new_s
 {
     uint32_t idx, new_idx, server_num;
     uint32_t data_len;
-    const uint32_t up_lower = 5;
     struct shm_servers *cur_shm_servers;
     struct shm_servers *next_shm_servers;
     struct shm_servers *servers;
@@ -659,7 +838,7 @@ int32_t update_config(struct agent_local_rdata *rdata, struct shm_servers *new_s
         server_num  = servers->server_num;
         data_len    = sizeof(struct shm_servers) + sizeof(struct server_info) * server_num;
         meta->mtime = mtime;
-        copy_specified_servers(servers, cur_shm_servers, up_lower);
+        copy_specified_servers(servers, cur_shm_servers, servers->shaping_request_min);
     } else {
         server_num  = cur_shm_servers->server_num;
         data_len    = sizeof(struct shm_servers) + sizeof(struct server_info) * server_num;
@@ -672,7 +851,7 @@ int32_t update_config(struct agent_local_rdata *rdata, struct shm_servers *new_s
         }
 
         /* 拷贝所有共享内存服务器信息到私有内存，同时计算统计信息 */
-        copy_servers(servers, cur_shm_servers, up_lower);
+        copy_servers(servers, cur_shm_servers, servers->shaping_request_min);
         if (!servers->server_num) {
             free(servers);
             return 0;
@@ -703,6 +882,7 @@ int32_t update_config(struct agent_local_rdata *rdata, struct shm_servers *new_s
     memcpy(next_shm_servers, servers, data_len);
 
     /* 设置新寻址服务器数据 */
+    mb();
     meta->index = new_idx;
 
     /* 合并统计数据到新服务器数据里面 */

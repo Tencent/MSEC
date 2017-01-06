@@ -1,3 +1,4 @@
+#!/bin/sh
 
 #
 # Tencent is pleased to support the open source community by making MSEC available.
@@ -15,10 +16,6 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 #
-
-
-
-#!/bin/sh
 
 echo "stoping nlb agent..."
 killall -9 nlbagent

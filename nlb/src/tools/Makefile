@@ -30,6 +30,8 @@ INC= -I./ -I../api -I../comm  -I../third_party/zookeeper/include/include -I../th
 CLIENT_TEST= client_test
 SHOW_TOOL= show_servers
 GET_ROUTE=get_route
+UPDATE_ROUTE=update_route
+OBJ_UPDATE_ROUTE=update_route.o
 OBJ_GET_ROUTE= get_route.o
 OBJ_CLIENT= client_test.o
 OBJ_SHOW=show_servers.o
@@ -49,6 +51,11 @@ $(CLIENT_TEST): $(OBJ_CLIENT)
 	@chmod +x $@
 $(SHOW_TOOL): $(OBJ_SHOW)
 	@echo -e  Linking $(CYAN)$@$(RESET) ...$(RED) 
+	@$(CC) -o $@ $^ $(CFLAGS) $(LIB) $(CRESET)
+	@chmod +x $@
+
+$(UPDATE_ROUTE): $(OBJ_UPDATE_ROUTE)
+	@echo -e Linking $(CYAN)$@$(RESET) ...$(RED) 
 	@$(CC) -o $@ $^ $(CFLAGS) $(LIB) $(CRESET)
 	@chmod +x $@
 

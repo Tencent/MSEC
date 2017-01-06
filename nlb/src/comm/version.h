@@ -24,7 +24,7 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-__attribute__((weak)) char NLB_VERSION[64] = "0.1.4";
+__attribute__((weak)) char NLB_VERSION[64] = "0.1.5";
 
 #endif
 

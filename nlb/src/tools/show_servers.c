@@ -43,9 +43,15 @@ static void dumpservers(struct shm_servers *servers)
 
     printf("general infomation:\n");
     printf("  cost_total:%lu  success_total:%lu fail_total:%lu server_num:%u dead_num:%u dead_retry_times:%u\n"
-           "  weight_total: %u weight_dead_base:%u mhash_order:%u\n\n",
+           "  weight_total: %u weight_dead_base:%u mhash_order:%u\n"
+           "  version: %d weight_static_total: %u weight_low_num: %u shaping_request_min: %d \n"
+           "  success_ratio_base: %f success_ratio_min: %f resume_weight_ratio: %f dead_retry_ratio: %f\n"
+           "  weight_low_watermark: %f weight_low_ratio: %f weight_incr_ratio: %f\n\n",
            servers->cost_total, servers->success_total, servers->fail_total, servers->server_num, servers->dead_num,
-           servers->dead_retry_times, servers->weight_total, servers->weight_dead_base, servers->mhash_order);
+           servers->dead_retry_times, servers->weight_total, servers->weight_dead_base, servers->mhash_order,
+           servers->version, servers->weight_static_total, servers->weight_low_num, servers->shaping_request_min,
+           servers->success_ratio_base, servers->success_ratio_min, servers->resume_weight_ratio, servers->dead_retry_ratio,
+           servers->weight_low_watermark, servers->weight_low_ratio, servers->weight_incr_ratio);
 
     if (servers->server_num == 0) {
         return;

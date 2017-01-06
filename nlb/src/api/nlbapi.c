@@ -164,6 +164,19 @@ NLB_PORT_TYPE get_port_type(struct server_info *server)
     return (NLB_PORT_TYPE)server->port_type;
 }
 
+float calc_success_ratio(struct shm_servers *shm_servers, struct server_info *server)
+{
+    uint32_t req_total;
+
+    req_total = server->failed + server->success;
+
+    if (req_total < shm_servers->shaping_request_min) {
+        return 100.0;
+    }
+
+    return ((float)server->success)/req_total;
+}
+
 /**
  * @brief 通过二分查找法查找路由服务器
  * @info  1. 服务器都死机，会随机找一个服务器
@@ -228,6 +241,12 @@ int32_t search_route(struct api_routedata *route_data, struct routeid *route)
     }
 
 FOUND_ROUTE:
+
+    /* 如果当前机器成功率太低，重新再随机选择一个 */
+    if (calc_success_ratio(servers_data, server) < servers_data->success_ratio_min) {
+        server = servers + nlb_rand() % server_num;
+    }
+
     route->ip    = server->server_ip;
     route->port  = get_one_port(server);
     route->type  = get_port_type(server);
