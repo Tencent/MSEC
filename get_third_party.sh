@@ -57,7 +57,7 @@ echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 wget https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz
 echo 'download zlib for monitor_server:'
 echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-wget http://zlib.net/zlib-1.2.8.tar.gz
+wget http://zlib.net/fossils/zlib-1.2.8.tar.gz
 echo 'download mysql client library for monitor_server:'
 echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 wget http://cdn.mysql.com/archives/mysql-5.5/MySQL-devel-5.5.8-1.linux2.6.x86_64.rpm
