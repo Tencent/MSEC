@@ -91,6 +91,7 @@ bool CShmMgr::GetAllServiceKeys()
 		ret = ht.Get(it, *data);
 		if (ret != 0)
 		{
+	        delete data;
 			return false;
 		}
 		if(data->klen == 16 && data->dlen > 0) {
