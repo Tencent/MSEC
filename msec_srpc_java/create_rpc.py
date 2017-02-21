@@ -82,7 +82,7 @@ def ParseProtoFile(filename):
     for item in service_list:
         method_list = []
         #print item[1]
-        p = re.compile(r'rpc\s+(\w+)\s*\((\w+)\)\s+returns\s+\((\w+)\)', re.S | re.M)
+        p = re.compile(r'rpc\s+(\w+)\s*\((\w+)\s*\)\s+returns\s+\((\w+)\s*\)', re.S | re.M)
         mlist = p.findall(item[0])
         for m in mlist:
             method_list.append((item[1], TransMethodName(m[0]), m[1], m[2]))

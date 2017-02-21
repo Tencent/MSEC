@@ -146,15 +146,15 @@ public class RequestProcessor implements Callable<RpcResponse> {
             return null;
         }
 
-        Map<String, String> headers = new HashMap<String, String>();
-        headers.put("Coloring", "1");
-        AccessLog.doLog(AccessLog.LOG_LEVEL_DEBUG, headers, "system rpc log. request: " + rpcRequest.getParameter());
+        //Map<String, String> headers = new HashMap<String, String>();
+        //headers.put("Coloring", "1");
+        //AccessLog.doLog(AccessLog.LOG_LEVEL_DEBUG, headers, "system rpc log. request: " + rpcRequest.getParameter());
 
         String serviceMethodName = rpcRequest.getServiceName() + "/" + rpcRequest.getMethodName();
         log.info("Rpc Call: " + rpcContext.getClientAddr() + " ---> " +
                 rpcContext.getLocalAddr() + " " + serviceMethodName + " request: " + rpcRequest.getParameter());
-        AccessLog.doLog(AccessLog.LOG_LEVEL_INFO, "Rpc Call: " + rpcContext.getClientAddr() + " ---> " +
-                rpcContext.getLocalAddr() + " " + serviceMethodName + " request: " + rpcRequest.getParameter());
+        //AccessLog.doLog(AccessLog.LOG_LEVEL_INFO, "Rpc Call: " + rpcContext.getClientAddr() + " ---> " +
+        //        rpcContext.getLocalAddr() + " " + serviceMethodName + " request: " + rpcRequest.getParameter());
 
         ServiceFactory.ServiceMethodEntry serviceMethodEntry = ServiceFactory.getServiceMethodEntry(rpcRequest.getServiceName(), rpcRequest.getMethodName());
         if (serviceMethodEntry != null) {
@@ -169,7 +169,7 @@ public class RequestProcessor implements Callable<RpcResponse> {
 
                 AccessMonitor.add("frm.rpc " + rpcRequest.getMethodName() + " succ count");
                 log.info("RPC invoke discrete method succeeded: " + invokeResultObj);
-                AccessLog.doLog(AccessLog.LOG_LEVEL_INFO, "Rpc Call timecost: " + (timeEnd - timeBegin) + "ms response: " + invokeResultObj);
+                //AccessLog.doLog(AccessLog.LOG_LEVEL_INFO, "Rpc Call timecost: " + (timeEnd - timeBegin) + "ms response: " + invokeResultObj);
             } catch (InvocationTargetException ex) {
                 rpcResponse.setErrno(-1000);
                 rpcResponse.setError(ex);
