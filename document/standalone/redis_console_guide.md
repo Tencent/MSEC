@@ -233,5 +233,5 @@ redis数据层的开放端口从10000开始，开放端口=10000+服务组ID。
 
 部署在业务运营机上的remote_shell_agent接受Redis console服务器上的remote\_shell\_server.jar程序的管理，可以传输文件、远程执行命令。
 
-这里的安全性考虑和加强请务必阅读 [msec console使用说明文档的第3部分](https://github.com/Tencent/MSEC/blob/master/document/msec/msec_console_guide.md)
+这里的安全性考虑和加强请务必阅读 [msec console使用说明文档的第3部分](https://github.com/Tencent/MSEC/blob/master/document/msec/msec_console_guide.md#3remote-shell身份认证)
 
