@@ -78,16 +78,24 @@ docker ps -a
 
 ## 1.3 服务端口列表
 
-Elasticsearch管理平台开放了下述端口：
+Elasticsearch管理平台需要开放下述端口：
 
 | 服务端口 | 开放目的 |
 | --- | --- |
 | 8080 | 服务管理页面 |
+| 8081 | Nignx服务，用于Head插件展示及作为Elasticsearch Http API的反向代理 |
 | 9982 | 远程命令数据传输服务端口 |
 | 38002 | 监控服务业务上报端口 |
 | 38003 | 监控服务数据获取端口 |
 
-Elasticsearch实例业务机的开放端口使用默认端口9200和9300。
+Elasticsearch实例业务机需要开放下述端口：
+| 服务端口 | 开放目的 |
+| --- | --- |
+| 9200 | Elasticsearch Http API服务端口 |
+| 9300 | Elasticsearch Java API服务端口 |
+| 30150 | 日志查询端口 |
+| 44445 | 日志入库端口 |
+
 
 
 # 二、使用说明
@@ -112,6 +120,8 @@ Elasticsearch实例业务机的开放端口使用默认端口9200和9300。
 3.  缩容管理：集群去除一个/多个ip。
 
 ![](images/es_console_guide/image2.png)
+
+每个实例的IP:Port后有两个图标，点击分别展示IP的基础属性以及Elasticsearch的Head插件。
 
 点击加号可以对当前实例进行服务重启，适用于服务宕机后的恢复。
 
