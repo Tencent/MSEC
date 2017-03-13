@@ -89,6 +89,7 @@ Elasticsearch管理平台需要开放下述端口：
 | 38003 | 监控服务数据获取端口 |
 
 Elasticsearch实例业务机需要开放下述端口：
+
 | 服务端口 | 开放目的 |
 | --- | --- |
 | 9200 | Elasticsearch Http API服务端口 |
