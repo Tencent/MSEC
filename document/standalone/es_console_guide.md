@@ -246,15 +246,15 @@ Elasticsearch服务可以用作毫秒服务引擎的日志系统。用户无需�
 
 # 五、业务机Agent安装
 
-## 4.1 agent包下载和安装
+## 5.1 agent包下载和安装
 
 业务机需要部署Agent才能完成和Console之间的交互以及监控数据的上报。请在页面“客户端Agent下载-下载”中获取Agent包，并放置于Elasticsearch实例业务机的/msec/agent/目录里。
 
 将下载包解压，使用`/msec/agent/start.sh ip`启动agent，其中ip参数为Elasticsearch console的内网IP。
 
-## 4.2 remote shell身份认证【重要！】
+## 5.2 remote shell身份认证【重要！】
 
-部署在业务运营机上的remote_shell_agent接受Redis console服务器上的remote\_shell\_server.jar程序的管理，可以传输文件、远程执行命令。
+部署在业务运营机上的remote_shell_agent接受Elasticsearch console服务器上的remote\_shell\_server.jar程序的管理，可以传输文件、远程执行命令。
 
 这里的安全性考虑和加强请务必阅读 [msec console使用说明文档的第3部分](https://github.com/Tencent/MSEC/blob/master/document/msec/msec_console_guide.md#3remote-shell身份认证)
 
