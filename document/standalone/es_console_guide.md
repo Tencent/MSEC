@@ -76,7 +76,16 @@ docker ps -a
 
 5.  进入监控系统管理页面查看是否正常, URL为 http://Console_IP:8080
 
-## 1.3 服务端口列表
+## 1.3 Elasticsearch实例业务机依赖项
+
+根据[Elasticsearch官网手册](https://www.elastic.co/guide/en/elasticsearch/reference/current/setup.html)说明，Elasticsearch实例业务机需要至少[Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)及以上版本，推荐使用JDK 1.8.0_121及以上版本,可以通过以下命令来检查你的Java版本（如果有需要，安装或者升级）：
+
+```
+java -version
+echo $JAVA_HOME
+```
+
+## 1.4 服务端口列表
 
 Elasticsearch管理平台需要开放下述端口：
 
@@ -96,8 +105,6 @@ Elasticsearch实例业务机需要开放下述端口：
 | 9300 | Elasticsearch Java API服务端口 |
 | 30150 | 日志查询端口 |
 | 44445 | 日志入库端口 |
-
-
 
 # 二、使用说明
 
@@ -210,7 +217,34 @@ Elasticsearch实例业务机需要开放下述端口：
 
 /msec/tomcat_log tomcat的log目录
 
-# 四、业务机Agent安装
+# 四、用于毫秒服务引擎的集群版日志系统
+
+## 4.1 配置
+
+Elasticsearch服务可以用作毫秒服务引擎的日志系统。用户无需修改已有毫秒服务的代码或现网毫秒实例，仅需下述操作即可无缝接入Elasticsearch服务，具体操作步骤如下：
+
+1. 在每个毫秒服务实例的业务机上更新日志agent，agent会将数据发向集群版的日志系统，并重启日志agent服务：
+
+	```
+	/msec/agent/logsys/bin/restart.sh
+	```
+	
+	*注意：仅需要重启日志agent即可，无需重启毫秒实例*
+
+2. 在毫秒web化控制台上更新Elasticsearch系统的IP，对应上面的Elasticsearch集群，更新服务IP列表信息如下，注意端口默认为30150，使用tcp协议：
+
+![](images/es_console_guide/image8.png)
+
+完成上述步骤后，日志的录入和查询即可切换到Elasticsearch系统。
+
+## 4.2 架构简图
+
+使用了Elasticsearch系统作为毫秒引擎的集群版日志系统后，整个架构简图如下：
+
+
+![](images/es_console_guide/image9.png)
+
+# 五、业务机Agent安装
 
 ## 4.1 agent包下载和安装
 
