@@ -1,0 +1,22 @@
+body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+.form_style {color:#666666;background-color: #f0f0f0; margin-top: 5px}
+.title_bar_style {color:darkblue;background-color: #f0f0f0; margin-top: 5px}
+.table_style {color:#666666;background-color: #f0f0f0; margin-top: 5px}
+.result_msg_style {color:red;background-color: #f0f0f0 margin-top: 5px;}
+.clear{clear:both}
+.dt_text {width:237px;display: inline-block}
+td.ip-port img {cursor: pointer;}
+.icon-reload{position:absolute;width:16px;height:16px; cursor:pointer;background:url('../imgs/reload.png') no-repeat;}
+.icon-warning{diaplay:inline;position:absolute;margin-left:2px;width:19px;height:16px; cursor:pointer;background:url('../imgs/warning.png') no-repeat;}
+td.details-control {background: url('../imgs/details_open.png') no-repeat center center;cursor: pointer;}
+tr.shown td.details-control {background: url('../imgs/details_close.png') no-repeat center center;}
+input.time {width: 80px;}
+table.dataTable thead th, table.dataTable tfoot th {font-size:small}
+table.dataTable tbody tr {font-size:small}
+.btn-icon{background-position: center;background-repeat: no-repeat;height: 16px;width: 16px;cursor: pointer;white-space: nowrap;padding: 0;border: 0 none; background: transparent;}
+.icon-weekquery {background-image: url('../imgs/query.png') !important;}
+.icon-beforeday {background-image: url('../imgs/beforeday.png') !important;}
+.icon-afterday {background-image: url('../imgs/afterday.png') !important;}
+.icon-beforeweek {background-image: url('../imgs/beforeweek.png') !important;}
+.icon-afterweek {background-image: url('../imgs/afterweek.png') !important;}
+.health_message {font-size: 1.1em; font-weight: bold; padding: 0 10px;}
