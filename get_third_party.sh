@@ -35,6 +35,12 @@ cp ../../msec_console/*  ./
 wget http://search.maven.org/remotecontent?filepath=redis/clients/jedis/2.8.1/jedis-2.8.1.jar
 cd -
 
+echo ' download jar files used by elasicsearch console:'
+echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
+mkdir -p third_party/es_console; cd   third_party/es_console
+cp ../../msec_console/*  ./
+cd -
+
 echo 'download jar files used by remote shell server:'
 echo '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 mkdir -p third_party/remote_shell/server;cd third_party/remote_shell/server
