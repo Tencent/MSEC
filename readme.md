@@ -197,20 +197,41 @@ srpc\_java是一个逻辑层的java框架, 对应的子目录是msec\_srpc\_java
 * protobuf-java-2.5.0.jar
 * protobuf-java-format-1.2.jar
 
-# 9、logsys #
+# 9、Elasticsearch集群 #
 
 ## 9.1 简介 ##
 
-Logsys是msec中日志系统。
+子目录elsticsearch是一套基于Elasticsearch的日志集群管理平台。
 
-源码主要目录介绍：
+Web侧的代码在es\_console子目录，是一个典型的Java Web Application。目录下的src子目录是java代码，web子目录是静态页面、css、图片等web资源文件。
 
-* api  日志系统提供的API，供srpc框架使用
+业务侧需要部署flume agent，并通过日志系统提供的api将数据通过agent集中发往Elasticsearch集群，关键的代码在logsys子目录。该目录下的目录介绍如下：
+* api  日志系统提供的API
 * flume-ng-mysql-sink    apache flume的插件，使日志数据写入mysql, 通过maven命令行构建
 * flume-protobuf-source   apache flume的插件，读取protobuf协议格式的日志数据, 通过maven命令行构建
-* proxy  日志系统的查询接口, 通过maven命令行构建
 
 ## 9.2 用到的外部库 ##
+
+es\_console用到的库：
+
+* Elasticsearch API v5.2 (通过pom.xml获取)
+* commons-compress-1.8.jar
+* commons-fileupload-1.2.2.jar
+* commons-io-2.4.jar
+* jackson-all-1.6.0.jar
+* javax.servlet-api-3.1.0.jar
+* jcommon-1.0.21.jar 
+* jfreechart-1.0.18.jar
+* junit-4.12.jar
+* log4j-1.2.17.jar
+* mysql-connector-java-5.1.38-bin.jar
+* org.json.jar
+* protobuf-java-2.6.1.jar
+* scf4j-props-1.0.1.jar
+* slf4j-api-1.7.18.jar
+
+logsys用到的库：
+
 * protobuf-2.5.0
 * commons-beanutils-1.7.0.jar
 * commons-cli-1.2.jar
