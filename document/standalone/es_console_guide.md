@@ -259,3 +259,92 @@ Elasticsearch服务可以用作毫秒服务引擎的日志系统。用户无需�
 这里的安全性考虑和加强请务必阅读 [msec console使用说明文档的第3部分](https://github.com/Tencent/MSEC/blob/master/document/msec/msec_console_guide.md#3remote-shell身份认证)
 
 
+# 六、日志调用API
+
+## 6.1 日志系统接口(C++)
+初始化
+
+```c++
+    /*
+    * 根据配置文件初始化API
+    * 返回值： 0表示初始化成功， 其他表示初始化失败
+    */
+    int LogsysApi::Init(const char* conf_filename); 
+```
+
+设置日志字段
+
+```c++
+    /*
+    * 设置日志字段
+    * 输入参数： key     字段名
+    *            value   字段值
+    */
+    LogsysApi& msec::LogSetHeader(const std::string& key, const std::string& value); 
+```
+
+记录远程日志
+
+```c++
+    /*
+    * 记录远程日志
+    * 输入参数： level   日志级别
+    *            format  日志内容
+    */
+    void msec::LOG(int level, const char* format, ...);
+```
+
+示例代码：
+
+```c++
+    msec::LogsysApi* log_api = msec::LogsysApi::GetInstance();
+    int ret = log_api->Init("./config.ini");
+    if (ret != 0)
+    {
+        cerr << "logsys api init failed." << endl;
+        return -1;
+    }
+        
+    msec::LogSetHeader("ReqID", "1234888").LogSetHeader("IP", "26.19.3.333").LogSetHeader("ServiceName", "TestSvc.TestSvc");
+    msec::LOG(msec::LogsysApi::ERROR, "%s", "something");
+```
+
+## 6.2 日志系统接口(Java)
+初始化
+
+```java
+    /*
+    * 根据配置文件初始化API
+    * 返回值： true表示初始化成功， 其他表示初始化失败
+    */
+    boolean AccessLog:: initLog(const char* conf_filename); 
+```
+
+记录远程日志
+
+```java
+    /*
+    * 记录远程日志
+    * 输入参数： level   日志级别
+    *            headers  日志的自定义字段
+    *            body     日志内容
+    */
+    void  AccessLog::log(int level, Map<String, String> headers, String body);
+```
+
+## 6.3 日志系统配置文件说明
+
+```
+[LOG]
+Level=DEBUG
+[COLOR]
+FieldName0=uin
+FieldValue0=11228499
+FieldName1=merchID
+FieldValue1=M1234
+```
+
+LOG/Level表示日志级别，可选级别有:  TRACE, DEBUG, INFO, ERROR, FATAL
+COLOR下为染色配置，满足染色条件的日志会忽略日志级别，全部记录下来。
+染色条件为自定义Name、自定义Value的形式，即两者同时匹配就会满足染色条件。
+如上配置会将uin字段为11228499的日志染色，也会将merchID字段为M1234的日志染色。
