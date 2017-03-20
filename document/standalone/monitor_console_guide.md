@@ -110,7 +110,11 @@ docker ps -a
 | 38002 | 监控服务业务上报端口 |
 | 38003 | 监控服务数据获取端口 |
 
-## 3.4 业务机器Agent安装
+## 3.4 关键数据
+
+请参考监控服务使用说明文档中[关键数据](https://github.com/Tencent/MSEC/blob/master/document/msec/monitor_service_instruction.md#关键数据)一节。
+
+## 3.5 业务机器Agent安装
 
 每台业务机器必须安装Agent包，这样才能和监控系统交互。
 
