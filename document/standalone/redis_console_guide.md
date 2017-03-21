@@ -55,7 +55,7 @@ docker ps -a
 2. 解压数据卷, 并移至目录： /redis_console_data
 
 	```bash
-	tar xvf redis_console_data.tar.gz; mv redis_console_data redis_console_data
+	tar xvf redis_console_data.tar.gz; mv redis_console_data /redis_console_data
 	```
 
 3.  运行docker镜像
