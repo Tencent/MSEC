@@ -55,7 +55,7 @@ docker ps -a
 2. 解压数据卷, 并移至目录： /es_console_data
 
 	```bash
-	tar xvf es_console_data.tar.gz; mv es_console_data es_console_data
+	tar xvf es_console_data.tar.gz; mv es_console_data /es_console_data
 	```
 
 3.  运行docker镜像
