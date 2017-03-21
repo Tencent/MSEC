@@ -38,9 +38,10 @@ docker ps -a
 
 如果运行出现以上结果，说明docker已经运行成功了！
 
-特别注意：docker要求1.8或者更高的版本
+*特别注意：docker要求1.8或者更高的版本，console系统请保证有2G以上的内存*
 
 ## 1.2 Elasticsearch console系统安装
+
 
 1. 加载docker镜像
 
