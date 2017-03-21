@@ -73,6 +73,8 @@ docker ps -a
 	#tcp 0 0 0.0.0.0:9982 0.0.0.0:* LISTEN 2326/java off (0.00/0/0)
 	#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 2359/java off (0.00/0/0)
 	#tcp 0 0 0.0.0.0:38002 0.0.0.0:* LISTEN 2815/./monitor_serv off (0.00/0/0)
+	#tcp 0 0 0.0.0.0:8081 0.0.0.0:* LISTEN 2423/nginx: master pro (0.00/0/0)
+	#tcp :::8081 :::* LISTEN 2423/nginx: master pro (0.00/0/0)
 	```
 
 5.  进入监控系统管理页面查看是否正常, URL为 http://Console_IP:8080
