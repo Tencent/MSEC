@@ -68,7 +68,7 @@ docker ps -a
 4.  查看服务正常
 
 	```bash
-	netstat -anop |grep '8080\|38002\|9982' |grep LISTEN
+	netstat -anop |grep '8080\|8081\|38002\|9982' |grep LISTEN
 	#result looks like:
 	#tcp 0 0 0.0.0.0:9982 0.0.0.0:* LISTEN 2326/java off (0.00/0/0)
 	#tcp 0 0 0.0.0.0:8080 0.0.0.0:* LISTEN 2359/java off (0.00/0/0)
