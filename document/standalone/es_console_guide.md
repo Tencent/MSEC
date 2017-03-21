@@ -45,7 +45,7 @@ docker ps -a
 1. 加载docker镜像
 
 	```bash
-	docker import es_console.tar.gz centos:esconsole
+	docker import es_console.tar.gz centos:es_console
 	docker images
 	#result looks like:
 	#REPOSITORY TAG IMAGE ID CREATED VIRTUAL SIZE
