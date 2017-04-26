@@ -390,8 +390,8 @@ UnpackResponse(recv_buf, recv_len, response)
 为了方便拷贝试做，这里给出了代码：[msg_crawl_impl.cpp](examples/dev_cpp/msg_crawl_impl.cpp)
 
 另外还有两个用到解析json字符串的c++代码，请放到msg_crawl_impl.cpp相同的目录下即可：
-[frozen.h](https://github.com/cesanta/frozen/blob/master/frozen.h)
-[frozen.c](https://github.com/cesanta/frozen/blob/master/frozen.c)
+[frozen.h](https://github.com/cesanta/frozen/blob/d406553a61220bac474a946a0598f05963af9d6b/frozen.h)
+[frozen.c](https://github.com/cesanta/frozen/blob/d406553a61220bac474a946a0598f05963af9d6b/frozen.c)
 
 ### Step6：cgi访问MainLogic标准服务
 
