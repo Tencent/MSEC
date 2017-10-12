@@ -230,9 +230,9 @@ int CConnSet::send(unsigned flow, const char* data, size_t data_len)
     struct timeval now;
     ConnCache* cc = ccs_[flow % maxconn_];
 
+    gettimeofday(&now, NULL);
     if (cc->_flow != flow || flow == 0) {
         MONITOR(MONITOR_SEND_FLOWID_ERR); // rsp msg flowid invalid
-        gettimeofday(&now, NULL);
         unsigned flowCostTime =
             (now.tv_sec - cc->_info.recvtime_) * 1000
             + (now.tv_usec - cc->_info.tv_usec) / 1000;
