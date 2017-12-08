@@ -48,7 +48,7 @@
 **A：** 取  Mass Service Engine in Cluster的首字母msec，刚好是毫秒的英文缩写；另外也表达小而美的寓意。
 
 ### Q10:有没有教学视频？ ###
-这里有一些简单的视频：<http://haomiao.qq.com/vod/vod_list.html>
+参见[这里](document#msec快速上手视频)
 
 ### Q11:路由和容错是怎么实现的? ###
 **A：**以一个场景为例：标准服务A调用服务B（可以是标准服务或者异构服务），用户在web console页面上配置B服务的IP信息，这些IP信息会写入zookeeper服务(console容器里跑着)。安装在A的服务器上的nlb agent会拉取到服务B的IP列表。
