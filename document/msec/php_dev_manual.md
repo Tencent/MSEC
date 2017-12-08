@@ -375,7 +375,7 @@ string get_config(string session, string key);
 
 ### 2.5.5. 其它新加扩展
 
-详细见官网视频[http://haomiao.qq.com/vod/msec_extend_php.html](http://haomiao.qq.com/vod/msec_extend_php.html "扩展php")
+详见[教学视频](https://v.qq.com/x/page/f0515jaf1on.html)
 
 - **PHP原生扩展**
 
