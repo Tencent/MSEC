@@ -1,6 +1,6 @@
 # 1、概述 #
 这里是毫秒服务引擎的代码，分好几个模块，开发语言主要是java和c/c++。每个模块需要单独编译。
-官网 <http://haomiao.qq.com> 上有编译好的docker镜像和文档可以快速部署，强烈推荐。
+同时提供编译好的[docker镜像](downloads/readme.md)可以快速部署，强烈推荐。
 
 ## 编译环境要求 ##
 * gcc version >= 4.1.2
