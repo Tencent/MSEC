@@ -37,6 +37,12 @@ public class DownloadMonitorChart extends JsonRPCHandler {
     {
 
         //security protection
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
+
         if(request.getChart_to_download().contains(".."))
         {
             return null;
