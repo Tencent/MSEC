@@ -39,6 +39,12 @@ public class DownloadCallGraph extends JsonRPCHandler {
     public JsonRPCResponseBase exec(BusinessLog request)
     {
         Logger logger = Logger.getLogger(DownloadCallGraph.class);
+        
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
 
         try {
             String filename = QueryBusinessLog.getGraphFilename(request.getRequest_id());
