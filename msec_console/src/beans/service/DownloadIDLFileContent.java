@@ -46,7 +46,13 @@ public class DownloadIDLFileContent extends JsonRPCHandler {
 
     public JsonRPCResponseBase exec(IDL request) {
         Logger logger = Logger.getLogger(DownloadIDLFileContent.class);
-
+        
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
+        
         try {
 
             getHttpResponse().setCharacterEncoding("UTF-8");
