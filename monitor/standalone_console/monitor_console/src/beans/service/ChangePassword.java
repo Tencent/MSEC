@@ -76,7 +76,13 @@ public class ChangePassword extends JsonRPCHandler {
              return resp;
          }
 
-
+         String result = checkIdentity();
+         if (!result.equals("success"))
+         {
+             resp.setStatus(99);
+             resp.setMessage(result);
+             return resp;
+         }
 
          DBUtil util = new DBUtil();
          if (util.getConnection() == null)
@@ -86,9 +92,6 @@ public class ChangePassword extends JsonRPCHandler {
              return resp;
          }
          List<StaffInfo> staffInfoList ;
-
-
-
 
          try {
              String sql = "select staff_name, staff_phone,password,salt from t_staff "+
