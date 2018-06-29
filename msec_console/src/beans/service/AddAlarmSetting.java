@@ -189,10 +189,13 @@ public class AddAlarmSetting extends JsonRPCHandler {
         String svc = "";
         String attr = "";
 
-
-
-
-
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
 
         svc = request.getService_name();
         attr = request.getAttr_name();
