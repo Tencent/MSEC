@@ -144,6 +144,15 @@ public class QueryBusiLogField extends JsonRPCHandler {
     public BusiLogFieldResponse exec(BusiLogField request)
     {
         BusiLogFieldResponse response = new BusiLogFieldResponse();
+        
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
+        
         ArrayList<BusiLogField> fields = new ArrayList<BusiLogField>();
         String msg = doGetBusiLogField(request, fields);
         if (msg == null || !msg.equals("success"))
