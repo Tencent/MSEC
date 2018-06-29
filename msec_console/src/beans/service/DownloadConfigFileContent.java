@@ -49,7 +49,11 @@ public class DownloadConfigFileContent extends JsonRPCHandler {
     {
         Logger logger = Logger.getLogger(DownloadConfigFileContent.class);
 
-
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
 
         try {
             getHttpResponse().setCharacterEncoding("UTF-8");
