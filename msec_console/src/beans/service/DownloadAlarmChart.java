@@ -37,6 +37,12 @@ public class DownloadAlarmChart extends JsonRPCHandler {
     public AlarmResponse exec(Alarm request)
     {
         Logger logger = Logger.getLogger(DownloadAlarmChart.class);
+        
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            return null;
+        }
 
         try {
             //请求数据，生成图片
