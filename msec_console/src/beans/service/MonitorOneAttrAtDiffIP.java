@@ -355,6 +355,14 @@ public class MonitorOneAttrAtDiffIP extends JsonRPCHandler {
         MonitorResponse response = new MonitorResponse();
         Logger logger = Logger.getLogger(MonitorOneAttrAtDiffIP.class);
 
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
+
         String svc = "";
         String attribute = "";
         String date = "";
