@@ -39,6 +39,15 @@ public class QueryConfigInLB extends JsonRPCHandler {
     {
         QueryConfigInLBResponse response = new QueryConfigInLBResponse();
         Logger logger = Logger.getLogger(QueryConfigInLB.class);
+                
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
+
         String svc = request.getFirst_level_service_name() + "/"+request.getSecond_level_service_name();
         AccessZooKeeper azk = new AccessZooKeeper();
 
