@@ -126,7 +126,16 @@ public class AddBusiLogField extends JsonRPCHandler {
     public BusiLogFieldResponse exec(BusiLogField request)
     {
         BusiLogFieldResponse response = new BusiLogFieldResponse();
-        String result = doAddBusiLogField(request);
+                
+        String result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
+
+        result = doAddBusiLogField(request);
         if (result == null || !result.equals("success")) {
             response.setMessage(result);
             response.setStatus(100);
