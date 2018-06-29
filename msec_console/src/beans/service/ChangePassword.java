@@ -76,7 +76,13 @@ public class ChangePassword extends JsonRPCHandler {
              return resp;
          }
 
-
+         String result = checkIdentity();
+         if (!result.equals("success"))
+         {
+             resp.setStatus(99);
+             resp.setMessage(result);
+             return resp;
+         }
 
          DBUtil util = new DBUtil();
          if (util.getConnection() == null)
