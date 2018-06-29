@@ -188,8 +188,13 @@ public class QueryAlarmSetting extends JsonRPCHandler {
 
         String result;
 
-
-
+        result = checkIdentity();
+        if (!result.equals("success"))
+        {
+            response.setStatus(99);
+            response.setMessage(result);
+            return response;
+        }
 
         svc = request.getService_name();
         date = request.getDate();
